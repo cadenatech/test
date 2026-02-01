@@ -2,25 +2,26 @@
 
 ## Project Structure & Module Organization
 - `gas/`: Google Apps Script backend (proxy that fetches ZIPs and returns content). Main file: `gas/Code.js` and its manifest `gas/appsscript.json`.
-- `docs/`: Frontend served by GitHub Pages. Includes `index.html`, `styles.css`, `app.js`, `sw.js`, and `config.js` (Apps Script Web App URL).
-- Root files: `README.md` for deployment notes, `.clasp.json` for Apps Script CLI configuration.
+- Frontend (GitHub Pages) está en la **raíz** del repositorio: `index.html`, `styles.css`, `app.js`, `sw.js`, y `config.js` (URL del Web App de Apps Script).
+- Root files: `README.md` para notas de despliegue, `.clasp.json` y `appsscript.json` para configuración de `clasp`.
 
 ## Build, Test, and Development Commands
 This project has no build system or package manager. Use simple local serving and Apps Script tooling:
-- `python3 -m http.server 8000 --directory docs`: Serve the frontend locally to test UI and service worker.
+- `python3 -m http.server 8000`: Servir la web localmente (raíz) para probar UI y service worker.
 - `clasp push`: Upload `gas/` to Apps Script (only when you explicitly approve pushes to the script).
 - `clasp pull`: Sync remote Apps Script into `gas/`.
 
 ## Coding Style & Naming Conventions
-- JavaScript is plain ES5/ES6 without bundlers. Prefer `var` and function declarations to match `docs/app.js`.
+- JavaScript is plain ES5/ES6 without bundlers. Prefer `var` and function declarations to match `app.js`.
 - Indentation: 2 spaces in JS/CSS/HTML.
-- Keep DOM hooks as `data-*` attributes (see `docs/index.html` and `docs/app.js`).
-- Keep configuration values in `docs/config.js` only; avoid hard-coding URLs elsewhere.
+- Keep DOM hooks as `data-*` attributes (see `index.html` y `app.js`).
+- Keep configuration values in `config.js` only; avoid hard-coding URLs elsewhere.
+- Si subes versión: actualizar `README.md` + footer en `index.html` y, si aplica, el cache-bust `app.js?v=...`.
 
 ## Testing Guidelines
 - No automated tests are configured.
 - Manual checks:
-  - Open `docs/` via a local server, generate a share URL, and verify ZIP download + render.
+  - Abrir la raíz via servidor local, generar una URL de compartir y verificar descarga + render del ZIP.
   - Confirm service worker caching and IndexedDB persistence after reload.
 
 ## Commit & Pull Request Guidelines
