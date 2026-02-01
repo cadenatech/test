@@ -3422,59 +3422,50 @@
       setProgress(progress);
     }
 
-    return fetchZipBundleMeta(zipUrl)
-      .then(function (m) {
-        meta = m || meta;
-        totalSize = meta.size || 0;
-      })
-      .catch(function () {
-        // If meta fails, try the first chunk and infer totalSize from Content-Range.
-      })
-      .then(function () {
-        stopProgress();
-        setProgress(baseProgress);
-        setLoadingMessage('Reintentando: descarga por trozos...');
-        updateDownloadProgress();
-        function fetchPart(part) {
-          var endpoint = GAS_WEBAPP_URL + '?url=' + encodeURIComponent(zipUrl) + '&bundle=1&part=' + part + '&chunkSize=' + chunkSize;
-          return fetch(endpoint)
-            .then(function (res) {
-              if (!res.ok) {
-                throw new Error('HTTP ' + res.status);
-              }
-              return res.json();
-            })
-            .then(function (data) {
-              if (data && data.error) {
-                throw new Error(data.error);
-              }
-              if (!meta.name && data.name) meta.name = data.name;
-              if (!totalSize && data.totalSize) totalSize = data.totalSize;
-              if (!meta.acceptRanges && data.acceptRanges) meta.acceptRanges = true;
-              if (totalSize && meta.size !== totalSize) meta.size = totalSize;
-              var partBytes = base64ToBytes(data.base64 || '');
-              chunks.push(partBytes);
-              downloaded += partBytes.length;
-              updateDownloadProgress();
-              if (partBytes.length < chunkSize) {
-                return;
-              }
-              if (totalSize && downloaded >= totalSize) {
-                return;
-              }
-              return fetchPart(part + 1);
-            });
-        }
-        return fetchPart(0);
-      })
-      .then(function () {
-        var zipBytes = concatUint8Arrays(chunks, totalSize || downloaded);
-        return {
-          name: meta.name || 'site.zip',
-          size: totalSize || zipBytes.length,
-          bytes: zipBytes
-        };
-      });
+    stopProgress();
+    setProgress(baseProgress);
+    setLoadingMessage('Reintentando: descarga por trozos...');
+    updateDownloadProgress();
+
+    function fetchPart(part) {
+      var endpoint = GAS_WEBAPP_URL + '?url=' + encodeURIComponent(zipUrl) + '&bundle=1&part=' + part + '&chunkSize=' + chunkSize;
+      return fetch(endpoint)
+        .then(function (res) {
+          if (!res.ok) {
+            throw new Error('HTTP ' + res.status);
+          }
+          return res.json();
+        })
+        .then(function (data) {
+          if (data && data.error) {
+            throw new Error(data.error);
+          }
+          if (!meta.name && data.name) meta.name = data.name;
+          if (!totalSize && data.totalSize) totalSize = data.totalSize;
+          if (!meta.acceptRanges && data.acceptRanges) meta.acceptRanges = true;
+          if (totalSize && meta.size !== totalSize) meta.size = totalSize;
+          var partBytes = base64ToBytes(data.base64 || '');
+          chunks.push(partBytes);
+          downloaded += partBytes.length;
+          updateDownloadProgress();
+          if (partBytes.length < chunkSize) {
+            return;
+          }
+          if (totalSize && downloaded >= totalSize) {
+            return;
+          }
+          return fetchPart(part + 1);
+        });
+    }
+
+    return fetchPart(0).then(function () {
+      var zipBytes = concatUint8Arrays(chunks, totalSize || downloaded);
+      return {
+        name: meta.name || 'site.zip',
+        size: totalSize || zipBytes.length,
+        bytes: zipBytes
+      };
+    });
   }
 
   function fetchZipBundle(zipUrl) {

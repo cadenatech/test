@@ -708,34 +708,38 @@ function clamp_(value, min, max) {
 }
 
 function fetchRemoteMeta_(url) {
-  var head = UrlFetchApp.fetch(url, {
-    method: 'head',
+  // Apps Script UrlFetchApp does not support HEAD reliably. Use a tiny Range probe instead.
+  var resp = UrlFetchApp.fetch(url, {
+    method: 'get',
     followRedirects: true,
-    muteHttpExceptions: true
+    muteHttpExceptions: true,
+    headers: { Range: 'bytes=0-0' }
   });
-  var code = head.getResponseCode();
+  var code = resp.getResponseCode();
   if (code >= 400) {
     throw new Error('Respuesta HTTP ' + code);
   }
-  var headers = head.getAllHeaders() || {};
-  var len = parseInt(headers['Content-Length'] || headers['content-length'] || '', 10);
+
+  var headers = resp.getAllHeaders() || {};
   var acceptRanges = (headers['Accept-Ranges'] || headers['accept-ranges'] || '').toString().toLowerCase().indexOf('bytes') !== -1;
   var disposition = (headers['Content-Disposition'] || headers['content-disposition'] || '').toString();
-  var name = extractFilenameFromDisposition_(disposition) || 'site.zip';
+  var name = extractFilenameFromDisposition_(disposition) || resp.getBlob().getName() || 'site.zip';
 
+  var totalSize = null;
+  var contentRange = (headers['Content-Range'] || headers['content-range'] || '').toString();
+  var m = contentRange.match(/\/(\d+)\s*$/);
+  if (m && m[1]) {
+    totalSize = parseInt(m[1], 10);
+  }
+  var len = totalSize;
   if (!len || isNaN(len)) {
-    var rangeProbe = fetchRangeResponse_(url, 0, 0);
-    if (rangeProbe.totalSize) {
-      len = rangeProbe.totalSize;
-    }
-    acceptRanges = acceptRanges || !!rangeProbe.acceptRanges;
-    name = name || rangeProbe.name || 'site.zip';
+    len = parseInt(headers['Content-Length'] || headers['content-length'] || '', 10);
   }
 
   return {
     name: name,
-    size: len || null,
-    acceptRanges: !!acceptRanges
+    size: (len && !isNaN(len)) ? len : null,
+    acceptRanges: !!(acceptRanges || code === 206)
   };
 }
 
