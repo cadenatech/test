@@ -600,6 +600,9 @@ textarea:focus-visible {
   font-size: 1.05rem;
   font-weight: 800;
   color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .publish-choice-card__note {

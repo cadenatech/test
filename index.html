@@ -81,15 +81,21 @@
                   <path d="M14 3v5h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
                 </svg>
               </span>
-              <span class="publish-choice-card__title" data-i18n="publish.choice.main.title">Ya tengo un ZIP</span>
-              <span class="publish-choice-card__note" data-i18n="publish.choice.main.note">Pega un enlace público al ZIP y genera el enlace del visor.</span>
+              <div class="publish-choice-card__title">
+                <span data-i18n="publish.choice.main.title">Ya tengo un ZIP o ELPX</span>
+                <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="¿Qué es ELPX?">
+                  ?
+                  <span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Un archivo <code>.elpx</code> es un proyecto de eXeLearning. Por dentro es un ZIP, así que el visor puede abrirlo.</span>
+                </span>
+              </div>
+              <span class="publish-choice-card__note" data-i18n="publish.choice.main.note">Pega un enlace público al ZIP (o al archivo .elpx de eXeLearning) y genera el enlace del visor.</span>
             </button>
           </div>
           <div class="zip-explainer">
             <details class="zip-explainer__details">
 	              <summary class="zip-explainer__summary" data-i18n="publish.zipHelp.summary">¿Qué es un ZIP?</summary>
 	              <div class="zip-explainer__body" data-i18n-html="publish.zipHelp.bodyHtml">
-	                Un <strong>ZIP</strong> es un archivo comprimido que agrupa varios archivos (y carpetas) en uno solo.
+	                Un <strong>ZIP</strong> es un archivo comprimido que agrupa varios archivos (y carpetas) en uno solo. En <strong>eXeLearning 3+</strong>, el archivo <code>.elpx</code> también sirve porque ya es un ZIP.
 	              </div>
 	            </details>
             <details class="zip-explainer__details">
@@ -114,8 +120,8 @@
           </div>
           <form data-form>
             <span class="field-title" data-i18n="main.form.title">Pega aqui el enlace publico</span>
-            <p class="step-note" data-i18n="main.subtitle">Si ya tienes tu recurso en formato ZIP en un servicio con enlace público (Drive, Dropbox, etc.), pega aquí el enlace para generar el enlace.</p>
-            <input data-url type="url" placeholder="Pega aqui el enlace publico del ZIP" data-i18n-placeholder="main.form.placeholder" required>
+            <p class="step-note" data-i18n="main.subtitle">Si ya tienes tu recurso en formato ZIP (o .elpx de eXeLearning 3+) en un servicio con enlace público (Drive, Dropbox, etc.), pega aquí el enlace para generar el enlace.</p>
+            <input data-url type="url" placeholder="Pega aqui el enlace publico del ZIP o del .elpx" data-i18n-placeholder="main.form.placeholder" required>
             <button type="submit" data-i18n="main.form.submit">Crear enlace</button>
           </form>
 
@@ -151,10 +157,10 @@
                 <ul class="manager-subtitle zipper-subtitle">
                   <li data-i18n="zipper.subtitle.lead">Para compartir tu recurso, comprime los archivos (o la carpeta que los contiene) en un archivo .zip.</li>
                   <li>
-                    <span data-i18n-html="zipper.subtitle.exeSentenceHtml">Si usas <strong>eXeLearning</strong>, también puedes crear el ZIP desde el propio programa y, si quieres, continuar con la opción “Ya tengo un ZIP”.</span>
+                    <span data-i18n-html="zipper.subtitle.exeSentenceHtml">Si usas <strong>eXeLearning</strong>, en la versión 3+ puedes usar directamente el archivo <code>.elpx</code> (ya es un ZIP). En otras versiones, exporta a ZIP desde el propio programa y, si quieres, continúa con la opción “Ya tengo un ZIP”.</span>
                     <button class="info-dot" type="button" data-i18n-aria-label="zipper.exe.tooltip">
                       ?
-                      <span class="info-dot__tooltip" role="tooltip" data-i18n-html="zipper.exe.tooltipHtml">Cómo exportar desde eXeLearning:<br>• Versión 2.x: Archivo &gt; Exportar &gt; Sitio Web &gt; Archivo comprimido ZIP.<br>• Versión 3.x: Archivo &gt; Descargar como &gt; Sitio web.</span>
+                      <span class="info-dot__tooltip" role="tooltip" data-i18n-html="zipper.exe.tooltipHtml">eXeLearning:<br>• Versión 3+: puedes usar directamente el archivo <code>.elpx</code> (ya es un ZIP).<br>• Versión 2.x: Archivo &gt; Exportar &gt; Sitio Web &gt; Archivo comprimido ZIP.</span>
                     </button>
                   </li>
                 </ul>
@@ -379,7 +385,7 @@
     <footer class="site-footer">
       <a class="footer-link" href="https://bilateria.org" target="_blank" rel="noopener">(c) 2026 Juan Jose de Haro</a>
       <span class="footer-sep">·</span>
-<span class="footer-link">v1.3.4</span>
+<span class="footer-link">v1.3.5</span>
       <span class="footer-sep">·</span>
       <a class="footer-link" href="https://github.com/visor-webzip/visor-webzip.github.io" target="_blank" rel="noopener">
         <svg class="footer-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
@@ -405,6 +411,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/fflate@0.8.2/umd/index.js"></script>
   <script src="config.js"></script>
-	  <script src="app.js?v=22"></script>
+	  <script src="app.js?v=23"></script>
  </body>
  </html>

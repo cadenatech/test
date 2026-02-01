@@ -119,7 +119,7 @@
         back: 'Volver al inicio',
         zipHelp: {
           summary: '¿Qué es un ZIP?',
-          bodyHtml: 'Un <strong>ZIP</strong> es un archivo comprimido que agrupa varios archivos (y carpetas) en uno solo.'
+          bodyHtml: 'Un <strong>ZIP</strong> es un archivo comprimido que agrupa varios archivos (y carpetas) en uno solo. En <strong>eXeLearning 3+</strong>, el archivo <code>.elpx</code> también sirve porque ya es un ZIP.'
         },
         htmlHelp: {
           summary: '¿Qué es el HTML y dónde lo obtengo?',
@@ -131,8 +131,10 @@
             note: 'Empieza creando un ZIP desde tus archivos o desde HTML.'
           },
           main: {
-            title: 'Ya tengo un ZIP',
-            note: 'Pega un enlace público al ZIP y genera el enlace del visor.'
+            title: 'Ya tengo un ZIP o ELPX',
+            note: 'Pega un enlace público al ZIP (o al archivo .elpx de eXeLearning) y genera el enlace del visor.',
+            elpxTooltip: '¿Qué es ELPX?',
+            elpxTooltipHtml: 'Un archivo <code>.elpx</code> es un proyecto de eXeLearning. Por dentro es un ZIP, así que el visor puede abrirlo.'
           }
         }
       },
@@ -140,11 +142,11 @@
         label: 'Secciones'
       },
       main: {
-        subtitle: 'Si ya tienes tu recurso en formato ZIP en un servicio con enlace público (Drive, Dropbox, etc.), pega aquí el enlace para generar el enlace.',
+        subtitle: 'Si ya tienes tu recurso en formato ZIP (o .elpx de eXeLearning 3+) en un servicio con enlace público (Drive, Dropbox, etc.), pega aquí el enlace para generar el enlace.',
         form: {
           title: 'Pega aquí el enlace público',
-          step: 'Pega el enlace público al ZIP y pulsa “Crear enlace”.',
-          placeholder: 'Pega aquí el enlace público del ZIP',
+          step: 'Pega el enlace público al ZIP (o .elpx) y pulsa “Crear enlace”.',
+          placeholder: 'Pega aquí el enlace público del ZIP o del .elpx',
           submit: 'Crear enlace'
         },
         output: {
@@ -208,7 +210,7 @@
           share: 'Compartir',
           embed: 'Insertar en una web',
           edit: 'Editar el título',
-          download: 'Descargar ZIP'
+          download: 'Descargar archivo'
         },
         editPrompt: 'Título del recurso',
         empty: 'No hay recursos guardados en este navegador.',
@@ -222,11 +224,11 @@
         },
         subtitle: {
           lead: 'Para compartir tu recurso, comprime los archivos (o la carpeta que los contiene) en un archivo .zip.',
-          exeSentenceHtml: 'Si usas <strong>eXeLearning</strong>, también puedes crear el ZIP desde el propio programa y, si quieres, continuar con la opción “Ya tengo un ZIP”.'
+          exeSentenceHtml: 'Si usas <strong>eXeLearning</strong>, en la versión 3+ puedes usar directamente el archivo <code>.elpx</code> (ya es un ZIP). En otras versiones, exporta a ZIP desde el propio programa y, si quieres, continúa con la opción “Ya tengo un ZIP”.'
         },
         exe: {
-          tooltip: 'Cómo exportar desde eXeLearning. Versión 2.x: Archivo > Exportar > Sitio Web > Archivo comprimido ZIP. Versión 3.x: Archivo > Descargar como > Sitio web.',
-          tooltipHtml: '<strong>Cómo exportar desde eXeLearning:</strong><br>• Versión 2.x: Archivo &gt; Exportar &gt; Sitio Web &gt; Archivo comprimido ZIP.<br>• Versión 3.x: Archivo &gt; Descargar como &gt; Sitio web.'
+          tooltip: 'eXeLearning: en la versión 3+ puedes usar directamente un .elpx (ya es un ZIP). Versión 2.x: Archivo > Exportar > Sitio Web > Archivo comprimido ZIP.',
+          tooltipHtml: '<strong>eXeLearning:</strong><br>• Versión 3+: puedes usar directamente el archivo <code>.elpx</code> (ya es un ZIP).<br>• Versión 2.x: Archivo &gt; Exportar &gt; Sitio Web &gt; Archivo comprimido ZIP.'
         },
         step1: {
           title: 'Añade tus archivos',
@@ -335,7 +337,7 @@
           + '<div class="about-section"><h3>Publicar</h3><ul><li><strong>Crear un ZIP</strong>: crea y descarga un ZIP desde tus archivos o pegando HTML.</li><li><strong>Ya tengo un ZIP</strong>: pega el enlace público al ZIP y pulsa "Crear enlace" para obtener el enlace del visor.</li><li>Opcional: copia el enlace o abre la vista previa.</li></ul></div>'
           + '<div class="about-section"><h3>Crear un ZIP</h3><ul><li><strong>¿No tienes archivos? Pega el HTML</strong>: pega el HTML completo y se creará un ZIP con <code>index.html</code>.</li><li><strong>¿Tienes archivos? Crea el ZIP</strong>: arrastra la carpeta o los archivos y pulsa "Crear y descargar ZIP".</li><li>Si no hay <code>index.html</code>, el visor te pedirá qué HTML abrir primero.</li></ul></div>'
           + '<div class="about-section"><h3>Ya tengo un ZIP</h3><ul><li>Pega el enlace público del ZIP.</li><li>Pulsa "Crear enlace" y copia el resultado o abre la vista previa.</li></ul></div>'
-          + '<div class="about-section"><h3>Gestor de recursos</h3><ul><li>Aquí puedes ver y gestionar los recursos que has abierto desde este navegador.</li><li><strong>Ver</strong> abre el recurso guardado.</li><li><strong>Compartir</strong> copia el enlace del visor (pantalla completa).</li><li><strong>Editar</strong> cambia el título.</li><li><strong>Descargar</strong> baja el ZIP original.</li><li><strong>Eliminar</strong> borra ese recurso del navegador.</li></ul></div>'
+          + '<div class="about-section"><h3>Gestor de recursos</h3><ul><li>Aquí puedes ver y gestionar los recursos que has abierto desde este navegador.</li><li><strong>Ver</strong> abre el recurso guardado.</li><li><strong>Compartir</strong> copia el enlace del visor (pantalla completa).</li><li><strong>Editar</strong> cambia el título.</li><li><strong>Descargar</strong> baja el archivo original (ZIP o .elpx).</li><li><strong>Eliminar</strong> borra ese recurso del navegador.</li></ul></div>'
           + '<div class="about-section"><h3>Qué funciona y qué puede fallar</h3><ul><li>Funciona con webs estáticas (HTML, CSS, imágenes, audio, vídeo, PDF...).</li><li>No funciona con webs que requieren servidor (formularios con BD, PHP, etc.).</li><li>Google Drive limita descargas directas de archivos grandes (~25 MB).</li></ul></div>'
       },
       error: {
@@ -399,7 +401,7 @@
         back: "Tornar a l'inici",
         zipHelp: {
           summary: 'Què és un ZIP?',
-          bodyHtml: 'Un <strong>ZIP</strong> és un fitxer comprimit que agrupa diversos fitxers (i carpetes) en un de sol.'
+          bodyHtml: 'Un <strong>ZIP</strong> és un fitxer comprimit que agrupa diversos fitxers (i carpetes) en un de sol. A <strong>eXeLearning 3+</strong>, el fitxer <code>.elpx</code> també serveix perquè ja és un ZIP.'
         },
         htmlHelp: {
           summary: 'Què és l’HTML i d’on l’obtinc?',
@@ -411,8 +413,10 @@
             note: 'Comença creant un ZIP des dels teus fitxers o des d’HTML.'
           },
           main: {
-            title: 'Ja tinc un ZIP',
-            note: 'Enganxa un enllaç públic al ZIP i genera l’enllaç del visor.'
+            title: 'Ja tinc un ZIP o ELPX',
+            note: 'Enganxa un enllaç públic al ZIP (o al fitxer .elpx d’eXeLearning) i genera l’enllaç del visor.',
+            elpxTooltip: 'Què és ELPX?',
+            elpxTooltipHtml: 'Un fitxer <code>.elpx</code> és un projecte d’eXeLearning. Per dins és un ZIP, així que el visor el pot obrir.'
           }
         }
       },
@@ -420,11 +424,11 @@
         label: 'Seccions'
       },
       main: {
-        subtitle: "Si ja tens el teu recurs en format ZIP en un servei amb enllaç públic (Drive, Dropbox, etc.), enganxa aquí l'enllaç per generar l’enllaç del visor.",
+        subtitle: "Si ja tens el teu recurs en format ZIP (o .elpx d’eXeLearning 3+) en un servei amb enllaç públic (Drive, Dropbox, etc.), enganxa aquí l'enllaç per generar l’enllaç del visor.",
         form: {
           title: "Enganxa aquí l'enllaç públic",
-          step: 'Enganxa l’enllaç públic al ZIP i prem “Crear enllaç”.',
-          placeholder: "Enganxa aquí l'enllaç públic del ZIP",
+          step: 'Enganxa l’enllaç públic al ZIP (o .elpx) i prem “Crear enllaç”.',
+          placeholder: "Enganxa aquí l'enllaç públic del ZIP o del .elpx",
           submit: 'Crear enllaç'
         },
         output: {
@@ -488,7 +492,7 @@
           share: 'Compartir',
           embed: 'Inserir en una web',
           edit: 'Editar el títol',
-          download: 'Descarregar ZIP'
+          download: 'Descarregar fitxer'
         },
         editPrompt: 'Títol del recurs',
         empty: 'No hi ha recursos desats en aquest navegador.',
@@ -502,11 +506,11 @@
         },
         subtitle: {
           lead: 'Per compartir el teu recurs has de comprimir els fitxers (o la carpeta que els conté) en un arxiu ZIP.',
-          exeSentenceHtml: "Si fas servir <strong>eXeLearning</strong>, també pots crear el ZIP des del mateix programa i, si vols, continuar amb l’opció “Ja tinc un ZIP”."
+          exeSentenceHtml: "Si fas servir <strong>eXeLearning</strong>, a la versió 3+ pots usar directament el fitxer <code>.elpx</code> (ja és un ZIP). En altres versions, exporta a ZIP des del mateix programa i, si vols, continua amb l’opció “Ja tinc un ZIP”."
         },
         exe: {
-          tooltip: "Com exportar des d'eXeLearning. Versió 2.x: Fitxer > Exportar > Lloc web > Arxiu comprimit ZIP. Versió 3.x: Fitxer > Descarregar com > Lloc web.",
-          tooltipHtml: "<strong>Com exportar des d'eXeLearning:</strong><br>• Versió 2.x: Fitxer &gt; Exportar &gt; Lloc web &gt; Arxiu comprimit ZIP.<br>• Versió 3.x: Fitxer &gt; Descarregar com &gt; Lloc web."
+          tooltip: "eXeLearning: a la versió 3+ pots usar directament un .elpx (ja és un ZIP). Versió 2.x: Fitxer > Exportar > Lloc web > Arxiu comprimit ZIP. Versió 3.x: Fitxer > Descarregar com > Lloc web.",
+          tooltipHtml: "<strong>eXeLearning:</strong><br>• Versió 3+: pots usar directament el fitxer <code>.elpx</code> (ja és un ZIP).<br>• Versió 2.x: Fitxer &gt; Exportar &gt; Lloc web &gt; Arxiu comprimit ZIP.<br>• Versió 3.x: Fitxer &gt; Descarregar com &gt; Lloc web."
         },
         step1: {
           title: 'Afegeix els teus fitxers',
@@ -615,7 +619,7 @@
           + '<div class="about-section"><h3>Publicar</h3><ul><li><strong>Crear un ZIP</strong>: crea i descarrega un ZIP des dels teus fitxers o enganxant HTML.</li><li><strong>Ja tinc un ZIP</strong>: enganxa l’enllaç públic al ZIP i prem “Crear enllaç” per obtenir l’enllaç del visor.</li><li>Opcional: copia l’enllaç o obre la vista prèvia.</li></ul></div>'
           + '<div class="about-section"><h3>Crear un ZIP</h3><ul><li><strong>No tens fitxers? Enganxa l’HTML</strong>: enganxa l’HTML complet i es crearà un ZIP amb <code>index.html</code>.</li><li><strong>Tens fitxers? Crea el ZIP</strong>: arrossega la carpeta o els fitxers i prem “Crear i descarregar ZIP”.</li><li>Si no hi ha <code>index.html</code>, el visor et demanarà quin HTML obrir primer.</li></ul></div>'
           + '<div class="about-section"><h3>Ja tinc un ZIP</h3><ul><li>Enganxa l’enllaç públic del ZIP.</li><li>Prem “Crear enllaç” i copia el resultat o obre la vista prèvia.</li></ul></div>'
-          + '<div class="about-section"><h3>Gestor de recursos</h3><ul><li>Aquí pots veure i gestionar els recursos que has obert des d’aquest navegador.</li><li><strong>Veure</strong> obre el recurs desat.</li><li><strong>Compartir</strong> copia l’enllaç del visor (pantalla completa).</li><li><strong>Editar</strong> canvia el títol.</li><li><strong>Descarregar</strong> baixa el ZIP original.</li><li><strong>Eliminar</strong> esborra el recurs del navegador.</li></ul></div>'
+          + '<div class="about-section"><h3>Gestor de recursos</h3><ul><li>Aquí pots veure i gestionar els recursos que has obert des d’aquest navegador.</li><li><strong>Veure</strong> obre el recurs desat.</li><li><strong>Compartir</strong> copia l’enllaç del visor (pantalla completa).</li><li><strong>Editar</strong> canvia el títol.</li><li><strong>Descarregar</strong> baixa el fitxer original (ZIP o .elpx).</li><li><strong>Eliminar</strong> esborra el recurs del navegador.</li></ul></div>'
           + '<div class="about-section"><h3>Què funciona i què pot fallar</h3><ul><li>Funciona amb webs estàtiques (HTML, CSS, imatges, àudio, vídeo, PDF...).</li><li>No funciona amb webs que requereixen servidor (formularis amb BD, PHP, etc.).</li><li>Google Drive limita les descàrregues directes d’arxius grans (~25 MB).</li></ul></div>'
       },
       error: {
@@ -679,7 +683,7 @@
         back: 'Volver ao inicio',
         zipHelp: {
           summary: 'Que é un ZIP?',
-          bodyHtml: 'Un <strong>ZIP</strong> é un ficheiro comprimido que agrupa varios ficheiros (e cartafoles) nun só.'
+          bodyHtml: 'Un <strong>ZIP</strong> é un ficheiro comprimido que agrupa varios ficheiros (e cartafoles) nun só. En <strong>eXeLearning 3+</strong>, o ficheiro <code>.elpx</code> tamén serve porque xa é un ZIP.'
         },
         htmlHelp: {
           summary: 'Que é o HTML e onde o consigo?',
@@ -691,8 +695,10 @@
             note: 'Comeza creando un ZIP desde os teus ficheiros ou desde HTML.'
           },
           main: {
-            title: 'Xa teño un ZIP',
-            note: 'Pega unha ligazón pública ao ZIP e xera a ligazón do visor.'
+            title: 'Xa teño un ZIP ou ELPX',
+            note: 'Pega unha ligazón pública ao ZIP (ou ao ficheiro .elpx de eXeLearning) e xera a ligazón do visor.',
+            elpxTooltip: 'Que é ELPX?',
+            elpxTooltipHtml: 'Un ficheiro <code>.elpx</code> é un proxecto de eXeLearning. Por dentro é un ZIP, así que o visor pode abrilo.'
           }
         }
       },
@@ -700,11 +706,11 @@
         label: 'Seccións'
       },
       main: {
-        subtitle: 'Se xa tes o teu recurso en formato ZIP nun servizo con ligazón pública (Drive, Dropbox, etc.), pega aquí a ligazón para xerar a ligazón do visor.',
+        subtitle: 'Se xa tes o teu recurso en formato ZIP (ou .elpx de eXeLearning 3+) nun servizo con ligazón pública (Drive, Dropbox, etc.), pega aquí a ligazón para xerar a ligazón do visor.',
         form: {
           title: 'Pega aquí a ligazón pública',
-          step: 'Pega a ligazón pública ao ZIP e preme “Crear ligazón”.',
-          placeholder: 'Pega aquí a ligazón pública do ZIP',
+          step: 'Pega a ligazón pública ao ZIP (ou .elpx) e preme “Crear ligazón”.',
+          placeholder: 'Pega aquí a ligazón pública do ZIP ou do .elpx',
           submit: 'Crear ligazón'
         },
         output: {
@@ -768,7 +774,7 @@
           share: 'Compartir',
           embed: 'Inserir nunha web',
           edit: 'Editar o título',
-          download: 'Descargar ZIP'
+          download: 'Descargar ficheiro'
         },
         editPrompt: 'Título do recurso',
         empty: 'Non hai recursos gardados neste navegador.',
@@ -782,11 +788,11 @@
         },
         subtitle: {
           lead: 'Para compartir o teu recurso necesitas comprimir os ficheiros (ou o cartafol que os contén) nun arquivo ZIP.',
-          exeSentenceHtml: 'Se usas <strong>eXeLearning</strong>, tamén podes crear o ZIP desde o propio programa e, se queres, continuar coa opción “Xa teño un ZIP”.'
+          exeSentenceHtml: 'Se usas <strong>eXeLearning</strong>, na versión 3+ podes usar directamente o ficheiro <code>.elpx</code> (xa é un ZIP). Noutras versións, exporta a ZIP desde o propio programa e, se queres, continúa coa opción “Xa teño un ZIP”.'
         },
         exe: {
-          tooltip: 'Como exportar desde eXeLearning. Versión 2.x: Arquivo > Exportar > Sitio web > Arquivo comprimido ZIP. Versión 3.x: Arquivo > Descargar como > Sitio web.',
-          tooltipHtml: '<strong>Como exportar desde eXeLearning:</strong><br>• Versión 2.x: Arquivo &gt; Exportar &gt; Sitio web &gt; Arquivo comprimido ZIP.<br>• Versión 3.x: Arquivo &gt; Descargar como &gt; Sitio web.'
+          tooltip: 'eXeLearning: na versión 3+ podes usar directamente un .elpx (xa é un ZIP). Versión 2.x: Arquivo > Exportar > Sitio web > Arquivo comprimido ZIP. Versión 3.x: Arquivo > Descargar como > Sitio web.',
+          tooltipHtml: '<strong>eXeLearning:</strong><br>• Versión 3+: podes usar directamente o ficheiro <code>.elpx</code> (xa é un ZIP).<br>• Versión 2.x: Arquivo &gt; Exportar &gt; Sitio web &gt; Arquivo comprimido ZIP.<br>• Versión 3.x: Arquivo &gt; Descargar como &gt; Sitio web.'
         },
         step1: {
           title: 'Engade os teus ficheiros',
@@ -895,7 +901,7 @@
           + '<div class="about-section"><h3>Publicar</h3><ul><li><strong>Crear un ZIP</strong>: crea e descarga un ZIP desde os teus ficheiros ou pegando HTML.</li><li><strong>Xa teño un ZIP</strong>: pega a ligazón pública ao ZIP e preme “Crear ligazón” para obter a ligazón do visor.</li><li>Opcional: copia a ligazón ou abre a vista previa.</li></ul></div>'
           + '<div class="about-section"><h3>Crear un ZIP</h3><ul><li><strong>Non tes ficheiros? Pega o HTML</strong>: pega o HTML completo e crearase un ZIP con <code>index.html</code>.</li><li><strong>Tes ficheiros? Crea o ZIP</strong>: arrastra o cartafol ou os ficheiros e preme “Crear e descargar ZIP”.</li><li>Se non hai <code>index.html</code>, o visor pedirache que HTML abrir primeiro.</li></ul></div>'
           + '<div class="about-section"><h3>Xa teño un ZIP</h3><ul><li>Pega a ligazón pública do ZIP.</li><li>Preme “Crear ligazón” e copia o resultado ou abre a vista previa.</li></ul></div>'
-          + '<div class="about-section"><h3>Xestor de recursos</h3><ul><li>Aquí podes ver e xestionar os recursos que abríches desde este navegador.</li><li><strong>Ver</strong> abre o recurso gardado.</li><li><strong>Compartir</strong> copia a ligazón do visor (pantalla completa).</li><li><strong>Editar</strong> cambia o título.</li><li><strong>Descargar</strong> baixa o ZIP orixinal.</li><li><strong>Eliminar</strong> borra o recurso do navegador.</li></ul></div>'
+          + '<div class="about-section"><h3>Xestor de recursos</h3><ul><li>Aquí podes ver e xestionar os recursos que abríches desde este navegador.</li><li><strong>Ver</strong> abre o recurso gardado.</li><li><strong>Compartir</strong> copia a ligazón do visor (pantalla completa).</li><li><strong>Editar</strong> cambia o título.</li><li><strong>Descargar</strong> baixa o ficheiro orixinal (ZIP ou .elpx).</li><li><strong>Eliminar</strong> borra o recurso do navegador.</li></ul></div>'
           + '<div class="about-section"><h3>Que funciona e que pode fallar</h3><ul><li>Funciona con webs estáticas (HTML, CSS, imaxes, audio, vídeo, PDF...).</li><li>Non funciona con webs que requiren servidor (formularios con BD, PHP, etc.).</li><li>Google Drive limita descargas directas de ficheiros grandes (~25 MB).</li></ul></div>'
       },
       error: {
@@ -959,7 +965,7 @@
         back: 'Hasierara itzuli',
         zipHelp: {
           summary: 'Zer da ZIP bat?',
-          bodyHtml: '<strong>ZIP</strong> bat fitxategi konprimatua da: hainbat fitxategi (eta karpeta) fitxategi bakarrean biltzen ditu.'
+          bodyHtml: '<strong>ZIP</strong> bat fitxategi konprimatua da: hainbat fitxategi (eta karpeta) fitxategi bakarrean biltzen ditu. <strong>eXeLearning 3+</strong> bertsioan, <code>.elpx</code> fitxategiak ere balio du, dagoeneko ZIP bat delako.'
         },
         htmlHelp: {
           summary: 'Zer da HTMLa eta non lortzen dut?',
@@ -971,8 +977,10 @@
             note: 'Hasi ZIP bat sortzen zure fitxategietatik edo HTMLtik.'
           },
           main: {
-            title: 'ZIP bat badaukat',
-            note: 'Itsatsi ZIParen esteka publikoa eta sortu bisorearen esteka.'
+            title: 'ZIP edo ELPX badaukat',
+            note: 'Itsatsi ZIParen esteka publikoa (edo eXeLearning-en .elpx fitxategiarena) eta sortu bisorearen esteka.',
+            elpxTooltip: 'Zer da ELPX?',
+            elpxTooltipHtml: '<code>.elpx</code> fitxategia eXeLearning-en proiektu bat da. Barrutik ZIP bat da; beraz, bisoreak ireki dezake.'
           }
         }
       },
@@ -980,11 +988,11 @@
         label: 'Atalak'
       },
       main: {
-        subtitle: 'Zure baliabidea ZIP formatuan baduzu eta esteka publikoa duen zerbitzu batean badago (Drive, Dropbox, etab.), itsatsi hemen esteka bisorearen esteka sortzeko.',
+        subtitle: 'Zure baliabidea ZIP formatuan (edo eXeLearning 3+eko .elpx) baduzu eta esteka publikoa duen zerbitzu batean badago (Drive, Dropbox, etab.), itsatsi hemen esteka bisorearen esteka sortzeko.',
         form: {
           title: 'Itsatsi hemen esteka publikoa',
-          step: 'Itsatsi ZIParen esteka publikoa eta sakatu “Esteka sortu”.',
-          placeholder: 'Itsatsi hemen ZIParen esteka publikoa',
+          step: 'Itsatsi ZIParen esteka publikoa (edo .elpx) eta sakatu “Esteka sortu”.',
+          placeholder: 'Itsatsi hemen ZIParen edo .elpx fitxategiaren esteka publikoa',
           submit: 'Esteka sortu'
         },
         output: {
@@ -1048,7 +1056,7 @@
           share: 'Partekatu',
           embed: 'Web batean txertatu',
           edit: 'Izenburua editatu',
-          download: 'ZIPa deskargatu'
+          download: 'Fitxategia deskargatu'
         },
         editPrompt: 'Baliabidearen izenburua',
         empty: 'Ez dago gordetako baliabiderik nabigatzaile honetan.',
@@ -1062,11 +1070,11 @@
         },
         subtitle: {
           lead: 'Zure baliabidea partekatzeko, fitxategiak (edo horiek dituen karpeta) ZIP fitxategi batean konprimitu behar dituzu.',
-          exeSentenceHtml: '<strong>eXeLearning</strong> erabiltzen baduzu, ZIPa programatik bertatik sor dezakezu eta, nahi baduzu, “ZIP bat badaukat” aukerarekin jarraitu.'
+          exeSentenceHtml: '<strong>eXeLearning</strong> erabiltzen baduzu, 3+ bertsioan <code>.elpx</code> fitxategia zuzenean erabil dezakezu (dagoeneko ZIP bat da). Beste bertsioetan, esportatu ZIPera programatik bertatik eta, nahi baduzu, “ZIP bat badaukat” aukerarekin jarraitu.'
         },
         exe: {
-          tooltip: 'eXeLearningetik nola esportatu. 2.x bertsioa: Fitxategia > Esportatu > Webgunea > ZIP fitxategi konprimatua. 3.x bertsioa: Fitxategia > Deskargatu honela > Webgunea.',
-          tooltipHtml: '<strong>eXeLearningetik nola esportatu:</strong><br>• 2.x bertsioa: Fitxategia &gt; Esportatu &gt; Webgunea &gt; ZIP fitxategi konprimatua.<br>• 3.x bertsioa: Fitxategia &gt; Deskargatu honela &gt; Webgunea.'
+          tooltip: 'eXeLearning: 3+ bertsioan .elpx zuzenean erabil dezakezu (dagoeneko ZIP bat da). 2.x bertsioa: Fitxategia > Esportatu > Webgunea > ZIP fitxategi konprimatua. 3.x bertsioa: Fitxategia > Deskargatu honela > Webgunea.',
+          tooltipHtml: '<strong>eXeLearning:</strong><br>• 3+ bertsioa: <code>.elpx</code> fitxategia zuzenean erabil dezakezu (dagoeneko ZIP bat da).<br>• 2.x bertsioa: Fitxategia &gt; Esportatu &gt; Webgunea &gt; ZIP fitxategi konprimatua.<br>• 3.x bertsioa: Fitxategia &gt; Deskargatu honela &gt; Webgunea.'
         },
         step1: {
           title: 'Gehitu zure fitxategiak',
@@ -1175,7 +1183,7 @@
           + '<div class="about-section"><h3>Argitaratu</h3><ul><li><strong>ZIP bat sortu</strong>: sortu eta deskargatu ZIP bat zure fitxategietatik edo HTMLa itsatsita.</li><li><strong>ZIP bat badaukat</strong>: itsatsi ZIParen esteka publikoa eta sakatu “Esteka sortu” bisorearen esteka lortzeko.</li><li>Aukerakoa: kopiatu esteka edo ireki aurrebista.</li></ul></div>'
           + '<div class="about-section"><h3>ZIP bat sortu</h3><ul><li><strong>Ez duzu fitxategirik? Itsatsi HTMLa</strong>: itsatsi HTML osoa eta ZIP bat sortuko da <code>index.html</code>arekin.</li><li><strong>Fitxategiak dituzu? Sortu ZIPa</strong>: arrastatu karpeta edo fitxategiak eta sakatu “Sortu eta deskargatu ZIPa”.</li><li><code>index.html</code> ez badago, bisoreak lehenik zein HTML ireki galdetuko dizu.</li></ul></div>'
           + '<div class="about-section"><h3>ZIP bat badaukat</h3><ul><li>Itsatsi ZIParen esteka publikoa.</li><li>Sakatu “Esteka sortu” eta kopiatu emaitza edo ireki aurrebista.</li></ul></div>'
-          + '<div class="about-section"><h3>Baliabide kudeatzailea</h3><ul><li>Hemen nabigatzaile honetan irekitako baliabideak ikusi eta kudeatu ditzakezu.</li><li><strong>Ikusi</strong> gordetako baliabidea irekitzen du.</li><li><strong>Partekatu</strong> bisorearen esteka kopiatzen du (pantaila osoa).</li><li><strong>Editatu</strong> izenburua aldatzen du.</li><li><strong>Deskargatu</strong> jatorrizko ZIPa jaisten du.</li><li><strong>Ezabatu</strong> baliabidea nabigatzailetik kentzen du.</li></ul></div>'
+          + '<div class="about-section"><h3>Baliabide kudeatzailea</h3><ul><li>Hemen nabigatzaile honetan irekitako baliabideak ikusi eta kudeatu ditzakezu.</li><li><strong>Ikusi</strong> gordetako baliabidea irekitzen du.</li><li><strong>Partekatu</strong> bisorearen esteka kopiatzen du (pantaila osoa).</li><li><strong>Editatu</strong> izenburua aldatzen du.</li><li><strong>Deskargatu</strong> jatorrizko fitxategia jaisten du (ZIP edo .elpx).</li><li><strong>Ezabatu</strong> baliabidea nabigatzailetik kentzen du.</li></ul></div>'
           + '<div class="about-section"><h3>Zer dabil eta zer huts egin dezake</h3><ul><li>Web estatikoekin dabil (HTML, CSS, irudiak, audioa, bideoa, PDF...).</li><li>Ez dabil zerbitzaria behar duten webekin (DBko formularioak, PHP, etab.).</li><li>Google Drivek fitxategi handien deskarga zuzena mugatzen du (~25 MB).</li></ul></div>'
       },
       error: {
@@ -1239,7 +1247,7 @@
         back: 'Back to start',
         zipHelp: {
           summary: 'What is a ZIP?',
-          bodyHtml: 'A <strong>ZIP</strong> is a compressed file that bundles multiple files (and folders) into one.'
+          bodyHtml: 'A <strong>ZIP</strong> is a compressed file that bundles multiple files (and folders) into one. In <strong>eXeLearning 3+</strong>, the <code>.elpx</code> file also works because it’s already a ZIP.'
         },
         htmlHelp: {
           summary: 'What is HTML and where do I get it?',
@@ -1251,8 +1259,10 @@
             note: 'Start by creating a ZIP from your files or from HTML.'
           },
           main: {
-            title: 'I already have a ZIP',
-            note: 'Paste a public ZIP link and generate the viewer link.'
+            title: 'I already have a ZIP or ELPX',
+            note: 'Paste a public link to the ZIP (or an eXeLearning .elpx file) and generate the viewer link.',
+            elpxTooltip: 'What is ELPX?',
+            elpxTooltipHtml: 'An <code>.elpx</code> file is an eXeLearning project. It’s a ZIP internally, so the viewer can open it.'
           }
         }
       },
@@ -1260,11 +1270,11 @@
         label: 'Sections'
       },
       main: {
-        subtitle: 'If your resource is already a ZIP hosted on a public link service (Drive, Dropbox, etc.), paste the link here to generate the viewer link.',
+        subtitle: 'If your resource is already a ZIP (or an eXeLearning 3+ .elpx file) hosted on a public link service (Drive, Dropbox, etc.), paste the link here to generate the viewer link.',
         form: {
           title: 'Paste the public link here',
-          step: 'Paste the public ZIP link and click “Create link”.',
-          placeholder: 'Paste the public ZIP link here',
+          step: 'Paste the public ZIP link (or .elpx) and click “Create link”.',
+          placeholder: 'Paste the public ZIP or .elpx link here',
           submit: 'Create link'
         },
         output: {
@@ -1328,7 +1338,7 @@
           share: 'Share',
           embed: 'Embed in a website',
           edit: 'Edit title',
-          download: 'Download ZIP'
+          download: 'Download file'
         },
         editPrompt: 'Resource title',
         empty: 'No saved resources in this browser.',
@@ -1342,11 +1352,11 @@
         },
         subtitle: {
           lead: 'To share your resource, compress the files (or the folder that contains them) into a .zip file.',
-          exeSentenceHtml: 'If you use <strong>eXeLearning</strong>, you can also create the ZIP from the program itself and, if you want, continue with the “I already have a ZIP” option.'
+          exeSentenceHtml: 'If you use <strong>eXeLearning</strong>, in version 3+ you can use the <code>.elpx</code> file directly (it’s already a ZIP). In other versions, export to ZIP from the program and, if you want, continue with “I already have a ZIP”.'
         },
         exe: {
-          tooltip: 'How to export from eXeLearning. Version 2.x: File > Export > Website > Compressed ZIP file. Version 3.x: File > Download as > Website.',
-          tooltipHtml: '<strong>How to export from eXeLearning:</strong><br>• Version 2.x: File &gt; Export &gt; Website &gt; Compressed ZIP file.<br>• Version 3.x: File &gt; Download as &gt; Website.'
+          tooltip: 'eXeLearning: in version 3+ you can use a .elpx directly (it’s already a ZIP). Version 2.x: File > Export > Website > Compressed ZIP file. Version 3.x: File > Download as > Website.',
+          tooltipHtml: '<strong>eXeLearning:</strong><br>• Version 3+: you can use the <code>.elpx</code> file directly (it’s already a ZIP).<br>• Version 2.x: File &gt; Export &gt; Website &gt; Compressed ZIP file.<br>• Version 3.x: File &gt; Download as &gt; Website.'
         },
         step1: {
           title: 'Add your files',
@@ -1455,7 +1465,7 @@
           + '<div class="about-section"><h3>Publish</h3><ul><li><strong>Create a ZIP</strong>: create and download a ZIP from your files or by pasting HTML.</li><li><strong>I already have a ZIP</strong>: paste the public ZIP link and click “Create link” to get the viewer link.</li><li>Optional: copy the link or open the preview.</li></ul></div>'
           + '<div class="about-section"><h3>Create a ZIP</h3><ul><li><strong>No files? Paste the HTML</strong>: paste the full HTML and a ZIP with <code>index.html</code> will be created.</li><li><strong>Have files? Create the ZIP</strong>: drop the folder/files and click “Create and download ZIP”.</li><li>If there is no <code>index.html</code>, the viewer will ask which HTML to open first.</li></ul></div>'
           + '<div class="about-section"><h3>I already have a ZIP</h3><ul><li>Paste the public ZIP link.</li><li>Click “Create link” and copy the result or open the preview.</li></ul></div>'
-          + '<div class="about-section"><h3>Resource manager</h3><ul><li>Here you can review and manage the resources you opened from this browser.</li><li><strong>View</strong> opens the saved resource.</li><li><strong>Share</strong> copies the viewer link (full screen).</li><li><strong>Edit</strong> changes the title.</li><li><strong>Download</strong> downloads the original ZIP.</li><li><strong>Delete</strong> removes the resource from the browser.</li></ul></div>'
+          + '<div class="about-section"><h3>Resource manager</h3><ul><li>Here you can review and manage the resources you opened from this browser.</li><li><strong>View</strong> opens the saved resource.</li><li><strong>Share</strong> copies the viewer link (full screen).</li><li><strong>Edit</strong> changes the title.</li><li><strong>Download</strong> downloads the original file (ZIP or .elpx).</li><li><strong>Delete</strong> removes the resource from the browser.</li></ul></div>'
           + '<div class="about-section"><h3>What works and what may fail</h3><ul><li>Works with static websites (HTML, CSS, images, audio, video, PDF...).</li><li>Does not work with sites that require a server (database forms, PHP, etc.).</li><li>Google Drive limits direct downloads of large files (~25 MB).</li></ul></div>'
       },
       error: {
@@ -1519,7 +1529,7 @@
         back: 'Zurück zum Start',
         zipHelp: {
           summary: 'Was ist eine ZIP-Datei?',
-          bodyHtml: 'Eine <strong>ZIP</strong>-Datei ist ein komprimiertes Archiv, das mehrere Dateien (und Ordner) in einer Datei bündelt.'
+          bodyHtml: 'Eine <strong>ZIP</strong>-Datei ist ein komprimiertes Archiv, das mehrere Dateien (und Ordner) in einer Datei bündelt. In <strong>eXeLearning 3+</strong> funktioniert auch die <code>.elpx</code>-Datei, weil sie bereits ein ZIP ist.'
         },
         htmlHelp: {
           summary: 'Was ist HTML und woher bekomme ich es?',
@@ -1531,8 +1541,10 @@
             note: 'Starte, indem du ein ZIP aus deinen Dateien oder aus HTML erstellst.'
           },
           main: {
-            title: 'Ich habe bereits ein ZIP',
-            note: 'Füge einen öffentlichen ZIP-Link ein und erzeuge den Viewer-Link.'
+            title: 'Ich habe bereits ein ZIP oder ELPX',
+            note: 'Füge einen öffentlichen Link zur ZIP-Datei (oder zu einer eXeLearning-.elpx-Datei) ein und erzeuge den Viewer-Link.',
+            elpxTooltip: 'Was ist ELPX?',
+            elpxTooltipHtml: 'Eine <code>.elpx</code>-Datei ist ein eXeLearning-Projekt. Intern ist sie ein ZIP, daher kann der Viewer sie öffnen.'
           }
         }
       },
@@ -1540,11 +1552,11 @@
         label: 'Abschnitte'
       },
       main: {
-        subtitle: 'Wenn deine Ressource bereits als ZIP mit öffentlichem Link verfügbar ist (Drive, Dropbox usw.), füge den Link hier ein, um den Viewer-Link zu erzeugen.',
+        subtitle: 'Wenn deine Ressource bereits als ZIP (oder als eXeLearning-3+-.elpx-Datei) mit öffentlichem Link verfügbar ist (Drive, Dropbox usw.), füge den Link hier ein, um den Viewer-Link zu erzeugen.',
         form: {
           title: 'Füge hier den öffentlichen Link ein',
-          step: 'Füge den öffentlichen ZIP-Link ein und klicke auf „Link erstellen“.',
-          placeholder: 'Füge hier den öffentlichen ZIP-Link ein',
+          step: 'Füge den öffentlichen Link zur ZIP-Datei (oder .elpx) ein und klicke auf „Link erstellen“.',
+          placeholder: 'Füge hier den öffentlichen ZIP- oder .elpx-Link ein',
           submit: 'Link erstellen'
         },
         output: {
@@ -1608,7 +1620,7 @@
           share: 'Teilen',
           embed: 'In eine Website einbetten',
           edit: 'Titel bearbeiten',
-          download: 'ZIP herunterladen'
+          download: 'Datei herunterladen'
         },
         editPrompt: 'Titel der Ressource',
         empty: 'Keine gespeicherten Ressourcen in diesem Browser.',
@@ -1622,11 +1634,11 @@
         },
         subtitle: {
           lead: 'Um deine Ressource zu teilen, komprimiere die Dateien (oder den Ordner, der sie enthält) in eine ZIP-Datei.',
-          exeSentenceHtml: 'Wenn du <strong>eXeLearning</strong> nutzt, kannst du das ZIP direkt im Programm erstellen und, wenn du möchtest, mit „Ich habe bereits ein ZIP“ weitermachen.'
+          exeSentenceHtml: 'Wenn du <strong>eXeLearning</strong> nutzt, kannst du in Version 3+ die <code>.elpx</code>-Datei direkt verwenden (sie ist bereits ein ZIP). In anderen Versionen exportiere als ZIP und fahre bei Bedarf mit „Ich habe bereits ein ZIP“ fort.'
         },
         exe: {
-          tooltip: 'So exportierst du aus eXeLearning. Version 2.x: Datei > Exportieren > Website > Komprimierte ZIP-Datei. Version 3.x: Datei > Herunterladen als > Website.',
-          tooltipHtml: '<strong>So exportierst du aus eXeLearning:</strong><br>• Version 2.x: Datei &gt; Exportieren &gt; Website &gt; Komprimierte ZIP-Datei.<br>• Version 3.x: Datei &gt; Herunterladen als &gt; Website.'
+          tooltip: 'eXeLearning: In Version 3+ kannst du eine .elpx direkt verwenden (sie ist bereits ein ZIP). Version 2.x: Datei > Exportieren > Website > Komprimierte ZIP-Datei. Version 3.x: Datei > Herunterladen als > Website.',
+          tooltipHtml: '<strong>eXeLearning:</strong><br>• Version 3+: Du kannst die <code>.elpx</code>-Datei direkt verwenden (sie ist bereits ein ZIP).<br>• Version 2.x: Datei &gt; Exportieren &gt; Website &gt; Komprimierte ZIP-Datei.<br>• Version 3.x: Datei &gt; Herunterladen als &gt; Website.'
         },
         step1: {
           title: 'Dateien hinzufügen',
@@ -1735,7 +1747,7 @@
           + '<div class="about-section"><h3>Veröffentlichen</h3><ul><li><strong>ZIP erstellen</strong>: Erstelle und lade ein ZIP aus deinen Dateien herunter oder indem du HTML einfügst.</li><li><strong>Ich habe bereits ein ZIP</strong>: Füge den öffentlichen ZIP-Link ein und klicke auf „Link erstellen“, um den Viewer-Link zu erhalten.</li><li>Optional: Link kopieren oder Vorschau öffnen.</li></ul></div>'
           + '<div class="about-section"><h3>ZIP erstellen</h3><ul><li><strong>Keine Dateien? HTML einfügen</strong>: Füge das vollständige HTML ein und es wird ein ZIP mit <code>index.html</code> erstellt.</li><li><strong>Dateien vorhanden? ZIP erstellen</strong>: Ordner/Dateien ablegen und „ZIP erstellen und herunterladen“ klicken.</li><li>Wenn es kein <code>index.html</code> gibt, fragt der Viewer, welche HTML-Datei zuerst geöffnet werden soll.</li></ul></div>'
           + '<div class="about-section"><h3>Ich habe bereits ein ZIP</h3><ul><li>Füge den öffentlichen ZIP-Link ein.</li><li>Klicke auf „Link erstellen“ und kopiere das Ergebnis oder öffne die Vorschau.</li></ul></div>'
-          + '<div class="about-section"><h3>Ressourcenverwaltung</h3><ul><li>Hier kannst du die in diesem Browser geöffneten Ressourcen ansehen und verwalten.</li><li><strong>Ansehen</strong> öffnet die gespeicherte Ressource.</li><li><strong>Teilen</strong> kopiert den Viewer-Link (Vollbild).</li><li><strong>Bearbeiten</strong> ändert den Titel.</li><li><strong>ZIP herunterladen</strong> lädt das Original-ZIP herunter.</li><li><strong>Löschen</strong> entfernt die Ressource aus dem Browser.</li></ul></div>'
+          + '<div class="about-section"><h3>Ressourcenverwaltung</h3><ul><li>Hier kannst du die in diesem Browser geöffneten Ressourcen ansehen und verwalten.</li><li><strong>Ansehen</strong> öffnet die gespeicherte Ressource.</li><li><strong>Teilen</strong> kopiert den Viewer-Link (Vollbild).</li><li><strong>Bearbeiten</strong> ändert den Titel.</li><li><strong>Datei herunterladen</strong> lädt die Originaldatei (ZIP oder .elpx) herunter.</li><li><strong>Löschen</strong> entfernt die Ressource aus dem Browser.</li></ul></div>'
           + '<div class="about-section"><h3>Was funktioniert und was scheitern kann</h3><ul><li>Funktioniert mit statischen Webseiten (HTML, CSS, Bilder, Audio, Video, PDF...).</li><li>Funktioniert nicht mit Seiten, die einen Server benötigen (DB-Formulare, PHP usw.).</li><li>Google Drive begrenzt direkte Downloads großer Dateien (~25 MB).</li></ul></div>'
       },
       error: {
