@@ -3352,6 +3352,11 @@
     return bytes;
   }
 
+  function formatMiB(bytes) {
+    var mib = bytes / (1024 * 1024);
+    return mib.toFixed(1).replace('.', ',') + ' MB';
+  }
+
   function concatUint8Arrays(chunks, totalSize) {
     var size = totalSize;
     if (!size) {
@@ -3388,18 +3393,28 @@
 
   function fetchZipBundleChunked(zipUrl) {
     var meta = { name: 'site.zip', size: 0, acceptRanges: false };
-    var chunkSize = 2 * 1024 * 1024;
+    var chunkSize = 4 * 1024 * 1024;
     var chunks = [];
     var downloaded = 0;
     var totalSize = 0;
+    var maxProgress = 20;
 
     function updateDownloadProgress() {
+      var message = 'Descargando: ' + formatMiB(downloaded);
+      var pct = 0;
+      if (totalSize) {
+        pct = downloaded / totalSize;
+        if (pct < 0) pct = 0;
+        if (pct > 1) pct = 1;
+        message += ' / ' + formatMiB(totalSize) + ' (' + Math.round(pct * 100) + '%)';
+      }
+      setLoadingMessage(message);
+
       if (!totalSize) return;
-      var pct = downloaded / totalSize;
-      if (pct < 0) pct = 0;
-      if (pct > 1) pct = 1;
       var progress = 20 + Math.round(pct * 45);
       if (progress > 65) progress = 65;
+      if (progress < maxProgress) progress = maxProgress;
+      maxProgress = progress;
       setProgress(progress);
     }
 
@@ -3412,6 +3427,9 @@
         // If meta fails, try the first chunk and infer totalSize from Content-Range.
       })
       .then(function () {
+        stopProgress();
+        setProgress(20);
+        updateDownloadProgress();
         function fetchPart(part) {
           var endpoint = GAS_WEBAPP_URL + '?url=' + encodeURIComponent(zipUrl) + '&bundle=1&part=' + part + '&chunkSize=' + chunkSize;
           return fetch(endpoint)
