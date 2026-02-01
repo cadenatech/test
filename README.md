@@ -35,7 +35,9 @@ Enlaces:
 
 ### Endpoints principales
 
-- `?url=...&bundle=1`: devuelve el ZIP en base64 para que el navegador lo pueda descomprimir.
+- `?url=...&bundle=1`: devuelve el ZIP en base64 (solo para ZIPs pequenos/medianos).
+- `?url=...&bundle=1&meta=1`: devuelve metadatos (`size`, `acceptRanges`, `name`) para descarga por trozos.
+- `?url=...&bundle=1&part=N&chunkSize=...`: devuelve un trozo del ZIP (usa `Range`).
 - `?url=...&json=1`: devuelve el `siteId` y el `indexPath` (legacy).
 
 ## 2) Frontend en GitHub Pages
@@ -71,5 +73,5 @@ Enlaces:
 
 - El ZIP debe estar compartido publicamente (Drive con "Cualquiera con el enlace").
 - El primer acceso descarga y descomprime el ZIP en el navegador.
-- El limite del proxy es 100 MB (antes de base64). Si necesitas mas, hay que aumentar el limite en `gas/Code.js`.
+- Para ZIPs grandes, el modo `bundle=1` en una sola respuesta puede fallar por el tamano del base64. La solucion es la **descarga por trozos** (`meta=1` + `part=`), ya incluida en `gas/Code.js` y con fallback automatico en el frontend.
 - Si cambias el ZIP pero mantienes el mismo enlace, los alumnos deben volver a abrir la URL para actualizar el cache.

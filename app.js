@@ -3352,18 +3352,128 @@
     return bytes;
   }
 
+  function concatUint8Arrays(chunks, totalSize) {
+    var size = totalSize;
+    if (!size) {
+      size = chunks.reduce(function (sum, chunk) { return sum + chunk.length; }, 0);
+    }
+    var out = new Uint8Array(size);
+    var offset = 0;
+    for (var i = 0; i < chunks.length; i++) {
+      out.set(chunks[i], offset);
+      offset += chunks[i].length;
+    }
+    if (offset !== size) {
+      return out.slice(0, offset);
+    }
+    return out;
+  }
+
+  function fetchZipBundleMeta(zipUrl) {
+    var endpoint = GAS_WEBAPP_URL + '?url=' + encodeURIComponent(zipUrl) + '&bundle=1&meta=1';
+    return fetch(endpoint)
+      .then(function (res) {
+        if (!res.ok) {
+          throw new Error('HTTP ' + res.status);
+        }
+        return res.json();
+      })
+      .then(function (data) {
+        if (data && data.error) {
+          throw new Error(data.error);
+        }
+        return data || {};
+      });
+  }
+
+  function fetchZipBundleChunked(zipUrl) {
+    var meta = { name: 'site.zip', size: 0, acceptRanges: false };
+    var chunkSize = 2 * 1024 * 1024;
+    var chunks = [];
+    var downloaded = 0;
+    var totalSize = 0;
+
+    function updateDownloadProgress() {
+      if (!totalSize) return;
+      var pct = downloaded / totalSize;
+      if (pct < 0) pct = 0;
+      if (pct > 1) pct = 1;
+      var progress = 20 + Math.round(pct * 45);
+      if (progress > 65) progress = 65;
+      setProgress(progress);
+    }
+
+    return fetchZipBundleMeta(zipUrl)
+      .then(function (m) {
+        meta = m || meta;
+        totalSize = meta.size || 0;
+      })
+      .catch(function () {
+        // If meta fails, try the first chunk and infer totalSize from Content-Range.
+      })
+      .then(function () {
+        function fetchPart(part) {
+          var endpoint = GAS_WEBAPP_URL + '?url=' + encodeURIComponent(zipUrl) + '&bundle=1&part=' + part + '&chunkSize=' + chunkSize;
+          return fetch(endpoint)
+            .then(function (res) {
+              if (!res.ok) {
+                throw new Error('HTTP ' + res.status);
+              }
+              return res.json();
+            })
+            .then(function (data) {
+              if (data && data.error) {
+                throw new Error(data.error);
+              }
+              if (!meta.name && data.name) meta.name = data.name;
+              if (!totalSize && data.totalSize) totalSize = data.totalSize;
+              if (!meta.acceptRanges && data.acceptRanges) meta.acceptRanges = true;
+              if (totalSize && meta.size !== totalSize) meta.size = totalSize;
+              var partBytes = base64ToBytes(data.base64 || '');
+              chunks.push(partBytes);
+              downloaded += partBytes.length;
+              updateDownloadProgress();
+              if (partBytes.length < chunkSize) {
+                return;
+              }
+              if (totalSize && downloaded >= totalSize) {
+                return;
+              }
+              return fetchPart(part + 1);
+            });
+        }
+        return fetchPart(0);
+      })
+      .then(function () {
+        var zipBytes = concatUint8Arrays(chunks, totalSize || downloaded);
+        return {
+          name: meta.name || 'site.zip',
+          size: totalSize || zipBytes.length,
+          bytes: zipBytes
+        };
+      });
+  }
+
   function fetchZipBundle(zipUrl) {
     if (!GAS_WEBAPP_URL) {
       return Promise.reject(new Error(t('error.configMissing')));
     }
     var endpoint = GAS_WEBAPP_URL + '?url=' + encodeURIComponent(zipUrl) + '&bundle=1';
     return fetch(endpoint)
-      .then(function (res) { return res.json(); })
+      .then(function (res) {
+        if (!res.ok) {
+          throw new Error('HTTP ' + res.status);
+        }
+        return res.json();
+      })
       .then(function (data) {
-        if (data.error) {
+        if (data && data.error) {
           throw new Error(data.error);
         }
         return data;
+      })
+      .catch(function () {
+        return fetchZipBundleChunked(zipUrl);
       });
   }
 
@@ -3491,7 +3601,7 @@
           if (!window.fflate || !window.fflate.unzipSync) {
             throw new Error(t('error.fflateMissing'));
           }
-          var bytes = base64ToBytes(bundle.base64);
+          var bytes = bundle.bytes ? bundle.bytes : base64ToBytes(bundle.base64);
           var entries = window.fflate.unzipSync(bytes);
           var files = [];
           Object.keys(entries).forEach(function (entryPath) {

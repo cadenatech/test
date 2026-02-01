@@ -4,12 +4,18 @@ var SITE_ROOT_FOLDER = 'ZipWebSites';
 var MANIFEST_FILE = 'manifest.json';
 var CACHE_SECONDS = 21600; // 6 hours
 var MAX_BUNDLE_BYTES = 100 * 1024 * 1024; // 100 MB before base64
+var MAX_CHUNK_BYTES = 4 * 1024 * 1024; // 4 MB per chunk (raw bytes)
+var DEFAULT_CHUNK_BYTES = 2 * 1024 * 1024; // 2 MB per chunk (raw bytes)
 
 function authorize() {
   // Run once to grant Drive and UrlFetch scopes for the deploying user.
   DriveApp.getRootFolder().getName();
   UrlFetchApp.fetch('https://www.google.com', { muteHttpExceptions: true });
   return 'ok';
+}
+
+function doOptions(e) {
+  return corsTextOutput_('');
 }
 
 function doGet(e) {
@@ -26,16 +32,19 @@ function doGet(e) {
   if (url) {
     try {
       if (wantsBundle_(e)) {
-        return jsonOutput_(buildBundle_(url));
+        if (wantsBundleMeta_(e) || wantsBundlePart_(e)) {
+          return corsJsonOutput_(buildBundleChunk_(url, e));
+        }
+        return corsJsonOutput_(buildBundle_(url));
       }
       var siteId = ensureSiteFromUrl_(url);
       if (wantsJson_(e)) {
-        return jsonOutput_(getSiteInfo_(siteId));
+        return corsJsonOutput_(getSiteInfo_(siteId));
       }
       return redirectToSite_(siteId);
     } catch (err) {
       if (wantsJson_(e) || wantsBundle_(e)) {
-        return jsonOutput_({ error: 'No se pudo cargar el ZIP. ' + err.message });
+        return corsJsonOutput_({ error: 'No se pudo cargar el ZIP. ' + err.message });
       }
       return errorPage_('No se pudo cargar el ZIP. ' + err.message);
     }
@@ -157,8 +166,57 @@ function buildBundle_(rawUrl) {
   if (bytes.length > MAX_BUNDLE_BYTES) {
     throw new Error('El ZIP supera el limite de ' + (MAX_BUNDLE_BYTES / (1024 * 1024)) + ' MB.');
   }
+  var b64Len = Math.ceil(bytes.length / 3) * 4;
+  if (b64Len > 45 * 1024 * 1024) {
+    throw new Error('El ZIP es demasiado grande para devolverlo en una sola respuesta. Actualiza el backend para usar descarga por trozos.');
+  }
   return {
     name: blob.getName() || 'site.zip',
+    size: bytes.length,
+    base64: Utilities.base64Encode(bytes)
+  };
+}
+
+function buildBundleChunk_(rawUrl, e) {
+  var url = normalizeDownloadUrl_(rawUrl);
+  if (extractDriveId_(url)) {
+    throw new Error('La descarga por trozos no esta disponible para enlaces de Drive en este backend.');
+  }
+
+  if (wantsBundleMeta_(e)) {
+    return fetchRemoteMeta_(url);
+  }
+
+  var part = parsePositiveInt_(e.parameter.part, 0);
+  var chunkSize = parsePositiveInt_(e.parameter.chunkSize, DEFAULT_CHUNK_BYTES);
+  chunkSize = clamp_(chunkSize, 64 * 1024, MAX_CHUNK_BYTES);
+  var start = part * chunkSize;
+  var end = start + chunkSize - 1;
+
+  var resp = fetchRangeResponse_(url, start, end);
+  var bytes = resp.bytes;
+  if (!bytes || !bytes.length) {
+    throw new Error('No se recibieron datos del servidor.');
+  }
+
+  if (resp.contentType && resp.contentType.toLowerCase().indexOf('text/html') !== -1) {
+    throw new Error('La URL devolvio HTML en lugar del ZIP. Revisa permisos o usa un enlace directo.');
+  }
+  if (start === 0 && !looksLikeZipSignature_(bytes)) {
+    var blob = Utilities.newBlob(bytes, resp.contentType || 'application/octet-stream', resp.name || 'download');
+    if (looksLikeHtml_(blob, bytes)) {
+      throw new Error('La URL devolvio HTML en lugar del ZIP. Revisa permisos o usa un enlace directo.');
+    }
+  }
+
+  return {
+    name: resp.name || 'site.zip',
+    totalSize: resp.totalSize || null,
+    acceptRanges: !!resp.acceptRanges,
+    part: part,
+    chunkSize: chunkSize,
+    start: start,
+    end: start + bytes.length - 1,
     size: bytes.length,
     base64: Utilities.base64Encode(bytes)
   };
@@ -603,10 +661,145 @@ function jsonOutput_(data) {
     .setMimeType(ContentService.MimeType.JSON);
 }
 
+function corsJsonOutput_(data) {
+  return corsOutput_(jsonOutput_(data));
+}
+
+function corsTextOutput_(text) {
+  return corsOutput_(ContentService.createTextOutput(text).setMimeType(ContentService.MimeType.TEXT));
+}
+
+function corsOutput_(output) {
+  if (!output) return output;
+  try {
+    output.setHeader('Access-Control-Allow-Origin', '*');
+    output.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    output.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  } catch (err) {
+    // Some output types might not support headers.
+  }
+  return output;
+}
+
 function wantsBundle_(e) {
   return !!(e && e.parameter && (e.parameter.bundle === '1' || e.parameter.format === 'bundle'));
 }
 
 function wantsJson_(e) {
   return !!(e && e.parameter && (e.parameter.json === '1' || e.parameter.format === 'json'));
+}
+
+function wantsBundleMeta_(e) {
+  return !!(e && e.parameter && (e.parameter.meta === '1' || e.parameter.format === 'meta'));
+}
+
+function wantsBundlePart_(e) {
+  return !!(e && e.parameter && typeof e.parameter.part !== 'undefined');
+}
+
+function parsePositiveInt_(value, fallback) {
+  var n = parseInt(value, 10);
+  if (isNaN(n) || n < 0) return fallback;
+  return n;
+}
+
+function clamp_(value, min, max) {
+  return Math.max(min, Math.min(max, value));
+}
+
+function fetchRemoteMeta_(url) {
+  var head = UrlFetchApp.fetch(url, {
+    method: 'head',
+    followRedirects: true,
+    muteHttpExceptions: true
+  });
+  var code = head.getResponseCode();
+  if (code >= 400) {
+    throw new Error('Respuesta HTTP ' + code);
+  }
+  var headers = head.getAllHeaders() || {};
+  var len = parseInt(headers['Content-Length'] || headers['content-length'] || '', 10);
+  var acceptRanges = (headers['Accept-Ranges'] || headers['accept-ranges'] || '').toString().toLowerCase().indexOf('bytes') !== -1;
+  var disposition = (headers['Content-Disposition'] || headers['content-disposition'] || '').toString();
+  var name = extractFilenameFromDisposition_(disposition) || 'site.zip';
+
+  if (!len || isNaN(len)) {
+    var rangeProbe = fetchRangeResponse_(url, 0, 0);
+    if (rangeProbe.totalSize) {
+      len = rangeProbe.totalSize;
+    }
+    acceptRanges = acceptRanges || !!rangeProbe.acceptRanges;
+    name = name || rangeProbe.name || 'site.zip';
+  }
+
+  return {
+    name: name,
+    size: len || null,
+    acceptRanges: !!acceptRanges
+  };
+}
+
+function extractFilenameFromDisposition_(disposition) {
+  if (!disposition) return '';
+  var match = disposition.match(/filename\*\s*=\s*UTF-8''([^;]+)/i);
+  if (match && match[1]) {
+    try {
+      return decodeURIComponent(match[1].trim());
+    } catch (err) {
+      return match[1].trim();
+    }
+  }
+  match = disposition.match(/filename\s*=\s*\"([^\"]+)\"/i);
+  if (match && match[1]) return match[1].trim();
+  match = disposition.match(/filename\s*=\s*([^;]+)/i);
+  if (match && match[1]) return match[1].trim();
+  return '';
+}
+
+function fetchRangeResponse_(url, start, end) {
+  var resp = UrlFetchApp.fetch(url, {
+    method: 'get',
+    followRedirects: true,
+    muteHttpExceptions: true,
+    headers: { Range: 'bytes=' + start + '-' + end }
+  });
+  var code = resp.getResponseCode();
+  if (code >= 400) {
+    throw new Error('Respuesta HTTP ' + code);
+  }
+  if (code !== 206 && code !== 200) {
+    throw new Error('Respuesta HTTP inesperada ' + code);
+  }
+  if (start > 0 && code === 200) {
+    throw new Error('El servidor no soporta descargas por rangos.');
+  }
+
+  var headers = resp.getAllHeaders() || {};
+  var contentType = (headers['Content-Type'] || headers['content-type'] || '').toString();
+  var acceptRanges = (headers['Accept-Ranges'] || headers['accept-ranges'] || '').toString().toLowerCase().indexOf('bytes') !== -1;
+  var disposition = (headers['Content-Disposition'] || headers['content-disposition'] || '').toString();
+  var name = extractFilenameFromDisposition_(disposition) || resp.getBlob().getName() || '';
+
+  var totalSize = null;
+  var contentRange = (headers['Content-Range'] || headers['content-range'] || '').toString();
+  var m = contentRange.match(/\/(\d+)\s*$/);
+  if (m && m[1]) {
+    totalSize = parseInt(m[1], 10);
+  }
+
+  var blob = resp.getBlob();
+  var bytes = blob.getBytes();
+
+  return {
+    bytes: bytes,
+    totalSize: totalSize,
+    acceptRanges: acceptRanges || code === 206,
+    contentType: contentType || blob.getContentType() || '',
+    name: name
+  };
+}
+
+function looksLikeZipSignature_(bytes) {
+  if (!bytes || bytes.length < 4) return false;
+  return bytes[0] === 0x50 && bytes[1] === 0x4b && (bytes[2] === 0x03 || bytes[2] === 0x05 || bytes[2] === 0x07) && (bytes[3] === 0x04 || bytes[3] === 0x06 || bytes[3] === 0x08);
 }
