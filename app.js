@@ -67,6 +67,7 @@
   var currentZipUrl = '';
   var loadingActive = false;
   var progressTimer = null;
+  var lastProgressValue = 0;
   var selectedFiles = [];
   var zipNameDirty = false;
   var htmlPickerResolve = null;
@@ -2072,6 +2073,7 @@
   function setProgress(value) {
     if (!loadingBar) return;
     var percent = Math.max(0, Math.min(100, value));
+    lastProgressValue = percent;
     loadingBar.style.width = percent + '%';
   }
 
@@ -3397,7 +3399,8 @@
     var chunks = [];
     var downloaded = 0;
     var totalSize = 0;
-    var maxProgress = 20;
+    var baseProgress = Math.max(20, lastProgressValue || 0);
+    var maxProgress = baseProgress;
 
     function updateDownloadProgress() {
       var message = 'Descargando: ' + formatMiB(downloaded);
@@ -3411,7 +3414,8 @@
       setLoadingMessage(message);
 
       if (!totalSize) return;
-      var progress = 20 + Math.round(pct * 45);
+      var span = 65 - baseProgress;
+      var progress = baseProgress + Math.round(pct * span);
       if (progress > 65) progress = 65;
       if (progress < maxProgress) progress = maxProgress;
       maxProgress = progress;
@@ -3428,7 +3432,8 @@
       })
       .then(function () {
         stopProgress();
-        setProgress(20);
+        setProgress(baseProgress);
+        setLoadingMessage('Reintentando: descarga por trozos...');
         updateDownloadProgress();
         function fetchPart(part) {
           var endpoint = GAS_WEBAPP_URL + '?url=' + encodeURIComponent(zipUrl) + '&bundle=1&part=' + part + '&chunkSize=' + chunkSize;
