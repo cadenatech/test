@@ -1337,6 +1337,10 @@ textarea:focus-visible {
   overflow: auto;
 }
 
+.modal__card--narrow {
+  width: min(720px, 96vw);
+}
+
 .modal__header {
   display: flex;
   justify-content: space-between;
