@@ -3395,7 +3395,7 @@
 
   function fetchZipBundleChunked(zipUrl) {
     var meta = { name: 'site.zip', size: 0, acceptRanges: false };
-    var chunkSize = 4 * 1024 * 1024;
+    var chunkSize = 10 * 1024 * 1024;
     var chunks = [];
     var downloaded = 0;
     var totalSize = 0;
