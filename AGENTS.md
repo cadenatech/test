@@ -10,6 +10,7 @@ This project has no build system or package manager. Use simple local serving an
 - `python3 -m http.server 8000`: Servir la web localmente (raíz) para probar UI y service worker.
 - `clasp push`: Upload `gas/` to Apps Script (only when you explicitly approve pushes to the script).
 - `clasp pull`: Sync remote Apps Script into `gas/`.
+- Si `clasp` no está en PATH, usar `npx clasp push` o `npx clasp pull`.
 
 ## Coding Style & Naming Conventions
 - JavaScript is plain ES5/ES6 without bundlers. Prefer `var` and function declarations to match `app.js`.
@@ -33,3 +34,6 @@ This project has no build system or package manager. Use simple local serving an
 - Only use publicly shareable ZIP links (Drive/Dropbox/etc.).
 - Do not commit private URLs or tokens; configure the Apps Script endpoint in `docs/config.js`.
 - Do not push to GitHub without Juanjo’s explicit permission.
+
+## Apps Script
+- Project URL: https://script.google.com/home/projects/1Z5LuSuiDd9cREiU0hvABvhQ2JrGVisb4GApA7d37z5Cl8j6I4CHnyoDT/edit

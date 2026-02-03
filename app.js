@@ -9,6 +9,7 @@
   var loadingScreen = document.querySelector('[data-loading]');
   var loadingMessage = document.querySelector('[data-loading-message]');
   var loadingBar = document.querySelector('[data-loading-bar]');
+  var loadingEta = document.querySelector('[data-loading-eta]');
   var mainContent = document.querySelector('[data-main]');
   var embedShell = document.querySelector('[data-embed-shell]');
   var embedFrame = document.querySelector('[data-embed-frame]');
@@ -93,7 +94,9 @@
       loading: {
         title: 'Cargando material',
         message: 'Preparando...',
-        note: 'Este proceso puede tardar unos segundos la primera vez.'
+        eta: 'Tiempo estimado de descarga: --',
+        etaPrefix: 'Tiempo estimado de descarga: ',
+        note: 'Las siguientes veces la visualización será instantánea.'
       },
       header: {
         eyebrow: 'Materiales en ZIP',
@@ -358,6 +361,7 @@
       status: {
         preparing: 'Preparando...',
         preparingZip: 'Preparando ZIP...',
+        connecting: 'Conectando',
         downloadingZip: 'Descargando ZIP...',
         unpacking: 'Descomprimiendo...',
         saving: 'Guardando en el navegador...',
@@ -375,7 +379,9 @@
       loading: {
         title: 'Carregant material',
         message: 'Preparant...',
-        note: 'Aquest procés pot trigar uns segons la primera vegada.'
+        eta: 'Temps estimat de descàrrega: --',
+        etaPrefix: 'Temps estimat de descàrrega: ',
+        note: 'Les següents vegades la visualització serà instantània.'
       },
       header: {
         eyebrow: 'Materials en ZIP',
@@ -640,6 +646,7 @@
       status: {
         preparing: 'Preparant...',
         preparingZip: 'Preparant ZIP...',
+        connecting: 'Connectant',
         downloadingZip: 'Descarregant ZIP...',
         unpacking: 'Descomprimint...',
         saving: 'Desant al navegador...',
@@ -657,7 +664,9 @@
       loading: {
         title: 'Cargando material',
         message: 'Preparando...',
-        note: 'Este proceso pode tardar uns segundos a primeira vez.'
+        eta: 'Tempo estimado de descarga: --',
+        etaPrefix: 'Tempo estimado de descarga: ',
+        note: 'As seguintes veces a visualización será instantánea.'
       },
       header: {
         eyebrow: 'Materiais en ZIP',
@@ -922,6 +931,7 @@
       status: {
         preparing: 'Preparando...',
         preparingZip: 'Preparando ZIP...',
+        connecting: 'Conectando',
         downloadingZip: 'Descargando ZIP...',
         unpacking: 'Descomprimindo...',
         saving: 'Gardando no navegador...',
@@ -939,7 +949,9 @@
       loading: {
         title: 'Materiala kargatzen',
         message: 'Prestatzen...',
-        note: 'Prozesu honek lehen aldian segundo batzuk har ditzake.'
+        eta: 'Deskargaren denbora estimatua: --',
+        etaPrefix: 'Deskargaren denbora estimatua: ',
+        note: 'Hurrengo aldietan bistaratzea berehalakoa izango da.'
       },
       header: {
         eyebrow: 'ZIP materialen artean',
@@ -1204,6 +1216,7 @@
       status: {
         preparing: 'Prestatzen...',
         preparingZip: 'ZIPa prestatzen...',
+        connecting: 'Konektatzen',
         downloadingZip: 'ZIPa deskargatzen...',
         unpacking: 'Deskonprimatzen...',
         saving: 'Nabigatzailean gordetzen...',
@@ -1221,7 +1234,9 @@
       loading: {
         title: 'Loading material',
         message: 'Preparing...',
-        note: 'This process may take a few seconds the first time.'
+        eta: 'Estimated download time: --',
+        etaPrefix: 'Estimated download time: ',
+        note: 'Next times, viewing will be instant.'
       },
       header: {
         eyebrow: 'Materials in ZIP',
@@ -1486,6 +1501,7 @@
       status: {
         preparing: 'Preparing...',
         preparingZip: 'Preparing ZIP...',
+        connecting: 'Connecting',
         downloadingZip: 'Downloading ZIP...',
         unpacking: 'Unpacking...',
         saving: 'Saving in the browser...',
@@ -1503,7 +1519,9 @@
       loading: {
         title: 'Material wird geladen',
         message: 'Vorbereiten...',
-        note: 'Dieser Vorgang kann beim ersten Mal ein paar Sekunden dauern.'
+        eta: 'Geschätzte Downloadzeit: --',
+        etaPrefix: 'Geschätzte Downloadzeit: ',
+        note: 'Danach ist die Anzeige beim nächsten Mal sofort.'
       },
       header: {
         eyebrow: 'Materialien im ZIP',
@@ -1768,6 +1786,7 @@
       status: {
         preparing: 'Vorbereiten...',
         preparingZip: 'ZIP wird vorbereitet...',
+        connecting: 'Verbinden',
         downloadingZip: 'ZIP wird heruntergeladen...',
         unpacking: 'Entpacken...',
         saving: 'Im Browser speichern...',
@@ -2067,6 +2086,21 @@
   function setLoadingMessage(message) {
     if (loadingMessage) {
       loadingMessage.textContent = message;
+    }
+  }
+
+  function setLoadingEta(message) {
+    if (loadingEta) {
+      loadingEta.textContent = message;
+    }
+  }
+
+  function setLoadingEtaVisible(visible) {
+    if (!loadingEta) return;
+    if (visible) {
+      loadingEta.removeAttribute('hidden');
+    } else {
+      loadingEta.setAttribute('hidden', '');
     }
   }
 
@@ -3359,6 +3393,21 @@
     return mib.toFixed(1).replace('.', ',') + ' MB';
   }
 
+  function pad2(n) {
+    return (n < 10 ? '0' : '') + n;
+  }
+
+  function formatEta(seconds) {
+    if (!isFinite(seconds) || seconds < 0) return '';
+    var s = Math.round(seconds);
+    var h = Math.floor(s / 3600);
+    s -= h * 3600;
+    var m = Math.floor(s / 60);
+    s -= m * 60;
+    if (h > 0) return h + ':' + pad2(m) + ':' + pad2(s);
+    return m + ':' + pad2(s);
+  }
+
   function concatUint8Arrays(chunks, totalSize) {
     var size = totalSize;
     if (!size) {
@@ -3395,15 +3444,28 @@
 
   function fetchZipBundleChunked(zipUrl) {
     var meta = { name: 'site.zip', size: 0, acceptRanges: false };
-    var chunkSize = 10 * 1024 * 1024;
+    var chunkSize = 20 * 1024 * 1024;
     var chunks = [];
     var downloaded = 0;
     var totalSize = 0;
-    var baseProgress = Math.max(20, lastProgressValue || 0);
+    var downloadStartedAt = Date.now();
+    var etaTimer = null;
+    var lastEtaText = '';
+    var lastChunkAt = Date.now();
+    var avgSpeed = 0;
+    var etaBaseSeconds = 0;
+    var etaBaseAt = 0;
+    var lastEtaSeconds = 0;
+    var baseProgress = 0;
     var maxProgress = baseProgress;
+    var hasStartedDownload = false;
+    var dotPhase = 0;
+    var dotText = '.';
 
-    function updateDownloadProgress() {
-      var message = 'Descargando: ' + formatMiB(downloaded);
+    function buildDownloadMessage() {
+      var message = hasStartedDownload
+        ? (formatMiB(downloaded))
+        : (t('status.connecting') + dotText);
       var pct = 0;
       if (totalSize) {
         pct = downloaded / totalSize;
@@ -3411,23 +3473,62 @@
         if (pct > 1) pct = 1;
         message += ' / ' + formatMiB(totalSize) + ' (' + Math.round(pct * 100) + '%)';
       }
-      setLoadingMessage(message);
+      return { message: message, pct: pct };
+    }
+
+    function updateEta() {
+      if (!totalSize || !avgSpeed) {
+        setLoadingEtaVisible(false);
+        return;
+      }
+      var elapsed = (Date.now() - etaBaseAt) / 1000;
+      var etaSeconds = etaBaseSeconds - elapsed;
+      if (etaSeconds < 0) etaSeconds = 0;
+      if (lastEtaSeconds && etaSeconds > lastEtaSeconds) {
+        etaSeconds = lastEtaSeconds;
+      }
+      lastEtaSeconds = etaSeconds;
+      var etaText = formatEta(etaSeconds);
+      if (etaText) {
+        setLoadingEta(t('loading.etaPrefix') + etaText);
+        setLoadingEtaVisible(true);
+      } else {
+        setLoadingEtaVisible(false);
+      }
+    }
+
+    function updateDownloadProgress() {
+      var info = buildDownloadMessage();
+      setLoadingMessage(info.message);
 
       if (!totalSize) return;
-      var span = 65 - baseProgress;
-      var progress = baseProgress + Math.round(pct * span);
-      if (progress > 65) progress = 65;
+      var pct = info.pct;
+      var progress = baseProgress + Math.round(pct * 100);
+      if (progress > 100) progress = 100;
       if (progress < maxProgress) progress = maxProgress;
       maxProgress = progress;
       setProgress(progress);
     }
 
     stopProgress();
-    setProgress(baseProgress);
-    setLoadingMessage('Reintentando: descarga por trozos...');
+    startProgress(2);
+    setLoadingMessage(t('status.connecting') + '...');
     updateDownloadProgress();
+    etaTimer = setInterval(function () {
+      dotPhase = (dotPhase + 1) % 3;
+      dotText = dotPhase === 0 ? '.' : (dotPhase === 1 ? '..' : '...');
+      var info = buildDownloadMessage();
+      if (info.message !== lastEtaText) {
+        lastEtaText = info.message;
+        setLoadingMessage(info.message);
+      }
+      if (totalSize && downloaded) {
+        updateEta();
+      }
+    }, 1000);
 
-    function fetchPart(part) {
+    function fetchPart(part, attempt) {
+      var tries = typeof attempt === 'number' ? attempt : 0;
       var endpoint = GAS_WEBAPP_URL + '?url=' + encodeURIComponent(zipUrl) + '&bundle=1&part=' + part + '&chunkSize=' + chunkSize;
       return fetch(endpoint)
         .then(function (res) {
@@ -3440,31 +3541,69 @@
           if (data && data.error) {
             throw new Error(data.error);
           }
+          if (data && data.chunkSize && data.chunkSize !== chunkSize) {
+            chunkSize = data.chunkSize;
+          }
           if (!meta.name && data.name) meta.name = data.name;
           if (!totalSize && data.totalSize) totalSize = data.totalSize;
           if (!meta.acceptRanges && data.acceptRanges) meta.acceptRanges = true;
           if (totalSize && meta.size !== totalSize) meta.size = totalSize;
           var partBytes = base64ToBytes(data.base64 || '');
+          if (partBytes.length) {
+            if (!hasStartedDownload) {
+              hasStartedDownload = true;
+              stopProgress();
+              setProgress(0);
+            }
+          }
           chunks.push(partBytes);
           downloaded += partBytes.length;
-          updateDownloadProgress();
-          if (partBytes.length < chunkSize) {
-            return;
+          var now = Date.now();
+          var delta = Math.max(0.2, (now - lastChunkAt) / 1000);
+          var chunkSpeed = partBytes.length / delta;
+          avgSpeed = avgSpeed ? (avgSpeed * 0.8 + chunkSpeed * 0.2) : chunkSpeed;
+          lastChunkAt = now;
+          if (totalSize) {
+            etaBaseSeconds = (totalSize - downloaded) / avgSpeed;
+            etaBaseAt = now;
+            if (!lastEtaSeconds) lastEtaSeconds = etaBaseSeconds;
           }
+          updateDownloadProgress();
           if (totalSize && downloaded >= totalSize) {
             return;
           }
-          return fetchPart(part + 1);
+          if (!totalSize && partBytes.length < chunkSize) {
+            return;
+          }
+          return fetchPart(part + 1, 0);
+        })
+        .catch(function (err) {
+          if (tries >= 2) {
+            throw err;
+          }
+          setLoadingMessage('Reintentando trozo ' + (part + 1) + ' (' + (tries + 1) + '/2)...');
+          return new Promise(function (resolve) { setTimeout(resolve, 700 * (tries + 1)); })
+            .then(function () { return fetchPart(part, tries + 1); });
         });
     }
 
-    return fetchPart(0).then(function () {
+    return fetchPart(0, 0).then(function () {
+      if (etaTimer) {
+        clearInterval(etaTimer);
+        etaTimer = null;
+      }
       var zipBytes = concatUint8Arrays(chunks, totalSize || downloaded);
       return {
         name: meta.name || 'site.zip',
         size: totalSize || zipBytes.length,
         bytes: zipBytes
       };
+    }).catch(function (err) {
+      if (etaTimer) {
+        clearInterval(etaTimer);
+        etaTimer = null;
+      }
+      throw err;
     });
   }
 
@@ -3596,21 +3735,27 @@
         setStatus(t('status.downloadingZip'));
         if (showProgress && !autoOpen) {
           setLoading(true);
-          setLoadingMessage(t('status.downloadingZip'));
+          setLoadingMessage(t('status.connecting') + '...');
+          startProgress(2);
+          setLoadingEtaVisible(false);
         }
         if (autoOpen) {
-          startProgress(20);
-        } else if (showProgress) {
-          startProgress(20);
+          stopProgress();
+          startProgress(2);
+          setLoadingEtaVisible(false);
         }
         return fetchZipBundle(effectiveZipUrl).then(function (bundle) {
+          if (autoOpen || showProgress) {
+            stopProgress();
+            setProgress(100);
+            setLoadingEtaVisible(false);
+          }
           setStatus(t('status.unpacking'));
-          if (autoOpen) {
+          if (autoOpen || showProgress) {
             stopProgress();
-            setProgress(70);
-          } else if (showProgress) {
-            stopProgress();
-            setProgress(70);
+            setProgress(0);
+            setLoadingMessage(t('status.unpacking'));
+            setLoadingEtaVisible(false);
           }
           if (!window.fflate || !window.fflate.unzipSync) {
             throw new Error(t('error.fflateMissing'));
@@ -3639,6 +3784,10 @@
           if (!files.length) {
             throw new Error(t('error.zipNoWebFiles'));
           }
+          if (autoOpen || showProgress) {
+            stopProgress();
+            setProgress(100);
+          }
 
           var paths = files.map(function (file) { return file.path; });
           return pickIndexPath(paths).then(function (indexPath) {
@@ -3648,12 +3797,12 @@
               setLoadingMessage(t('status.saving'));
             }
             setStatus(t('status.saving'));
-            if (autoOpen) {
+            if (autoOpen || showProgress) {
               stopProgress();
-              setProgress(85);
-            } else if (showProgress) {
-              stopProgress();
-              setProgress(85);
+              setProgress(0);
+              startProgress(0);
+              setLoadingMessage(t('status.saving'));
+              setLoadingEtaVisible(false);
             }
 
             var totalBytes = files.reduce(function (sum, item) { return sum + item.size; }, 0);

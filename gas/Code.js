@@ -4,8 +4,8 @@ var SITE_ROOT_FOLDER = 'ZipWebSites';
 var MANIFEST_FILE = 'manifest.json';
 var CACHE_SECONDS = 21600; // 6 hours
 var MAX_BUNDLE_BYTES = 100 * 1024 * 1024; // 100 MB before base64
-var MAX_CHUNK_BYTES = 12 * 1024 * 1024; // 12 MB per chunk (raw bytes)
-var DEFAULT_CHUNK_BYTES = 10 * 1024 * 1024; // 10 MB per chunk (raw bytes)
+var MAX_CHUNK_BYTES = 20 * 1024 * 1024; // 20 MB per chunk (raw bytes)
+var DEFAULT_CHUNK_BYTES = 20 * 1024 * 1024; // 20 MB per chunk (raw bytes)
 
 function authorize() {
   // Run once to grant Drive and UrlFetch scopes for the deploying user.
