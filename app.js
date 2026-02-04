@@ -22,6 +22,9 @@
   var aboutOpen = document.querySelector('[data-about-open]');
   var aboutModal = document.querySelector('[data-about-modal]');
   var aboutCloseButtons = document.querySelectorAll('[data-about-close]');
+  var restrictModal = document.querySelector('[data-restrict-modal]');
+  var restrictRange = document.querySelector('[data-restrict-range]');
+  var restrictCloseButtons = document.querySelectorAll('[data-restrict-close]');
   var htmlModal = document.querySelector('[data-html-modal]');
   var htmlList = document.querySelector('[data-html-list]');
   var htmlConfirm = document.querySelector('[data-html-confirm]');
@@ -63,6 +66,26 @@
   var managerSettingsOpenButton = document.querySelector('[data-manager-settings-open]');
   var managerSettingsModal = document.querySelector('[data-manager-settings-modal]');
   var managerSettingsCloseButtons = document.querySelectorAll('[data-manager-settings-close]');
+  var languageOpenButton = document.querySelector('[data-lang-open]');
+  var languagePanel = document.querySelector('[data-lang-panel]');
+  var mainSettingsOpenButton = document.querySelector('[data-main-settings-open]');
+  var mainSettingsModal = document.querySelector('[data-main-settings-modal]');
+  var mainSettingsCloseButtons = document.querySelectorAll('[data-main-settings-close]');
+  var restrictionToggle = document.querySelector('[data-restrict-toggle]');
+  var restrictionFields = document.querySelector('[data-restrict-fields]');
+  var restrictionActions = document.querySelector('[data-restrict-actions]');
+  var restrictionStartInput = document.querySelector('[data-restrict-start]');
+  var restrictionEndInput = document.querySelector('[data-restrict-end]');
+  var restrictionNoEnd = document.querySelector('[data-restrict-no-end]');
+  var restrictionAllowShare = document.querySelector('[data-restrict-allow-share]');
+  var restrictionAllowEmbed = document.querySelector('[data-restrict-allow-embed]');
+  var restrictionHint = document.querySelector('[data-restrict-hint]');
+  var restrictionAccordion = document.querySelector('[data-restrict-accordion]');
+  var restrictionZipInput = document.querySelector('[data-restrict-zip-input]');
+  var restrictionZipPick = document.querySelector('[data-restrict-zip-pick]');
+  var restrictionZipApply = document.querySelector('[data-restrict-zip-apply]');
+  var restrictionZipStatus = document.querySelector('[data-restrict-zip-status]');
+  var ignoreRestrictionsForShare = false;
 
   var currentShareLink = '';
   var currentZipUrl = '';
@@ -82,6 +105,8 @@
   var currentEmbedId = '';
   var embedHeightTimer = null;
   var lastEmbedHeight = 0;
+  var currentRestrictions = null;
+  var restrictionZipFile = null;
 
   var DB_NAME = 'visor-web-sites';
   var DB_VERSION = 1;
@@ -102,7 +127,32 @@
         eyebrow: 'Materiales en ZIP',
         title: 'Visor Web-ZIP',
         help: 'Ayuda',
+        settings: 'Ajustes',
+        settingsHint: 'Configura el idioma y la disponibilidad del recurso',
+        language: 'Idioma',
+        languageHint: 'Cambiar idioma',
         subtitle: 'Autopublicación de recursos educativos desde tu almacenamiento en la nube.'
+      },
+      settings: {
+        title: 'Ajustes',
+        languageTitle: 'Idioma',
+        restrictTitle: 'Acceso por fechas',
+        restrictHint: 'No limites el acceso a no ser que tengas un buen motivo para hacerlo.',
+        restrictToggle: 'Limitar el acceso por fechas',
+        startLabel: 'Inicio',
+        endLabel: 'Fin',
+        neverExpires: 'No caducar nunca',
+        actionsTitle: 'Acciones permitidas mientras el acceso esté abierto',
+        allowShare: 'Compartir',
+        allowEmbed: 'Insertar en web',
+        downloadNote: 'La descarga estará siempre desactivada cuando haya restricciones.'
+      },
+      restrictionModal: {
+        title: 'Acceso restringido',
+        body: 'Este recurso no está disponible en este momento.',
+        rangeStart: 'Disponible desde: {date}',
+        rangeEnd: 'Hasta: {date}',
+        rangeNoEnd: 'Sin fecha de fin'
       },
       lang: {
         label: 'Idioma',
@@ -132,7 +182,8 @@
         choice: {
           zipper: {
             title: 'Crea un ZIP',
-            note: 'Empieza creando un ZIP desde tus archivos o desde HTML.'
+            note: 'Empieza creando un ZIP desde tus archivos o desde HTML.',
+            restrictHint: 'También puedes subir un ZIP para limitar su acceso por fechas.'
           },
           main: {
             title: 'Ya tengo un ZIP o ELPX',
@@ -148,7 +199,7 @@
       main: {
         subtitle: 'Si ya tienes tu recurso en formato ZIP (o .elpx de eXeLearning 3+) en un servicio con enlace público (Drive, Dropbox, etc.), pega aquí el enlace para generar el enlace.',
         form: {
-          title: 'Pega aquí el enlace público',
+          title: 'Ya tengo un ZIP o ELPX',
           step: 'Pega el enlace público al ZIP (o .elpx) y pulsa “Crear enlace”.',
           placeholder: 'Pega aquí el enlace público del ZIP o del .elpx',
           submit: 'Crear enlace'
@@ -221,6 +272,11 @@
         siteNoUrl: 'Sitio sin URL',
         noDate: 'sin fecha'
       },
+      badges: {
+        scheduled: 'Programado',
+        opening: 'Apertura: {date}',
+        closing: 'Cierre: {date}'
+      },
       zipper: {
         title: 'Crear ZIP para el visor',
         accordion: {
@@ -279,6 +335,18 @@
             creating: 'Creando ZIP...',
             downloaded: 'ZIP descargado.',
             failed: 'No se pudo crear el ZIP. Revisa el HTML.'
+          }
+        },
+        restrict: {
+          title: '¿Quieres limitar el acceso a un ZIP ya creado?',
+          note: 'Sube tu ZIP y el visor añadirá las restricciones en un archivo JSON. Después tendrás que volver a subirlo a Drive, Dropbox, etc.',
+          pick: 'Seleccionar ZIP',
+          apply: 'Aplicar restricciones y descargar',
+          status: {
+            ready: 'Selecciona un ZIP para añadir las restricciones.',
+            working: 'Aplicando restricciones...',
+            done: 'ZIP listo con restricciones.',
+            failed: 'No se pudo modificar el ZIP. Revisa el archivo.'
           }
         },
         help: {
@@ -347,6 +415,8 @@
       error: {
         driveTooLarge: 'El archivo es demasiado grande y Google Drive limita las descargas.',
         loadZip: 'No se pudo cargar el ZIP.',
+        restricted: 'Este recurso ya no está disponible por las restricciones de fecha.',
+        embedNotAllowed: 'La inserción en web no está permitida para este recurso.',
         noHtmlSelected: 'No se seleccionó ningún HTML.',
         htmlPickerOpen: 'No se pudo abrir el selector de HTML.',
         serviceWorkerUnavailable: 'Service worker no disponible.',
@@ -363,6 +433,7 @@
         preparingZip: 'Preparando ZIP...',
         connecting: 'Conectando',
         downloadingZip: 'Descargando ZIP...',
+        restrictedReady: 'El recurso está restringido por fecha. El enlace ya está listo.',
         unpacking: 'Descomprimiendo...',
         saving: 'Guardando en el navegador...',
         copySuccess: 'Enlace copiado.'
@@ -387,7 +458,32 @@
         eyebrow: 'Materials en ZIP',
         title: 'Visor Web-ZIP',
         help: 'Ajuda',
+        settings: 'Ajustos',
+        settingsHint: 'Configura l’idioma i la disponibilitat del recurs',
+        language: 'Idioma',
+        languageHint: 'Canviar idioma',
         subtitle: 'Comparteix els teus recursos educatius des del teu emmagatzematge favorit al núvol.'
+      },
+      settings: {
+        title: 'Ajustos',
+        languageTitle: 'Idioma',
+        restrictTitle: 'Accés per dates',
+        restrictHint: 'No limitis l’accés si no tens un bon motiu per fer-ho.',
+        restrictToggle: 'Limitar l’accés per dates',
+        startLabel: 'Inici',
+        endLabel: 'Fi',
+        neverExpires: 'No caduca mai',
+        actionsTitle: 'Accions permeses mentre l’accés estigui obert',
+        allowShare: 'Compartir',
+        allowEmbed: 'Inserir en web',
+        downloadNote: 'La descàrrega estarà sempre desactivada quan hi hagi restriccions.'
+      },
+      restrictionModal: {
+        title: 'Accés restringit',
+        body: 'Aquest recurs no està disponible en aquest moment.',
+        rangeStart: 'Disponible des de: {date}',
+        rangeEnd: 'Fins a: {date}',
+        rangeNoEnd: 'Sense data de fi'
       },
       lang: {
         label: 'Idioma',
@@ -417,7 +513,8 @@
         choice: {
           zipper: {
             title: 'Crear un ZIP',
-            note: 'Comença creant un ZIP des dels teus fitxers o des d’HTML.'
+            note: 'Comença creant un ZIP des dels teus fitxers o des d’HTML.',
+            restrictHint: 'També pots pujar un ZIP per limitar-ne l’accés per dates.'
           },
           main: {
             title: 'Ja tinc un ZIP o ELPX',
@@ -433,7 +530,7 @@
       main: {
         subtitle: "Si ja tens el teu recurs en format ZIP (o .elpx d’eXeLearning 3+) en un servei amb enllaç públic (Drive, Dropbox, etc.), enganxa aquí l'enllaç per generar l’enllaç del visor.",
         form: {
-          title: "Enganxa aquí l'enllaç públic",
+          title: 'Ja tinc un ZIP o ELPX',
           step: 'Enganxa l’enllaç públic al ZIP (o .elpx) i prem “Crear enllaç”.',
           placeholder: "Enganxa aquí l'enllaç públic del ZIP o del .elpx",
           submit: 'Crear enllaç'
@@ -506,6 +603,11 @@
         siteNoUrl: 'Lloc sense URL',
         noDate: 'sense data'
       },
+      badges: {
+        scheduled: 'Programat',
+        opening: 'Obertura: {date}',
+        closing: 'Tancament: {date}'
+      },
       zipper: {
         title: 'Crear ZIP per al visor',
         accordion: {
@@ -564,6 +666,18 @@
             creating: 'Creant ZIP...',
             downloaded: 'ZIP descarregat.',
             failed: 'No s’ha pogut crear el ZIP. Revisa l’HTML.'
+          }
+        },
+        restrict: {
+          title: 'Vols limitar l’accés a un ZIP ja creat?',
+          note: 'Puja el teu ZIP i el visor afegirà les restriccions en un fitxer JSON. Després l’hauràs de tornar a pujar a Drive, Dropbox, etc.',
+          pick: 'Seleccionar ZIP',
+          apply: 'Aplicar restriccions i descarregar',
+          status: {
+            ready: 'Selecciona un ZIP per afegir-hi les restriccions.',
+            working: 'Aplicant restriccions...',
+            done: 'ZIP llest amb restriccions.',
+            failed: 'No s’ha pogut modificar el ZIP. Revisa el fitxer.'
           }
         },
         help: {
@@ -632,6 +746,8 @@
       error: {
         driveTooLarge: 'El fitxer és massa gran i Google Drive limita les descàrregues.',
         loadZip: 'No s’ha pogut carregar el ZIP.',
+        restricted: 'Aquest recurs ja no està disponible per les restriccions de data.',
+        embedNotAllowed: 'La inserció en web no està permesa per a aquest recurs.',
         noHtmlSelected: 'No s’ha seleccionat cap HTML.',
         htmlPickerOpen: 'No s’ha pogut obrir el selector d’HTML.',
         serviceWorkerUnavailable: 'Service worker no disponible.',
@@ -648,6 +764,7 @@
         preparingZip: 'Preparant ZIP...',
         connecting: 'Connectant',
         downloadingZip: 'Descarregant ZIP...',
+        restrictedReady: 'El recurs està restringit per data. L’enllaç ja està llest.',
         unpacking: 'Descomprimint...',
         saving: 'Desant al navegador...',
         copySuccess: 'Enllaç copiat.'
@@ -672,7 +789,32 @@
         eyebrow: 'Materiais en ZIP',
         title: 'Visor Web-ZIP',
         help: 'Axuda',
+        settings: 'Axustes',
+        settingsHint: 'Configura o idioma e a dispoñibilidade do recurso',
+        language: 'Idioma',
+        languageHint: 'Cambiar idioma',
         subtitle: 'Comparte os teus recursos educativos desde o teu almacenamento favorito na nube.'
+      },
+      settings: {
+        title: 'Axustes',
+        languageTitle: 'Idioma',
+        restrictTitle: 'Acceso por datas',
+        restrictHint: 'Non limites o acceso salvo que teñas un bo motivo para facelo.',
+        restrictToggle: 'Limitar o acceso por datas',
+        startLabel: 'Inicio',
+        endLabel: 'Fin',
+        neverExpires: 'Non caduca nunca',
+        actionsTitle: 'Accións permitidas mentres o acceso estea aberto',
+        allowShare: 'Compartir',
+        allowEmbed: 'Inserir nunha web',
+        downloadNote: 'A descarga estará sempre desactivada cando haxa restricións.'
+      },
+      restrictionModal: {
+        title: 'Acceso restrinxido',
+        body: 'Este recurso non está dispoñible neste momento.',
+        rangeStart: 'Disponible desde: {date}',
+        rangeEnd: 'Ata: {date}',
+        rangeNoEnd: 'Sen data de fin'
       },
       lang: {
         label: 'Idioma',
@@ -702,7 +844,8 @@
         choice: {
           zipper: {
             title: 'Crear un ZIP',
-            note: 'Comeza creando un ZIP desde os teus ficheiros ou desde HTML.'
+            note: 'Comeza creando un ZIP desde os teus ficheiros ou desde HTML.',
+            restrictHint: 'Tamén podes subir un ZIP para limitar o acceso por datas.'
           },
           main: {
             title: 'Xa teño un ZIP ou ELPX',
@@ -718,7 +861,7 @@
       main: {
         subtitle: 'Se xa tes o teu recurso en formato ZIP (ou .elpx de eXeLearning 3+) nun servizo con ligazón pública (Drive, Dropbox, etc.), pega aquí a ligazón para xerar a ligazón do visor.',
         form: {
-          title: 'Pega aquí a ligazón pública',
+          title: 'Xa teño un ZIP ou ELPX',
           step: 'Pega a ligazón pública ao ZIP (ou .elpx) e preme “Crear ligazón”.',
           placeholder: 'Pega aquí a ligazón pública do ZIP ou do .elpx',
           submit: 'Crear ligazón'
@@ -791,6 +934,11 @@
         siteNoUrl: 'Sitio sen URL',
         noDate: 'sen data'
       },
+      badges: {
+        scheduled: 'Programado',
+        opening: 'Apertura: {date}',
+        closing: 'Peche: {date}'
+      },
       zipper: {
         title: 'Crear ZIP para o visor',
         accordion: {
@@ -849,6 +997,18 @@
             creating: 'Creando ZIP...',
             downloaded: 'ZIP descargado.',
             failed: 'No se pudo crear el ZIP. Revisa el HTML.'
+          }
+        },
+        restrict: {
+          title: 'Queres limitar o acceso a un ZIP xa creado?',
+          note: 'Sube o teu ZIP e o visor engadirá as restricións nun ficheiro JSON. Despois terás que volver subilo a Drive, Dropbox, etc.',
+          pick: 'Seleccionar ZIP',
+          apply: 'Aplicar restricións e descargar',
+          status: {
+            ready: 'Selecciona un ZIP para engadir as restricións.',
+            working: 'Aplicando restricións...',
+            done: 'ZIP listo con restricións.',
+            failed: 'Non se puido modificar o ZIP. Revisa o ficheiro.'
           }
         },
         help: {
@@ -917,6 +1077,8 @@
       error: {
         driveTooLarge: 'O ficheiro é demasiado grande e Google Drive limita as descargas.',
         loadZip: 'Non se puido cargar o ZIP.',
+        restricted: 'Este recurso xa non está dispoñible polas restricións de data.',
+        embedNotAllowed: 'A inserción en web non está permitida para este recurso.',
         noHtmlSelected: 'Non se seleccionou ningún HTML.',
         htmlPickerOpen: 'Non se puido abrir o selector de HTML.',
         serviceWorkerUnavailable: 'Service worker non dispoñible.',
@@ -933,6 +1095,7 @@
         preparingZip: 'Preparando ZIP...',
         connecting: 'Conectando',
         downloadingZip: 'Descargando ZIP...',
+        restrictedReady: 'O recurso está restrinxido por data. A ligazón xa está lista.',
         unpacking: 'Descomprimindo...',
         saving: 'Gardando no navegador...',
         copySuccess: 'Ligazón copiada.'
@@ -957,7 +1120,32 @@
         eyebrow: 'ZIP materialen artean',
         title: 'Web-ZIP Bisorea',
         help: 'Laguntza',
+        settings: 'Ezarpenak',
+        settingsHint: 'Ezarri hizkuntza eta baliabidearen erabilgarritasuna',
+        language: 'Hizkuntza',
+        languageHint: 'Hizkuntza aldatu',
         subtitle: 'Partekatu zure hezkuntza-baliabideak hodeiko biltegiratze gogokoenetik.'
+      },
+      settings: {
+        title: 'Ezarpenak',
+        languageTitle: 'Hizkuntza',
+        restrictTitle: 'Sarbidea daten bidez',
+        restrictHint: 'Ez mugatu sarbidea arrazoi onik ez baduzu.',
+        restrictToggle: 'Sarbidea daten bidez mugatu',
+        startLabel: 'Hasiera',
+        endLabel: 'Amaiera',
+        neverExpires: 'Ez da inoiz iraungiko',
+        actionsTitle: 'Sarbidea irekita dagoenean baimendutako ekintzak',
+        allowShare: 'Partekatu',
+        allowEmbed: 'Web batean txertatu',
+        downloadNote: 'Deskarga beti desaktibatuta egongo da murrizketak daudenean.'
+      },
+      restrictionModal: {
+        title: 'Sarbide mugatua',
+        body: 'Baliabidea ez dago eskuragarri une honetan.',
+        rangeStart: 'Erabilgarri hemendik: {date}',
+        rangeEnd: 'Hona arte: {date}',
+        rangeNoEnd: 'Amaiera-datarik gabe'
       },
       lang: {
         label: 'Hizkuntza',
@@ -987,7 +1175,8 @@
         choice: {
           zipper: {
             title: 'ZIP bat sortu',
-            note: 'Hasi ZIP bat sortzen zure fitxategietatik edo HTMLtik.'
+            note: 'Hasi ZIP bat sortzen zure fitxategietatik edo HTMLtik.',
+            restrictHint: 'ZIP bat ere igo dezakezu sarbidea daten bidez mugatzeko.'
           },
           main: {
             title: 'ZIP edo ELPX badaukat',
@@ -1003,7 +1192,7 @@
       main: {
         subtitle: 'Zure baliabidea ZIP formatuan (edo eXeLearning 3+eko .elpx) baduzu eta esteka publikoa duen zerbitzu batean badago (Drive, Dropbox, etab.), itsatsi hemen esteka bisorearen esteka sortzeko.',
         form: {
-          title: 'Itsatsi hemen esteka publikoa',
+          title: 'ZIP edo ELPX badaukat',
           step: 'Itsatsi ZIParen esteka publikoa (edo .elpx) eta sakatu “Esteka sortu”.',
           placeholder: 'Itsatsi hemen ZIParen edo .elpx fitxategiaren esteka publikoa',
           submit: 'Esteka sortu'
@@ -1076,6 +1265,11 @@
         siteNoUrl: 'URLrik gabeko gunea',
         noDate: 'datarik gabe'
       },
+      badges: {
+        scheduled: 'Programatua',
+        opening: 'Irekiera: {date}',
+        closing: 'Itxiera: {date}'
+      },
       zipper: {
         title: 'Bisorerako ZIP sortu',
         accordion: {
@@ -1134,6 +1328,18 @@
             creating: 'Creando ZIP...',
             downloaded: 'ZIP descargado.',
             failed: 'No se pudo crear el ZIP. Revisa el HTML.'
+          }
+        },
+        restrict: {
+          title: 'ZIP bat jada sortuta badago, sarbidea mugatu nahi?',
+          note: 'Igo zure ZIPa eta bisoreak murrizketak JSON fitxategi batean gehituko ditu. Ondoren berriro igo beharko duzu Drive, Dropbox, etab.',
+          pick: 'ZIPa hautatu',
+          apply: 'Murrizketak aplikatu eta deskargatu',
+          status: {
+            ready: 'Hautatu ZIP bat murrizketak gehitzeko.',
+            working: 'Murrizketak aplikatzen...',
+            done: 'ZIPa prest murrizketekin.',
+            failed: 'Ezin izan da ZIPa aldatu. Berrikusi fitxategia.'
           }
         },
         help: {
@@ -1202,6 +1408,8 @@
       error: {
         driveTooLarge: 'Fitxategia handiegia da eta Google Drivek deskargak mugatzen ditu.',
         loadZip: 'Ezin izan da ZIPa kargatu.',
+        restricted: 'Baliabide hau ez dago eskuragarri data-murrizketengatik.',
+        embedNotAllowed: 'Web-ean txertatzea ez dago baimenduta baliabide honetarako.',
         noHtmlSelected: 'Ez da HTMLrik hautatu.',
         htmlPickerOpen: 'Ezin izan da HTML hautatzailea ireki.',
         serviceWorkerUnavailable: 'Service worker ez dago erabilgarri.',
@@ -1218,6 +1426,7 @@
         preparingZip: 'ZIPa prestatzen...',
         connecting: 'Konektatzen',
         downloadingZip: 'ZIPa deskargatzen...',
+        restrictedReady: 'Baliabidea dataren arabera mugatuta dago. Esteka prest dago.',
         unpacking: 'Deskonprimatzen...',
         saving: 'Nabigatzailean gordetzen...',
         copySuccess: 'Esteka kopiatuta.'
@@ -1242,7 +1451,32 @@
         eyebrow: 'Materials in ZIP',
         title: 'Web-ZIP Viewer',
         help: 'Help',
+        settings: 'Settings',
+        settingsHint: 'Set the language and resource availability',
+        language: 'Language',
+        languageHint: 'Change language',
         subtitle: 'Share your educational resources from your favorite cloud storage.'
+      },
+      settings: {
+        title: 'Settings',
+        languageTitle: 'Language',
+        restrictTitle: 'Date access',
+        restrictHint: 'Do not limit access unless you have a good reason to do so.',
+        restrictToggle: 'Limit access by dates',
+        startLabel: 'Start',
+        endLabel: 'End',
+        neverExpires: 'Never expires',
+        actionsTitle: 'Allowed actions while access is open',
+        allowShare: 'Share',
+        allowEmbed: 'Embed',
+        downloadNote: 'Download will always be disabled when restrictions are enabled.'
+      },
+      restrictionModal: {
+        title: 'Access restricted',
+        body: 'This resource is not available right now.',
+        rangeStart: 'Available from: {date}',
+        rangeEnd: 'Until: {date}',
+        rangeNoEnd: 'No end date'
       },
       lang: {
         label: 'Language',
@@ -1272,7 +1506,8 @@
         choice: {
           zipper: {
             title: 'Create a ZIP',
-            note: 'Start by creating a ZIP from your files or from HTML.'
+            note: 'Start by creating a ZIP from your files or from HTML.',
+            restrictHint: 'You can also upload a ZIP to limit access by dates.'
           },
           main: {
             title: 'I already have a ZIP or ELPX',
@@ -1288,7 +1523,7 @@
       main: {
         subtitle: 'If your resource is already a ZIP (or an eXeLearning 3+ .elpx file) hosted on a public link service (Drive, Dropbox, etc.), paste the link here to generate the viewer link.',
         form: {
-          title: 'Paste the public link here',
+          title: 'I already have a ZIP or ELPX',
           step: 'Paste the public ZIP link (or .elpx) and click “Create link”.',
           placeholder: 'Paste the public ZIP or .elpx link here',
           submit: 'Create link'
@@ -1361,6 +1596,11 @@
         siteNoUrl: 'Site without URL',
         noDate: 'no date'
       },
+      badges: {
+        scheduled: 'Scheduled',
+        opening: 'Opens: {date}',
+        closing: 'Closes: {date}'
+      },
       zipper: {
         title: 'Create ZIP for the viewer',
         accordion: {
@@ -1419,6 +1659,18 @@
             creating: 'Creating ZIP...',
             downloaded: 'ZIP downloaded.',
             failed: 'Could not create the ZIP. Check the HTML.'
+          }
+        },
+        restrict: {
+          title: 'Want to limit access to an existing ZIP?',
+          note: 'Upload your ZIP and the viewer will add restrictions in a JSON file. Then upload it again to Drive, Dropbox, etc.',
+          pick: 'Select ZIP',
+          apply: 'Apply restrictions and download',
+          status: {
+            ready: 'Select a ZIP to add restrictions.',
+            working: 'Applying restrictions...',
+            done: 'ZIP ready with restrictions.',
+            failed: 'Could not modify the ZIP. Check the file.'
           }
         },
         help: {
@@ -1487,6 +1739,8 @@
       error: {
         driveTooLarge: 'The file is too large and Google Drive limits downloads.',
         loadZip: 'Could not load the ZIP.',
+        restricted: 'This resource is no longer available due to date restrictions.',
+        embedNotAllowed: 'Embedding is not allowed for this resource.',
         noHtmlSelected: 'No HTML selected.',
         htmlPickerOpen: 'Could not open the HTML selector.',
         serviceWorkerUnavailable: 'Service worker not available.',
@@ -1503,6 +1757,7 @@
         preparingZip: 'Preparing ZIP...',
         connecting: 'Connecting',
         downloadingZip: 'Downloading ZIP...',
+        restrictedReady: 'This resource is date-restricted. The link is ready.',
         unpacking: 'Unpacking...',
         saving: 'Saving in the browser...',
         copySuccess: 'Link copied.'
@@ -1527,7 +1782,32 @@
         eyebrow: 'Materialien im ZIP',
         title: 'Web-ZIP-Viewer',
         help: 'Hilfe',
+        settings: 'Einstellungen',
+        settingsHint: 'Sprache und Verfügbarkeit des Materials einstellen',
+        language: 'Sprache',
+        languageHint: 'Sprache ändern',
         subtitle: 'Teile deine Bildungsressourcen aus deinem bevorzugten Cloud-Speicher.'
+      },
+      settings: {
+        title: 'Einstellungen',
+        languageTitle: 'Sprache',
+        restrictTitle: 'Zugriff nach Datum',
+        restrictHint: 'Begrenze den Zugriff nur, wenn du einen guten Grund dafür hast.',
+        restrictToggle: 'Zugriff nach Datum begrenzen',
+        startLabel: 'Start',
+        endLabel: 'Ende',
+        neverExpires: 'Nie ablaufen',
+        actionsTitle: 'Erlaubte Aktionen, solange der Zugriff offen ist',
+        allowShare: 'Teilen',
+        allowEmbed: 'Einbetten',
+        downloadNote: 'Der Download ist bei Einschränkungen immer deaktiviert.'
+      },
+      restrictionModal: {
+        title: 'Zugriff eingeschränkt',
+        body: 'Diese Ressource ist im Moment nicht verfügbar.',
+        rangeStart: 'Verfügbar ab: {date}',
+        rangeEnd: 'Bis: {date}',
+        rangeNoEnd: 'Kein Enddatum'
       },
       lang: {
         label: 'Sprache',
@@ -1557,7 +1837,8 @@
         choice: {
           zipper: {
             title: 'ZIP erstellen',
-            note: 'Starte, indem du ein ZIP aus deinen Dateien oder aus HTML erstellst.'
+            note: 'Starte, indem du ein ZIP aus deinen Dateien oder aus HTML erstellst.',
+            restrictHint: 'Du kannst auch ein ZIP hochladen, um den Zugriff zeitlich zu begrenzen.'
           },
           main: {
             title: 'Ich habe bereits ein ZIP oder ELPX',
@@ -1573,7 +1854,7 @@
       main: {
         subtitle: 'Wenn deine Ressource bereits als ZIP (oder als eXeLearning-3+-.elpx-Datei) mit öffentlichem Link verfügbar ist (Drive, Dropbox usw.), füge den Link hier ein, um den Viewer-Link zu erzeugen.',
         form: {
-          title: 'Füge hier den öffentlichen Link ein',
+          title: 'Ich habe bereits ein ZIP oder ELPX',
           step: 'Füge den öffentlichen Link zur ZIP-Datei (oder .elpx) ein und klicke auf „Link erstellen“.',
           placeholder: 'Füge hier den öffentlichen ZIP- oder .elpx-Link ein',
           submit: 'Link erstellen'
@@ -1646,6 +1927,11 @@
         siteNoUrl: 'Website ohne URL',
         noDate: 'ohne Datum'
       },
+      badges: {
+        scheduled: 'Geplant',
+        opening: 'Öffnet: {date}',
+        closing: 'Schließt: {date}'
+      },
       zipper: {
         title: 'ZIP für den Viewer erstellen',
         accordion: {
@@ -1704,6 +1990,18 @@
             creating: 'ZIP wird erstellt...',
             downloaded: 'ZIP heruntergeladen.',
             failed: 'ZIP konnte nicht erstellt werden. Prüfe das HTML.'
+          }
+        },
+        restrict: {
+          title: 'Zugriff auf ein vorhandenes ZIP begrenzen?',
+          note: 'Lade dein ZIP hoch und der Viewer fügt die Einschränkungen in einer JSON-Datei hinzu. Danach musst du es erneut zu Drive, Dropbox usw. hochladen.',
+          pick: 'ZIP auswählen',
+          apply: 'Einschränkungen anwenden und herunterladen',
+          status: {
+            ready: 'Wähle ein ZIP, um Einschränkungen hinzuzufügen.',
+            working: 'Einschränkungen werden angewendet...',
+            done: 'ZIP ist mit Einschränkungen bereit.',
+            failed: 'ZIP konnte nicht geändert werden. Prüfe die Datei.'
           }
         },
         help: {
@@ -1772,6 +2070,8 @@
       error: {
         driveTooLarge: 'Die Datei ist zu groß und Google Drive begrenzt Downloads.',
         loadZip: 'ZIP konnte nicht geladen werden.',
+        restricted: 'Diese Ressource ist aufgrund der Datumsbeschränkung nicht mehr verfügbar.',
+        embedNotAllowed: 'Einbetten ist für diese Ressource nicht erlaubt.',
         noHtmlSelected: 'Kein HTML ausgewählt.',
         htmlPickerOpen: 'HTML-Auswahl konnte nicht geöffnet werden.',
         serviceWorkerUnavailable: 'Service Worker nicht verfügbar.',
@@ -1788,6 +2088,7 @@
         preparingZip: 'ZIP wird vorbereitet...',
         connecting: 'Verbinden',
         downloadingZip: 'ZIP wird heruntergeladen...',
+        restrictedReady: 'Diese Ressource ist zeitlich eingeschränkt. Der Link ist bereit.',
         unpacking: 'Entpacken...',
         saving: 'Im Browser speichern...',
         copySuccess: 'Link kopiert.'
@@ -2024,6 +2325,9 @@
     if (langSelect) {
       langSelect.value = currentLang;
     }
+    if (languagePanel) {
+      languagePanel.setAttribute('hidden', '');
+    }
     try {
       localStorage.setItem(LANG_KEY, currentLang);
     } catch (err) {
@@ -2052,6 +2356,11 @@
       } else {
         setHtmlZipStatus(t('zipper.html.status.empty'));
       }
+    }
+    applyRestrictionUiState();
+    updateRestrictionDefaults();
+    if (restrictionZipStatus) {
+      restrictionZipStatus.textContent = t('zipper.restrict.status.ready');
     }
     if (!loadingActive && loadingMessage) {
       loadingMessage.textContent = t('loading.message');
@@ -2143,19 +2452,19 @@
   }
 
   function setShareLink(link) {
-    currentShareLink = link;
-    output.textContent = link;
+    currentShareLink = link || '';
+    output.textContent = currentShareLink || t('main.output.placeholder');
     if (copyButton) {
-      copyButton.disabled = !link;
+      copyButton.disabled = !currentShareLink || !restrictionsAllowShare(currentRestrictions);
     }
     if (embedButton) {
-      embedButton.disabled = !link;
+      embedButton.disabled = !currentShareLink || !restrictionsAllowEmbed(currentRestrictions);
     }
     if (openLink) {
-      openLink.href = link || '#';
-      openLink.setAttribute('aria-disabled', link ? 'false' : 'true');
+      openLink.href = currentShareLink || '#';
+      openLink.setAttribute('aria-disabled', currentShareLink ? 'false' : 'true');
     }
-    if (link && stepThree && !isEmbedMode) {
+    if (currentShareLink && stepThree && !isEmbedMode) {
       stepThree.scrollIntoView({ behavior: 'smooth', block: 'center' });
       stepThree.setAttribute('tabindex', '-1');
       stepThree.focus({ preventScroll: true });
@@ -2317,6 +2626,41 @@
       bytes[i] = utf8.charCodeAt(i);
     }
     return bytes;
+  }
+
+  function decodeUtf8(bytes) {
+    if (window.TextDecoder) {
+      return new TextDecoder('utf-8').decode(bytes);
+    }
+    var out = '';
+    for (var i = 0; i < bytes.length; i += 1) {
+      out += String.fromCharCode(bytes[i]);
+    }
+    try {
+      return decodeURIComponent(escape(out));
+    } catch (e) {
+      return out;
+    }
+  }
+
+  function formatLocalDateTime(value) {
+    var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+    return value.getFullYear()
+      + '-' + pad(value.getMonth() + 1)
+      + '-' + pad(value.getDate())
+      + 'T' + pad(value.getHours())
+      + ':' + pad(value.getMinutes());
+  }
+
+  function formatRestrictionDate(value) {
+    if (!value) return '';
+    var date = new Date(value);
+    if (isNaN(date.getTime())) return '';
+    try {
+      return date.toLocaleString(currentLang);
+    } catch (e) {
+      return date.toISOString();
+    }
   }
 
   function deriveZipBaseName(files) {
@@ -2513,6 +2857,10 @@
           files[entry.path] = entry.data;
         }
       });
+      var restrictions = buildRestrictionsPayload();
+      if (restrictions) {
+        files['restrictions.json'] = encodeUtf8(JSON.stringify(restrictions, null, 2));
+      }
       var zipped = window.fflate.zipSync(files);
       var blob = new Blob([zipped], { type: 'application/zip' });
       var url = URL.createObjectURL(blob);
@@ -2552,6 +2900,10 @@
       var files = {
         'index.html': encodeUtf8(htmlText)
       };
+      var restrictions = buildRestrictionsPayload();
+      if (restrictions) {
+        files['restrictions.json'] = encodeUtf8(JSON.stringify(restrictions, null, 2));
+      }
       var zipped = window.fflate.zipSync(files);
       var blob = new Blob([zipped], { type: 'application/zip' });
       var anchor = document.createElement('a');
@@ -2565,6 +2917,61 @@
     } catch (err) {
       setHtmlZipStatus(t('zipper.html.status.failed'));
     }
+  }
+
+  function downloadZipBlob(blob, name) {
+    var url = URL.createObjectURL(blob);
+    var anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = name;
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+    setTimeout(function () {
+      URL.revokeObjectURL(url);
+    }, 1000);
+  }
+
+  function applyRestrictionsToZipFile(file) {
+    if (!file) return;
+    if (!window.fflate || !window.fflate.unzipSync || !window.fflate.zipSync) {
+      if (restrictionZipStatus) {
+        restrictionZipStatus.textContent = t('zipper.restrict.status.failed');
+      }
+      return;
+    }
+    var restrictions = buildRestrictionsPayload();
+    if (!restrictions) {
+      if (restrictionZipStatus) {
+        restrictionZipStatus.textContent = t('zipper.restrict.status.failed');
+      }
+      return;
+    }
+    if (restrictionZipStatus) {
+      restrictionZipStatus.textContent = t('zipper.restrict.status.working');
+    }
+    file.arrayBuffer().then(function (buffer) {
+      var entries = window.fflate.unzipSync(new Uint8Array(buffer));
+      entries['restrictions.json'] = encodeUtf8(JSON.stringify(restrictions, null, 2));
+      var zipped = window.fflate.zipSync(entries);
+      var blob = new Blob([zipped], { type: 'application/zip' });
+      var name = file.name || 'site.zip';
+      if (/\.elpx$/i.test(name)) {
+        name = name.replace(/\.elpx$/i, '-restricciones.elpx');
+      } else if (/\.zip$/i.test(name)) {
+        name = name.replace(/\.zip$/i, '-restricciones.zip');
+      } else {
+        name += '-restricciones.zip';
+      }
+      downloadZipBlob(blob, name);
+      if (restrictionZipStatus) {
+        restrictionZipStatus.textContent = t('zipper.restrict.status.done');
+      }
+    }).catch(function () {
+      if (restrictionZipStatus) {
+        restrictionZipStatus.textContent = t('zipper.restrict.status.failed');
+      }
+    });
   }
 
   function looksLikeHtmlDocument(text) {
@@ -2586,6 +2993,172 @@
     }
     if (/\bexport\s+default\b/.test(sample) && /\breturn\s*\(\s*<[\w]/.test(sample)) return true;
     return false;
+  }
+
+  function applyRestrictionUiState() {
+    var enabled = !!(restrictionToggle && restrictionToggle.checked);
+    if (restrictionFields) {
+      if (enabled) restrictionFields.removeAttribute('hidden');
+      else restrictionFields.setAttribute('hidden', '');
+    }
+    if (restrictionActions) {
+      if (enabled) restrictionActions.removeAttribute('hidden');
+      else restrictionActions.setAttribute('hidden', '');
+    }
+    if (restrictionHint) {
+      if (enabled) restrictionHint.removeAttribute('hidden');
+      else restrictionHint.setAttribute('hidden', '');
+    }
+    if (restrictionAccordion) {
+      if (enabled) restrictionAccordion.removeAttribute('hidden');
+      else restrictionAccordion.setAttribute('hidden', '');
+    }
+    if (restrictionNoEnd && restrictionEndInput) {
+      restrictionEndInput.disabled = restrictionNoEnd.checked;
+    }
+    if (restrictionZipApply) {
+      restrictionZipApply.disabled = !enabled || !restrictionZipFile;
+    }
+    if (mainSettingsOpenButton) {
+      var lockSvg = enabled
+        ? '<rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path>'
+        : '<rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path>';
+      var icon = mainSettingsOpenButton.querySelector('svg');
+      if (icon) {
+        icon.innerHTML = lockSvg;
+      }
+      if (enabled) {
+        mainSettingsOpenButton.classList.add('is-locked');
+        mainSettingsOpenButton.classList.remove('is-unlocked');
+      } else {
+        mainSettingsOpenButton.classList.remove('is-locked');
+        mainSettingsOpenButton.classList.add('is-unlocked');
+      }
+    }
+  }
+
+  function updateRestrictionDefaults() {
+    if (!restrictionStartInput || !restrictionEndInput) return;
+    var now = new Date();
+    if (!restrictionStartInput.value) {
+      restrictionStartInput.value = formatLocalDateTime(now);
+    }
+    if (!restrictionEndInput.value) {
+      var later = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+      restrictionEndInput.value = formatLocalDateTime(later);
+    }
+  }
+
+  function buildRestrictionsPayload() {
+    if (!restrictionToggle || !restrictionToggle.checked) return null;
+    updateRestrictionDefaults();
+    var startValue = restrictionStartInput ? restrictionStartInput.value : '';
+    var endValue = restrictionEndInput ? restrictionEndInput.value : '';
+    var startAt = startValue ? new Date(startValue).toISOString() : new Date().toISOString();
+    var neverExpires = !!(restrictionNoEnd && restrictionNoEnd.checked);
+    var endAt = null;
+    if (!neverExpires && endValue) {
+      endAt = new Date(endValue).toISOString();
+    }
+    return {
+      version: 1,
+      enabled: true,
+      startAt: startAt,
+      endAt: endAt,
+      neverExpires: neverExpires,
+      allowShare: !(restrictionAllowShare && restrictionAllowShare.checked === false),
+      allowEmbed: !(restrictionAllowEmbed && restrictionAllowEmbed.checked === false),
+      createdAt: new Date().toISOString(),
+      source: 'visor-webzip'
+    };
+  }
+
+  function isRestrictionActive(restrictions) {
+    return restrictions && restrictions.enabled;
+  }
+
+  function isRestrictionAllowedNow(restrictions) {
+    if (!restrictions || !restrictions.enabled) return true;
+    var now = Date.now();
+    if (restrictions.startAt) {
+      var start = Date.parse(restrictions.startAt);
+      if (!isNaN(start) && now < start) return false;
+    }
+    if (restrictions.neverExpires) return true;
+    if (restrictions.endAt) {
+      var end = Date.parse(restrictions.endAt);
+      if (!isNaN(end) && now > end) return false;
+    }
+    return true;
+  }
+
+  function isRestrictionExpired(restrictions) {
+    if (!restrictions || !restrictions.enabled) return false;
+    if (restrictions.neverExpires) return false;
+    if (!restrictions.endAt) return false;
+    var end = Date.parse(restrictions.endAt);
+    if (isNaN(end)) return false;
+    return Date.now() > end;
+  }
+
+  function isRestrictionBeforeStart(restrictions) {
+    if (!restrictions || !restrictions.enabled) return false;
+    if (!restrictions.startAt) return false;
+    var start = Date.parse(restrictions.startAt);
+    if (isNaN(start)) return false;
+    return Date.now() < start;
+  }
+
+  function restrictionsAllowShare(restrictions) {
+    if (!restrictions || !restrictions.enabled) return true;
+    return !!restrictions.allowShare;
+  }
+
+  function restrictionsAllowEmbed(restrictions) {
+    if (!restrictions || !restrictions.enabled) return true;
+    return !!restrictions.allowEmbed;
+  }
+
+  function extractRestrictions(entries) {
+    if (!entries || !entries['restrictions.json']) return null;
+    try {
+      var raw = decodeUtf8(entries['restrictions.json']);
+      var data = JSON.parse(raw);
+      if (data && data.enabled) return data;
+    } catch (e) {
+      // ignore invalid restrictions
+    }
+    return null;
+  }
+
+  function applyRestrictionsToActions(restrictions) {
+    currentRestrictions = restrictions || null;
+    if (ignoreRestrictionsForShare) return;
+    if (copyButton) {
+      copyButton.disabled = !currentShareLink || !restrictionsAllowShare(currentRestrictions);
+    }
+    if (embedButton) {
+      embedButton.disabled = !currentShareLink || !restrictionsAllowEmbed(currentRestrictions);
+    }
+  }
+
+  function showRestrictionModal(restrictions) {
+    if (!restrictModal) return;
+    var lines = [];
+    if (restrictions && restrictions.startAt) {
+      var startText = formatRestrictionDate(restrictions.startAt);
+      if (startText) lines.push(t('restrictionModal.rangeStart', { date: startText }));
+    }
+    if (restrictions && restrictions.neverExpires) {
+      lines.push(t('restrictionModal.rangeNoEnd'));
+    } else if (restrictions && restrictions.endAt) {
+      var endText = formatRestrictionDate(restrictions.endAt);
+      if (endText) lines.push(t('restrictionModal.rangeEnd', { date: endText }));
+    }
+    if (restrictRange) {
+      restrictRange.textContent = lines.join(' · ');
+    }
+    restrictModal.removeAttribute('hidden');
   }
 
   function registerServiceWorker() {
@@ -2921,6 +3494,11 @@
     }
     var sortedSites = sortManagerSites(sites);
     sortedSites.forEach(function (site) {
+      var restrictions = site.restrictions || null;
+      var canShare = restrictionsAllowShare(restrictions);
+      var canEmbed = restrictionsAllowEmbed(restrictions);
+      var canView = !isRestrictionBeforeStart(restrictions);
+      var canDownload = !isRestrictionActive(restrictions);
       var item = document.createElement('div');
       item.className = 'manager-item';
       var info = document.createElement('div');
@@ -2933,6 +3511,24 @@
       meta.className = 'manager-item__meta';
       var date = site.updatedAt ? new Date(site.updatedAt).toLocaleString(currentLang) : t('manager.noDate');
       meta.textContent = formatBytes(site.totalBytes || 0) + ' · ' + date;
+      if (restrictions && restrictions.enabled) {
+        var badge = document.createElement('span');
+        badge.className = 'manager-badge';
+        var startLabel = restrictions.startAt ? formatRestrictionDate(restrictions.startAt) : '';
+        var endLabel = (!restrictions.neverExpires && restrictions.endAt) ? formatRestrictionDate(restrictions.endAt) : '';
+        var openText = startLabel ? t('manager.badges.opening', { date: startLabel }) : '';
+        var closeText = endLabel ? t('manager.badges.closing', { date: endLabel }) : '';
+        if (openText && closeText) {
+          badge.textContent = openText + ' · ' + closeText;
+        } else if (openText) {
+          badge.textContent = openText;
+        } else if (closeText) {
+          badge.textContent = closeText;
+        } else {
+          badge.textContent = t('manager.badges.scheduled');
+        }
+        meta.appendChild(badge);
+      }
       info.appendChild(title);
       if (site.url && displayTitle !== site.url) {
         var urlLine = document.createElement('div');
@@ -2953,6 +3549,7 @@
       viewButton.setAttribute('data-tooltip', t('manager.actions.view'));
       viewButton.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M1.5 12s3.5-7 10.5-7 10.5 7 10.5 7-3.5 7-10.5 7-10.5-7-10.5-7z"></path><circle cx="12" cy="12" r="3.5"></circle></svg>';
       actions.appendChild(viewButton);
+      viewButton.disabled = !canView;
       var shareButton = document.createElement('button');
       shareButton.type = 'button';
       shareButton.className = 'icon-button';
@@ -2962,6 +3559,7 @@
       shareButton.setAttribute('data-tooltip', t('manager.actions.share'));
       shareButton.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><path d="M8.6 10.7l6.8-3.4"></path><path d="M8.6 13.3l6.8 3.4"></path></svg>';
       actions.appendChild(shareButton);
+      shareButton.disabled = !site.url || !canShare;
       var embedManagerButton = document.createElement('button');
       embedManagerButton.type = 'button';
       embedManagerButton.className = 'icon-button';
@@ -2971,6 +3569,7 @@
       embedManagerButton.setAttribute('data-tooltip', t('manager.actions.embed'));
       embedManagerButton.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M16 18l6-6-6-6"></path><path d="M8 6l-6 6 6 6"></path><path d="M14 4l-4 16"></path></svg>';
       actions.appendChild(embedManagerButton);
+      embedManagerButton.disabled = !site.url || !canEmbed;
       var editButton = document.createElement('button');
       editButton.type = 'button';
       editButton.className = 'icon-button';
@@ -2989,6 +3588,7 @@
       downloadButton.setAttribute('data-tooltip', t('manager.actions.download'));
       downloadButton.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 3v10"></path><path d="M7 9l5 5 5-5"></path><path d="M5 21h14"></path></svg>';
       actions.appendChild(downloadButton);
+      downloadButton.disabled = !site.url || !canDownload;
       var delButton = document.createElement('button');
       delButton.type = 'button';
       delButton.className = 'icon-button';
@@ -3008,6 +3608,14 @@
     return Promise.all([getAllSites(), estimateStorage()]).then(function (result) {
       var sites = result[0];
       var estimate = result[1];
+      var expiredIds = sites.filter(function (site) {
+        return isRestrictionActive(site.restrictions) && isRestrictionExpired(site.restrictions);
+      }).map(function (site) { return site.id; });
+      if (expiredIds.length) {
+        return deleteSitesSequential(expiredIds).then(function () {
+          return refreshManager();
+        });
+      }
       var totalBytes = sumSiteBytes(sites);
       if (storageUsed) {
         storageUsed.textContent = formatBytes(totalBytes);
@@ -3220,6 +3828,16 @@
     } catch (e) {
       // ignore
     }
+  }
+
+  function closeMainSettingsModal() {
+    if (!mainSettingsModal) return;
+    mainSettingsModal.setAttribute('hidden', '');
+  }
+
+  function openMainSettingsModal() {
+    if (!mainSettingsModal) return;
+    mainSettingsModal.removeAttribute('hidden');
   }
 
   function closeReactPromptModal() {
@@ -3715,6 +4333,32 @@
         setShareLink(shareLink);
 
         if (result.cached && !opts.force) {
+          if (result.site && isRestrictionActive(result.site.restrictions) && !isRestrictionAllowedNow(result.site.restrictions)) {
+            if (isRestrictionExpired(result.site.restrictions)) {
+              return deleteSite(result.siteId).then(function () {
+                showRestrictionModal(result.site.restrictions);
+                var err = new Error(t('error.restricted'));
+                err.skipStatus = true;
+                throw err;
+              });
+            }
+            if (opts.allowInactive) {
+              setStatus(t('status.restrictedReady'));
+              if (showProgress && !autoOpen) {
+                setLoading(false);
+              }
+              currentRestrictions = null;
+              applyRestrictionsToActions(currentRestrictions);
+              return { siteId: result.siteId, siteUrl: null };
+            }
+            showRestrictionModal(result.site.restrictions);
+            var errInactive = new Error(t('error.restricted'));
+            errInactive.skipStatus = true;
+            throw errInactive;
+          }
+          if (opts.embed && result.site && isRestrictionActive(result.site.restrictions) && !restrictionsAllowEmbed(result.site.restrictions)) {
+            throw new Error(t('error.embedNotAllowed'));
+          }
           var siteUrl = buildSiteUrl(result.siteId, result.site.indexPath);
           return controlPromise.then(function () {
             if (opts.embed) {
@@ -3728,6 +4372,8 @@
             if (showProgress && !autoOpen) {
               setLoading(false);
             }
+            currentRestrictions = result.site ? result.site.restrictions || null : null;
+            applyRestrictionsToActions(currentRestrictions);
             return { siteId: result.siteId, siteUrl: siteUrl };
           });
         }
@@ -3762,9 +4408,23 @@
           }
           var bytes = bundle.bytes ? bundle.bytes : base64ToBytes(bundle.base64);
           var entries = window.fflate.unzipSync(bytes);
+          var restrictions = extractRestrictions(entries);
+          var blockedNow = isRestrictionActive(restrictions) && !isRestrictionAllowedNow(restrictions);
+          if (blockedNow && isRestrictionExpired(restrictions)) {
+            showRestrictionModal(restrictions);
+            var blocked = new Error(t('error.restricted'));
+            blocked.skipStatus = true;
+            throw blocked;
+          }
+          if (opts.embed && isRestrictionActive(restrictions) && !restrictionsAllowEmbed(restrictions)) {
+            throw new Error(t('error.embedNotAllowed'));
+          }
           var files = [];
           Object.keys(entries).forEach(function (entryPath) {
             if (entryPath.endsWith('/') || entryPath.indexOf('__MACOSX/') === 0) {
+              return;
+            }
+            if (entryPath === 'restrictions.json') {
               return;
             }
             var normalized = normalizePath(entryPath);
@@ -3823,15 +4483,32 @@
                   updatedAt: Date.now(),
                   fileCount: files.length,
                   totalBytes: totalBytes,
-                  title: siteTitle
+                  title: siteTitle,
+                  restrictions: restrictions || null
                 };
                 return saveSite(site).then(function () {
                   return saveFiles(files).then(function () {
                     var siteUrl = buildSiteUrl(result.siteId, indexPath);
                     return controlPromise.then(function () {
+                      currentRestrictions = restrictions || null;
+                      applyRestrictionsToActions(currentRestrictions);
                       if (opts.embed) {
                         openEmbedSite(siteUrl);
                         return { siteId: result.siteId, siteUrl: siteUrl };
+                      }
+                      if (blockedNow && !opts.allowInactive) {
+                        showRestrictionModal(restrictions);
+                        if (showProgress || autoOpen) {
+                          stopProgress();
+                          setLoading(false);
+                        }
+                        if (loadingMessage) {
+                          loadingMessage.textContent = t('loading.message');
+                        }
+                        if (loadingEta) {
+                          setLoadingEtaVisible(false);
+                        }
+                        return { siteId: result.siteId, siteUrl: null };
                       }
                       if (autoOpen) {
                         window.location.assign(siteUrl);
@@ -3862,7 +4539,11 @@
           return;
         }
         setShareLink('');
-        setStatus(message);
+        currentRestrictions = null;
+        applyRestrictionsToActions(currentRestrictions);
+        if (!err || !err.skipStatus) {
+          setStatus(message);
+        }
         if (autoOpen) {
           setLoading(false);
         }
@@ -4018,6 +4699,57 @@
       buildZipFromHtml();
     });
   }
+  if (restrictionToggle) {
+    restrictionToggle.addEventListener('change', function () {
+      if (restrictionToggle.checked) {
+        var now = new Date();
+        if (restrictionStartInput) {
+          restrictionStartInput.value = formatLocalDateTime(now);
+        }
+        if (restrictionEndInput && !restrictionEndInput.value) {
+          var later = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+          restrictionEndInput.value = formatLocalDateTime(later);
+        }
+      }
+      applyRestrictionUiState();
+      updateRestrictionDefaults();
+      if (restrictionZipStatus) {
+        restrictionZipStatus.textContent = t('zipper.restrict.status.ready');
+      }
+      if (!restrictionToggle.checked) {
+        restrictionZipFile = null;
+        if (restrictionZipApply) {
+          restrictionZipApply.disabled = true;
+        }
+      }
+    });
+  }
+  if (restrictionNoEnd) {
+    restrictionNoEnd.addEventListener('change', function () {
+      applyRestrictionUiState();
+    });
+  }
+  if (restrictionZipPick && restrictionZipInput) {
+    restrictionZipPick.addEventListener('click', function () {
+      restrictionZipInput.click();
+    });
+  }
+  if (restrictionZipInput) {
+    restrictionZipInput.addEventListener('change', function () {
+      restrictionZipFile = restrictionZipInput.files && restrictionZipInput.files[0] ? restrictionZipInput.files[0] : null;
+      if (restrictionZipApply) {
+        restrictionZipApply.disabled = !restrictionZipFile;
+      }
+      if (restrictionZipStatus) {
+        restrictionZipStatus.textContent = restrictionZipFile ? restrictionZipFile.name : t('zipper.restrict.status.ready');
+      }
+    });
+  }
+  if (restrictionZipApply) {
+    restrictionZipApply.addEventListener('click', function () {
+      applyRestrictionsToZipFile(restrictionZipFile);
+    });
+  }
 
   if (form) {
     form.addEventListener('submit', function (event) {
@@ -4026,12 +4758,16 @@
       if (!zipUrl) {
         return;
       }
-      loadZip(zipUrl, { force: true });
+      ignoreRestrictionsForShare = true;
+      loadZip(zipUrl, { force: true, allowInactive: true });
     });
   }
 
   var params = new URLSearchParams(window.location.search);
   var urlParam = params.get('url');
+  if (urlParam) {
+    ignoreRestrictionsForShare = false;
+  }
   if (langSelect) {
     langSelect.addEventListener('change', function () {
       setLanguage(langSelect.value);
@@ -4096,6 +4832,7 @@
       if (!(target instanceof Element)) return;
       var button = target.closest('button');
       if (!button) return;
+      if (button.disabled) return;
       var action = button.getAttribute('data-action');
       var siteId = button.getAttribute('data-site-id');
       var indexPath = button.getAttribute('data-index-path') || '';
@@ -4110,8 +4847,20 @@
         return;
       }
       if (action === 'view' && siteId) {
-        var siteUrl = buildSiteUrl(siteId, indexPath || '');
-        window.open(siteUrl, '_blank');
+        getSite(siteId).then(function (site) {
+          if (site && isRestrictionActive(site.restrictions) && !isRestrictionAllowedNow(site.restrictions)) {
+            if (isRestrictionExpired(site.restrictions)) {
+              return deleteSite(siteId).then(function () {
+                refreshManager();
+                showRestrictionModal(site.restrictions);
+              });
+            }
+            showRestrictionModal(site.restrictions);
+            return;
+          }
+          var siteUrl = buildSiteUrl(siteId, indexPath || '');
+          window.open(siteUrl, '_blank');
+        });
         return;
       }
       if (action === 'share' && zipUrl) {
@@ -4198,6 +4947,63 @@
     document.addEventListener('keydown', function (event) {
       if (event.key === 'Escape') {
         closeManagerSettingsModal();
+      }
+    });
+  }
+
+  if (restrictCloseButtons && restrictCloseButtons.length) {
+    restrictCloseButtons.forEach(function (button) {
+      button.addEventListener('click', function () {
+        if (restrictModal) {
+          restrictModal.setAttribute('hidden', '');
+        }
+      });
+    });
+  }
+
+  if (mainSettingsOpenButton && mainSettingsModal) {
+    mainSettingsOpenButton.addEventListener('click', function (event) {
+      event.preventDefault();
+      openMainSettingsModal();
+    });
+    if (mainSettingsCloseButtons && mainSettingsCloseButtons.length) {
+      mainSettingsCloseButtons.forEach(function (button) {
+        button.addEventListener('click', function () {
+          closeMainSettingsModal();
+        });
+      });
+    }
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && mainSettingsModal && !mainSettingsModal.hasAttribute('hidden')) {
+        closeMainSettingsModal();
+      }
+    });
+  }
+  if (languageOpenButton && languagePanel) {
+    languageOpenButton.addEventListener('click', function (event) {
+      event.preventDefault();
+      if (languagePanel.hasAttribute('hidden')) {
+        languagePanel.removeAttribute('hidden');
+      } else {
+        languagePanel.setAttribute('hidden', '');
+      }
+      if (langSelect) {
+        try {
+          langSelect.focus();
+        } catch (e) {
+          // ignore
+        }
+      }
+    });
+    document.addEventListener('click', function (event) {
+      if (languagePanel.hasAttribute('hidden')) return;
+      if (!languagePanel.contains(event.target) && !languageOpenButton.contains(event.target)) {
+        languagePanel.setAttribute('hidden', '');
+      }
+    });
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && !languagePanel.hasAttribute('hidden')) {
+        languagePanel.setAttribute('hidden', '');
       }
     });
   }

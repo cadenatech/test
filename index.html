@@ -32,7 +32,14 @@
           <p class="header-subtitle" data-i18n="header.subtitle">Autopublicación de recursos educativos desde tu almacenamiento en la nube.</p>
         </div>
         <div class="title-actions">
-          <div class="lang-switch">
+          <button class="icon-button" type="button" data-lang-open data-i18n-aria-label="header.language" data-i18n-tooltip="header.languageHint">
+            <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"></path>
+            </svg>
+          </button>
+          <div class="lang-panel" data-lang-panel hidden>
             <label for="lang-select" class="sr-only" data-i18n="lang.label">Idioma</label>
             <select id="lang-select" data-lang-select>
               <option value="es" data-i18n="lang.es">Español</option>
@@ -43,6 +50,12 @@
               <option value="de" data-i18n="lang.de">Deutsch</option>
             </select>
           </div>
+          <button class="icon-button" type="button" data-main-settings-open data-i18n-aria-label="header.settings" data-i18n-tooltip="header.settingsHint">
+            <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 9.9-1"></path>
+            </svg>
+          </button>
           <button class="help-pill" type="button" data-about-open data-i18n-aria-label="header.help">
             <span class="help-pill__icon">?</span>
             <span class="help-pill__tooltip" role="tooltip" data-i18n="header.help">Ayuda</span>
@@ -74,6 +87,7 @@
               </span>
               <span class="publish-choice-card__title" data-i18n="publish.choice.zipper.title">Crea un ZIP</span>
               <span class="publish-choice-card__note" data-i18n="publish.choice.zipper.note">Empieza creando un ZIP desde tus archivos o desde HTML.</span>
+              <span class="publish-choice-card__note" data-restrict-hint data-i18n="publish.choice.zipper.restrictHint" hidden>También puedes subir un ZIP para limitar su acceso por fechas.</span>
             </button>
             <button class="publish-choice-card" type="button" data-publish-start="main">
               <span class="publish-choice-card__icon" aria-hidden="true">
@@ -120,7 +134,7 @@
             </button>
           </div>
           <form data-form>
-            <span class="field-title" data-i18n="main.form.title">Pega aqui el enlace publico</span>
+            <span class="field-title" data-i18n="main.form.title">Ya tengo un ZIP o ELPX</span>
             <p class="step-note" data-i18n="main.subtitle">Si ya tienes tu recurso en formato ZIP (o .elpx de eXeLearning 3+) en un servicio con enlace público (Drive, Dropbox, etc.), pega aquí el enlace para generar el enlace.</p>
             <input data-url type="url" placeholder="Pega aqui el enlace publico del ZIP o del .elpx" data-i18n-placeholder="main.form.placeholder" required>
             <button type="submit" data-i18n="main.form.submit">Crear enlace</button>
@@ -208,6 +222,20 @@
                   </div>
                   <p class="upload-status" data-zip-status data-i18n="zipper.status.readyHint" data-i18n-dynamic>Prepara el ZIP para obtener tu archivo.</p>
                 </section>
+              </div>
+            </details>
+            <details class="html-zip-accordion" data-restrict-accordion hidden>
+              <summary class="html-zip-accordion__summary" data-i18n="zipper.restrict.title">¿Quieres limitar el acceso a un ZIP ya creado?</summary>
+              <div class="html-zip-card">
+                <div class="html-zip-card__header">
+                  <p class="step-note" data-i18n="zipper.restrict.note">Sube tu ZIP y el visor añadirá las restricciones en un archivo JSON. Después tendrás que volver a subirlo a Drive, Dropbox, etc.</p>
+                </div>
+                <div class="upload-actions">
+                  <button class="ghost-button" type="button" data-restrict-zip-pick data-i18n="zipper.restrict.pick">Seleccionar ZIP</button>
+                  <input type="file" accept=".zip,.elpx,application/zip" data-restrict-zip-input hidden>
+                  <button type="button" data-restrict-zip-apply data-i18n="zipper.restrict.apply" disabled>Aplicar restricciones y descargar</button>
+                </div>
+                <p class="upload-status" data-restrict-zip-status data-i18n="zipper.restrict.status.ready" data-i18n-dynamic>Selecciona un ZIP para añadir las restricciones.</p>
               </div>
             </details>
             <details class="html-zip-accordion">
@@ -365,6 +393,69 @@
       </div>
     </div>
 
+    <div class="modal" data-restrict-modal hidden>
+      <div class="modal__overlay modal__overlay--solid"></div>
+      <div class="modal__card modal__card--narrow" role="dialog" aria-modal="true" aria-labelledby="restrict-title">
+        <div class="modal__header">
+          <h2 id="restrict-title" data-i18n="restrictionModal.title">Acceso restringido</h2>
+        </div>
+        <div class="modal__content">
+          <p class="manager-subtitle" data-i18n="restrictionModal.body">Este recurso no está disponible en este momento.</p>
+          <p class="setting-help" data-restrict-range></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" data-main-settings-modal hidden>
+      <div class="modal__overlay" data-main-settings-close></div>
+      <div class="modal__card" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+        <div class="modal__header">
+          <h2 id="settings-title" data-i18n="settings.title">Ajustes</h2>
+          <button class="modal__close" type="button" data-main-settings-close data-i18n-aria-label="common.close">×</button>
+        </div>
+        <div class="modal__content">
+          <div class="settings-panel__title" data-i18n="settings.restrictTitle">Acceso por fechas</div>
+          <p class="setting-help" data-i18n="settings.restrictHint">No limites el acceso a no ser que tengas un buen motivo para hacerlo.</p>
+          <label class="settings-check">
+            <input type="checkbox" data-restrict-toggle>
+            <span data-i18n="settings.restrictToggle">Limitar el acceso por fechas</span>
+          </label>
+
+          <div class="settings-grid" data-restrict-fields hidden>
+            <label class="settings-field">
+              <span class="stat-label" data-i18n="settings.startLabel">Inicio</span>
+              <input type="datetime-local" data-restrict-start>
+            </label>
+            <label class="settings-field">
+              <span class="stat-label" data-i18n="settings.endLabel">Fin</span>
+              <input type="datetime-local" data-restrict-end>
+            </label>
+            <label class="settings-check">
+              <input type="checkbox" data-restrict-no-end checked>
+              <span data-i18n="settings.neverExpires">No caducar nunca</span>
+            </label>
+          </div>
+
+          <div class="settings-panel__title" data-i18n="settings.actionsTitle">Acciones permitidas</div>
+          <div class="settings-grid" data-restrict-actions hidden>
+            <label class="settings-check">
+              <input type="checkbox" data-restrict-allow-share checked>
+              <span data-i18n="settings.allowShare">Compartir</span>
+            </label>
+            <label class="settings-check">
+              <input type="checkbox" data-restrict-allow-embed checked>
+              <span data-i18n="settings.allowEmbed">Insertar en web</span>
+            </label>
+          </div>
+          <p class="setting-help" data-i18n="settings.downloadNote">La descarga estará siempre desactivada cuando haya restricciones.</p>
+
+          <div class="html-picker__actions">
+            <button class="ghost-button" type="button" data-main-settings-close data-i18n="common.close">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="modal" data-embed-modal hidden>
       <div class="modal__overlay" data-embed-close></div>
       <div class="modal__card" role="dialog" aria-modal="true" aria-labelledby="embed-title">
@@ -386,7 +477,7 @@
     <footer class="site-footer">
       <a class="footer-link" href="https://bilateria.org" target="_blank" rel="noopener">(c) 2026 Juan Jose de Haro</a>
       <span class="footer-sep">·</span>
-<span class="footer-link">v1.4.0</span>
+<span class="footer-link">v1.5.0</span>
       <span class="footer-sep">·</span>
       <a class="footer-link" href="https://github.com/visor-webzip/visor-webzip.github.io" target="_blank" rel="noopener">
         <svg class="footer-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
@@ -412,6 +503,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/fflate@0.8.2/umd/index.js"></script>
   <script src="config.js"></script>
-	  <script src="app.js?v=24"></script>
+	  <script src="app.js?v=25"></script>
  </body>
  </html>
