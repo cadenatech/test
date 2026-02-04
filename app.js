@@ -89,23 +89,33 @@
   var restrictionZipApply = document.querySelector('[data-restrict-zip-apply]');
   var restrictionZipStatus = document.querySelector('[data-restrict-zip-status]');
   var restrictionCountdown = document.querySelector('[data-restrict-countdown]');
+  var UI = window.UI || {};
   var restrictionSummary = document.querySelector('[data-restrict-summary]');
   var restrictionSummaryItems = document.querySelector('[data-restrict-summary-items]');
   var ignoreRestrictionsForShare = false;
   var restrictCountdownTimer = null;
 
+  if (UI.init) {
+    UI.init({
+      loadingScreen: loadingScreen,
+      loadingMessage: loadingMessage,
+      loadingBar: loadingBar,
+      loadingEta: loadingEta,
+      output: output,
+      uploadStatus: uploadStatus,
+      zipStatus: zipStatus,
+      htmlZipStatus: htmlZipStatus,
+      getCurrentShareLink: function () { return currentShareLink; }
+    });
+  }
+
   var currentShareLink = '';
   var currentZipUrl = '';
-  var loadingActive = false;
-  var progressTimer = null;
-  var lastProgressValue = 0;
   var selectedFiles = [];
   var zipNameDirty = false;
   var htmlPickerResolve = null;
   var htmlPickerReject = null;
   var htmlPickerWasLoading = false;
-  var toastTimer = null;
-  var inlineToastTimer = null;
   var activeTitleEdit = null;
   var activePublishModule = '';
   var isEmbedMode = false;
@@ -490,17 +500,17 @@
       output.textContent = t('main.output.placeholder');
     }
     if (!selectedFiles.length) {
-      setUploadStatus(t('zipper.status.empty'));
-      setZipStatus(t('zipper.status.readyHint'));
+      UI.setUploadStatus(t('zipper.status.empty'));
+      UI.setZipStatus(t('zipper.status.readyHint'));
     } else {
-      setUploadStatus(t('zipper.status.filesReady', { count: selectedFiles.length }));
-      setZipStatus(t('zipper.status.ready'));
+      UI.setUploadStatus(t('zipper.status.filesReady', { count: selectedFiles.length }));
+      UI.setZipStatus(t('zipper.status.ready'));
     }
     if (htmlZipInput) {
       if (htmlZipInput.value.trim()) {
-        setHtmlZipStatus(t('zipper.html.status.ready'));
+        UI.setHtmlZipStatus(t('zipper.html.status.ready'));
       } else {
-        setHtmlZipStatus(t('zipper.html.status.empty'));
+        UI.setHtmlZipStatus(t('zipper.html.status.empty'));
       }
     }
     applyRestrictionUiState();
@@ -509,7 +519,7 @@
     if (restrictionZipStatus) {
       restrictionZipStatus.textContent = t('zipper.restrict.status.ready');
     }
-    if (!loadingActive && loadingMessage) {
+    if (UI.isLoading && !UI.isLoading() && loadingMessage) {
       loadingMessage.textContent = t('loading.message');
     }
     if (managerList) {
@@ -524,65 +534,12 @@
     }
   }
 
-  function setLoading(active) {
-    loadingActive = !!active;
-    if (loadingScreen) {
-      if (active) {
-        loadingScreen.removeAttribute('hidden');
-      } else {
-        loadingScreen.setAttribute('hidden', '');
-      }
-    }
-    document.body.setAttribute('data-loading', active ? 'true' : 'false');
-    if (!active) {
-      stopProgress();
-    }
-  }
 
-  function setLoadingMessage(message) {
-    if (loadingMessage) {
-      loadingMessage.textContent = message;
-    }
-  }
 
-  function setLoadingEta(message) {
-    if (loadingEta) {
-      loadingEta.textContent = message;
-    }
-  }
 
-  function setLoadingEtaVisible(visible) {
-    if (!loadingEta) return;
-    if (visible) {
-      loadingEta.removeAttribute('hidden');
-    } else {
-      loadingEta.setAttribute('hidden', '');
-    }
-  }
 
-  function setProgress(value) {
-    if (!loadingBar) return;
-    var percent = Math.max(0, Math.min(100, value));
-    lastProgressValue = percent;
-    loadingBar.style.width = percent + '%';
-  }
 
-  function startProgress(initial) {
-    stopProgress();
-    var current = initial || 5;
-    setProgress(current);
-    progressTimer = setInterval(function () {
-      current = Math.min(current + 2, 85);
-      setProgress(current);
-    }, 600);
-  }
 
-  function stopProgress() {
-    if (progressTimer) {
-      clearInterval(progressTimer);
-      progressTimer = null;
-    }
-  }
   function appBase() {
     var path = window.location.pathname;
     if (!path.endsWith('/')) {
@@ -591,12 +548,6 @@
     return window.location.origin + path;
   }
 
-  function setStatus(message) {
-    output.textContent = message;
-    if (loadingActive && !(message && /^https?:\/\//i.test(message))) {
-      setLoadingMessage(message);
-    }
-  }
 
   function setShareLink(link) {
     currentShareLink = link || '';
@@ -618,32 +569,7 @@
     }
   }
 
-  function flashMessage(message) {
-    output.textContent = message;
-    if (currentShareLink) {
-      setTimeout(function () {
-        output.textContent = currentShareLink;
-      }, 1500);
-    }
-  }
 
-  function showInlineToast(button, message) {
-    if (!button) return;
-    var existing = button.querySelector('.inline-toast');
-    var bubble = existing || document.createElement('span');
-    bubble.className = 'inline-toast';
-    bubble.textContent = message;
-    if (!existing) {
-      button.appendChild(bubble);
-    }
-    button.classList.add('show-toast');
-    if (inlineToastTimer) {
-      clearTimeout(inlineToastTimer);
-    }
-    inlineToastTimer = setTimeout(function () {
-      button.classList.remove('show-toast');
-    }, 1300);
-  }
 
   function formatUserError(err) {
     var message = (err && err.message) ? err.message : '';
@@ -688,9 +614,9 @@
     return new Promise(function (resolve, reject) {
       htmlPickerResolve = resolve;
       htmlPickerReject = reject;
-      if (loadingActive) {
+      if (UI.isLoading && UI.isLoading()) {
         htmlPickerWasLoading = true;
-        setLoading(false);
+        UI.setLoading(false);
       }
       htmlList.innerHTML = '';
       htmlPaths.forEach(function (path, index) {
@@ -715,23 +641,8 @@
     });
   }
 
-  function setUploadStatus(message) {
-    if (uploadStatus) {
-      uploadStatus.textContent = message;
-    }
-  }
 
-  function setZipStatus(message) {
-    if (zipStatus) {
-      zipStatus.textContent = message;
-    }
-  }
 
-  function setHtmlZipStatus(message) {
-    if (htmlZipStatus) {
-      htmlZipStatus.textContent = message;
-    }
-  }
 
   function resetZipDownload() {
     // No-op: downloads are triggered immediately after ZIP creation.
@@ -741,8 +652,8 @@
     selectedFiles = files || [];
     resetZipDownload();
     if (!selectedFiles.length) {
-      setUploadStatus(t('zipper.status.empty'));
-      setZipStatus(t('zipper.status.readyHint'));
+      UI.setUploadStatus(t('zipper.status.empty'));
+      UI.setZipStatus(t('zipper.status.readyHint'));
       if (zipNameInput && !zipNameDirty) {
         zipNameInput.value = getZipDefaultName();
       }
@@ -751,8 +662,8 @@
     if (zipNameInput && !zipNameDirty) {
       zipNameInput.value = deriveZipBaseName(selectedFiles);
     }
-    setUploadStatus(t('zipper.status.filesReady', { count: selectedFiles.length }));
-    setZipStatus(t('zipper.status.ready'));
+    UI.setUploadStatus(t('zipper.status.filesReady', { count: selectedFiles.length }));
+    UI.setZipStatus(t('zipper.status.ready'));
   }
 
   function normalizeZipName(name) {
@@ -972,15 +883,15 @@
 
   function buildZipFromSelection() {
     if (!selectedFiles.length) {
-      setZipStatus(t('zipper.status.selectFirst'));
+      UI.setZipStatus(t('zipper.status.selectFirst'));
       return;
     }
     if (!window.fflate || !window.fflate.zipSync) {
-      setZipStatus(t('zipper.status.engineMissing'));
+      UI.setZipStatus(t('zipper.status.engineMissing'));
       return;
     }
     var zipName = normalizeZipName(zipNameInput ? zipNameInput.value : '');
-    setZipStatus(t('zipper.status.creating'));
+    UI.setZipStatus(t('zipper.status.creating'));
     var tasks = selectedFiles.map(function (item) {
       return item.file.arrayBuffer().then(function (buffer) {
         return {
@@ -1012,29 +923,29 @@
       setTimeout(function () {
         URL.revokeObjectURL(url);
       }, 1000);
-      setZipStatus(t('zipper.status.downloaded'));
+      UI.setZipStatus(t('zipper.status.downloaded'));
     }).catch(function () {
-      setZipStatus(t('zipper.status.failed'));
+      UI.setZipStatus(t('zipper.status.failed'));
     });
   }
 
   function buildZipFromHtml() {
     var htmlText = htmlZipInput ? htmlZipInput.value.trim() : '';
     if (!htmlText) {
-      setHtmlZipStatus(t('zipper.html.status.empty'));
+      UI.setHtmlZipStatus(t('zipper.html.status.empty'));
       return;
     }
     if (looksLikeReactJsx(htmlText)) {
-      setHtmlZipStatus(t('zipper.html.status.reactDetected'));
+      UI.setHtmlZipStatus(t('zipper.html.status.reactDetected'));
       openReactPromptModal(htmlText);
       return;
     }
     if (!window.fflate || !window.fflate.zipSync) {
-      setHtmlZipStatus(t('zipper.status.engineMissing'));
+      UI.setHtmlZipStatus(t('zipper.status.engineMissing'));
       return;
     }
     var zipName = normalizeZipName(zipNameInput ? zipNameInput.value : '');
-    setHtmlZipStatus(t('zipper.html.status.creating'));
+    UI.setHtmlZipStatus(t('zipper.html.status.creating'));
     try {
       var files = {
         'index.html': encodeUtf8(htmlText)
@@ -1052,9 +963,9 @@
       anchor.click();
       URL.revokeObjectURL(anchor.href);
       document.body.removeChild(anchor);
-      setHtmlZipStatus(t('zipper.html.status.downloaded'));
+      UI.setHtmlZipStatus(t('zipper.html.status.downloaded'));
     } catch (err) {
-      setHtmlZipStatus(t('zipper.html.status.failed'));
+      UI.setHtmlZipStatus(t('zipper.html.status.failed'));
     }
   }
 
@@ -2188,8 +2099,8 @@
     if (message) {
       sendEmbedError(message);
     }
-    stopProgress();
-    setLoading(false);
+    UI.stopProgress();
+    UI.setLoading(false);
   }
 
   function openEmbedSite(siteUrl) {
@@ -2197,9 +2108,9 @@
     if (embedFallback) {
       embedFallback.setAttribute('hidden', '');
     }
-    setLoading(true);
+    UI.setLoading(true);
     embedFrame.onload = function () {
-      setLoading(false);
+      UI.setLoading(false);
       sendEmbedReady(siteUrl);
       startEmbedHeightTracking();
       setTimeout(function () {
@@ -2313,7 +2224,7 @@
 
     function updateEta() {
       if (!totalSize || !avgSpeed) {
-        setLoadingEtaVisible(false);
+        UI.setLoadingEtaVisible(false);
         return;
       }
       var elapsed = (Date.now() - etaBaseAt) / 1000;
@@ -2325,16 +2236,16 @@
       lastEtaSeconds = etaSeconds;
       var etaText = formatEta(etaSeconds);
       if (etaText) {
-        setLoadingEta(t('loading.etaPrefix') + etaText);
-        setLoadingEtaVisible(true);
+        UI.setLoadingEta(t('loading.etaPrefix') + etaText);
+        UI.setLoadingEtaVisible(true);
       } else {
-        setLoadingEtaVisible(false);
+        UI.setLoadingEtaVisible(false);
       }
     }
 
     function updateDownloadProgress() {
       var info = buildDownloadMessage();
-      setLoadingMessage(info.message);
+      UI.setLoadingMessage(info.message);
 
       if (!totalSize) return;
       var pct = info.pct;
@@ -2342,12 +2253,12 @@
       if (progress > 100) progress = 100;
       if (progress < maxProgress) progress = maxProgress;
       maxProgress = progress;
-      setProgress(progress);
+      UI.setProgress(progress);
     }
 
-    stopProgress();
-    startProgress(2);
-    setLoadingMessage(t('status.connecting') + '...');
+    UI.stopProgress();
+    UI.startProgress(2);
+    UI.setLoadingMessage(t('status.connecting') + '...');
     updateDownloadProgress();
     etaTimer = setInterval(function () {
       dotPhase = (dotPhase + 1) % 3;
@@ -2355,7 +2266,7 @@
       var info = buildDownloadMessage();
       if (info.message !== lastEtaText) {
         lastEtaText = info.message;
-        setLoadingMessage(info.message);
+        UI.setLoadingMessage(info.message);
       }
       if (totalSize && downloaded) {
         updateEta();
@@ -2387,8 +2298,8 @@
           if (partBytes.length) {
             if (!hasStartedDownload) {
               hasStartedDownload = true;
-              stopProgress();
-              setProgress(0);
+              UI.stopProgress();
+              UI.setProgress(0);
             }
           }
           chunks.push(partBytes);
@@ -2416,7 +2327,7 @@
           if (tries >= 2) {
             throw err;
           }
-          setLoadingMessage('Reintentando trozo ' + (part + 1) + ' (' + (tries + 1) + '/2)...');
+          UI.setLoadingMessage('Reintentando trozo ' + (part + 1) + ' (' + (tries + 1) + '/2)...');
           return new Promise(function (resolve) { setTimeout(resolve, 700 * (tries + 1)); })
             .then(function () { return fetchPart(part, tries + 1); });
         });
@@ -2515,20 +2426,20 @@
       input.value = normalizedZipUrl;
     }
     if (autoOpen) {
-      setLoading(true);
-      setProgress(5);
-      setLoadingMessage(t('status.preparing'));
+      UI.setLoading(true);
+      UI.setProgress(5);
+      UI.setLoadingMessage(t('status.preparing'));
     }
     if (!GAS_WEBAPP_URL) {
-      setStatus(t('error.configMissing'));
+      UI.setStatus(t('error.configMissing'));
       if (showProgress && !autoOpen) {
-        setLoading(false);
+        UI.setLoading(false);
       }
       return Promise.resolve();
     }
-    setStatus(t('status.preparingZip'));
+    UI.setStatus(t('status.preparingZip'));
     if (autoOpen) {
-      startProgress(8);
+      UI.startProgress(8);
     }
 
     var workerPromise = registerServiceWorker().catch(function () {
@@ -2553,9 +2464,9 @@
           if (result.site && Restrictions.isRestrictionActive(result.site.restrictions) && !Restrictions.isRestrictionAllowedNow(result.site.restrictions)) {
             if (Restrictions.isRestrictionExpired(result.site.restrictions)) {
               if (opts.allowInactive) {
-                setStatus(t('status.restrictedReady'));
+                UI.setStatus(t('status.restrictedReady'));
                 if (showProgress && !autoOpen) {
-                  setLoading(false);
+                  UI.setLoading(false);
                 }
                 currentRestrictions = result.site ? result.site.restrictions || null : null;
                 applyRestrictionsToActions(currentRestrictions);
@@ -2569,9 +2480,9 @@
               });
             }
             if (opts.allowInactive) {
-              setStatus(t('status.restrictedReady'));
+              UI.setStatus(t('status.restrictedReady'));
               if (showProgress && !autoOpen) {
-                setLoading(false);
+                UI.setLoading(false);
               }
               currentRestrictions = result.site ? result.site.restrictions || null : null;
               applyRestrictionsToActions(currentRestrictions);
@@ -2592,11 +2503,11 @@
               return { siteId: result.siteId, siteUrl: siteUrl };
             }
             if (autoOpen) {
-              setProgress(100);
+              UI.setProgress(100);
               window.location.assign(siteUrl);
             }
             if (showProgress && !autoOpen) {
-              setLoading(false);
+              UI.setLoading(false);
             }
             currentRestrictions = result.site ? result.site.restrictions || null : null;
             applyRestrictionsToActions(currentRestrictions);
@@ -2604,30 +2515,30 @@
           });
         }
 
-        setStatus(t('status.downloadingZip'));
+        UI.setStatus(t('status.downloadingZip'));
         if (showProgress && !autoOpen) {
-          setLoading(true);
-          setLoadingMessage(t('status.connecting') + '...');
-          startProgress(2);
-          setLoadingEtaVisible(false);
+          UI.setLoading(true);
+          UI.setLoadingMessage(t('status.connecting') + '...');
+          UI.startProgress(2);
+          UI.setLoadingEtaVisible(false);
         }
         if (autoOpen) {
-          stopProgress();
-          startProgress(2);
-          setLoadingEtaVisible(false);
+          UI.stopProgress();
+          UI.startProgress(2);
+          UI.setLoadingEtaVisible(false);
         }
         return fetchZipBundle(effectiveZipUrl).then(function (bundle) {
           if (autoOpen || showProgress) {
-            stopProgress();
-            setProgress(100);
-            setLoadingEtaVisible(false);
+            UI.stopProgress();
+            UI.setProgress(100);
+            UI.setLoadingEtaVisible(false);
           }
-          setStatus(t('status.unpacking'));
+          UI.setStatus(t('status.unpacking'));
           if (autoOpen || showProgress) {
-            stopProgress();
-            setProgress(0);
-            setLoadingMessage(t('status.unpacking'));
-            setLoadingEtaVisible(false);
+            UI.stopProgress();
+            UI.setProgress(0);
+            UI.setLoadingMessage(t('status.unpacking'));
+            UI.setLoadingEtaVisible(false);
           }
           if (!window.fflate || !window.fflate.unzipSync) {
             throw new Error(t('error.fflateMissing'));
@@ -2638,10 +2549,10 @@
           var blockedNow = Restrictions.isRestrictionActive(restrictions) && !Restrictions.isRestrictionAllowedNow(restrictions);
           if (blockedNow && Restrictions.isRestrictionExpired(restrictions)) {
             if (opts.allowInactive) {
-              setStatus(t('status.restrictedReady'));
+              UI.setStatus(t('status.restrictedReady'));
               if (autoOpen || showProgress) {
-                stopProgress();
-                setLoading(false);
+                UI.stopProgress();
+                UI.setLoading(false);
               }
               currentRestrictions = restrictions || null;
               applyRestrictionsToActions(currentRestrictions);
@@ -2681,24 +2592,24 @@
             throw new Error(t('error.zipNoWebFiles'));
           }
           if (autoOpen || showProgress) {
-            stopProgress();
-            setProgress(100);
+            UI.stopProgress();
+            UI.setProgress(100);
           }
 
           var paths = files.map(function (file) { return file.path; });
           return pickIndexPath(paths).then(function (indexPath) {
             if (htmlPickerWasLoading) {
               htmlPickerWasLoading = false;
-              setLoading(true);
-              setLoadingMessage(t('status.saving'));
+              UI.setLoading(true);
+              UI.setLoadingMessage(t('status.saving'));
             }
-            setStatus(t('status.saving'));
+            UI.setStatus(t('status.saving'));
             if (autoOpen || showProgress) {
-              stopProgress();
-              setProgress(0);
-              startProgress(0);
-              setLoadingMessage(t('status.saving'));
-              setLoadingEtaVisible(false);
+              UI.stopProgress();
+              UI.setProgress(0);
+              UI.startProgress(0);
+              UI.setLoadingMessage(t('status.saving'));
+              UI.setLoadingEtaVisible(false);
             }
 
             var totalBytes = files.reduce(function (sum, item) { return sum + item.size; }, 0);
@@ -2735,14 +2646,14 @@
                       if (blockedNow && !opts.allowInactive) {
                         showRestrictionModal(restrictions);
                         if (showProgress || autoOpen) {
-                          stopProgress();
-                          setLoading(false);
+                          UI.stopProgress();
+                          UI.setLoading(false);
                         }
                         if (loadingMessage) {
                           loadingMessage.textContent = t('loading.message');
                         }
                         if (loadingEta) {
-                          setLoadingEtaVisible(false);
+                          UI.setLoadingEtaVisible(false);
                         }
                         return { siteId: result.siteId, siteUrl: null };
                       }
@@ -2750,9 +2661,9 @@
                         window.location.assign(siteUrl);
                       }
                       if (showProgress && !autoOpen) {
-                        setProgress(100);
-                        stopProgress();
-                        setLoading(false);
+                        UI.setProgress(100);
+                        UI.stopProgress();
+                        UI.setLoading(false);
                       }
                       refreshManager();
                       return { siteId: result.siteId, siteUrl: siteUrl };
@@ -2765,7 +2676,7 @@
         });
       })
       .then(function () {
-        setStatus(currentShareLink);
+        UI.setStatus(currentShareLink);
       })
       .catch(function (err) {
         var message = formatUserError(err);
@@ -2778,14 +2689,14 @@
         currentRestrictions = null;
         applyRestrictionsToActions(currentRestrictions);
         if (!err || !err.skipStatus) {
-          setStatus(message);
+          UI.setStatus(message);
         }
         if (autoOpen) {
-          setLoading(false);
+          UI.setLoading(false);
         }
         if (showProgress && !autoOpen) {
-          stopProgress();
-          setLoading(false);
+          UI.stopProgress();
+          UI.setLoading(false);
         }
       });
   }
@@ -2794,9 +2705,9 @@
     if (!value) return;
     var done = function () {
       if (sourceButton) {
-        showInlineToast(sourceButton, t('status.copySuccess'));
+        UI.showInlineToast(sourceButton, t('status.copySuccess'));
       } else {
-        flashMessage(t('status.copySuccess'));
+        UI.flashMessage(t('status.copySuccess'));
       }
     };
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -2923,9 +2834,9 @@
   if (htmlZipInput) {
     htmlZipInput.addEventListener('input', function () {
       if (htmlZipInput.value.trim()) {
-        setHtmlZipStatus(t('zipper.html.status.ready'));
+        UI.setHtmlZipStatus(t('zipper.html.status.ready'));
       } else {
-        setHtmlZipStatus(t('zipper.html.status.empty'));
+        UI.setHtmlZipStatus(t('zipper.html.status.empty'));
       }
     });
   }
@@ -3362,6 +3273,6 @@
   } else {
     setEmbedMode(false, '');
     setPublishModule('');
-    setLoading(false);
+    UI.setLoading(false);
   }
 })();
