@@ -94,6 +94,7 @@
   var Downloads = window.Downloads || {};
   var Zipper = window.Zipper || {};
   var HtmlPicker = window.HtmlPicker || {};
+  var Storage = window.Storage || {};
   var restrictionSummary = document.querySelector('[data-restrict-summary]');
   var restrictionSummaryItems = document.querySelector('[data-restrict-summary-items]');
   var ignoreRestrictionsForShare = false;
@@ -259,10 +260,6 @@
     };
   }
 
-  var DB_NAME = 'visor-web-sites';
-  var DB_VERSION = 1;
-  var STORE_SITES = 'sites';
-  var STORE_FILES = 'files';
 
   var I18N = window.I18N || {};
 
@@ -1239,108 +1236,12 @@
 
 
 
-  function openDb() {
-    return new Promise(function (resolve, reject) {
-      var request = window.indexedDB.open(DB_NAME, DB_VERSION);
-      request.onupgradeneeded = function () {
-        var db = request.result;
-        if (!db.objectStoreNames.contains(STORE_SITES)) {
-          db.createObjectStore(STORE_SITES, { keyPath: 'id' });
-        }
-        if (!db.objectStoreNames.contains(STORE_FILES)) {
-          var store = db.createObjectStore(STORE_FILES, { keyPath: 'key' });
-          store.createIndex('siteId', 'siteId', { unique: false });
-        }
-      };
-      request.onsuccess = function () {
-        resolve(request.result);
-      };
-      request.onerror = function () {
-        reject(request.error);
-      };
-    });
-  }
 
-  function withStore(storeName, mode, action) {
-    return openDb().then(function (db) {
-      return new Promise(function (resolve, reject) {
-        var tx = db.transaction(storeName, mode);
-        var store = tx.objectStore(storeName);
-        var request = action(store);
-        request.onsuccess = function () {
-          resolve(request.result);
-        };
-        request.onerror = function () {
-          reject(request.error);
-        };
-      });
-    });
-  }
 
-  function getSite(siteId) {
-    return withStore(STORE_SITES, 'readonly', function (store) {
-      return store.get(siteId);
-    });
-  }
 
-  function saveSite(site) {
-    return withStore(STORE_SITES, 'readwrite', function (store) {
-      return store.put(site);
-    });
-  }
 
-  function getAllSites() {
-    return withStore(STORE_SITES, 'readonly', function (store) {
-      return store.getAll();
-    }).then(function (sites) {
-      return sites || [];
-    });
-  }
 
-  function saveFiles(files) {
-    if (!files.length) {
-      return Promise.resolve();
-    }
-    return openDb().then(function (db) {
-      return new Promise(function (resolve, reject) {
-        var tx = db.transaction(STORE_FILES, 'readwrite');
-        var store = tx.objectStore(STORE_FILES);
-        files.forEach(function (file) {
-          store.put(file);
-        });
-        tx.oncomplete = function () {
-          resolve();
-        };
-        tx.onerror = function () {
-          reject(tx.error);
-        };
-      });
-    });
-  }
 
-  function deleteSite(siteId) {
-    return openDb().then(function (db) {
-      return new Promise(function (resolve, reject) {
-        var tx = db.transaction([STORE_SITES, STORE_FILES], 'readwrite');
-        tx.objectStore(STORE_SITES).delete(siteId);
-        var fileStore = tx.objectStore(STORE_FILES);
-        var index = fileStore.index('siteId');
-        var request = index.getAllKeys(IDBKeyRange.only(siteId));
-        request.onsuccess = function () {
-          var keys = request.result || [];
-          keys.forEach(function (key) {
-            fileStore.delete(key);
-          });
-        };
-        tx.oncomplete = function () {
-          resolve();
-        };
-        tx.onerror = function () {
-          reject(tx.error);
-        };
-      });
-    });
-  }
 
   function normalizePath(path) {
     return path.replace(/\\/g, '/').replace(/^\.?\//, '');
@@ -1454,22 +1355,7 @@
     }, 0);
   }
 
-  function estimateStorage() {
-    if (navigator.storage && navigator.storage.estimate) {
-      return navigator.storage.estimate().catch(function () {
-        return null;
-      });
-    }
-    return Promise.resolve(null);
-  }
 
-  function deleteSitesSequential(siteIds) {
-    return siteIds.reduce(function (promise, siteId) {
-      return promise.then(function () {
-        return deleteSite(siteId);
-      });
-    }, Promise.resolve());
-  }
 
   function chooseOldestSites(sites, targetBytes) {
     var sorted = sites.slice().sort(function (a, b) {
@@ -1486,7 +1372,7 @@
   }
 
   function ensureStorageCapacity(extraBytes) {
-    return Promise.all([getAllSites(), estimateStorage()]).then(function (result) {
+    return Promise.all([Storage.getAllSites(), Storage.estimateStorage()]).then(function (result) {
       var sites = result[0];
       var estimate = result[1];
       var quota = estimate && estimate.quota ? estimate.quota : 0;
@@ -1502,7 +1388,7 @@
       var target = Math.max(0, limit - (extraBytes || 0));
       var toDelete = chooseOldestSites(sites, target);
       if (!toDelete.length) return false;
-      return deleteSitesSequential(toDelete).then(function () {
+      return Storage.deleteSitesSequential(toDelete).then(function () {
         return ensureStorageCapacity(extraBytes);
       });
     });
@@ -1510,12 +1396,12 @@
 
   function cleanupOldSites() {
     var cutoff = Date.now() - getCleanupDays() * 24 * 60 * 60 * 1000;
-    return getAllSites().then(function (sites) {
+    return Storage.getAllSites().then(function (sites) {
       var oldIds = sites.filter(function (site) {
         return site.updatedAt && site.updatedAt < cutoff;
       }).map(function (site) { return site.id; });
       if (!oldIds.length) return;
-      return deleteSitesSequential(oldIds);
+      return Storage.deleteSitesSequential(oldIds);
     });
   }
 
@@ -1653,14 +1539,14 @@
   }
 
   function refreshManager() {
-    return Promise.all([getAllSites(), estimateStorage()]).then(function (result) {
+    return Promise.all([Storage.getAllSites(), Storage.estimateStorage()]).then(function (result) {
       var sites = result[0];
       var estimate = result[1];
       var expiredIds = sites.filter(function (site) {
         return Restrictions.isRestrictionActive(site.restrictions) && Restrictions.isRestrictionExpired(site.restrictions);
       }).map(function (site) { return site.id; });
       if (expiredIds.length) {
-        return deleteSitesSequential(expiredIds).then(function () {
+        return Storage.deleteSitesSequential(expiredIds).then(function () {
           return refreshManager();
         });
       }
@@ -1735,10 +1621,10 @@
 
     var save = function () {
       var value = input.value.trim().replace(/\s+/g, ' ');
-      getSite(siteId).then(function (site) {
+      Storage.getSite(siteId).then(function (site) {
         if (!site) return;
         site.title = value;
-        return saveSite(site).then(function () {
+        return Storage.saveSite(site).then(function () {
           refreshManager();
         });
       }).finally(function () {
@@ -2143,7 +2029,7 @@
 
     return computeSiteId(effectiveZipUrl)
       .then(function (siteId) {
-        return getSite(siteId).then(function (site) {
+        return Storage.getSite(siteId).then(function (site) {
           return { siteId: siteId, cached: !!site, site: site };
         });
       })
@@ -2164,7 +2050,7 @@
                 applyRestrictionsToActions(currentRestrictions);
                 return { siteId: result.siteId, siteUrl: null };
               }
-              return deleteSite(result.siteId).then(function () {
+              return Storage.deleteSite(result.siteId).then(function () {
                 showRestrictionModal(result.site.restrictions);
                 var err = new Error(t('error.restricted'));
                 err.skipStatus = true;
@@ -2308,7 +2194,7 @@
               if (!canProceed) {
                 throw new Error(t('error.noSpace'));
               }
-              return deleteSite(result.siteId).catch(function () {
+              return Storage.deleteSite(result.siteId).catch(function () {
                 // Ignore delete errors.
               });
             }).then(function () {
@@ -2324,8 +2210,8 @@
                   title: siteTitle,
                   restrictions: restrictions || null
                 };
-                return saveSite(site).then(function () {
-                  return saveFiles(files).then(function () {
+                return Storage.saveSite(site).then(function () {
+                  return Storage.saveFiles(files).then(function () {
                     var siteUrl = buildSiteUrl(result.siteId, indexPath);
                     return controlPromise.then(function () {
                       currentRestrictions = restrictions || null;
@@ -2699,7 +2585,7 @@
       var zipUrl = button.getAttribute('data-zip-url') || '';
       if (action === 'delete' && siteId) {
         button.classList.add('is-active');
-        deleteSite(siteId).then(function () {
+        Storage.deleteSite(siteId).then(function () {
           refreshManager();
         }).finally(function () {
           button.classList.remove('is-active');
@@ -2707,10 +2593,10 @@
         return;
       }
       if (action === 'view' && siteId) {
-        getSite(siteId).then(function (site) {
+        Storage.getSite(siteId).then(function (site) {
           if (site && Restrictions.isRestrictionActive(site.restrictions) && !Restrictions.isRestrictionAllowedNow(site.restrictions)) {
             if (Restrictions.isRestrictionExpired(site.restrictions)) {
-              return deleteSite(siteId).then(function () {
+              return Storage.deleteSite(siteId).then(function () {
                 refreshManager();
                 showRestrictionModal(site.restrictions);
               });
@@ -2785,9 +2671,9 @@
       if (!confirm(t('manager.deleteAllConfirm'))) {
         return;
       }
-      getAllSites().then(function (sites) {
+      Storage.getAllSites().then(function (sites) {
         var ids = sites.map(function (site) { return site.id; });
-        return deleteSitesSequential(ids);
+        return Storage.deleteSitesSequential(ids);
       }).then(function () {
         refreshManager();
       });
