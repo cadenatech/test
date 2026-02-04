@@ -5,6 +5,8 @@
   var copyButton = document.querySelector('[data-copy]');
   var embedButton = document.querySelector('[data-embed]');
   var openLink = document.querySelector('[data-open]');
+  var shareRestrictSummary = document.querySelector('[data-share-restrict-summary]');
+  var shareRestrictItems = document.querySelector('[data-share-restrict-items]');
   var stepThree = document.querySelector('[data-step-three]');
   var loadingScreen = document.querySelector('[data-loading]');
   var loadingMessage = document.querySelector('[data-loading-message]');
@@ -87,6 +89,8 @@
   var restrictionZipApply = document.querySelector('[data-restrict-zip-apply]');
   var restrictionZipStatus = document.querySelector('[data-restrict-zip-status]');
   var restrictionCountdown = document.querySelector('[data-restrict-countdown]');
+  var restrictionSummary = document.querySelector('[data-restrict-summary]');
+  var restrictionSummaryItems = document.querySelector('[data-restrict-summary-items]');
   var ignoreRestrictionsForShare = false;
   var restrictCountdownTimer = null;
 
@@ -110,6 +114,131 @@
   var lastEmbedHeight = 0;
   var currentRestrictions = null;
   var restrictionZipFile = null;
+  var Restrictions = window.Restrictions || {};
+  if (!Restrictions.normalizeDateTimeValue) {
+    Restrictions.normalizeDateTimeValue = function (value) {
+      if (!value) return '';
+      if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+        return value + 'T00:00';
+      }
+      if (/^\d{4}-\d{2}-\d{2}T$/.test(value)) {
+        return value + '00:00';
+      }
+      return value;
+    };
+  }
+  if (!Restrictions.formatRestrictionDate) {
+    Restrictions.formatRestrictionDate = function (value, lang) {
+      if (!value) return '';
+      var date = new Date(value);
+      if (isNaN(date.getTime())) return '';
+      try {
+        var map = {
+          es: 'es-ES',
+          ca: 'ca-ES',
+          gl: 'gl-ES',
+          eu: 'eu-ES',
+          en: 'en-US',
+          de: 'de-DE'
+        };
+        var locale = map[lang] || lang || 'es-ES';
+        var formatter = new Intl.DateTimeFormat(locale, {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false
+        });
+        return formatter.format(date);
+      } catch (e) {
+        return date.toISOString();
+      }
+    };
+  }
+  if (!Restrictions.formatCountdown) {
+    Restrictions.formatCountdown = function (ms) {
+      var totalSeconds = Math.max(0, Math.ceil(ms / 1000));
+      var days = Math.floor(totalSeconds / 86400);
+      var remainder = totalSeconds % 86400;
+      var hours = Math.floor(remainder / 3600);
+      var minutes = Math.floor((remainder % 3600) / 60);
+      var seconds = remainder % 60;
+      var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+      var time = pad(hours) + ':' + pad(minutes) + ':' + pad(seconds);
+      return days > 0 ? (days + 'd ' + time) : time;
+    };
+  }
+  if (!Restrictions.isRestrictionActive) {
+    Restrictions.isRestrictionActive = function (restrictions) {
+      return restrictions && restrictions.enabled;
+    };
+  }
+  if (!Restrictions.isRestrictionAllowedNow) {
+    Restrictions.isRestrictionAllowedNow = function (restrictions) {
+      if (!restrictions || !restrictions.enabled) return true;
+      if (restrictions.startAt) {
+        var start = Date.parse(restrictions.startAt);
+        if (!isNaN(start) && Date.now() < start) return false;
+      }
+      if (restrictions.neverExpires) return true;
+      if (restrictions.endAt) {
+        var end = Date.parse(restrictions.endAt);
+        if (!isNaN(end) && Date.now() > end) return false;
+      }
+      return true;
+    };
+  }
+  if (!Restrictions.isRestrictionExpired) {
+    Restrictions.isRestrictionExpired = function (restrictions) {
+      if (!restrictions || !restrictions.enabled) return false;
+      if (restrictions.neverExpires) return false;
+      if (!restrictions.endAt) return false;
+      var end = Date.parse(restrictions.endAt);
+      if (isNaN(end)) return false;
+      return Date.now() > end;
+    };
+  }
+  if (!Restrictions.isRestrictionBeforeStart) {
+    Restrictions.isRestrictionBeforeStart = function (restrictions) {
+      if (!restrictions || !restrictions.enabled) return false;
+      if (!restrictions.startAt) return false;
+      var start = Date.parse(restrictions.startAt);
+      if (isNaN(start)) return false;
+      return Date.now() < start;
+    };
+  }
+  if (!Restrictions.allowShare) {
+    Restrictions.allowShare = function (restrictions) {
+      if (!restrictions || !restrictions.enabled) return true;
+      return !!restrictions.allowShare;
+    };
+  }
+  if (!Restrictions.allowEmbed) {
+    Restrictions.allowEmbed = function (restrictions) {
+      if (!restrictions || !restrictions.enabled) return true;
+      return !!restrictions.allowEmbed;
+    };
+  }
+  if (!Restrictions.allowDownload) {
+    Restrictions.allowDownload = function (restrictions) {
+      if (!restrictions || !restrictions.enabled) return true;
+      return !!restrictions.allowDownload;
+    };
+  }
+  if (!Restrictions.extractRestrictions) {
+    Restrictions.extractRestrictions = function (entries, decodeUtf8) {
+      if (!entries || !entries['restrictions.json']) return null;
+      try {
+        var raw = decodeUtf8(entries['restrictions.json']);
+        var data = JSON.parse(raw || '{}');
+        if (!data || !data.enabled) return null;
+        return data;
+      } catch (e) {
+        return null;
+      }
+    };
+  }
 
   var DB_NAME = 'visor-web-sites';
   var DB_VERSION = 1;
@@ -376,6 +505,7 @@
     }
     applyRestrictionUiState();
     updateRestrictionDefaults();
+    updateRestrictionSummary();
     if (restrictionZipStatus) {
       restrictionZipStatus.textContent = t('zipper.restrict.status.ready');
     }
@@ -1038,6 +1168,7 @@
     if (restrictionZipApply) {
       restrictionZipApply.disabled = !enabled || !restrictionZipFile;
     }
+    updateRestrictionSummary();
     var lockSvg = enabled
       ? '<rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path>'
       : '<rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path>';
@@ -1095,6 +1226,51 @@
     };
   }
 
+  function updateRestrictionSummary() {
+    if (!restrictionSummary || !restrictionSummaryItems) return;
+    var enabled = !!(restrictionToggle && restrictionToggle.checked);
+    if (!enabled) {
+      restrictionSummary.setAttribute('hidden', '');
+      restrictionSummaryItems.innerHTML = '';
+      return;
+    }
+    updateRestrictionDefaults();
+    var startValue = restrictionStartInput ? restrictionStartInput.value : '';
+    var endValue = restrictionEndInput ? restrictionEndInput.value : '';
+    startValue = Restrictions.normalizeDateTimeValue(startValue);
+    endValue = Restrictions.normalizeDateTimeValue(endValue);
+    var items = [];
+    if (startValue) {
+      var startText = Restrictions.formatRestrictionDate(startValue, currentLang) || startValue;
+      if (startText) {
+        var openText = t('badges.opening', { date: startText }) || ('Inicio: ' + startText);
+        items.push(openText);
+      }
+    }
+    if (restrictionNoEnd && restrictionNoEnd.checked) {
+      items.push(t('restrictionModal.rangeNoEnd') || 'Sin fecha de fin');
+    } else if (endValue) {
+      var endText = Restrictions.formatRestrictionDate(endValue, currentLang) || endValue;
+      if (endText) {
+        var closeText = t('badges.closing', { date: endText }) || ('Fin: ' + endText);
+        items.push(closeText);
+      }
+    }
+    if (!items.length) {
+      restrictionSummary.setAttribute('hidden', '');
+      restrictionSummaryItems.innerHTML = '';
+      return;
+    }
+    restrictionSummary.removeAttribute('hidden');
+    restrictionSummaryItems.innerHTML = '';
+    items.forEach(function (text) {
+      var span = document.createElement('span');
+      span.className = 'zipper-restrict-summary__item';
+      span.textContent = text;
+      restrictionSummaryItems.appendChild(span);
+    });
+  }
+
 
 
 
@@ -1105,6 +1281,7 @@
 
   function applyRestrictionsToActions(restrictions) {
     currentRestrictions = restrictions || null;
+    updateShareRestrictionSummary(currentRestrictions);
     if (ignoreRestrictionsForShare) return;
     if (copyButton) {
       copyButton.disabled = !currentShareLink || !Restrictions.allowShare(currentRestrictions);
@@ -1112,6 +1289,34 @@
     if (embedButton) {
       embedButton.disabled = !currentShareLink || !Restrictions.allowEmbed(currentRestrictions);
     }
+  }
+
+  function updateShareRestrictionSummary(restrictions) {
+    if (!shareRestrictSummary || !shareRestrictItems) return;
+    shareRestrictItems.innerHTML = '';
+    if (!restrictions || !restrictions.enabled) {
+      shareRestrictSummary.setAttribute('hidden', '');
+      return;
+    }
+    var startLabel = restrictions.startAt ? Restrictions.formatRestrictionDate(restrictions.startAt, currentLang) : '';
+    var endLabel = (!restrictions.neverExpires && restrictions.endAt) ? Restrictions.formatRestrictionDate(restrictions.endAt, currentLang) : '';
+    if (!startLabel && !endLabel) {
+      shareRestrictSummary.setAttribute('hidden', '');
+      return;
+    }
+    if (startLabel) {
+      var startBadge = document.createElement('span');
+      startBadge.className = 'manager-badge manager-badge--start';
+      startBadge.textContent = t('badges.opening', { date: startLabel });
+      shareRestrictItems.appendChild(startBadge);
+    }
+    if (endLabel) {
+      var endBadge = document.createElement('span');
+      endBadge.className = 'manager-badge manager-badge--end';
+      endBadge.textContent = t('badges.closing', { date: endLabel });
+      shareRestrictItems.appendChild(endBadge);
+    }
+    shareRestrictSummary.removeAttribute('hidden');
   }
 
   function showRestrictionModal(restrictions) {
@@ -2347,6 +2552,15 @@
         if (result.cached && !opts.force) {
           if (result.site && Restrictions.isRestrictionActive(result.site.restrictions) && !Restrictions.isRestrictionAllowedNow(result.site.restrictions)) {
             if (Restrictions.isRestrictionExpired(result.site.restrictions)) {
+              if (opts.allowInactive) {
+                setStatus(t('status.restrictedReady'));
+                if (showProgress && !autoOpen) {
+                  setLoading(false);
+                }
+                currentRestrictions = result.site ? result.site.restrictions || null : null;
+                applyRestrictionsToActions(currentRestrictions);
+                return { siteId: result.siteId, siteUrl: null };
+              }
               return deleteSite(result.siteId).then(function () {
                 showRestrictionModal(result.site.restrictions);
                 var err = new Error(t('error.restricted'));
@@ -2359,7 +2573,7 @@
               if (showProgress && !autoOpen) {
                 setLoading(false);
               }
-              currentRestrictions = null;
+              currentRestrictions = result.site ? result.site.restrictions || null : null;
               applyRestrictionsToActions(currentRestrictions);
               return { siteId: result.siteId, siteUrl: null };
             }
@@ -2423,6 +2637,16 @@
           var restrictions = Restrictions.extractRestrictions(entries, decodeUtf8);
           var blockedNow = Restrictions.isRestrictionActive(restrictions) && !Restrictions.isRestrictionAllowedNow(restrictions);
           if (blockedNow && Restrictions.isRestrictionExpired(restrictions)) {
+            if (opts.allowInactive) {
+              setStatus(t('status.restrictedReady'));
+              if (autoOpen || showProgress) {
+                stopProgress();
+                setLoading(false);
+              }
+              currentRestrictions = restrictions || null;
+              applyRestrictionsToActions(currentRestrictions);
+              return { siteId: result.siteId, siteUrl: null };
+            }
             showRestrictionModal(restrictions);
             var blocked = new Error(t('error.restricted'));
             blocked.skipStatus = true;
@@ -2738,6 +2962,16 @@
   if (restrictionNoEnd) {
     restrictionNoEnd.addEventListener('change', function () {
       applyRestrictionUiState();
+    });
+  }
+  if (restrictionStartInput) {
+    restrictionStartInput.addEventListener('change', function () {
+      updateRestrictionSummary();
+    });
+  }
+  if (restrictionEndInput) {
+    restrictionEndInput.addEventListener('change', function () {
+      updateRestrictionSummary();
     });
   }
   if (restrictionZipPick && restrictionZipInput) {

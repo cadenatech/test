@@ -166,6 +166,9 @@
       },
       zipper: {
         title: 'Crear ZIP para el visor',
+        restrict: {
+          summaryTitle: 'Disponibilidad'
+        },
         accordion: {
           filesTitle: '¿Tienes archivos? Crea el ZIP'
         },
@@ -565,7 +568,8 @@
             working: 'Aplicant restriccions...',
             done: 'ZIP llest amb restriccions.',
             failed: 'No s’ha pogut modificar el ZIP. Revisa el fitxer.'
-          }
+          },
+          summaryTitle: 'Disponibilitat'
         },
         help: {
           inline: 'Si ja has creat un fitxer ZIP i l’has compartit en un servei amb enllaç públic, ves a la secció: “Ja tinc un ZIP o ELPX”.',
@@ -896,7 +900,8 @@
             working: 'Aplicando restricións...',
             done: 'ZIP listo con restricións.',
             failed: 'Non se puido modificar o ZIP. Revisa o ficheiro.'
-          }
+          },
+          summaryTitle: 'Disponibilidade'
         },
         help: {
           inline: 'Se xa creaches un arquivo ZIP e o compartiches nun servizo con ligazón pública, vai á sección: “Xa teño un ZIP ou ELPX”.',
@@ -1227,7 +1232,8 @@
             working: 'Murrizketak aplikatzen...',
             done: 'ZIPa prest murrizketekin.',
             failed: 'Ezin izan da ZIPa aldatu. Berrikusi fitxategia.'
-          }
+          },
+          summaryTitle: 'Erabilgarritasuna'
         },
         help: {
           inline: 'ZIP fitxategi bat sortu eta esteka publikoarekin duen zerbitzu batean partekatu baduzu, joan atalera: “ZIP bat badaukat edo ELPX”.',
@@ -1558,7 +1564,9 @@
             working: 'Applying restrictions...',
             done: 'ZIP ready with restrictions.',
             failed: 'Could not modify the ZIP. Check the file.'
-          }
+          },
+          
+          summaryTitle: 'Availability'
         },
         help: {
           inline: 'If you already created a ZIP file and shared it on a service with a public link, go to: “I already have a ZIP or ELPX”.',
@@ -1889,7 +1897,9 @@
             working: 'Einschränkungen werden angewendet...',
             done: 'ZIP ist mit Einschränkungen bereit.',
             failed: 'ZIP konnte nicht geändert werden. Prüfe die Datei.'
-          }
+          },
+          
+          summaryTitle: 'Verfügbarkeit'
         },
         help: {
           inline: 'Wenn du bereits eine ZIP-Datei erstellt und sie über einen Dienst mit öffentlichem Link geteilt hast, gehe zu: „Ich habe bereits ein ZIP oder ELPX“.',

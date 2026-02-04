@@ -10,12 +10,34 @@
     return value;
   }
 
+  function resolveLocale(lang) {
+    if (!lang) return 'es-ES';
+    var map = {
+      es: 'es-ES',
+      ca: 'ca-ES',
+      gl: 'gl-ES',
+      eu: 'eu-ES',
+      en: 'en-US',
+      de: 'de-DE'
+    };
+    return map[lang] || lang;
+  }
+
   function formatRestrictionDate(value, lang) {
     if (!value) return '';
     var date = new Date(value);
     if (isNaN(date.getTime())) return '';
     try {
-      return date.toLocaleString(lang || 'es');
+      var locale = resolveLocale(lang);
+      var formatter = new Intl.DateTimeFormat(locale, {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+      });
+      return formatter.format(date);
     } catch (e) {
       return date.toISOString();
     }
