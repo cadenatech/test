@@ -129,7 +129,7 @@
         title: 'Visor Web-ZIP',
         help: 'Ayuda',
         settings: 'Ajustes',
-        settingsHint: 'Configura el idioma y la disponibilidad del recurso',
+        settingsHint: 'Configura la disponibilidad del recurso',
         language: 'Idioma',
         languageHint: 'Cambiar idioma',
         subtitle: 'Autopublicación de recursos educativos desde tu almacenamiento en la nube.'
@@ -460,7 +460,7 @@
         title: 'Visor Web-ZIP',
         help: 'Ajuda',
         settings: 'Ajustos',
-        settingsHint: 'Configura l’idioma i la disponibilitat del recurs',
+        settingsHint: 'Configura la disponibilitat del recurs',
         language: 'Idioma',
         languageHint: 'Canviar idioma',
         subtitle: 'Comparteix els teus recursos educatius des del teu emmagatzematge favorit al núvol.'
@@ -791,7 +791,7 @@
         title: 'Visor Web-ZIP',
         help: 'Axuda',
         settings: 'Axustes',
-        settingsHint: 'Configura o idioma e a dispoñibilidade do recurso',
+        settingsHint: 'Configura a dispoñibilidade do recurso',
         language: 'Idioma',
         languageHint: 'Cambiar idioma',
         subtitle: 'Comparte os teus recursos educativos desde o teu almacenamento favorito na nube.'
@@ -1122,7 +1122,7 @@
         title: 'Web-ZIP Bisorea',
         help: 'Laguntza',
         settings: 'Ezarpenak',
-        settingsHint: 'Ezarri hizkuntza eta baliabidearen erabilgarritasuna',
+        settingsHint: 'Ezarri baliabidearen erabilgarritasuna',
         language: 'Hizkuntza',
         languageHint: 'Hizkuntza aldatu',
         subtitle: 'Partekatu zure hezkuntza-baliabideak hodeiko biltegiratze gogokoenetik.'
@@ -1453,7 +1453,7 @@
         title: 'Web-ZIP Viewer',
         help: 'Help',
         settings: 'Settings',
-        settingsHint: 'Set the language and resource availability',
+        settingsHint: 'Set the resource availability',
         language: 'Language',
         languageHint: 'Change language',
         subtitle: 'Share your educational resources from your favorite cloud storage.'
@@ -1784,7 +1784,7 @@
         title: 'Web-ZIP-Viewer',
         help: 'Hilfe',
         settings: 'Einstellungen',
-        settingsHint: 'Sprache und Verfügbarkeit des Materials einstellen',
+        settingsHint: 'Verfügbarkeit des Materials einstellen',
         language: 'Sprache',
         languageHint: 'Sprache ändern',
         subtitle: 'Teile deine Bildungsressourcen aus deinem bevorzugten Cloud-Speicher.'
