@@ -278,8 +278,8 @@
       },
       badges: {
         scheduled: 'Programado',
-        opening: 'Apertura: {date}',
-        closing: 'Cierre: {date}'
+        opening: 'Inicio: {date}',
+        closing: 'Fin: {date}'
       },
       zipper: {
         title: 'Crear ZIP para el visor',
@@ -354,10 +354,9 @@
           }
         },
         help: {
-          title: '¿Quieres compartir el ZIP?',
-          step1: 'Sube el ZIP a un servicio con enlace público (Drive, Dropbox, GitHub…).',
-          step2: 'Copia el enlace público y pégalo en “Ya tengo un ZIP”.',
-          goTab: 'Abrir “Ya tengo un ZIP”'
+          inline: 'Si ya has creado un archivo ZIP y lo has compartido en un servicio con enlace público, pasa a la sección: “Ya tengo un ZIP o ELPX”.',
+          nextStepText: 'El siguiente paso es subir y compartir con enlace público el archivo ZIP o ELPX, cuando lo tengas pulsa sobre Continuar.',
+          goTab: 'Siguiente: “Ya tengo un ZIP o ELPX”'
         }
       },
       html: {
@@ -610,8 +609,8 @@
       },
       badges: {
         scheduled: 'Programat',
-        opening: 'Obertura: {date}',
-        closing: 'Tancament: {date}'
+        opening: 'Inici: {date}',
+        closing: 'Fi: {date}'
       },
       zipper: {
         title: 'Crear ZIP per al visor',
@@ -686,10 +685,9 @@
           }
         },
         help: {
-          title: 'Vols compartir el ZIP?',
-          step1: 'Puja el ZIP a un servei amb enllaç públic (Drive, Dropbox, GitHub…).',
-          step2: 'Copia l’enllaç públic i enganxa’l a “Ja tinc un ZIP”.',
-          goTab: 'Obrir “Ja tinc un ZIP”'
+          inline: 'Si ja has creat un fitxer ZIP i l’has compartit en un servei amb enllaç públic, ves a la secció: “Ja tinc un ZIP o ELPX”.',
+          nextStepText: 'El següent pas és pujar i compartir amb enllaç públic el fitxer ZIP o ELPX; quan el tinguis, prem “Continuar”.',
+          goTab: 'Següent: “Ja tinc un ZIP o ELPX”'
         }
       },
       html: {
@@ -942,8 +940,8 @@
       },
       badges: {
         scheduled: 'Programado',
-        opening: 'Apertura: {date}',
-        closing: 'Peche: {date}'
+        opening: 'Inicio: {date}',
+        closing: 'Fin: {date}'
       },
       zipper: {
         title: 'Crear ZIP para o visor',
@@ -1018,10 +1016,9 @@
           }
         },
         help: {
-          title: 'Queres compartir o ZIP?',
-          step1: 'Sube o ZIP a un servizo con ligazón pública (Drive, Dropbox, GitHub…).',
-          step2: 'Copia a ligazón pública e pégaa en “Xa teño un ZIP”.',
-          goTab: 'Abrir “Xa teño un ZIP”'
+          inline: 'Se xa creaches un arquivo ZIP e o compartiches nun servizo con ligazón pública, vai á sección: “Xa teño un ZIP ou ELPX”.',
+          nextStepText: 'O seguinte paso é subir e compartir cunha ligazón pública o arquivo ZIP ou ELPX; cando o teñas, preme en “Continuar”.',
+          goTab: 'Seguinte: “Xa teño un ZIP ou ELPX”'
         }
       },
       html: {
@@ -1274,8 +1271,8 @@
       },
       badges: {
         scheduled: 'Programatua',
-        opening: 'Irekiera: {date}',
-        closing: 'Itxiera: {date}'
+        opening: 'Hasiera: {date}',
+        closing: 'Amaiera: {date}'
       },
       zipper: {
         title: 'Bisorerako ZIP sortu',
@@ -1350,10 +1347,9 @@
           }
         },
         help: {
-          title: 'ZIPa partekatu nahi duzu?',
-          step1: 'Igo ZIPa esteka publikoarekin duen zerbitzu batera (Drive, Dropbox, GitHub…).',
-          step2: 'Kopiatu esteka publikoa eta itsatsi “ZIP bat badaukat” aukeran.',
-          goTab: 'Ireki “ZIP bat badaukat”'
+          inline: 'ZIP fitxategi bat sortu eta esteka publikoarekin duen zerbitzu batean partekatu baduzu, joan atalera: “ZIP bat badaukat edo ELPX”.',
+          nextStepText: 'Hurrengo urratsa ZIP edo ELPX fitxategia esteka publikoarekin igo eta partekatzea da; prest duzunean, sakatu “Jarraitu”.',
+          goTab: 'Hurrengoa: “ZIP bat badaukat edo ELPX”'
         }
       },
       html: {
@@ -1606,8 +1602,8 @@
       },
       badges: {
         scheduled: 'Scheduled',
-        opening: 'Opens: {date}',
-        closing: 'Closes: {date}'
+        opening: 'Start: {date}',
+        closing: 'End: {date}'
       },
       zipper: {
         title: 'Create ZIP for the viewer',
@@ -1682,10 +1678,9 @@
           }
         },
         help: {
-          title: 'Want to share the ZIP?',
-          step1: 'Upload the ZIP to a service with a public link (Drive, Dropbox, GitHub…).',
-          step2: 'Copy the public link and paste it into “I already have a ZIP”.',
-          goTab: 'Open “I already have a ZIP”'
+          inline: 'If you already created a ZIP file and shared it on a service with a public link, go to: “I already have a ZIP or ELPX”.',
+          nextStepText: 'The next step is to upload and share the ZIP or ELPX file with a public link; once you have it, click “Continue”.',
+          goTab: 'Next: “I already have a ZIP or ELPX”'
         }
       },
       html: {
@@ -1938,8 +1933,8 @@
       },
       badges: {
         scheduled: 'Geplant',
-        opening: 'Öffnet: {date}',
-        closing: 'Schließt: {date}'
+        opening: 'Beginn: {date}',
+        closing: 'Ende: {date}'
       },
       zipper: {
         title: 'ZIP für den Viewer erstellen',
@@ -2014,10 +2009,9 @@
           }
         },
         help: {
-          title: 'ZIP teilen?',
-          step1: 'Lade das ZIP zu einem Dienst mit öffentlichem Link hoch (Drive, Dropbox, GitHub…).',
-          step2: 'Kopiere den öffentlichen Link und füge ihn bei „Ich habe bereits ein ZIP“ ein.',
-          goTab: '„Ich habe bereits ein ZIP“ öffnen'
+          inline: 'Wenn du bereits eine ZIP-Datei erstellt und sie über einen Dienst mit öffentlichem Link geteilt hast, gehe zu: „Ich habe bereits ein ZIP oder ELPX“.',
+          nextStepText: 'Der nächste Schritt ist, die ZIP- oder ELPX-Datei mit öffentlichem Link hochzuladen und zu teilen; sobald du sie hast, klicke auf „Weiter“.',
+          goTab: 'Weiter: „Ich habe bereits ein ZIP oder ELPX“'
         }
       },
       html: {
@@ -2661,6 +2655,17 @@
       + ':' + pad(value.getMinutes());
   }
 
+  function normalizeDateTimeValue(value) {
+    if (!value) return '';
+    if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+      return value + 'T00:00';
+    }
+    if (/^\d{4}-\d{2}-\d{2}T$/.test(value)) {
+      return value + '00:00';
+    }
+    return value;
+  }
+
   function formatRestrictionDate(value) {
     if (!value) return '';
     var date = new Date(value);
@@ -3085,6 +3090,8 @@
     updateRestrictionDefaults();
     var startValue = restrictionStartInput ? restrictionStartInput.value : '';
     var endValue = restrictionEndInput ? restrictionEndInput.value : '';
+    startValue = normalizeDateTimeValue(startValue);
+    endValue = normalizeDateTimeValue(endValue);
     var startAt = startValue ? new Date(startValue).toISOString() : new Date().toISOString();
     var neverExpires = !!(restrictionNoEnd && restrictionNoEnd.checked);
     var endAt = null;
@@ -3585,22 +3592,26 @@
       var date = site.updatedAt ? new Date(site.updatedAt).toLocaleString(currentLang) : t('manager.noDate');
       meta.textContent = formatBytes(site.totalBytes || 0) + ' · ' + date;
       if (restrictions && restrictions.enabled) {
-        var badge = document.createElement('span');
-        badge.className = 'manager-badge';
         var startLabel = restrictions.startAt ? formatRestrictionDate(restrictions.startAt) : '';
         var endLabel = (!restrictions.neverExpires && restrictions.endAt) ? formatRestrictionDate(restrictions.endAt) : '';
-        var openText = startLabel ? t('manager.badges.opening', { date: startLabel }) : '';
-        var closeText = endLabel ? t('manager.badges.closing', { date: endLabel }) : '';
-        if (openText && closeText) {
-          badge.textContent = openText + ' · ' + closeText;
-        } else if (openText) {
-          badge.textContent = openText;
-        } else if (closeText) {
-          badge.textContent = closeText;
-        } else {
-          badge.textContent = t('manager.badges.scheduled');
+        if (startLabel) {
+          var startBadge = document.createElement('span');
+          startBadge.className = 'manager-badge manager-badge--start';
+          startBadge.textContent = t('badges.opening', { date: startLabel });
+          meta.appendChild(startBadge);
         }
-        meta.appendChild(badge);
+        if (endLabel) {
+          var endBadge = document.createElement('span');
+          endBadge.className = 'manager-badge manager-badge--end';
+          endBadge.textContent = t('badges.closing', { date: endLabel });
+          meta.appendChild(endBadge);
+        }
+        if (!startLabel && !endLabel) {
+          var genericBadge = document.createElement('span');
+          genericBadge.className = 'manager-badge';
+          genericBadge.textContent = t('badges.scheduled');
+          meta.appendChild(genericBadge);
+        }
       }
       info.appendChild(title);
       if (site.url && displayTitle !== site.url) {
@@ -4896,7 +4907,11 @@
   if (tabButtons.length && tabPanels.length) {
     tabButtons.forEach(function (button) {
       button.addEventListener('click', function () {
-        setActiveTab(button.getAttribute('data-tab'));
+        var tab = button.getAttribute('data-tab');
+        setActiveTab(tab);
+        if (tab === 'publish') {
+          setPublishModule('');
+        }
       });
     });
     setActiveTab('publish');

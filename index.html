@@ -122,7 +122,7 @@
           </div>
         </div>
 
-        <div class="publish-module" data-publish-module="main" hidden>
+        <div class="publish-module" data-publish-module="main" id="ya-tengo-zip-elpx" hidden>
           <div class="publish-module__nav">
             <button class="publish-back" type="button" data-publish-back>
               <span class="publish-back__icon" aria-hidden="true">
@@ -244,18 +244,14 @@
                 <p class="upload-status" data-restrict-zip-status data-i18n="zipper.restrict.status.ready" data-i18n-dynamic>Selecciona un ZIP para añadir las restricciones.</p>
               </div>
             </details>
-            <details class="html-zip-accordion">
-              <summary class="html-zip-accordion__summary" data-i18n="zipper.help.title">¿Quieres compartir el ZIP?</summary>
-              <div class="upload-help">
-                <ul class="upload-help-list">
-                  <li data-i18n="zipper.help.step1">Sube el ZIP a un servicio con enlace público (Drive, Dropbox, GitHub…).</li>
-                  <li data-i18n="zipper.help.step2">Copia el enlace público y pégalo en “Ya tengo un ZIP”.</li>
-                </ul>
-                <div class="upload-actions">
-                  <button class="ghost-button" type="button" data-go-publish="main" data-i18n="zipper.help.goTab">Abrir “Ya tengo un ZIP”</button>
-                </div>
+            <div class="next-step">
+              <div class="next-step__text">
+                <p data-i18n="zipper.help.nextStepText">El siguiente paso es subir y compartir con enlace público el archivo ZIP o ELPX, cuando lo tengas pulsa sobre Continuar.</p>
               </div>
-            </details>
+              <a class="next-step__btn" href="#ya-tengo-zip-elpx" data-go-publish="main">
+                Continuar <span aria-hidden="true">→</span>
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -487,7 +483,7 @@
     <footer class="site-footer">
       <a class="footer-link" href="https://bilateria.org" target="_blank" rel="noopener">(c) 2026 Juan Jose de Haro</a>
       <span class="footer-sep">·</span>
-    <span class="footer-link">v1.5.2</span>
+    <span class="footer-link">v1.5.3</span>
       <span class="footer-sep">·</span>
       <a class="footer-link" href="https://github.com/visor-webzip/visor-webzip.github.io" target="_blank" rel="noopener">
         <svg class="footer-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
@@ -513,6 +509,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/fflate@0.8.2/umd/index.js"></script>
   <script src="config.js"></script>
-	  <script src="app.js?v=27"></script>
+	  <script src="app.js?v=28"></script>
  </body>
  </html>

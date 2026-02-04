@@ -1067,6 +1067,72 @@ textarea:focus-visible {
   box-shadow: none;
 }
 
+.upload-help--inline {
+  margin-top: 12px;
+  padding: 0;
+  background: transparent;
+}
+
+.next-step {
+  margin-top: 18px;
+  padding: 14px 16px;
+  border: 1px solid #e5e7eb;
+  background: #f8fafc;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.next-step__label {
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  font-weight: 700;
+  color: #64748b;
+  margin-bottom: 2px;
+}
+
+.next-step__title {
+  font-size: 14px;
+  color: #0f172a;
+}
+
+.next-step__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #0369a1;
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.next-step__btn:hover {
+  background: #075985;
+}
+
+.next-step__btn:focus {
+  outline: 3px solid rgba(2, 132, 199, 0.35);
+  outline-offset: 2px;
+}
+
+@media (max-width: 520px) {
+  .next-step {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .next-step__btn {
+    justify-content: center;
+    width: 100%;
+  }
+}
+
 .upload-help ol {
   margin: 8px 0 0 18px;
 }
@@ -1279,6 +1345,7 @@ textarea:focus-visible {
   border: 1px solid var(--border);
 }
 
+
 .manager-item__title {
   font-weight: 600;
   color: var(--ink);
@@ -1319,12 +1386,25 @@ textarea:focus-visible {
   align-items: center;
   padding: 2px 8px;
   border-radius: 999px;
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  background: var(--accent-wash);
-  color: var(--accent-strong);
+  font-size: 0.74rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  background: #dbeafe;
+  color: #1d4ed8;
+  border: 1px solid #93c5fd;
+}
+
+.manager-badge--start {
+  background: #dbeafe;
+  color: #1d4ed8;
+  border-color: #60a5fa;
+}
+
+.manager-badge--end {
+  background: #dbeafe;
+  color: #1d4ed8;
+  border-color: #60a5fa;
 }
 
 .manager-item__actions {
