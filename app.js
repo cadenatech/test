@@ -96,6 +96,7 @@
   var HtmlPicker = window.HtmlPicker || {};
   var Storage = window.Storage || {};
   var Manager = window.Manager || {};
+  var RestrictionUI = window.RestrictionUI || {};
   var restrictionSummary = document.querySelector('[data-restrict-summary]');
   var restrictionSummaryItems = document.querySelector('[data-restrict-summary-items]');
   var ignoreRestrictionsForShare = false;
@@ -392,14 +393,56 @@
   if (Zipper.init) {
     Zipper.init({ t: t });
   }
-  if (Manager.init) {
-    Manager.init({
+  if (RestrictionUI.init) {
+    RestrictionUI.init({
       t: t,
       lang: currentLang,
-      storage: Storage,
-      restrictions: Restrictions,
       ui: UI,
+      restrictions: Restrictions,
       context: {
+        restrictionToggle: restrictionToggle,
+        restrictionFields: restrictionFields,
+        restrictionActions: restrictionActions,
+        restrictionStartInput: restrictionStartInput,
+        restrictionEndInput: restrictionEndInput,
+        restrictionNoEnd: restrictionNoEnd,
+        restrictionAllowShare: restrictionAllowShare,
+        restrictionAllowEmbed: restrictionAllowEmbed,
+        restrictionAllowDownload: restrictionAllowDownload,
+        restrictionHint: restrictionHint,
+        restrictionAccordion: restrictionAccordion,
+        restrictionZipApply: restrictionZipApply,
+        restrictionZipStatus: restrictionZipStatus,
+        restrictionZipFile: function () { return restrictionZipFile; },
+        restrictionSummary: restrictionSummary,
+        restrictionSummaryItems: restrictionSummaryItems,
+        shareRestrictSummary: shareRestrictSummary,
+        shareRestrictItems: shareRestrictItems,
+        copyButton: copyButton,
+        embedButton: embedButton,
+        restrictModal: restrictModal,
+        restrictRange: restrictRange,
+        restrictionCountdown: restrictionCountdown,
+        currentShareLink: function () { return currentShareLink; },
+        currentRestrictions: function (value) {
+          if (arguments.length) {
+            currentRestrictions = value;
+          }
+          return currentRestrictions;
+        },
+        ignoreRestrictionsForShare: function () { return ignoreRestrictionsForShare; }
+      }
+    });
+  }
+
+    if (Manager.init) {
+      Manager.init({
+        t: t,
+        lang: currentLang,
+        storage: Storage,
+        restrictions: Restrictions,
+        ui: UI,
+        context: {
         managerSortSelect: managerSortSelect,
         managerSortDirButton: document.querySelector('[data-manager-sort-dir]'),
         managerList: managerList,
@@ -522,10 +565,42 @@
         UI.setHtmlZipStatus(t('zipper.html.status.empty'));
       }
     }
-    applyRestrictionUiState();
-    updateRestrictionDefaults();
-    updateRestrictionSummary();
-    if (Manager.init) {
+    RestrictionUI.applyRestrictionUiState();
+    RestrictionUI.updateRestrictionDefaults();
+    RestrictionUI.updateRestrictionSummary();
+    if (RestrictionUI.init) {
+    RestrictionUI.init({
+      t: t,
+      lang: currentLang,
+      ui: UI,
+      restrictions: Restrictions,
+      context: {
+        restrictionToggle: restrictionToggle,
+        restrictionFields: restrictionFields,
+        restrictionActions: restrictionActions,
+        restrictionStartInput: restrictionStartInput,
+        restrictionEndInput: restrictionEndInput,
+        restrictionNoEnd: restrictionNoEnd,
+        restrictionAllowShare: restrictionAllowShare,
+        restrictionAllowEmbed: restrictionAllowEmbed,
+        restrictionAllowDownload: restrictionAllowDownload,
+        restrictionHint: restrictionHint,
+        restrictionAccordion: restrictionAccordion,
+        restrictionZipApply: restrictionZipApply,
+        restrictionZipStatus: restrictionZipStatus,
+        restrictionZipFile: restrictionZipFile,
+        restrictionSummary: restrictionSummary,
+        restrictionSummaryItems: restrictionSummaryItems,
+        shareRestrictSummary: shareRestrictSummary,
+        shareRestrictItems: shareRestrictItems,
+        currentShareLink: function () { return currentShareLink; },
+        currentRestrictions: function () { return currentRestrictions; },
+        ignoreRestrictionsForShare: function () { return ignoreRestrictionsForShare; }
+      }
+    });
+  }
+
+  if (Manager.init) {
       Manager.init({
         t: t,
         lang: currentLang,
@@ -551,6 +626,47 @@
           normalizeZipUrl: normalizeZipUrl,
           startTitleEdit: startTitleEdit,
           getCleanupDays: getCleanupDays
+        }
+      });
+    }
+    if (RestrictionUI.init) {
+      RestrictionUI.init({
+        t: t,
+        lang: currentLang,
+        ui: UI,
+        restrictions: Restrictions,
+        context: {
+          restrictionToggle: restrictionToggle,
+          restrictionFields: restrictionFields,
+          restrictionActions: restrictionActions,
+          restrictionStartInput: restrictionStartInput,
+          restrictionEndInput: restrictionEndInput,
+          restrictionNoEnd: restrictionNoEnd,
+          restrictionAllowShare: restrictionAllowShare,
+          restrictionAllowEmbed: restrictionAllowEmbed,
+          restrictionAllowDownload: restrictionAllowDownload,
+          restrictionHint: restrictionHint,
+          restrictionAccordion: restrictionAccordion,
+          restrictionZipApply: restrictionZipApply,
+          restrictionZipStatus: restrictionZipStatus,
+          restrictionZipFile: function () { return restrictionZipFile; },
+          restrictionSummary: restrictionSummary,
+          restrictionSummaryItems: restrictionSummaryItems,
+          shareRestrictSummary: shareRestrictSummary,
+          shareRestrictItems: shareRestrictItems,
+          copyButton: copyButton,
+          embedButton: embedButton,
+          restrictModal: restrictModal,
+          restrictRange: restrictRange,
+          restrictionCountdown: restrictionCountdown,
+          currentShareLink: function () { return currentShareLink; },
+          currentRestrictions: function (value) {
+            if (arguments.length) {
+              currentRestrictions = value;
+            }
+            return currentRestrictions;
+          },
+          ignoreRestrictionsForShare: function () { return ignoreRestrictionsForShare; }
         }
       });
     }
@@ -862,7 +978,7 @@
           files[entry.path] = entry.data;
         }
       });
-      var restrictions = buildRestrictionsPayload();
+      var restrictions = RestrictionUI.buildRestrictionsPayload();
       if (restrictions) {
         files['restrictions.json'] = encodeUtf8(JSON.stringify(restrictions, null, 2));
       }
@@ -905,7 +1021,7 @@
       var files = {
         'index.html': encodeUtf8(htmlText)
       };
-      var restrictions = buildRestrictionsPayload();
+      var restrictions = RestrictionUI.buildRestrictionsPayload();
       if (restrictions) {
         files['restrictions.json'] = encodeUtf8(JSON.stringify(restrictions, null, 2));
       }
@@ -945,7 +1061,7 @@
       }
       return;
     }
-    var restrictions = buildRestrictionsPayload();
+    var restrictions = RestrictionUI.buildRestrictionsPayload();
     if (!restrictions) {
       if (restrictionZipStatus) {
         restrictionZipStatus.textContent = t('zipper.restrict.status.failed');
@@ -981,142 +1097,6 @@
 
 
 
-  function applyRestrictionUiState() {
-    var enabled = !!(restrictionToggle && restrictionToggle.checked);
-    if (restrictionFields) {
-      if (enabled) restrictionFields.removeAttribute('hidden');
-      else restrictionFields.setAttribute('hidden', '');
-    }
-    if (restrictionActions) {
-      if (enabled) restrictionActions.removeAttribute('hidden');
-      else restrictionActions.setAttribute('hidden', '');
-    }
-    var restrictTitle = document.querySelector('[data-restrict-actions-title]');
-    if (restrictTitle) {
-      if (enabled) restrictTitle.removeAttribute('hidden');
-      else restrictTitle.setAttribute('hidden', '');
-    }
-    var restrictNote = document.querySelector('[data-restrict-actions-note]');
-    if (restrictNote) {
-      if (enabled) restrictNote.removeAttribute('hidden');
-      else restrictNote.setAttribute('hidden', '');
-    }
-    if (restrictionHint) {
-      if (enabled) restrictionHint.removeAttribute('hidden');
-      else restrictionHint.setAttribute('hidden', '');
-    }
-    if (restrictionAccordion) {
-      if (enabled) restrictionAccordion.removeAttribute('hidden');
-      else restrictionAccordion.setAttribute('hidden', '');
-    }
-    if (restrictionNoEnd && restrictionEndInput) {
-      restrictionEndInput.disabled = restrictionNoEnd.checked;
-    }
-    if (restrictionZipApply) {
-      restrictionZipApply.disabled = !enabled || !restrictionZipFile;
-    }
-    updateRestrictionSummary();
-    var lockSvg = enabled
-      ? '<rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path>'
-      : '<rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path>';
-    var lockTargets = document.querySelectorAll('[data-lock-indicator], [data-main-settings-open]');
-    lockTargets.forEach(function (target) {
-      var icon = target.querySelector('svg');
-      if (icon) {
-        icon.innerHTML = lockSvg;
-      }
-      if (enabled) {
-        target.classList.add('is-locked');
-        target.classList.remove('is-unlocked');
-      } else {
-        target.classList.remove('is-locked');
-        target.classList.add('is-unlocked');
-      }
-    });
-  }
-
-  function updateRestrictionDefaults() {
-    if (!restrictionStartInput || !restrictionEndInput) return;
-    var now = new Date();
-    if (!restrictionStartInput.value) {
-      restrictionStartInput.value = formatLocalDateTime(now);
-    }
-    if (restrictionNoEnd && restrictionNoEnd.checked) {
-      restrictionEndInput.value = '';
-    }
-  }
-
-  function buildRestrictionsPayload() {
-    if (!restrictionToggle || !restrictionToggle.checked) return null;
-    updateRestrictionDefaults();
-    var startValue = restrictionStartInput ? restrictionStartInput.value : '';
-    var endValue = restrictionEndInput ? restrictionEndInput.value : '';
-    startValue = Restrictions.normalizeDateTimeValue(startValue);
-    endValue = Restrictions.normalizeDateTimeValue(endValue);
-    var startAt = startValue ? new Date(startValue).toISOString() : new Date().toISOString();
-    var neverExpires = !!(restrictionNoEnd && restrictionNoEnd.checked);
-    var endAt = null;
-    if (!neverExpires && endValue) {
-      endAt = new Date(endValue).toISOString();
-    }
-    return {
-      version: 1,
-      enabled: true,
-      startAt: startAt,
-      endAt: endAt,
-      neverExpires: neverExpires,
-      allowShare: !!(restrictionAllowShare && restrictionAllowShare.checked),
-      allowEmbed: !!(restrictionAllowEmbed && restrictionAllowEmbed.checked),
-      allowDownload: !!(restrictionAllowDownload && restrictionAllowDownload.checked),
-      createdAt: new Date().toISOString(),
-      source: 'visor-webzip'
-    };
-  }
-
-  function updateRestrictionSummary() {
-    if (!restrictionSummary || !restrictionSummaryItems) return;
-    var enabled = !!(restrictionToggle && restrictionToggle.checked);
-    if (!enabled) {
-      restrictionSummary.setAttribute('hidden', '');
-      restrictionSummaryItems.innerHTML = '';
-      return;
-    }
-    updateRestrictionDefaults();
-    var startValue = restrictionStartInput ? restrictionStartInput.value : '';
-    var endValue = restrictionEndInput ? restrictionEndInput.value : '';
-    startValue = Restrictions.normalizeDateTimeValue(startValue);
-    endValue = Restrictions.normalizeDateTimeValue(endValue);
-    var items = [];
-    if (startValue) {
-      var startText = Restrictions.formatRestrictionDate(startValue, currentLang) || startValue;
-      if (startText) {
-        var openText = t('badges.opening', { date: startText }) || ('Inicio: ' + startText);
-        items.push(openText);
-      }
-    }
-    if (restrictionNoEnd && restrictionNoEnd.checked) {
-      items.push(t('restrictionModal.rangeNoEnd') || 'Sin fecha de fin');
-    } else if (endValue) {
-      var endText = Restrictions.formatRestrictionDate(endValue, currentLang) || endValue;
-      if (endText) {
-        var closeText = t('badges.closing', { date: endText }) || ('Fin: ' + endText);
-        items.push(closeText);
-      }
-    }
-    if (!items.length) {
-      restrictionSummary.setAttribute('hidden', '');
-      restrictionSummaryItems.innerHTML = '';
-      return;
-    }
-    restrictionSummary.removeAttribute('hidden');
-    restrictionSummaryItems.innerHTML = '';
-    items.forEach(function (text) {
-      var span = document.createElement('span');
-      span.className = 'zipper-restrict-summary__item';
-      span.textContent = text;
-      restrictionSummaryItems.appendChild(span);
-    });
-  }
 
 
 
@@ -1126,17 +1106,9 @@
 
 
 
-  function applyRestrictionsToActions(restrictions) {
-    currentRestrictions = restrictions || null;
-    updateShareRestrictionSummary(currentRestrictions);
-    if (ignoreRestrictionsForShare) return;
-    if (copyButton) {
-      copyButton.disabled = !currentShareLink || !Restrictions.allowShare(currentRestrictions);
-    }
-    if (embedButton) {
-      embedButton.disabled = !currentShareLink || !Restrictions.allowEmbed(currentRestrictions);
-    }
-  }
+
+
+
 
   function updateShareRestrictionSummary(restrictions) {
     if (!shareRestrictSummary || !shareRestrictItems) return;
@@ -1200,60 +1172,6 @@
     });
   }
 
-  function showRestrictionModal(restrictions) {
-    if (ignoreRestrictionsForShare) return;
-    if (!restrictModal) return;
-    if (restrictCountdownTimer) {
-      clearInterval(restrictCountdownTimer);
-      restrictCountdownTimer = null;
-    }
-    if (restrictionCountdown) {
-      restrictionCountdown.textContent = '';
-      restrictionCountdown.setAttribute('hidden', '');
-    }
-    var lines = [];
-    if (restrictions && restrictions.startAt) {
-      var startText = Restrictions.formatRestrictionDate(restrictions.startAt, currentLang);
-      if (startText) lines.push(t('restrictionModal.rangeStart', { date: startText }));
-    }
-    if (restrictions && restrictions.neverExpires) {
-      lines.push(t('restrictionModal.rangeNoEnd'));
-    } else if (restrictions && restrictions.endAt) {
-      var endText = Restrictions.formatRestrictionDate(restrictions.endAt, currentLang);
-      if (endText) lines.push(t('restrictionModal.rangeEnd', { date: endText }));
-    }
-    if (restrictRange) {
-      restrictRange.textContent = lines.join(' · ');
-    }
-    restrictModal.removeAttribute('hidden');
-
-    if (restrictions && restrictions.startAt && Restrictions.isRestrictionBeforeStart(restrictions)) {
-      var updateCountdown = function () {
-        var remaining = Date.parse(restrictions.startAt) - Date.now();
-        if (remaining <= 0) {
-          if (restrictCountdownTimer) {
-            clearInterval(restrictCountdownTimer);
-            restrictCountdownTimer = null;
-          }
-          restrictModal.setAttribute('hidden', '');
-          if (window.location.search.indexOf('url=') !== -1) {
-            var previewUrl = currentZipUrl || urlParam;
-            if (previewUrl) {
-              loadZip(previewUrl, { force: false, autoOpen: true });
-            }
-          }
-          return;
-        }
-        var countdownText = Restrictions.formatCountdown(remaining);
-        if (restrictionCountdown) {
-          restrictionCountdown.textContent = t('restrictionModal.countdown', { time: countdownText });
-          restrictionCountdown.removeAttribute('hidden');
-        }
-      };
-      updateCountdown();
-      restrictCountdownTimer = setInterval(updateCountdown, 1000);
-    }
-  }
 
 
 
@@ -1871,11 +1789,11 @@
                   UI.setLoading(false);
                 }
                 currentRestrictions = result.site ? result.site.restrictions || null : null;
-                applyRestrictionsToActions(currentRestrictions);
+                RestrictionUI.applyRestrictionsToActions(currentRestrictions);
                 return { siteId: result.siteId, siteUrl: null };
               }
               return Storage.deleteSite(result.siteId).then(function () {
-                showRestrictionModal(result.site.restrictions);
+                RestrictionUI.showRestrictionModal(result.site.restrictions);
                 var err = new Error(t('error.restricted'));
                 err.skipStatus = true;
                 throw err;
@@ -1887,10 +1805,10 @@
                 UI.setLoading(false);
               }
               currentRestrictions = result.site ? result.site.restrictions || null : null;
-              applyRestrictionsToActions(currentRestrictions);
+              RestrictionUI.applyRestrictionsToActions(currentRestrictions);
               return { siteId: result.siteId, siteUrl: null };
             }
-            showRestrictionModal(result.site.restrictions);
+            RestrictionUI.showRestrictionModal(result.site.restrictions);
             var errInactive = new Error(t('error.restricted'));
             errInactive.skipStatus = true;
             throw errInactive;
@@ -1912,7 +1830,7 @@
               UI.setLoading(false);
             }
             currentRestrictions = result.site ? result.site.restrictions || null : null;
-            applyRestrictionsToActions(currentRestrictions);
+            RestrictionUI.applyRestrictionsToActions(currentRestrictions);
             return { siteId: result.siteId, siteUrl: siteUrl };
           });
         }
@@ -1957,10 +1875,10 @@
                 UI.setLoading(false);
               }
               currentRestrictions = restrictions || null;
-              applyRestrictionsToActions(currentRestrictions);
+              RestrictionUI.applyRestrictionsToActions(currentRestrictions);
               return { siteId: result.siteId, siteUrl: null };
             }
-            showRestrictionModal(restrictions);
+            RestrictionUI.showRestrictionModal(restrictions);
             var blocked = new Error(t('error.restricted'));
             blocked.skipStatus = true;
             throw blocked;
@@ -2039,13 +1957,13 @@
                     var siteUrl = buildSiteUrl(result.siteId, indexPath);
                     return controlPromise.then(function () {
                       currentRestrictions = restrictions || null;
-                      applyRestrictionsToActions(currentRestrictions);
+                      RestrictionUI.applyRestrictionsToActions(currentRestrictions);
                       if (opts.embed) {
                         openEmbedSite(siteUrl);
                         return { siteId: result.siteId, siteUrl: siteUrl };
                       }
                       if (blockedNow && !opts.allowInactive) {
-                        showRestrictionModal(restrictions);
+                        RestrictionUI.showRestrictionModal(restrictions);
                         if (showProgress || autoOpen) {
                           UI.stopProgress();
                           UI.setLoading(false);
@@ -2088,7 +2006,7 @@
         }
         setShareLink('');
         currentRestrictions = null;
-        applyRestrictionsToActions(currentRestrictions);
+        RestrictionUI.applyRestrictionsToActions(currentRestrictions);
         if (!err || !err.skipStatus) {
           UI.setStatus(message);
         }
@@ -2258,8 +2176,8 @@
           restrictionEndInput.value = '';
         }
       }
-      applyRestrictionUiState();
-      updateRestrictionDefaults();
+      RestrictionUI.applyRestrictionUiState();
+      RestrictionUI.updateRestrictionDefaults();
       if (restrictionZipStatus) {
         restrictionZipStatus.textContent = t('zipper.restrict.status.ready');
       }
@@ -2273,17 +2191,17 @@
   }
   if (restrictionNoEnd) {
     restrictionNoEnd.addEventListener('change', function () {
-      applyRestrictionUiState();
+      RestrictionUI.applyRestrictionUiState();
     });
   }
   if (restrictionStartInput) {
     restrictionStartInput.addEventListener('change', function () {
-      updateRestrictionSummary();
+      RestrictionUI.updateRestrictionSummary();
     });
   }
   if (restrictionEndInput) {
     restrictionEndInput.addEventListener('change', function () {
-      updateRestrictionSummary();
+      RestrictionUI.updateRestrictionSummary();
     });
   }
   if (restrictionZipPick && restrictionZipInput) {
@@ -2422,10 +2340,10 @@
             if (Restrictions.isRestrictionExpired(site.restrictions)) {
               return Storage.deleteSite(siteId).then(function () {
                 Manager.refreshManager();
-                showRestrictionModal(site.restrictions);
+                RestrictionUI.showRestrictionModal(site.restrictions);
               });
             }
-            showRestrictionModal(site.restrictions);
+            RestrictionUI.showRestrictionModal(site.restrictions);
             return;
           }
           var siteUrl = buildSiteUrl(siteId, indexPath || '');
