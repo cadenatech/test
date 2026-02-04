@@ -436,18 +436,21 @@
             </label>
           </div>
 
-          <div class="settings-panel__title" data-i18n="settings.actionsTitle">Acciones permitidas</div>
+          <div class="settings-panel__title" data-restrict-actions-title data-i18n="settings.actionsTitle" hidden>Acciones permitidas</div>
           <div class="settings-grid" data-restrict-actions hidden>
             <label class="settings-check">
-              <input type="checkbox" data-restrict-allow-share checked>
+              <input type="checkbox" data-restrict-allow-share>
               <span data-i18n="settings.allowShare">Compartir</span>
             </label>
             <label class="settings-check">
-              <input type="checkbox" data-restrict-allow-embed checked>
+              <input type="checkbox" data-restrict-allow-embed>
               <span data-i18n="settings.allowEmbed">Insertar en web</span>
             </label>
+            <label class="settings-check">
+              <input type="checkbox" data-restrict-allow-download>
+              <span data-i18n="settings.allowDownload">Descargar</span>
+            </label>
           </div>
-          <p class="setting-help" data-i18n="settings.downloadNote">La descarga estará siempre desactivada cuando haya restricciones.</p>
 
           <div class="html-picker__actions">
             <button class="ghost-button" type="button" data-main-settings-close data-i18n="common.close">Cerrar</button>
@@ -477,7 +480,7 @@
     <footer class="site-footer">
       <a class="footer-link" href="https://bilateria.org" target="_blank" rel="noopener">(c) 2026 Juan Jose de Haro</a>
       <span class="footer-sep">·</span>
-<span class="footer-link">v1.5.0</span>
+<span class="footer-link">v1.5.1</span>
       <span class="footer-sep">·</span>
       <a class="footer-link" href="https://github.com/visor-webzip/visor-webzip.github.io" target="_blank" rel="noopener">
         <svg class="footer-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
@@ -503,6 +506,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/fflate@0.8.2/umd/index.js"></script>
   <script src="config.js"></script>
-	  <script src="app.js?v=25"></script>
+	  <script src="app.js?v=26"></script>
  </body>
  </html>

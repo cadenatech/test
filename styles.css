@@ -177,6 +177,13 @@ header {
   width: 220px;
 }
 
+.settings-field input[type="datetime-local"]:disabled {
+  background: var(--surface-muted);
+  color: var(--ink-muted);
+  border-color: rgba(148, 163, 184, 0.4);
+  opacity: 0.8;
+}
+
 .settings-grid .settings-check {
   grid-column: 1 / -1;
 }

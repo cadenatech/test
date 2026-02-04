@@ -79,6 +79,7 @@
   var restrictionNoEnd = document.querySelector('[data-restrict-no-end]');
   var restrictionAllowShare = document.querySelector('[data-restrict-allow-share]');
   var restrictionAllowEmbed = document.querySelector('[data-restrict-allow-embed]');
+  var restrictionAllowDownload = document.querySelector('[data-restrict-allow-download]');
   var restrictionHint = document.querySelector('[data-restrict-hint]');
   var restrictionAccordion = document.querySelector('[data-restrict-accordion]');
   var restrictionZipInput = document.querySelector('[data-restrict-zip-input]');
@@ -145,7 +146,7 @@
         actionsTitle: 'Acciones permitidas mientras el acceso esté abierto',
         allowShare: 'Compartir',
         allowEmbed: 'Insertar en web',
-        downloadNote: 'La descarga estará siempre desactivada cuando haya restricciones.'
+        allowDownload: 'Descargar'
       },
       restrictionModal: {
         title: 'Acceso restringido',
@@ -476,7 +477,7 @@
         actionsTitle: 'Accions permeses mentre l’accés estigui obert',
         allowShare: 'Compartir',
         allowEmbed: 'Inserir en web',
-        downloadNote: 'La descàrrega estarà sempre desactivada quan hi hagi restriccions.'
+        allowDownload: 'Descarregar'
       },
       restrictionModal: {
         title: 'Accés restringit',
@@ -807,7 +808,7 @@
         actionsTitle: 'Accións permitidas mentres o acceso estea aberto',
         allowShare: 'Compartir',
         allowEmbed: 'Inserir nunha web',
-        downloadNote: 'A descarga estará sempre desactivada cando haxa restricións.'
+        allowDownload: 'Descargar'
       },
       restrictionModal: {
         title: 'Acceso restrinxido',
@@ -1138,7 +1139,7 @@
         actionsTitle: 'Sarbidea irekita dagoenean baimendutako ekintzak',
         allowShare: 'Partekatu',
         allowEmbed: 'Web batean txertatu',
-        downloadNote: 'Deskarga beti desaktibatuta egongo da murrizketak daudenean.'
+        allowDownload: 'Deskargatu'
       },
       restrictionModal: {
         title: 'Sarbide mugatua',
@@ -1469,7 +1470,7 @@
         actionsTitle: 'Allowed actions while access is open',
         allowShare: 'Share',
         allowEmbed: 'Embed',
-        downloadNote: 'Download will always be disabled when restrictions are enabled.'
+        allowDownload: 'Download'
       },
       restrictionModal: {
         title: 'Access restricted',
@@ -1800,7 +1801,7 @@
         actionsTitle: 'Erlaubte Aktionen, solange der Zugriff offen ist',
         allowShare: 'Teilen',
         allowEmbed: 'Einbetten',
-        downloadNote: 'Der Download ist bei Einschränkungen immer deaktiviert.'
+        allowDownload: 'Herunterladen'
       },
       restrictionModal: {
         title: 'Zugriff eingeschränkt',
@@ -3005,6 +3006,16 @@
       if (enabled) restrictionActions.removeAttribute('hidden');
       else restrictionActions.setAttribute('hidden', '');
     }
+    var restrictTitle = document.querySelector('[data-restrict-actions-title]');
+    if (restrictTitle) {
+      if (enabled) restrictTitle.removeAttribute('hidden');
+      else restrictTitle.setAttribute('hidden', '');
+    }
+    var restrictNote = document.querySelector('[data-restrict-actions-note]');
+    if (restrictNote) {
+      if (enabled) restrictNote.removeAttribute('hidden');
+      else restrictNote.setAttribute('hidden', '');
+    }
     if (restrictionHint) {
       if (enabled) restrictionHint.removeAttribute('hidden');
       else restrictionHint.setAttribute('hidden', '');
@@ -3043,9 +3054,8 @@
     if (!restrictionStartInput.value) {
       restrictionStartInput.value = formatLocalDateTime(now);
     }
-    if (!restrictionEndInput.value) {
-      var later = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
-      restrictionEndInput.value = formatLocalDateTime(later);
+    if (restrictionNoEnd && restrictionNoEnd.checked) {
+      restrictionEndInput.value = '';
     }
   }
 
@@ -3066,8 +3076,9 @@
       startAt: startAt,
       endAt: endAt,
       neverExpires: neverExpires,
-      allowShare: !(restrictionAllowShare && restrictionAllowShare.checked === false),
-      allowEmbed: !(restrictionAllowEmbed && restrictionAllowEmbed.checked === false),
+      allowShare: !!(restrictionAllowShare && restrictionAllowShare.checked),
+      allowEmbed: !!(restrictionAllowEmbed && restrictionAllowEmbed.checked),
+      allowDownload: !!(restrictionAllowDownload && restrictionAllowDownload.checked),
       createdAt: new Date().toISOString(),
       source: 'visor-webzip'
     };
@@ -3117,6 +3128,11 @@
   function restrictionsAllowEmbed(restrictions) {
     if (!restrictions || !restrictions.enabled) return true;
     return !!restrictions.allowEmbed;
+  }
+
+  function restrictionsAllowDownload(restrictions) {
+    if (!restrictions || !restrictions.enabled) return true;
+    return !!restrictions.allowDownload;
   }
 
   function extractRestrictions(entries) {
@@ -3498,7 +3514,7 @@
       var canShare = restrictionsAllowShare(restrictions);
       var canEmbed = restrictionsAllowEmbed(restrictions);
       var canView = !isRestrictionBeforeStart(restrictions);
-      var canDownload = !isRestrictionActive(restrictions);
+      var canDownload = restrictionsAllowDownload(restrictions);
       var item = document.createElement('div');
       item.className = 'manager-item';
       var info = document.createElement('div');
@@ -4706,9 +4722,8 @@
         if (restrictionStartInput) {
           restrictionStartInput.value = formatLocalDateTime(now);
         }
-        if (restrictionEndInput && !restrictionEndInput.value) {
-          var later = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
-          restrictionEndInput.value = formatLocalDateTime(later);
+        if (restrictionNoEnd && restrictionNoEnd.checked && restrictionEndInput) {
+          restrictionEndInput.value = '';
         }
       }
       applyRestrictionUiState();
