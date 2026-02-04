@@ -93,6 +93,7 @@
   var UI = window.UI || {};
   var Downloads = window.Downloads || {};
   var Zipper = window.Zipper || {};
+  var HtmlPicker = window.HtmlPicker || {};
   var restrictionSummary = document.querySelector('[data-restrict-summary]');
   var restrictionSummaryItems = document.querySelector('[data-restrict-summary-items]');
   var ignoreRestrictionsForShare = false;
@@ -124,9 +125,6 @@
   var currentZipUrl = '';
   var selectedFiles = [];
   var zipNameDirty = false;
-  var htmlPickerResolve = null;
-  var htmlPickerReject = null;
-  var htmlPickerWasLoading = false;
   var activeTitleEdit = null;
   var activePublishModule = '';
   var isEmbedMode = false;
@@ -435,6 +433,16 @@
   if (Zipper.init) {
     Zipper.init({ t: t });
   }
+  if (HtmlPicker.init) {
+    HtmlPicker.init({
+      modal: htmlModal,
+      list: htmlList,
+      confirmButton: htmlConfirm,
+      closeButtons: htmlCloseButtons,
+      t: t,
+      ui: UI
+    });
+  }
 
   function applyTranslations() {
     var textNodes = document.querySelectorAll('[data-i18n]');
@@ -591,67 +599,8 @@
     return message || t('error.loadZip');
   }
 
-  function closeHtmlPicker(message) {
-    if (!htmlModal) return;
-    htmlModal.setAttribute('hidden', '');
-    if (htmlList) {
-      htmlList.innerHTML = '';
-    }
-    if (htmlPickerReject) {
-      var reject = htmlPickerReject;
-      htmlPickerResolve = null;
-      htmlPickerReject = null;
-      reject(new Error(message || t('error.noHtmlSelected')));
-    }
-  }
 
-  function confirmHtmlPicker() {
-    if (!htmlList || !htmlPickerResolve) return;
-    var choice = htmlList.querySelector('input[name="html-choice"]:checked');
-    if (!choice) {
-      return;
-    }
-    var resolve = htmlPickerResolve;
-    htmlPickerResolve = null;
-    htmlPickerReject = null;
-    htmlModal.setAttribute('hidden', '');
-    htmlList.innerHTML = '';
-    resolve(choice.value);
-  }
 
-  function openHtmlPicker(htmlPaths, preferred) {
-    if (!htmlModal || !htmlList || !htmlConfirm) {
-      return Promise.reject(new Error(t('error.htmlPickerOpen')));
-    }
-    return new Promise(function (resolve, reject) {
-      htmlPickerResolve = resolve;
-      htmlPickerReject = reject;
-      if (UI.isLoading && UI.isLoading()) {
-        htmlPickerWasLoading = true;
-        UI.setLoading(false);
-      }
-      htmlList.innerHTML = '';
-      htmlPaths.forEach(function (path, index) {
-        var id = 'html-choice-' + index;
-        var label = document.createElement('label');
-        label.className = 'html-option';
-        var input = document.createElement('input');
-        input.type = 'radio';
-        input.name = 'html-choice';
-        input.value = path;
-        input.id = id;
-        if ((preferred && preferred === path) || (!preferred && index === 0)) {
-          input.checked = true;
-        }
-        var text = document.createElement('span');
-        text.textContent = path;
-        label.appendChild(input);
-        label.appendChild(text);
-        htmlList.appendChild(label);
-      });
-      htmlModal.removeAttribute('hidden');
-    });
-  }
 
 
 
@@ -2149,7 +2098,7 @@
     if (htmlPaths.length === 1) {
       return Promise.resolve(htmlPaths[0]);
     }
-    return openHtmlPicker(htmlPaths, preferred || htmlPaths[0]);
+    return HtmlPicker.open(htmlPaths, preferred || htmlPaths[0]);
   }
 
   function loadZip(zipUrl, options) {
@@ -2341,8 +2290,7 @@
 
           var paths = files.map(function (file) { return file.path; });
           return pickIndexPath(paths).then(function (indexPath) {
-            if (htmlPickerWasLoading) {
-              htmlPickerWasLoading = false;
+            if (HtmlPicker.consumeWasLoading && HtmlPicker.consumeWasLoading()) {
               UI.setLoading(true);
               UI.setLoadingMessage(t('status.saving'));
             }
@@ -2961,19 +2909,9 @@
     });
   }
   if (htmlModal) {
-    htmlCloseButtons.forEach(function (button) {
-      button.addEventListener('click', function () {
-        closeHtmlPicker();
-      });
-    });
-    if (htmlConfirm) {
-      htmlConfirm.addEventListener('click', function () {
-        confirmHtmlPicker();
-      });
-    }
     document.addEventListener('keydown', function (event) {
       if (event.key === 'Escape') {
-        closeHtmlPicker();
+        HtmlPicker.close();
       }
     });
   }
