@@ -92,6 +92,7 @@
   var restrictionCountdown = document.querySelector('[data-restrict-countdown]');
   var UI = window.UI || {};
   var Downloads = window.Downloads || {};
+  var Zipper = window.Zipper || {};
   var restrictionSummary = document.querySelector('[data-restrict-summary]');
   var restrictionSummaryItems = document.querySelector('[data-restrict-summary-items]');
   var ignoreRestrictionsForShare = false;
@@ -431,6 +432,10 @@
     });
   }
 
+  if (Zipper.init) {
+    Zipper.init({ t: t });
+  }
+
   function applyTranslations() {
     var textNodes = document.querySelectorAll('[data-i18n]');
     textNodes.forEach(function (node) {
@@ -476,13 +481,10 @@
     });
   }
 
-  function getZipDefaultName() {
-    return t('zipper.zipName.default') || 'materiales';
-  }
 
   function syncZipNameDefault() {
     if (zipNameInput && !zipNameDirty) {
-      zipNameInput.value = getZipDefaultName();
+      zipNameInput.value = Zipper.getZipDefaultName();
     }
   }
 
@@ -665,24 +667,17 @@
       UI.setUploadStatus(t('zipper.status.empty'));
       UI.setZipStatus(t('zipper.status.readyHint'));
       if (zipNameInput && !zipNameDirty) {
-        zipNameInput.value = getZipDefaultName();
+        zipNameInput.value = Zipper.getZipDefaultName();
       }
       return;
     }
     if (zipNameInput && !zipNameDirty) {
-      zipNameInput.value = deriveZipBaseName(selectedFiles);
+      zipNameInput.value = Zipper.deriveZipBaseName(selectedFiles);
     }
     UI.setUploadStatus(t('zipper.status.filesReady', { count: selectedFiles.length }));
     UI.setZipStatus(t('zipper.status.ready'));
   }
 
-  function normalizeZipName(name) {
-    var value = (name || '').trim() || getZipDefaultName();
-    if (!/\.zip$/i.test(value)) {
-      value += '.zip';
-    }
-    return value;
-  }
 
   function encodeUtf8(text) {
     if (window.TextEncoder) {
@@ -723,23 +718,6 @@
 
 
 
-  function deriveZipBaseName(files) {
-    if (!files || !files.length) return getZipDefaultName();
-    var firstPath = files[0].path || '';
-    if (!firstPath) return getZipDefaultName();
-    var parts = firstPath.split('/');
-    if (parts.length > 1) {
-      var root = parts[0];
-      var sameRoot = files.every(function (item) {
-        return item.path && item.path.indexOf(root + '/') === 0;
-      });
-      if (sameRoot) {
-        return root;
-      }
-    }
-    var filename = parts[parts.length - 1] || getZipDefaultName();
-    return filename.replace(/\.[^/.]+$/, '') || getZipDefaultName();
-  }
 
   function deriveTitleFromPath(path) {
     if (!path) return '';
@@ -900,7 +878,7 @@
       UI.setZipStatus(t('zipper.status.engineMissing'));
       return;
     }
-    var zipName = normalizeZipName(zipNameInput ? zipNameInput.value : '');
+    var zipName = Zipper.normalizeZipName(zipNameInput ? zipNameInput.value : '');
     UI.setZipStatus(t('zipper.status.creating'));
     var tasks = selectedFiles.map(function (item) {
       return item.file.arrayBuffer().then(function (buffer) {
@@ -945,7 +923,7 @@
       UI.setHtmlZipStatus(t('zipper.html.status.empty'));
       return;
     }
-    if (looksLikeReactJsx(htmlText)) {
+    if (Zipper.looksLikeReactJsx(htmlText)) {
       UI.setHtmlZipStatus(t('zipper.html.status.reactDetected'));
       openReactPromptModal(htmlText);
       return;
@@ -954,7 +932,7 @@
       UI.setHtmlZipStatus(t('zipper.status.engineMissing'));
       return;
     }
-    var zipName = normalizeZipName(zipNameInput ? zipNameInput.value : '');
+    var zipName = Zipper.normalizeZipName(zipNameInput ? zipNameInput.value : '');
     UI.setHtmlZipStatus(t('zipper.html.status.creating'));
     try {
       var files = {
@@ -1034,26 +1012,7 @@
     });
   }
 
-  function looksLikeHtmlDocument(text) {
-    var head = String(text || '').slice(0, 600);
-    return /^\s*<!doctype\s+html\b/i.test(head) || /^\s*<html\b/i.test(head);
-  }
 
-  function looksLikeReactJsx(text) {
-    var value = String(text || '');
-    if (looksLikeHtmlDocument(value)) return false;
-    var sample = value.slice(0, 6000);
-    if (/\bimport\s+React\b/.test(sample)) return true;
-    if (/\bfrom\s+['"]react['"]/.test(sample)) return true;
-    if (/\breact-dom\b/.test(sample) && /\bcreateRoot\s*\(/.test(sample)) return true;
-    if (/\buseState\s*\(/.test(sample) || /\buseEffect\s*\(/.test(sample)) {
-      if (/\breturn\s*\(\s*<[\w]/.test(sample) || /\bclassName\s*=/.test(sample)) {
-        return true;
-      }
-    }
-    if (/\bexport\s+default\b/.test(sample) && /\breturn\s*\(\s*<[\w]/.test(sample)) return true;
-    return false;
-  }
 
   function applyRestrictionUiState() {
     var enabled = !!(restrictionToggle && restrictionToggle.checked);
