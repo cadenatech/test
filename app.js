@@ -68,7 +68,7 @@
   var managerSettingsCloseButtons = document.querySelectorAll('[data-manager-settings-close]');
   var languageOpenButton = document.querySelector('[data-lang-open]');
   var languagePanel = document.querySelector('[data-lang-panel]');
-  var mainSettingsOpenButton = document.querySelector('[data-main-settings-open]');
+  var mainSettingsOpenButtons = document.querySelectorAll('[data-main-settings-open]');
   var mainSettingsModal = document.querySelector('[data-main-settings-modal]');
   var mainSettingsCloseButtons = document.querySelectorAll('[data-main-settings-close]');
   var restrictionToggle = document.querySelector('[data-restrict-toggle]');
@@ -3030,22 +3030,23 @@
     if (restrictionZipApply) {
       restrictionZipApply.disabled = !enabled || !restrictionZipFile;
     }
-    if (mainSettingsOpenButton) {
-      var lockSvg = enabled
-        ? '<rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path>'
-        : '<rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path>';
-      var icon = mainSettingsOpenButton.querySelector('svg');
+    var lockSvg = enabled
+      ? '<rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path>'
+      : '<rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path>';
+    var lockTargets = document.querySelectorAll('[data-lock-indicator], [data-main-settings-open]');
+    lockTargets.forEach(function (target) {
+      var icon = target.querySelector('svg');
       if (icon) {
         icon.innerHTML = lockSvg;
       }
       if (enabled) {
-        mainSettingsOpenButton.classList.add('is-locked');
-        mainSettingsOpenButton.classList.remove('is-unlocked');
+        target.classList.add('is-locked');
+        target.classList.remove('is-unlocked');
       } else {
-        mainSettingsOpenButton.classList.remove('is-locked');
-        mainSettingsOpenButton.classList.add('is-unlocked');
+        target.classList.remove('is-locked');
+        target.classList.add('is-unlocked');
       }
-    }
+    });
   }
 
   function updateRestrictionDefaults() {
@@ -4976,10 +4977,12 @@
     });
   }
 
-  if (mainSettingsOpenButton && mainSettingsModal) {
-    mainSettingsOpenButton.addEventListener('click', function (event) {
-      event.preventDefault();
-      openMainSettingsModal();
+  if (mainSettingsOpenButtons && mainSettingsOpenButtons.length && mainSettingsModal) {
+    mainSettingsOpenButtons.forEach(function (button) {
+      button.addEventListener('click', function (event) {
+        event.preventDefault();
+        openMainSettingsModal();
+      });
     });
     if (mainSettingsCloseButtons && mainSettingsCloseButtons.length) {
       mainSettingsCloseButtons.forEach(function (button) {
@@ -4994,6 +4997,22 @@
       }
     });
   }
+  var lockIndicators = document.querySelectorAll('[data-lock-indicator]');
+  if (lockIndicators && lockIndicators.length && mainSettingsModal) {
+    lockIndicators.forEach(function (node) {
+      node.addEventListener('click', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        openMainSettingsModal();
+      });
+      node.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          openMainSettingsModal();
+        }
+      });
+    });
+  }
   if (languageOpenButton && languagePanel) {
     languageOpenButton.addEventListener('click', function (event) {
       event.preventDefault();
@@ -5005,6 +5024,14 @@
       if (langSelect) {
         try {
           langSelect.focus();
+          langSelect.click();
+          setTimeout(function () {
+            try {
+              langSelect.click();
+            } catch (e) {
+              // ignore
+            }
+          }, 0);
         } catch (e) {
           // ignore
         }

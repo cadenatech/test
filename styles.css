@@ -404,15 +404,16 @@ button {
 .help-pill,
 .info-dot,
 .icon-button,
-.publish-choice-card {
+.publish-choice-card,
+.card-lock {
   box-shadow: none;
 }
 
-button:not(.ghost-button):not(.tab-button):not(.publish-choice-card):not(.publish-back):not(.icon-button):not(.help-pill):not(.info-dot):not(.modal__close):not(.manager-sort-dir):hover {
+button:not(.ghost-button):not(.tab-button):not(.publish-choice-card):not(.publish-back):not(.icon-button):not(.help-pill):not(.info-dot):not(.modal__close):not(.manager-sort-dir):not(.card-lock):hover {
   background: var(--accent-strong);
 }
 
-button:not(.ghost-button):not(.tab-button):not(.publish-choice-card):not(.publish-back):not(.icon-button):not(.help-pill):not(.info-dot):not(.modal__close):not(.manager-sort-dir):active {
+button:not(.ghost-button):not(.tab-button):not(.publish-choice-card):not(.publish-back):not(.icon-button):not(.help-pill):not(.info-dot):not(.modal__close):not(.manager-sort-dir):not(.card-lock):active {
   transform: translateY(1px);
   box-shadow: 0 6px 14px rgba(37, 99, 235, 0.18);
 }
@@ -642,6 +643,7 @@ textarea:focus-visible {
   gap: 6px;
   cursor: pointer;
   transition: transform 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
+  position: relative;
 }
 
 .publish-choice-card:hover,
@@ -697,6 +699,67 @@ textarea:focus-visible {
 
 .publish-choice-card__note + .publish-choice-card__note {
   margin-top: 6px;
+}
+
+.publish-choice-card .card-lock {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+}
+
+.card-lock {
+  appearance: none;
+  border: 1px solid var(--border);
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-muted);
+  cursor: pointer;
+  padding: 0;
+  position: relative;
+}
+
+.card-lock svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+}
+
+.card-lock.is-locked {
+  color: #b42318;
+  background: #fef3f2;
+  border-color: #fecdca;
+}
+
+.card-lock.is-unlocked {
+  color: #067647;
+  background: #ecfdf3;
+  border-color: #a6f4c5;
+}
+
+.card-lock::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  right: 0;
+  background: #1b1f23;
+  color: #fff;
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 8px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s ease;
+}
+
+.card-lock:hover::after,
+.card-lock:focus-visible::after {
+  opacity: 1;
 }
 
 .publish-back {
@@ -1019,6 +1082,13 @@ textarea:focus-visible {
   gap: 16px;
   align-items: center;
   flex-wrap: wrap;
+  position: relative;
+}
+
+.manager-header .card-lock {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 .manager-header h2 {
