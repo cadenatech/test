@@ -3160,6 +3160,7 @@
   }
 
   function showRestrictionModal(restrictions) {
+    if (ignoreRestrictionsForShare) return;
     if (!restrictModal) return;
     var lines = [];
     if (restrictions && restrictions.startAt) {
@@ -4775,7 +4776,10 @@
         return;
       }
       ignoreRestrictionsForShare = true;
-      loadZip(zipUrl, { force: true, allowInactive: true });
+      loadZip(zipUrl, { force: true, allowInactive: true })
+        .finally(function () {
+          ignoreRestrictionsForShare = false;
+        });
     });
   }
 
