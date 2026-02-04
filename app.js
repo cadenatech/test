@@ -2,6 +2,7 @@
   var form = document.querySelector('[data-form]');
   var input = document.querySelector('[data-url]');
   var output = document.querySelector('[data-output]');
+  var createLinkButton = document.querySelector('[data-create-link]');
   var copyButton = document.querySelector('[data-copy]');
   var embedButton = document.querySelector('[data-embed]');
   var openLink = document.querySelector('[data-open]');
@@ -1237,6 +1238,40 @@
       shareRestrictItems.appendChild(endBadge);
     }
     shareRestrictSummary.removeAttribute('hidden');
+  }
+
+  function registerServiceWorker() {
+    if (!('serviceWorker' in navigator)) {
+      return Promise.reject(new Error(t('error.serviceWorkerUnavailable')));
+    }
+    return navigator.serviceWorker.register('sw.js', { scope: './' }).then(function () {
+      return navigator.serviceWorker.ready;
+    });
+  }
+
+  function waitForServiceWorkerControl() {
+    if (!('serviceWorker' in navigator)) {
+      return Promise.resolve();
+    }
+    if (navigator.serviceWorker.controller) {
+      return Promise.resolve();
+    }
+    return new Promise(function (resolve) {
+      var resolved = false;
+      var finish = function () {
+        if (resolved) return;
+        resolved = true;
+        navigator.serviceWorker.removeEventListener('controllerchange', onChange);
+        resolve();
+      };
+      var onChange = function () {
+        if (navigator.serviceWorker.controller) {
+          finish();
+        }
+      };
+      navigator.serviceWorker.addEventListener('controllerchange', onChange);
+      setTimeout(finish, 5000);
+    });
   }
 
   function showRestrictionModal(restrictions) {
@@ -2656,19 +2691,25 @@
     });
   }
 
-  if (form) {
-    form.addEventListener('submit', function (event) {
+  function handleCreateLink(event) {
+    if (event && event.preventDefault) {
       event.preventDefault();
-      var zipUrl = input.value.trim();
-      if (!zipUrl) {
-        return;
-      }
-      ignoreRestrictionsForShare = true;
-      loadZip(zipUrl, { force: true, allowInactive: true })
-        .finally(function () {
-          ignoreRestrictionsForShare = false;
-        });
-    });
+    }
+    var zipUrl = input.value.trim();
+    if (!zipUrl) {
+      return;
+    }
+    ignoreRestrictionsForShare = true;
+    loadZip(zipUrl, { force: true, allowInactive: true })
+      .finally(function () {
+        ignoreRestrictionsForShare = false;
+      });
+  }
+  if (form) {
+    form.addEventListener('submit', handleCreateLink);
+  }
+  if (createLinkButton) {
+    createLinkButton.addEventListener('click', handleCreateLink);
   }
 
   var params = new URLSearchParams(window.location.search);
