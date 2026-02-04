@@ -472,10 +472,10 @@
     currentShareLink = link || '';
     output.textContent = currentShareLink || t('main.output.placeholder');
     if (copyButton) {
-      copyButton.disabled = !currentShareLink || !restrictionsAllowShare(currentRestrictions);
+      copyButton.disabled = !currentShareLink || !Restrictions.allowShare(currentRestrictions);
     }
     if (embedButton) {
-      embedButton.disabled = !currentShareLink || !restrictionsAllowEmbed(currentRestrictions);
+      embedButton.disabled = !currentShareLink || !Restrictions.allowEmbed(currentRestrictions);
     }
     if (openLink) {
       openLink.href = currentShareLink || '#';
@@ -669,39 +669,8 @@
       + ':' + pad(value.getMinutes());
   }
 
-  function normalizeDateTimeValue(value) {
-    if (!value) return '';
-    if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
-      return value + 'T00:00';
-    }
-    if (/^\d{4}-\d{2}-\d{2}T$/.test(value)) {
-      return value + '00:00';
-    }
-    return value;
-  }
 
-  function formatRestrictionDate(value) {
-    if (!value) return '';
-    var date = new Date(value);
-    if (isNaN(date.getTime())) return '';
-    try {
-      return date.toLocaleString(currentLang);
-    } catch (e) {
-      return date.toISOString();
-    }
-  }
 
-  function formatCountdown(ms) {
-    var totalSeconds = Math.max(0, Math.ceil(ms / 1000));
-    var days = Math.floor(totalSeconds / 86400);
-    var remainder = totalSeconds % 86400;
-    var hours = Math.floor(remainder / 3600);
-    var minutes = Math.floor((remainder % 3600) / 60);
-    var seconds = remainder % 60;
-    var pad = function (n) { return (n < 10 ? '0' : '') + n; };
-    var time = pad(hours) + ':' + pad(minutes) + ':' + pad(seconds);
-    return days > 0 ? (days + 'd ' + time) : time;
-  }
 
   function deriveZipBaseName(files) {
     if (!files || !files.length) return getZipDefaultName();
@@ -1104,8 +1073,8 @@
     updateRestrictionDefaults();
     var startValue = restrictionStartInput ? restrictionStartInput.value : '';
     var endValue = restrictionEndInput ? restrictionEndInput.value : '';
-    startValue = normalizeDateTimeValue(startValue);
-    endValue = normalizeDateTimeValue(endValue);
+    startValue = Restrictions.normalizeDateTimeValue(startValue);
+    endValue = Restrictions.normalizeDateTimeValue(endValue);
     var startAt = startValue ? new Date(startValue).toISOString() : new Date().toISOString();
     var neverExpires = !!(restrictionNoEnd && restrictionNoEnd.checked);
     var endAt = null;
@@ -1126,77 +1095,22 @@
     };
   }
 
-  function isRestrictionActive(restrictions) {
-    return restrictions && restrictions.enabled;
-  }
 
-  function isRestrictionAllowedNow(restrictions) {
-    if (!restrictions || !restrictions.enabled) return true;
-    var now = Date.now();
-    if (restrictions.startAt) {
-      var start = Date.parse(restrictions.startAt);
-      if (!isNaN(start) && now < start) return false;
-    }
-    if (restrictions.neverExpires) return true;
-    if (restrictions.endAt) {
-      var end = Date.parse(restrictions.endAt);
-      if (!isNaN(end) && now > end) return false;
-    }
-    return true;
-  }
 
-  function isRestrictionExpired(restrictions) {
-    if (!restrictions || !restrictions.enabled) return false;
-    if (restrictions.neverExpires) return false;
-    if (!restrictions.endAt) return false;
-    var end = Date.parse(restrictions.endAt);
-    if (isNaN(end)) return false;
-    return Date.now() > end;
-  }
 
-  function isRestrictionBeforeStart(restrictions) {
-    if (!restrictions || !restrictions.enabled) return false;
-    if (!restrictions.startAt) return false;
-    var start = Date.parse(restrictions.startAt);
-    if (isNaN(start)) return false;
-    return Date.now() < start;
-  }
 
-  function restrictionsAllowShare(restrictions) {
-    if (!restrictions || !restrictions.enabled) return true;
-    return !!restrictions.allowShare;
-  }
 
-  function restrictionsAllowEmbed(restrictions) {
-    if (!restrictions || !restrictions.enabled) return true;
-    return !!restrictions.allowEmbed;
-  }
 
-  function restrictionsAllowDownload(restrictions) {
-    if (!restrictions || !restrictions.enabled) return true;
-    return !!restrictions.allowDownload;
-  }
 
-  function extractRestrictions(entries) {
-    if (!entries || !entries['restrictions.json']) return null;
-    try {
-      var raw = decodeUtf8(entries['restrictions.json']);
-      var data = JSON.parse(raw);
-      if (data && data.enabled) return data;
-    } catch (e) {
-      // ignore invalid restrictions
-    }
-    return null;
-  }
 
   function applyRestrictionsToActions(restrictions) {
     currentRestrictions = restrictions || null;
     if (ignoreRestrictionsForShare) return;
     if (copyButton) {
-      copyButton.disabled = !currentShareLink || !restrictionsAllowShare(currentRestrictions);
+      copyButton.disabled = !currentShareLink || !Restrictions.allowShare(currentRestrictions);
     }
     if (embedButton) {
-      embedButton.disabled = !currentShareLink || !restrictionsAllowEmbed(currentRestrictions);
+      embedButton.disabled = !currentShareLink || !Restrictions.allowEmbed(currentRestrictions);
     }
   }
 
@@ -1213,13 +1127,13 @@
     }
     var lines = [];
     if (restrictions && restrictions.startAt) {
-      var startText = formatRestrictionDate(restrictions.startAt);
+      var startText = Restrictions.formatRestrictionDate(restrictions.startAt, currentLang);
       if (startText) lines.push(t('restrictionModal.rangeStart', { date: startText }));
     }
     if (restrictions && restrictions.neverExpires) {
       lines.push(t('restrictionModal.rangeNoEnd'));
     } else if (restrictions && restrictions.endAt) {
-      var endText = formatRestrictionDate(restrictions.endAt);
+      var endText = Restrictions.formatRestrictionDate(restrictions.endAt, currentLang);
       if (endText) lines.push(t('restrictionModal.rangeEnd', { date: endText }));
     }
     if (restrictRange) {
@@ -1227,7 +1141,7 @@
     }
     restrictModal.removeAttribute('hidden');
 
-    if (restrictions && restrictions.startAt && isRestrictionBeforeStart(restrictions)) {
+    if (restrictions && restrictions.startAt && Restrictions.isRestrictionBeforeStart(restrictions)) {
       var updateCountdown = function () {
         var remaining = Date.parse(restrictions.startAt) - Date.now();
         if (remaining <= 0) {
@@ -1244,7 +1158,7 @@
           }
           return;
         }
-        var countdownText = formatCountdown(remaining);
+        var countdownText = Restrictions.formatCountdown(remaining);
         if (restrictionCountdown) {
           restrictionCountdown.textContent = t('restrictionModal.countdown', { time: countdownText });
           restrictionCountdown.removeAttribute('hidden');
@@ -1589,10 +1503,10 @@
     var sortedSites = sortManagerSites(sites);
     sortedSites.forEach(function (site) {
       var restrictions = site.restrictions || null;
-      var canShare = restrictionsAllowShare(restrictions);
-      var canEmbed = restrictionsAllowEmbed(restrictions);
-      var canView = !isRestrictionBeforeStart(restrictions);
-      var canDownload = restrictionsAllowDownload(restrictions);
+      var canShare = Restrictions.allowShare(restrictions);
+      var canEmbed = Restrictions.allowEmbed(restrictions);
+      var canView = !Restrictions.isRestrictionBeforeStart(restrictions);
+      var canDownload = Restrictions.allowDownload(restrictions);
       var item = document.createElement('div');
       item.className = 'manager-item';
       var info = document.createElement('div');
@@ -1606,8 +1520,8 @@
       var date = site.updatedAt ? new Date(site.updatedAt).toLocaleString(currentLang) : t('manager.noDate');
       meta.textContent = formatBytes(site.totalBytes || 0) + ' · ' + date;
       if (restrictions && restrictions.enabled) {
-        var startLabel = restrictions.startAt ? formatRestrictionDate(restrictions.startAt) : '';
-        var endLabel = (!restrictions.neverExpires && restrictions.endAt) ? formatRestrictionDate(restrictions.endAt) : '';
+        var startLabel = restrictions.startAt ? Restrictions.formatRestrictionDate(restrictions.startAt, currentLang) : '';
+        var endLabel = (!restrictions.neverExpires && restrictions.endAt) ? Restrictions.formatRestrictionDate(restrictions.endAt, currentLang) : '';
         if (startLabel) {
           var startBadge = document.createElement('span');
           startBadge.className = 'manager-badge manager-badge--start';
@@ -1707,7 +1621,7 @@
       var sites = result[0];
       var estimate = result[1];
       var expiredIds = sites.filter(function (site) {
-        return isRestrictionActive(site.restrictions) && isRestrictionExpired(site.restrictions);
+        return Restrictions.isRestrictionActive(site.restrictions) && Restrictions.isRestrictionExpired(site.restrictions);
       }).map(function (site) { return site.id; });
       if (expiredIds.length) {
         return deleteSitesSequential(expiredIds).then(function () {
@@ -2431,8 +2345,8 @@
         setShareLink(shareLink);
 
         if (result.cached && !opts.force) {
-          if (result.site && isRestrictionActive(result.site.restrictions) && !isRestrictionAllowedNow(result.site.restrictions)) {
-            if (isRestrictionExpired(result.site.restrictions)) {
+          if (result.site && Restrictions.isRestrictionActive(result.site.restrictions) && !Restrictions.isRestrictionAllowedNow(result.site.restrictions)) {
+            if (Restrictions.isRestrictionExpired(result.site.restrictions)) {
               return deleteSite(result.siteId).then(function () {
                 showRestrictionModal(result.site.restrictions);
                 var err = new Error(t('error.restricted'));
@@ -2454,7 +2368,7 @@
             errInactive.skipStatus = true;
             throw errInactive;
           }
-          if (opts.embed && result.site && isRestrictionActive(result.site.restrictions) && !restrictionsAllowEmbed(result.site.restrictions)) {
+          if (opts.embed && result.site && Restrictions.isRestrictionActive(result.site.restrictions) && !Restrictions.allowEmbed(result.site.restrictions)) {
             throw new Error(t('error.embedNotAllowed'));
           }
           var siteUrl = buildSiteUrl(result.siteId, result.site.indexPath);
@@ -2506,15 +2420,15 @@
           }
           var bytes = bundle.bytes ? bundle.bytes : base64ToBytes(bundle.base64);
           var entries = window.fflate.unzipSync(bytes);
-          var restrictions = extractRestrictions(entries);
-          var blockedNow = isRestrictionActive(restrictions) && !isRestrictionAllowedNow(restrictions);
-          if (blockedNow && isRestrictionExpired(restrictions)) {
+          var restrictions = Restrictions.extractRestrictions(entries, decodeUtf8);
+          var blockedNow = Restrictions.isRestrictionActive(restrictions) && !Restrictions.isRestrictionAllowedNow(restrictions);
+          if (blockedNow && Restrictions.isRestrictionExpired(restrictions)) {
             showRestrictionModal(restrictions);
             var blocked = new Error(t('error.restricted'));
             blocked.skipStatus = true;
             throw blocked;
           }
-          if (opts.embed && isRestrictionActive(restrictions) && !restrictionsAllowEmbed(restrictions)) {
+          if (opts.embed && Restrictions.isRestrictionActive(restrictions) && !Restrictions.allowEmbed(restrictions)) {
             throw new Error(t('error.embedNotAllowed'));
           }
           var files = [];
@@ -2952,8 +2866,8 @@
       }
       if (action === 'view' && siteId) {
         getSite(siteId).then(function (site) {
-          if (site && isRestrictionActive(site.restrictions) && !isRestrictionAllowedNow(site.restrictions)) {
-            if (isRestrictionExpired(site.restrictions)) {
+          if (site && Restrictions.isRestrictionActive(site.restrictions) && !Restrictions.isRestrictionAllowedNow(site.restrictions)) {
+            if (Restrictions.isRestrictionExpired(site.restrictions)) {
               return deleteSite(siteId).then(function () {
                 refreshManager();
                 showRestrictionModal(site.restrictions);
