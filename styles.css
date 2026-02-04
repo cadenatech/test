@@ -1142,6 +1142,14 @@ textarea:focus-visible {
   color: var(--ink-muted);
 }
 
+.restriction-countdown {
+  margin-top: 14px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ink);
+  text-align: center;
+}
+
 .setting-control {
   display: inline-flex;
   align-items: center;

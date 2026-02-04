@@ -86,7 +86,9 @@
   var restrictionZipPick = document.querySelector('[data-restrict-zip-pick]');
   var restrictionZipApply = document.querySelector('[data-restrict-zip-apply]');
   var restrictionZipStatus = document.querySelector('[data-restrict-zip-status]');
+  var restrictionCountdown = document.querySelector('[data-restrict-countdown]');
   var ignoreRestrictionsForShare = false;
+  var restrictCountdownTimer = null;
 
   var currentShareLink = '';
   var currentZipUrl = '';
@@ -153,7 +155,8 @@
         body: 'Este recurso no está disponible en este momento.',
         rangeStart: 'Disponible desde: {date}',
         rangeEnd: 'Hasta: {date}',
-        rangeNoEnd: 'Sin fecha de fin'
+        rangeNoEnd: 'Sin fecha de fin',
+        countdown: 'Disponible en: {time}'
       },
       lang: {
         label: 'Idioma',
@@ -484,7 +487,8 @@
         body: 'Aquest recurs no està disponible en aquest moment.',
         rangeStart: 'Disponible des de: {date}',
         rangeEnd: 'Fins a: {date}',
-        rangeNoEnd: 'Sense data de fi'
+        rangeNoEnd: 'Sense data de fi',
+        countdown: 'Disponible en: {time}'
       },
       lang: {
         label: 'Idioma',
@@ -815,7 +819,8 @@
         body: 'Este recurso non está dispoñible neste momento.',
         rangeStart: 'Disponible desde: {date}',
         rangeEnd: 'Ata: {date}',
-        rangeNoEnd: 'Sen data de fin'
+        rangeNoEnd: 'Sen data de fin',
+        countdown: 'Disponible en: {time}'
       },
       lang: {
         label: 'Idioma',
@@ -1146,7 +1151,8 @@
         body: 'Baliabidea ez dago eskuragarri une honetan.',
         rangeStart: 'Erabilgarri hemendik: {date}',
         rangeEnd: 'Hona arte: {date}',
-        rangeNoEnd: 'Amaiera-datarik gabe'
+        rangeNoEnd: 'Amaiera-datarik gabe',
+        countdown: 'Eskuragarri: {time}'
       },
       lang: {
         label: 'Hizkuntza',
@@ -1477,7 +1483,8 @@
         body: 'This resource is not available right now.',
         rangeStart: 'Available from: {date}',
         rangeEnd: 'Until: {date}',
-        rangeNoEnd: 'No end date'
+        rangeNoEnd: 'No end date',
+        countdown: 'Available in: {time}'
       },
       lang: {
         label: 'Language',
@@ -1808,7 +1815,8 @@
         body: 'Diese Ressource ist im Moment nicht verfügbar.',
         rangeStart: 'Verfügbar ab: {date}',
         rangeEnd: 'Bis: {date}',
-        rangeNoEnd: 'Kein Enddatum'
+        rangeNoEnd: 'Kein Enddatum',
+        countdown: 'Verfügbar in: {time}'
       },
       lang: {
         label: 'Sprache',
@@ -2664,6 +2672,18 @@
     }
   }
 
+  function formatCountdown(ms) {
+    var totalSeconds = Math.max(0, Math.ceil(ms / 1000));
+    var days = Math.floor(totalSeconds / 86400);
+    var remainder = totalSeconds % 86400;
+    var hours = Math.floor(remainder / 3600);
+    var minutes = Math.floor((remainder % 3600) / 60);
+    var seconds = remainder % 60;
+    var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+    var time = pad(hours) + ':' + pad(minutes) + ':' + pad(seconds);
+    return days > 0 ? (days + 'd ' + time) : time;
+  }
+
   function deriveZipBaseName(files) {
     if (!files || !files.length) return getZipDefaultName();
     var firstPath = files[0].path || '';
@@ -3162,6 +3182,14 @@
   function showRestrictionModal(restrictions) {
     if (ignoreRestrictionsForShare) return;
     if (!restrictModal) return;
+    if (restrictCountdownTimer) {
+      clearInterval(restrictCountdownTimer);
+      restrictCountdownTimer = null;
+    }
+    if (restrictionCountdown) {
+      restrictionCountdown.textContent = '';
+      restrictionCountdown.setAttribute('hidden', '');
+    }
     var lines = [];
     if (restrictions && restrictions.startAt) {
       var startText = formatRestrictionDate(restrictions.startAt);
@@ -3177,6 +3205,33 @@
       restrictRange.textContent = lines.join(' · ');
     }
     restrictModal.removeAttribute('hidden');
+
+    if (restrictions && restrictions.startAt && isRestrictionBeforeStart(restrictions)) {
+      var updateCountdown = function () {
+        var remaining = Date.parse(restrictions.startAt) - Date.now();
+        if (remaining <= 0) {
+          if (restrictCountdownTimer) {
+            clearInterval(restrictCountdownTimer);
+            restrictCountdownTimer = null;
+          }
+          restrictModal.setAttribute('hidden', '');
+          if (window.location.search.indexOf('url=') !== -1) {
+            var previewUrl = currentZipUrl || urlParam;
+            if (previewUrl) {
+              loadZip(previewUrl, { force: false, autoOpen: true });
+            }
+          }
+          return;
+        }
+        var countdownText = formatCountdown(remaining);
+        if (restrictionCountdown) {
+          restrictionCountdown.textContent = t('restrictionModal.countdown', { time: countdownText });
+          restrictionCountdown.removeAttribute('hidden');
+        }
+      };
+      updateCountdown();
+      restrictCountdownTimer = setInterval(updateCountdown, 1000);
+    }
   }
 
   function registerServiceWorker() {
