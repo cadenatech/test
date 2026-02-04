@@ -95,6 +95,7 @@
   var Zipper = window.Zipper || {};
   var HtmlPicker = window.HtmlPicker || {};
   var Storage = window.Storage || {};
+  var Manager = window.Manager || {};
   var restrictionSummary = document.querySelector('[data-restrict-summary]');
   var restrictionSummaryItems = document.querySelector('[data-restrict-summary-items]');
   var ignoreRestrictionsForShare = false;
@@ -315,49 +316,10 @@
     }
   }
 
-  function getManagerSort() {
-    try {
-      return localStorage.getItem(MANAGER_SORT_KEY) || MANAGER_SORT_DEFAULT;
-    } catch (err) {
-      return MANAGER_SORT_DEFAULT;
-    }
-  }
 
-  function setManagerSort(value) {
-    var sortValue = value || MANAGER_SORT_DEFAULT;
-    try {
-      localStorage.setItem(MANAGER_SORT_KEY, sortValue);
-    } catch (err) {}
-    if (managerSortSelect) {
-      managerSortSelect.value = sortValue;
-    }
-  }
 
-  function getManagerSortDir() {
-    try {
-      return localStorage.getItem(MANAGER_SORT_DIR_KEY) || MANAGER_SORT_DIR_DEFAULT;
-    } catch (err) {
-      return MANAGER_SORT_DIR_DEFAULT;
-    }
-  }
 
-  function setManagerSortDir(value) {
-    var dirValue = value === 'desc' ? 'desc' : 'asc';
-    try {
-      localStorage.setItem(MANAGER_SORT_DIR_KEY, dirValue);
-    } catch (err) {}
-    updateSortDirButton(dirValue);
-  }
 
-  function updateSortDirButton(dirValue) {
-    var button = document.querySelector('[data-manager-sort-dir]');
-    if (!button) return;
-    var isDesc = dirValue === 'desc';
-    button.setAttribute('data-i18n-tooltip', 'manager.sort.dirHelp');
-    button.textContent = isDesc ? '↓' : '↑';
-    button.setAttribute('aria-label', t(isDesc ? 'manager.sort.dirDesc' : 'manager.sort.dirAsc'));
-    button.setAttribute('data-sort-dir', isDesc ? 'desc' : 'asc');
-  }
 
   function getCleanupThreshold() {
     var value = getStoredNumber(CLEANUP_THRESHOLD_KEY, CLEANUP_THRESHOLD_DEFAULT);
@@ -430,6 +392,36 @@
   if (Zipper.init) {
     Zipper.init({ t: t });
   }
+  if (Manager.init) {
+    Manager.init({
+      t: t,
+      lang: currentLang,
+      storage: Storage,
+      restrictions: Restrictions,
+      ui: UI,
+      context: {
+        managerSortSelect: managerSortSelect,
+        managerSortDirButton: document.querySelector('[data-manager-sort-dir]'),
+        managerList: managerList,
+        storageUsed: storageUsed,
+        storageUsedPercent: storageUsedPercent,
+        storageTotal: storageTotal,
+        storageCount: storageCount,
+        MANAGER_SORT_KEY: MANAGER_SORT_KEY,
+        MANAGER_SORT_DIR_KEY: MANAGER_SORT_DIR_KEY,
+        MANAGER_SORT_DEFAULT: MANAGER_SORT_DEFAULT,
+        MANAGER_SORT_DIR_DEFAULT: MANAGER_SORT_DIR_DEFAULT,
+        formatBytes: formatBytes,
+        deriveTitleFromPath: deriveTitleFromPath,
+        buildShareLink: buildShareLink,
+        buildEmbedSnippet: buildEmbedSnippet,
+        normalizeZipUrl: normalizeZipUrl,
+        startTitleEdit: startTitleEdit,
+        getCleanupDays: getCleanupDays
+      }
+    });
+  }
+
   if (HtmlPicker.init) {
     HtmlPicker.init({
       modal: htmlModal,
@@ -512,7 +504,7 @@
     syncZipNameDefault();
     setCleanupThreshold(getCleanupThreshold());
     setCleanupDays(getCleanupDays());
-    updateSortDirButton(getManagerSortDir());
+    Manager.updateSortDirButton(Manager.getManagerSortDir());
     if (output && !currentShareLink) {
       output.textContent = t('main.output.placeholder');
     }
@@ -533,6 +525,35 @@
     applyRestrictionUiState();
     updateRestrictionDefaults();
     updateRestrictionSummary();
+    if (Manager.init) {
+      Manager.init({
+        t: t,
+        lang: currentLang,
+        storage: Storage,
+        restrictions: Restrictions,
+        ui: UI,
+        context: {
+          managerSortSelect: managerSortSelect,
+          managerSortDirButton: document.querySelector('[data-manager-sort-dir]'),
+          managerList: managerList,
+          storageUsed: storageUsed,
+          storageUsedPercent: storageUsedPercent,
+          storageTotal: storageTotal,
+          storageCount: storageCount,
+          MANAGER_SORT_KEY: MANAGER_SORT_KEY,
+          MANAGER_SORT_DIR_KEY: MANAGER_SORT_DIR_KEY,
+          MANAGER_SORT_DEFAULT: MANAGER_SORT_DEFAULT,
+          MANAGER_SORT_DIR_DEFAULT: MANAGER_SORT_DIR_DEFAULT,
+          formatBytes: formatBytes,
+          deriveTitleFromPath: deriveTitleFromPath,
+          buildShareLink: buildShareLink,
+          buildEmbedSnippet: buildEmbedSnippet,
+          normalizeZipUrl: normalizeZipUrl,
+          startTitleEdit: startTitleEdit,
+          getCleanupDays: getCleanupDays
+        }
+      });
+    }
     if (restrictionZipStatus) {
       restrictionZipStatus.textContent = t('zipper.restrict.status.ready');
     }
@@ -540,7 +561,7 @@
       loadingMessage.textContent = t('loading.message');
     }
     if (managerList) {
-      refreshManager();
+      Manager.refreshManager();
     }
   }
 
@@ -1394,206 +1415,9 @@
     });
   }
 
-  function cleanupOldSites() {
-    var cutoff = Date.now() - getCleanupDays() * 24 * 60 * 60 * 1000;
-    return Storage.getAllSites().then(function (sites) {
-      var oldIds = sites.filter(function (site) {
-        return site.updatedAt && site.updatedAt < cutoff;
-      }).map(function (site) { return site.id; });
-      if (!oldIds.length) return;
-      return Storage.deleteSitesSequential(oldIds);
-    });
-  }
 
-  function renderManagerList(sites) {
-    if (!managerList) return;
-    managerList.innerHTML = '';
-    if (!sites.length) {
-      var managerToolbar = document.querySelector('.manager-toolbar');
-      if (managerToolbar) {
-        managerToolbar.setAttribute('hidden', '');
-      }
-      var empty = document.createElement('p');
-      empty.textContent = t('manager.empty');
-      managerList.appendChild(empty);
-      return;
-    }
-    var managerToolbar = document.querySelector('.manager-toolbar');
-    if (managerToolbar) {
-      managerToolbar.removeAttribute('hidden');
-    }
-    var sortedSites = sortManagerSites(sites);
-    sortedSites.forEach(function (site) {
-      var restrictions = site.restrictions || null;
-      var canShare = Restrictions.allowShare(restrictions);
-      var canEmbed = Restrictions.allowEmbed(restrictions);
-      var canView = !Restrictions.isRestrictionBeforeStart(restrictions);
-      var canDownload = Restrictions.allowDownload(restrictions);
-      var item = document.createElement('div');
-      item.className = 'manager-item';
-      var info = document.createElement('div');
-      var title = document.createElement('div');
-      title.className = 'manager-item__title';
-      title.setAttribute('data-title', 'true');
-      var displayTitle = site.title || deriveTitleFromPath(site.indexPath) || site.url || t('manager.siteNoUrl');
-      title.textContent = displayTitle;
-      var meta = document.createElement('div');
-      meta.className = 'manager-item__meta';
-      var date = site.updatedAt ? new Date(site.updatedAt).toLocaleString(currentLang) : t('manager.noDate');
-      meta.textContent = formatBytes(site.totalBytes || 0) + ' · ' + date;
-      if (restrictions && restrictions.enabled) {
-        var startLabel = restrictions.startAt ? Restrictions.formatRestrictionDate(restrictions.startAt, currentLang) : '';
-        var endLabel = (!restrictions.neverExpires && restrictions.endAt) ? Restrictions.formatRestrictionDate(restrictions.endAt, currentLang) : '';
-        if (startLabel) {
-          var startBadge = document.createElement('span');
-          startBadge.className = 'manager-badge manager-badge--start';
-          startBadge.textContent = t('badges.opening', { date: startLabel });
-          meta.appendChild(startBadge);
-        }
-        if (endLabel) {
-          var endBadge = document.createElement('span');
-          endBadge.className = 'manager-badge manager-badge--end';
-          endBadge.textContent = t('badges.closing', { date: endLabel });
-          meta.appendChild(endBadge);
-        }
-        if (!startLabel && !endLabel) {
-          var genericBadge = document.createElement('span');
-          genericBadge.className = 'manager-badge';
-          genericBadge.textContent = t('badges.scheduled');
-          meta.appendChild(genericBadge);
-        }
-      }
-      info.appendChild(title);
-      if (site.url && displayTitle !== site.url) {
-        var urlLine = document.createElement('div');
-        urlLine.className = 'manager-item__url';
-        urlLine.textContent = site.url;
-        info.appendChild(urlLine);
-      }
-      info.appendChild(meta);
-      var actions = document.createElement('div');
-      actions.className = 'manager-item__actions';
-      var viewButton = document.createElement('button');
-      viewButton.type = 'button';
-      viewButton.className = 'icon-button';
-      viewButton.setAttribute('data-action', 'view');
-      viewButton.setAttribute('data-site-id', site.id);
-      viewButton.setAttribute('data-index-path', site.indexPath || '');
-      viewButton.setAttribute('aria-label', t('manager.actions.view'));
-      viewButton.setAttribute('data-tooltip', t('manager.actions.view'));
-      viewButton.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M1.5 12s3.5-7 10.5-7 10.5 7 10.5 7-3.5 7-10.5 7-10.5-7-10.5-7z"></path><circle cx="12" cy="12" r="3.5"></circle></svg>';
-      actions.appendChild(viewButton);
-      viewButton.disabled = !canView;
-      var shareButton = document.createElement('button');
-      shareButton.type = 'button';
-      shareButton.className = 'icon-button';
-      shareButton.setAttribute('data-action', 'share');
-      shareButton.setAttribute('data-zip-url', site.url || '');
-      shareButton.setAttribute('aria-label', t('manager.actions.share'));
-      shareButton.setAttribute('data-tooltip', t('manager.actions.share'));
-      shareButton.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><path d="M8.6 10.7l6.8-3.4"></path><path d="M8.6 13.3l6.8 3.4"></path></svg>';
-      actions.appendChild(shareButton);
-      shareButton.disabled = !site.url || !canShare;
-      var embedManagerButton = document.createElement('button');
-      embedManagerButton.type = 'button';
-      embedManagerButton.className = 'icon-button';
-      embedManagerButton.setAttribute('data-action', 'embed');
-      embedManagerButton.setAttribute('data-zip-url', site.url || '');
-      embedManagerButton.setAttribute('aria-label', t('manager.actions.embed'));
-      embedManagerButton.setAttribute('data-tooltip', t('manager.actions.embed'));
-      embedManagerButton.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M16 18l6-6-6-6"></path><path d="M8 6l-6 6 6 6"></path><path d="M14 4l-4 16"></path></svg>';
-      actions.appendChild(embedManagerButton);
-      embedManagerButton.disabled = !site.url || !canEmbed;
-      var editButton = document.createElement('button');
-      editButton.type = 'button';
-      editButton.className = 'icon-button';
-      editButton.setAttribute('data-action', 'edit');
-      editButton.setAttribute('data-site-id', site.id);
-      editButton.setAttribute('aria-label', t('manager.actions.edit'));
-      editButton.setAttribute('data-tooltip', t('manager.actions.edit'));
-      editButton.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"></path></svg>';
-      actions.appendChild(editButton);
-      var downloadButton = document.createElement('button');
-      downloadButton.type = 'button';
-      downloadButton.className = 'icon-button';
-      downloadButton.setAttribute('data-action', 'download');
-      downloadButton.setAttribute('data-zip-url', site.url || '');
-      downloadButton.setAttribute('aria-label', t('manager.actions.download'));
-      downloadButton.setAttribute('data-tooltip', t('manager.actions.download'));
-      downloadButton.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 3v10"></path><path d="M7 9l5 5 5-5"></path><path d="M5 21h14"></path></svg>';
-      actions.appendChild(downloadButton);
-      downloadButton.disabled = !site.url || !canDownload;
-      var delButton = document.createElement('button');
-      delButton.type = 'button';
-      delButton.className = 'icon-button';
-      delButton.setAttribute('data-action', 'delete');
-      delButton.setAttribute('data-site-id', site.id);
-      delButton.setAttribute('aria-label', t('common.delete'));
-      delButton.setAttribute('data-tooltip', t('common.delete'));
-      delButton.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 6h18"></path><path d="M8 6V4h8v2"></path><path d="M19 6l-1 14H6L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path></svg>';
-      actions.appendChild(delButton);
-      item.appendChild(info);
-      item.appendChild(actions);
-      managerList.appendChild(item);
-    });
-  }
 
-  function refreshManager() {
-    return Promise.all([Storage.getAllSites(), Storage.estimateStorage()]).then(function (result) {
-      var sites = result[0];
-      var estimate = result[1];
-      var expiredIds = sites.filter(function (site) {
-        return Restrictions.isRestrictionActive(site.restrictions) && Restrictions.isRestrictionExpired(site.restrictions);
-      }).map(function (site) { return site.id; });
-      if (expiredIds.length) {
-        return Storage.deleteSitesSequential(expiredIds).then(function () {
-          return refreshManager();
-        });
-      }
-      var totalBytes = sumSiteBytes(sites);
-      if (storageUsed) {
-        storageUsed.textContent = formatBytes(totalBytes);
-      }
-      if (storageUsedPercent) {
-        var quota = estimate && estimate.quota ? estimate.quota : 0;
-        if (quota) {
-          var percent = Math.min(100, Math.round((totalBytes / quota) * 100));
-          storageUsedPercent.textContent = percent + '%';
-        } else {
-          storageUsedPercent.textContent = '--';
-        }
-      }
-      if (storageTotal) {
-        storageTotal.textContent = estimate && estimate.quota ? formatBytes(estimate.quota) : '--';
-      }
-      if (storageCount) {
-        storageCount.textContent = String(sites.length);
-      }
-      renderManagerList(sites);
-    });
-  }
 
-  function sortManagerSites(sites) {
-    var key = getManagerSort();
-    var direction = getManagerSortDir();
-    var factor = direction === 'desc' ? -1 : 1;
-    var collator = new Intl.Collator(currentLang, { sensitivity: 'base', numeric: true });
-    return sites.slice().sort(function (a, b) {
-      if (key === 'date') {
-        var aDate = a.updatedAt || 0;
-        var bDate = b.updatedAt || 0;
-        return (aDate - bDate) * factor;
-      }
-      if (key === 'size') {
-        var aSize = a.totalBytes || 0;
-        var bSize = b.totalBytes || 0;
-        return (aSize - bSize) * factor;
-      }
-      var aTitle = a.title || deriveTitleFromPath(a.indexPath) || a.url || '';
-      var bTitle = b.title || deriveTitleFromPath(b.indexPath) || b.url || '';
-      return collator.compare(aTitle, bTitle) * factor;
-    });
-  }
 
   function closeActiveTitleEdit() {
     if (!activeTitleEdit) return;
@@ -1625,7 +1449,7 @@
         if (!site) return;
         site.title = value;
         return Storage.saveSite(site).then(function () {
-          refreshManager();
+          Manager.refreshManager();
         });
       }).finally(function () {
         closeActiveTitleEdit();
@@ -1658,7 +1482,7 @@
       panel.classList.toggle('is-active', isActive);
     });
     if (name === 'manager') {
-      refreshManager();
+      Manager.refreshManager();
     }
   }
 
@@ -2242,7 +2066,7 @@
                         UI.stopProgress();
                         UI.setLoading(false);
                       }
-                      refreshManager();
+                      Manager.refreshManager();
                       return { siteId: result.siteId, siteUrl: siteUrl };
                     });
                   });
@@ -2586,7 +2410,7 @@
       if (action === 'delete' && siteId) {
         button.classList.add('is-active');
         Storage.deleteSite(siteId).then(function () {
-          refreshManager();
+          Manager.refreshManager();
         }).finally(function () {
           button.classList.remove('is-active');
         });
@@ -2597,7 +2421,7 @@
           if (site && Restrictions.isRestrictionActive(site.restrictions) && !Restrictions.isRestrictionAllowedNow(site.restrictions)) {
             if (Restrictions.isRestrictionExpired(site.restrictions)) {
               return Storage.deleteSite(siteId).then(function () {
-                refreshManager();
+                Manager.refreshManager();
                 showRestrictionModal(site.restrictions);
               });
             }
@@ -2632,18 +2456,18 @@
   }
   var sortDirButton = document.querySelector('[data-manager-sort-dir]');
   if (managerSortSelect) {
-    setManagerSort(getManagerSort());
+    Manager.setManagerSort(Manager.getManagerSort());
     managerSortSelect.addEventListener('change', function () {
-      setManagerSort(managerSortSelect.value);
-      refreshManager();
+      Manager.setManagerSort(managerSortSelect.value);
+      Manager.refreshManager();
     });
   }
   if (sortDirButton) {
-    setManagerSortDir(getManagerSortDir());
+    Manager.setManagerSortDir(Manager.getManagerSortDir());
     sortDirButton.addEventListener('click', function () {
-      var nextDir = getManagerSortDir() === 'asc' ? 'desc' : 'asc';
-      setManagerSortDir(nextDir);
-      refreshManager();
+      var nextDir = Manager.getManagerSortDir() === 'asc' ? 'desc' : 'asc';
+      Manager.setManagerSortDir(nextDir);
+      Manager.refreshManager();
     });
   }
   if (cleanupThresholdInput) {
@@ -2654,16 +2478,16 @@
   if (cleanupDaysInput) {
     cleanupDaysInput.addEventListener('change', function () {
       setCleanupDays(cleanupDaysInput.value);
-      cleanupOldSites();
-      refreshManager();
+      Manager.cleanupOldSites();
+      Manager.refreshManager();
     });
   }
   if (resetCleanupButton) {
     resetCleanupButton.addEventListener('click', function () {
       setCleanupThreshold(CLEANUP_THRESHOLD_DEFAULT);
       setCleanupDays(CLEANUP_DAYS_DEFAULT);
-      cleanupOldSites();
-      refreshManager();
+      Manager.cleanupOldSites();
+      Manager.refreshManager();
     });
   }
   if (deleteAllButton) {
@@ -2675,7 +2499,7 @@
         var ids = sites.map(function (site) { return site.id; });
         return Storage.deleteSitesSequential(ids);
       }).then(function () {
-        refreshManager();
+        Manager.refreshManager();
       });
     });
   }
@@ -2823,8 +2647,8 @@
       }
     });
   }
-  cleanupOldSites();
-  refreshManager();
+  Manager.cleanupOldSites();
+  Manager.refreshManager();
   if (urlParam) {
     if (input) {
       input.value = urlParam;
