@@ -21,7 +21,7 @@
         subtitle: 'Autopublicación de recursos educativos desde tu almacenamiento en la nube.'
       },
       settings: {
-        title: 'Ajustes',
+        title: 'Ajustes de visibilidad',
         languageTitle: 'Idioma',
         restrictTitle: 'Acceso por fechas',
         restrictHint: 'Aquí puedes limitar cuándo se ve el recurso y qué acciones estarán disponibles en el gestor de recursos.',
@@ -358,10 +358,10 @@
         subtitle: 'Comparteix els teus recursos educatius des del teu emmagatzematge favorit al núvol.'
       },
       settings: {
-        title: 'Ajustos',
+        title: 'Ajustos de visibilitat',
         languageTitle: 'Idioma',
         restrictTitle: 'Accés per dates',
-        restrictHint: 'No limitis l’accés si no tens un bon motiu per fer-ho.',
+        restrictHint: 'Aquí pots limitar quan es veu el recurs i quines accions estaran disponibles al gestor de recursos.',
         restrictToggle: 'Limitar l’accés per dates',
         startLabel: 'Inici',
         endLabel: 'Fi',
@@ -693,10 +693,10 @@
         subtitle: 'Comparte os teus recursos educativos desde o teu almacenamento favorito na nube.'
       },
       settings: {
-        title: 'Axustes',
+        title: 'Axustes de visibilidade',
         languageTitle: 'Idioma',
         restrictTitle: 'Acceso por datas',
-        restrictHint: 'Non limites o acceso salvo que teñas un bo motivo para facelo.',
+        restrictHint: 'Aquí podes limitar cando se ve o recurso e que accións estarán dispoñibles no xestor de recursos.',
         restrictToggle: 'Limitar o acceso por datas',
         startLabel: 'Inicio',
         endLabel: 'Fin',
@@ -1028,10 +1028,10 @@
         subtitle: 'Partekatu zure hezkuntza-baliabideak hodeiko biltegiratze gogokoenetik.'
       },
       settings: {
-        title: 'Ezarpenak',
+        title: 'Ikusgarritasun ezarpenak',
         languageTitle: 'Hizkuntza',
         restrictTitle: 'Sarbidea daten bidez',
-        restrictHint: 'Ez mugatu sarbidea arrazoi onik ez baduzu.',
+        restrictHint: 'Hemen baliabidea noiz ikus daitekeen eta baliabide kudeatzailean zer ekintza egongo diren eskuragarri muga ditzakezu.',
         restrictToggle: 'Sarbidea daten bidez mugatu',
         startLabel: 'Hasiera',
         endLabel: 'Amaiera',
@@ -1363,10 +1363,10 @@
         subtitle: 'Share your educational resources from your favorite cloud storage.'
       },
       settings: {
-        title: 'Settings',
+        title: 'Visibility settings',
         languageTitle: 'Language',
         restrictTitle: 'Date access',
-        restrictHint: 'Do not limit access unless you have a good reason to do so.',
+        restrictHint: 'Here you can limit when the resource is visible and which actions are available in the resource manager.',
         restrictToggle: 'Limit access by dates',
         startLabel: 'Start',
         endLabel: 'End',
@@ -1699,10 +1699,10 @@
         subtitle: 'Teile deine Bildungsressourcen aus deinem bevorzugten Cloud-Speicher.'
       },
       settings: {
-        title: 'Einstellungen',
+        title: 'Sichtbarkeitseinstellungen',
         languageTitle: 'Sprache',
         restrictTitle: 'Zugriff nach Datum',
-        restrictHint: 'Begrenze den Zugriff nur, wenn du einen guten Grund dafür hast.',
+        restrictHint: 'Hier kannst du festlegen, wann die Ressource sichtbar ist und welche Aktionen im Ressourcenmanager verfügbar sind.',
         restrictToggle: 'Zugriff nach Datum begrenzen',
         startLabel: 'Start',
         endLabel: 'Ende',
