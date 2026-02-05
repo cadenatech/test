@@ -98,6 +98,7 @@
   var Manager = window.Manager || {};
   var RestrictionUI = window.RestrictionUI || {};
   var Share = window.Share || {};
+  var Nav = window.Nav || {};
   var restrictionSummary = document.querySelector('[data-restrict-summary]');
   var restrictionSummaryItems = document.querySelector('[data-restrict-summary-items]');
   var ignoreRestrictionsForShare = false;
@@ -394,6 +395,21 @@
   if (Zipper.init) {
     Zipper.init({ t: t });
   }
+  if (Nav.init) {
+    Nav.init({
+      manager: Manager,
+      context: {
+        tabButtons: tabButtons,
+        tabPanels: tabPanels,
+        publishChoice: publishChoice,
+        publishModules: publishModules,
+        setActivePublishModule: function (value) {
+          activePublishModule = value;
+        }
+      }
+    });
+  }
+
   if (Share.init) {
     Share.init({
       t: t,
@@ -592,7 +608,22 @@
     RestrictionUI.applyRestrictionUiState();
     RestrictionUI.updateRestrictionDefaults();
     RestrictionUI.updateRestrictionSummary();
-    if (Share.init) {
+    if (Nav.init) {
+    Nav.init({
+      manager: Manager,
+      context: {
+        tabButtons: tabButtons,
+        tabPanels: tabPanels,
+        publishChoice: publishChoice,
+        publishModules: publishModules,
+        setActivePublishModule: function (value) {
+          activePublishModule = value;
+        }
+      }
+    });
+  }
+
+  if (Share.init) {
     Share.init({
       t: t,
       ui: UI,
@@ -676,7 +707,22 @@
         }
       });
     }
-    if (Share.init) {
+    if (Nav.init) {
+    Nav.init({
+      manager: Manager,
+      context: {
+        tabButtons: tabButtons,
+        tabPanels: tabPanels,
+        publishChoice: publishChoice,
+        publishModules: publishModules,
+        setActivePublishModule: function (value) {
+          activePublishModule = value;
+        }
+      }
+    });
+  }
+
+  if (Share.init) {
     Share.init({
       t: t,
       ui: UI,
@@ -1439,39 +1485,7 @@
     });
   }
 
-  function setActiveTab(name) {
-    document.body.setAttribute('data-active-tab', name);
-    tabButtons.forEach(function (button) {
-      var isActive = button.getAttribute('data-tab') === name;
-      button.classList.toggle('is-active', isActive);
-      button.setAttribute('aria-selected', isActive ? 'true' : 'false');
-    });
-    tabPanels.forEach(function (panel) {
-      var isActive = panel.getAttribute('data-tab-panel') === name;
-      panel.classList.toggle('is-active', isActive);
-    });
-    if (name === 'manager') {
-      Manager.refreshManager();
-    }
-  }
 
-  function setPublishModule(name) {
-    if (!publishChoice || !publishModules.length) return;
-    activePublishModule = name || '';
-    if (activePublishModule) {
-      publishChoice.setAttribute('hidden', '');
-    } else {
-      publishChoice.removeAttribute('hidden');
-    }
-    publishModules.forEach(function (moduleEl) {
-      var isActive = moduleEl.getAttribute('data-publish-module') === activePublishModule;
-      if (isActive) {
-        moduleEl.removeAttribute('hidden');
-      } else {
-        moduleEl.setAttribute('hidden', '');
-      }
-    });
-  }
 
   function buildShareLink(zipUrl, fullView) {
     var base = appBase() + '?url=' + encodeURIComponent(zipUrl);
@@ -2290,10 +2304,10 @@
         var target = button.getAttribute('data-go-tab');
         if (target) {
           if (target === 'main' || target === 'zipper') {
-            setActiveTab('publish');
-            setPublishModule(target);
+            Nav.setActiveTab('publish');
+            Nav.setPublishModule(target);
           } else {
-            setActiveTab(target);
+            Nav.setActiveTab(target);
           }
         }
       });
@@ -2303,16 +2317,16 @@
     publishStartButtons.forEach(function (button) {
       button.addEventListener('click', function () {
         var target = button.getAttribute('data-publish-start');
-        setActiveTab('publish');
-        setPublishModule(target);
+        Nav.setActiveTab('publish');
+        Nav.setPublishModule(target);
       });
     });
   }
   if (publishBackButtons.length) {
     publishBackButtons.forEach(function (button) {
       button.addEventListener('click', function () {
-        setActiveTab('publish');
-        setPublishModule('');
+        Nav.setActiveTab('publish');
+        Nav.setPublishModule('');
       });
     });
   }
@@ -2321,8 +2335,8 @@
     goPublishButtons.forEach(function (button) {
       button.addEventListener('click', function () {
         var target = button.getAttribute('data-go-publish');
-        setActiveTab('publish');
-        setPublishModule(target);
+        Nav.setActiveTab('publish');
+        Nav.setPublishModule(target);
       });
     });
   }
@@ -2330,13 +2344,13 @@
     tabButtons.forEach(function (button) {
       button.addEventListener('click', function () {
         var tab = button.getAttribute('data-tab');
-        setActiveTab(tab);
+        Nav.setActiveTab(tab);
         if (tab === 'publish') {
-          setPublishModule('');
+          Nav.setPublishModule('');
         }
       });
     });
-    setActiveTab('publish');
+    Nav.setActiveTab('publish');
   }
   if (managerList) {
     managerList.addEventListener('click', function (event) {
@@ -2605,13 +2619,13 @@
       loadZip(urlParam, { force: false, autoOpen: false, embed: true, embedId: embedIdParam });
     } else {
       setEmbedMode(false, '');
-      setActiveTab('publish');
-      setPublishModule('main');
+      Nav.setActiveTab('publish');
+      Nav.setPublishModule('main');
       loadZip(urlParam, { force: false, autoOpen: autoOpen });
     }
   } else {
     setEmbedMode(false, '');
-    setPublishModule('');
+    Nav.setPublishModule('');
     UI.setLoading(false);
   }
 })();
