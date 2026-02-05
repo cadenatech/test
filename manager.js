@@ -82,6 +82,13 @@
   }
 
 
+  function sumSiteBytes(sites) {
+    return sites.reduce(function (sum, site) {
+      return sum + (site.totalBytes || 0);
+    }, 0);
+  }
+
+
   function renderManagerList(sites) {
     if (!ctx('managerList')) return;
     ctx('managerList').innerHTML = '';

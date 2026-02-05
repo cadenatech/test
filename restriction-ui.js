@@ -93,7 +93,13 @@
     if (!get('restrictionStartInput') || !get('restrictionEndInput')) return;
     var now = new Date();
     if (!get('restrictionStartInput').value) {
-      get('restrictionStartInput').value = formatLocalDateTime(now);
+      var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+      var localValue = now.getFullYear()
+        + '-' + pad(now.getMonth() + 1)
+        + '-' + pad(now.getDate())
+        + 'T' + pad(now.getHours())
+        + ':' + pad(now.getMinutes());
+      get('restrictionStartInput').value = localValue;
     }
     if (get('restrictionNoEnd') && get('restrictionNoEnd').checked) {
       get('restrictionEndInput').value = '';
