@@ -1243,10 +1243,10 @@ textarea:focus-visible {
   color: var(--ink-muted);
 }
 
-.settings-panel .setting-help {
+[data-main-settings-modal] .setting-help {
   font-size: 1rem;
   line-height: 1.45;
-  margin: 6px 0 14px;
+  margin: 8px 0 16px;
 }
 
 .restriction-countdown {
