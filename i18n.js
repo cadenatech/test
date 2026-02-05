@@ -24,7 +24,7 @@
         title: 'Ajustes',
         languageTitle: 'Idioma',
         restrictTitle: 'Acceso por fechas',
-        restrictHint: 'No limites el acceso a no ser que tengas un buen motivo para hacerlo.',
+        restrictHint: 'Aquí puedes limitar cuándo se ve el recurso y qué acciones estarán disponibles en el gestor de recursos.',
         restrictToggle: 'Limitar el acceso por fechas',
         startLabel: 'Inicio',
         endLabel: 'Fin',

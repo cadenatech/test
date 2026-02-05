@@ -1243,6 +1243,12 @@ textarea:focus-visible {
   color: var(--ink-muted);
 }
 
+.settings-panel .setting-help {
+  font-size: 1rem;
+  line-height: 1.45;
+  margin: 6px 0 14px;
+}
+
 .restriction-countdown {
   margin-top: 14px;
   font-size: 1.1rem;
