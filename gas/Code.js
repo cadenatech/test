@@ -28,6 +28,16 @@ function doGet(e) {
 
   var url = (e && e.parameter && e.parameter.url) ? e.parameter.url : '';
   var site = (e && e.parameter && e.parameter.site) ? e.parameter.site : '';
+  var short = (e && e.parameter && e.parameter.short) ? e.parameter.short : '';
+
+  if (short) {
+    if (short === '1' && url) {
+      return corsJsonOutput_(createShortLink_(url));
+    }
+    if (short && !url) {
+      return corsJsonOutput_(resolveShortLink_(short));
+    }
+  }
 
   if (url) {
     try {
@@ -679,6 +689,33 @@ function corsOutput_(output) {
     // Some output types might not support headers.
   }
   return output;
+}
+
+function computeShortToken_(value) {
+  var bytes = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, value, Utilities.Charset.UTF_8);
+  var token = Utilities.base64EncodeWebSafe(bytes).replace(/=+$/, '');
+  return token.slice(0, 12);
+}
+
+function createShortLink_(rawUrl) {
+  var url = normalizeDownloadUrl_(rawUrl);
+  var token = computeShortToken_(url);
+  var props = PropertiesService.getScriptProperties();
+  var key = 'short_' + token;
+  var stored = props.getProperty(key);
+  if (!stored) {
+    props.setProperty(key, url);
+  }
+  return { token: token };
+}
+
+function resolveShortLink_(token) {
+  var props = PropertiesService.getScriptProperties();
+  var url = props.getProperty('short_' + token);
+  if (!url) {
+    return { error: 'Token no encontrado' };
+  }
+  return { token: token, url: url };
 }
 
 function wantsBundle_(e) {

@@ -1496,6 +1496,73 @@
     return base;
   }
 
+  var shortLinkCache = {};
+  var shortResolveCache = {};
+
+  function buildShortShareLink(token, fullView) {
+    var base = appBase() + '?key=' + encodeURIComponent(token);
+    if (fullView) {
+      base += '&view=full';
+    }
+    return base;
+  }
+
+  function createShortToken(zipUrl) {
+    if (!GAS_WEBAPP_URL) {
+      return Promise.reject(new Error(t('error.configMissing')));
+    }
+    if (shortLinkCache[zipUrl]) {
+      return Promise.resolve(shortLinkCache[zipUrl]);
+    }
+    var endpoint = GAS_WEBAPP_URL + '?short=1&format=json&url=' + encodeURIComponent(zipUrl);
+    return fetch(endpoint, { method: 'GET' })
+      .then(function (resp) { return resp.json(); })
+      .then(function (data) {
+        if (!data || !data.token) {
+          throw new Error(t('error.loadZip'));
+        }
+        shortLinkCache[zipUrl] = data.token;
+        return data.token;
+      });
+  }
+
+  function resolveShortToken(token) {
+    if (!GAS_WEBAPP_URL) {
+      return Promise.reject(new Error(t('error.configMissing')));
+    }
+    if (shortResolveCache[token]) {
+      return Promise.resolve(shortResolveCache[token]);
+    }
+    var endpoint = GAS_WEBAPP_URL + '?short=' + encodeURIComponent(token) + '&format=json';
+    return fetch(endpoint, { method: 'GET' })
+      .then(function (resp) { return resp.json(); })
+      .then(function (data) {
+        if (!data || !data.url) {
+          throw new Error(t('error.loadZip'));
+        }
+        shortResolveCache[token] = data.url;
+        return data.url;
+      });
+  }
+
+  function buildShareLinkAsync(zipUrl, fullView) {
+    if (!zipUrl) return Promise.resolve('');
+    return createShortToken(zipUrl)
+      .then(function (token) {
+        return buildShortShareLink(token, fullView);
+      })
+      .catch(function () {
+        return buildShareLink(zipUrl, fullView);
+      });
+  }
+
+  function refreshShareLink(zipUrl) {
+    return buildShareLinkAsync(zipUrl, true).then(function (shareLink) {
+      Share.setShareLink(shareLink);
+      return shareLink;
+    });
+  }
+
   function createEmbedId() {
     return 'vwz-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 7);
   }
@@ -1852,8 +1919,7 @@
       })
       .then(function (result) {
         currentZipUrl = effectiveZipUrl;
-        var shareLink = buildShareLink(effectiveZipUrl, true);
-        Share.setShareLink(shareLink);
+        refreshShareLink(effectiveZipUrl);
 
         if (result.cached && !opts.force) {
           if (result.site && Restrictions.isRestrictionActive(result.site.restrictions) && !Restrictions.isRestrictionAllowedNow(result.site.restrictions)) {
@@ -2297,6 +2363,7 @@
 
   var params = new URLSearchParams(window.location.search);
   var urlParam = params.get('url');
+  var shortParam = params.get('key') || params.get('short') || params.get('s');
   if (urlParam) {
     ignoreRestrictionsForShare = false;
   }
@@ -2400,7 +2467,11 @@
         return;
       }
       if (action === 'share' && zipUrl) {
-        Share.copyText(buildShareLink(zipUrl, true), button);
+        buildShareLinkAsync(zipUrl, true).then(function (shareLink) {
+          Share.copyText(shareLink, button);
+        }).catch(function () {
+          Share.copyText(buildShareLink(zipUrl, true), button);
+        });
         return;
       }
       if (action === 'embed' && zipUrl) {
@@ -2613,11 +2684,9 @@
       }
     });
   }
-  Manager.cleanupOldSites();
-  Manager.refreshManager();
-  if (urlParam) {
+  function startFromUrl(resolvedUrl) {
     if (input) {
-      input.value = urlParam;
+      input.value = resolvedUrl;
     }
     var viewParam = (params.get('view') || '').toLowerCase();
     var embedParam = (params.get('embed') || '').toLowerCase();
@@ -2626,13 +2695,27 @@
     if (embedActive) {
       var embedIdParam = params.get('embedId') || '';
       setEmbedMode(true, embedIdParam);
-      loadZip(urlParam, { force: false, autoOpen: false, embed: true, embedId: embedIdParam });
+      loadZip(resolvedUrl, { force: false, autoOpen: false, embed: true, embedId: embedIdParam });
     } else {
       setEmbedMode(false, '');
       Nav.setActiveTab('publish');
       Nav.setPublishModule('main');
-      loadZip(urlParam, { force: false, autoOpen: autoOpen });
+      loadZip(resolvedUrl, { force: false, autoOpen: autoOpen });
     }
+  }
+
+  Manager.cleanupOldSites();
+  Manager.refreshManager();
+  if (!urlParam && shortParam) {
+    UI.setLoading(true);
+    resolveShortToken(shortParam).then(function (resolvedUrl) {
+      startFromUrl(resolvedUrl);
+    }).catch(function (err) {
+      UI.setLoading(false);
+      UI.setStatus(formatUserError(err));
+    });
+  } else if (urlParam) {
+    startFromUrl(urlParam);
   } else {
     setEmbedMode(false, '');
     Nav.setPublishModule('');

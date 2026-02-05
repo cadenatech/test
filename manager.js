@@ -124,7 +124,8 @@
       var meta = document.createElement('div');
       meta.className = 'manager-item__meta';
       var date = site.updatedAt ? new Date(site.updatedAt).toLocaleString(currentLang) : t('manager.noDate');
-      meta.textContent = ctx('formatBytes')(site.totalBytes || 0) + ' · ' + date;
+      var savedLabel = t('manager.savedAt') || '';
+      meta.textContent = ctx('formatBytes')(site.totalBytes || 0) + ' · ' + (savedLabel ? (savedLabel + ' ' + date) : date);
       if (restrictions && restrictions.enabled) {
         var startLabel = restrictions.startAt ? Restrictions.formatRestrictionDate(restrictions.startAt, currentLang) : '';
         var endLabel = (!restrictions.neverExpires && restrictions.endAt) ? Restrictions.formatRestrictionDate(restrictions.endAt, currentLang) : '';
@@ -148,12 +149,7 @@
         }
       }
       info.appendChild(title);
-      if (site.url && displayTitle !== site.url) {
-        var urlLine = document.createElement('div');
-        urlLine.className = 'manager-item__url';
-        urlLine.textContent = site.url;
-        info.appendChild(urlLine);
-      }
+      // Always hide original URL in manager list for privacy.
       info.appendChild(meta);
       var actions = document.createElement('div');
       actions.className = 'manager-item__actions';
@@ -269,6 +265,13 @@
         var aDate = a.updatedAt || 0;
         var bDate = b.updatedAt || 0;
         return (aDate - bDate) * factor;
+      }
+      if (key === 'start') {
+        var aStart = a.restrictions && a.restrictions.startAt ? Date.parse(a.restrictions.startAt) : 0;
+        var bStart = b.restrictions && b.restrictions.startAt ? Date.parse(b.restrictions.startAt) : 0;
+        if (isNaN(aStart)) aStart = 0;
+        if (isNaN(bStart)) bStart = 0;
+        return (aStart - bStart) * factor;
       }
       if (key === 'size') {
         var aSize = a.totalBytes || 0;
