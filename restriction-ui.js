@@ -215,10 +215,10 @@
     updateShareRestrictionSummary(getValue('currentRestrictions'));
     if (getValue('ignoreRestrictionsForShare')) return;
     if (get('copyButton')) {
-      get('copyButton').disabled = !getValue('currentShareLink') || !Restrictions.allowShare(getValue('currentRestrictions'));
+      get('copyButton').disabled = !getValue('currentShareLink');
     }
     if (get('embedButton')) {
-      get('embedButton').disabled = !getValue('currentShareLink') || !Restrictions.allowEmbed(getValue('currentRestrictions'));
+      get('embedButton').disabled = !getValue('currentShareLink');
     }
   }
 
