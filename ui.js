@@ -51,6 +51,15 @@
     }
   }
 
+  function setLoadingProgressVisible(visible) {
+    if (!els.loadingBarWrap) return;
+    if (visible) {
+      els.loadingBarWrap.removeAttribute('hidden');
+    } else {
+      els.loadingBarWrap.setAttribute('hidden', '');
+    }
+  }
+
   function setProgress(value) {
     if (!els.loadingBar) return;
     var percent = Math.max(0, Math.min(100, value));
@@ -140,6 +149,7 @@
     setLoadingMessage: setLoadingMessage,
     setLoadingEta: setLoadingEta,
     setLoadingEtaVisible: setLoadingEtaVisible,
+    setLoadingProgressVisible: setLoadingProgressVisible,
     setProgress: setProgress,
     startProgress: startProgress,
     stopProgress: stopProgress,

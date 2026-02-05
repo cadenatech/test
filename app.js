@@ -109,6 +109,7 @@
       loadingScreen: loadingScreen,
       loadingMessage: loadingMessage,
       loadingBar: loadingBar,
+      loadingBarWrap: document.querySelector('[data-loading-bar-wrap]'),
       loadingEta: loadingEta,
       output: output,
       uploadStatus: uploadStatus,
@@ -1755,6 +1756,15 @@
 
 
   function fetchZipBundle(zipUrl) {
+    if (!window.Downloads) {
+      throw new Error('Download helper missing');
+    }
+    if (Downloads.init) {
+      Downloads.init({ ui: UI, gasUrl: GAS_WEBAPP_URL, t: t, base64ToBytes: base64ToBytes });
+    }
+    if (Downloads.fetchZipBundle) {
+      return Downloads.fetchZipBundle(zipUrl);
+    }
     if (Downloads.fetchZipBundleChunked) {
       return Downloads.fetchZipBundleChunked(zipUrl);
     }

@@ -7,6 +7,7 @@
         message: 'Preparando...',
         eta: 'Tiempo estimado de descarga: --',
         etaPrefix: 'Tiempo estimado de descarga: ',
+        downloadedPrefix: 'Descargado: ',
         note: 'Las siguientes veces la visualización será instantánea.'
       },
       header: {
@@ -302,7 +303,7 @@
           + '<div class="about-section"><h3>Qué funciona y qué puede fallar</h3><ul><li>Funciona con webs estáticas (HTML, CSS, imágenes, audio, vídeo, PDF...).</li><li>No funciona con webs que requieren servidor (formularios con BD, PHP, etc.).</li><li>Google Drive limita descargas directas de archivos grandes (~25 MB).</li></ul></div>'
       },
       error: {
-        driveTooLarge: 'El archivo es demasiado grande y Google Drive limita las descargas.',
+        driveTooLarge: 'El archivo es demasiado grande y Google Drive limita las descargas. Intenta usando Nextcloud, Dropbox u otro servicio.',
         loadZip: 'No se pudo cargar el ZIP.',
         restricted: 'Este recurso ya no está disponible por las restricciones de fecha.',
         embedNotAllowed: 'La inserción en web no está permitida para este recurso.',
@@ -341,6 +342,7 @@
         message: 'Preparant...',
         eta: 'Temps estimat de descàrrega: --',
         etaPrefix: 'Temps estimat de descàrrega: ',
+        downloadedPrefix: 'Descarregat: ',
         note: 'Les següents vegades la visualització serà instantània.'
       },
       header: {
@@ -634,7 +636,7 @@
           + '<div class="about-section"><h3>Què funciona i què pot fallar</h3><ul><li>Funciona amb webs estàtiques (HTML, CSS, imatges, àudio, vídeo, PDF...).</li><li>No funciona amb webs que requereixen servidor (formularis amb BD, PHP, etc.).</li><li>Google Drive limita les descàrregues directes d’arxius grans (~25 MB).</li></ul></div>'
       },
       error: {
-        driveTooLarge: 'El fitxer és massa gran i Google Drive limita les descàrregues.',
+        driveTooLarge: 'El fitxer és massa gran i Google Drive limita les descàrregues. Prova amb Nextcloud, Dropbox o un altre servei.',
         loadZip: 'No s’ha pogut carregar el ZIP.',
         restricted: 'Aquest recurs ja no està disponible per les restriccions de data.',
         embedNotAllowed: 'La inserció en web no està permesa per a aquest recurs.',
@@ -673,6 +675,7 @@
         message: 'Preparando...',
         eta: 'Tempo estimado de descarga: --',
         etaPrefix: 'Tempo estimado de descarga: ',
+        downloadedPrefix: 'Descargado: ',
         note: 'As seguintes veces a visualización será instantánea.'
       },
       header: {
@@ -966,7 +969,7 @@
           + '<div class="about-section"><h3>Que funciona e que pode fallar</h3><ul><li>Funciona con webs estáticas (HTML, CSS, imaxes, audio, vídeo, PDF...).</li><li>Non funciona con webs que requiren servidor (formularios con BD, PHP, etc.).</li><li>Google Drive limita descargas directas de ficheiros grandes (~25 MB).</li></ul></div>'
       },
       error: {
-        driveTooLarge: 'O ficheiro é demasiado grande e Google Drive limita as descargas.',
+        driveTooLarge: 'O ficheiro é demasiado grande e Google Drive limita as descargas. Proba con Nextcloud, Dropbox ou outro servizo.',
         loadZip: 'Non se puido cargar o ZIP.',
         restricted: 'Este recurso xa non está dispoñible polas restricións de data.',
         embedNotAllowed: 'A inserción en web non está permitida para este recurso.',
@@ -1005,6 +1008,7 @@
         message: 'Prestatzen...',
         eta: 'Deskargaren denbora estimatua: --',
         etaPrefix: 'Deskargaren denbora estimatua: ',
+        downloadedPrefix: 'Deskargatuta: ',
         note: 'Hurrengo aldietan bistaratzea berehalakoa izango da.'
       },
       header: {
@@ -1298,7 +1302,7 @@
           + '<div class="about-section"><h3>Zer dabil eta zer huts egin dezake</h3><ul><li>Web estatikoekin dabil (HTML, CSS, irudiak, audioa, bideoa, PDF...).</li><li>Ez dabil zerbitzaria behar duten webekin (DBko formularioak, PHP, etab.).</li><li>Google Drivek fitxategi handien deskarga zuzena mugatzen du (~25 MB).</li></ul></div>'
       },
       error: {
-        driveTooLarge: 'Fitxategia handiegia da eta Google Drivek deskargak mugatzen ditu.',
+        driveTooLarge: 'Fitxategia handiegia da eta Google Drivek deskargak mugatzen ditu. Saiatu Nextcloud, Dropbox edo beste zerbitzu batekin.',
         loadZip: 'Ezin izan da ZIPa kargatu.',
         restricted: 'Baliabide hau ez dago eskuragarri data-murrizketengatik.',
         embedNotAllowed: 'Web-ean txertatzea ez dago baimenduta baliabide honetarako.',
@@ -1337,6 +1341,7 @@
         message: 'Preparing...',
         eta: 'Estimated download time: --',
         etaPrefix: 'Estimated download time: ',
+        downloadedPrefix: 'Downloaded: ',
         note: 'Next times, viewing will be instant.'
       },
       header: {
@@ -1631,7 +1636,7 @@
           + '<div class="about-section"><h3>What works and what may fail</h3><ul><li>Works with static websites (HTML, CSS, images, audio, video, PDF...).</li><li>Does not work with sites that require a server (database forms, PHP, etc.).</li><li>Google Drive limits direct downloads of large files (~25 MB).</li></ul></div>'
       },
       error: {
-        driveTooLarge: 'The file is too large and Google Drive limits downloads.',
+        driveTooLarge: 'The file is too large and Google Drive limits downloads. Try Nextcloud, Dropbox, or another service.',
         loadZip: 'Could not load the ZIP.',
         restricted: 'This resource is no longer available due to date restrictions.',
         embedNotAllowed: 'Embedding is not allowed for this resource.',
@@ -1670,6 +1675,7 @@
         message: 'Vorbereiten...',
         eta: 'Geschätzte Downloadzeit: --',
         etaPrefix: 'Geschätzte Downloadzeit: ',
+        downloadedPrefix: 'Heruntergeladen: ',
         note: 'Danach ist die Anzeige beim nächsten Mal sofort.'
       },
       header: {
@@ -1964,7 +1970,7 @@
           + '<div class="about-section"><h3>Was funktioniert und was scheitern kann</h3><ul><li>Funktioniert mit statischen Webseiten (HTML, CSS, Bilder, Audio, Video, PDF...).</li><li>Funktioniert nicht mit Seiten, die einen Server benötigen (DB-Formulare, PHP usw.).</li><li>Google Drive begrenzt direkte Downloads großer Dateien (~25 MB).</li></ul></div>'
       },
       error: {
-        driveTooLarge: 'Die Datei ist zu groß und Google Drive begrenzt Downloads.',
+        driveTooLarge: 'Die Datei ist zu groß und Google Drive begrenzt Downloads. Versuche es mit Nextcloud, Dropbox oder einem anderen Dienst.',
         loadZip: 'ZIP konnte nicht geladen werden.',
         restricted: 'Diese Ressource ist aufgrund der Datumsbeschränkung nicht mehr verfügbar.',
         embedNotAllowed: 'Einbetten ist für diese Ressource nicht erlaubt.',
