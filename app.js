@@ -97,6 +97,7 @@
   var Storage = window.Storage || {};
   var Manager = window.Manager || {};
   var RestrictionUI = window.RestrictionUI || {};
+  var Share = window.Share || {};
   var restrictionSummary = document.querySelector('[data-restrict-summary]');
   var restrictionSummaryItems = document.querySelector('[data-restrict-summary-items]');
   var ignoreRestrictionsForShare = false;
@@ -393,6 +394,29 @@
   if (Zipper.init) {
     Zipper.init({ t: t });
   }
+  if (Share.init) {
+    Share.init({
+      t: t,
+      ui: UI,
+      restrictions: Restrictions,
+      context: {
+        output: output,
+        copyButton: copyButton,
+        embedButton: embedButton,
+        openLink: openLink,
+        stepThree: stepThree,
+        currentShareLink: function (value) {
+          if (arguments.length) {
+            currentShareLink = value;
+          }
+          return currentShareLink;
+        },
+        currentRestrictions: function () { return currentRestrictions; },
+        isEmbedMode: function () { return isEmbedMode; }
+      }
+    });
+  }
+
   if (RestrictionUI.init) {
     RestrictionUI.init({
       t: t,
@@ -568,7 +592,30 @@
     RestrictionUI.applyRestrictionUiState();
     RestrictionUI.updateRestrictionDefaults();
     RestrictionUI.updateRestrictionSummary();
-    if (RestrictionUI.init) {
+    if (Share.init) {
+    Share.init({
+      t: t,
+      ui: UI,
+      restrictions: Restrictions,
+      context: {
+        output: output,
+        copyButton: copyButton,
+        embedButton: embedButton,
+        openLink: openLink,
+        stepThree: stepThree,
+        currentShareLink: function (value) {
+          if (arguments.length) {
+            currentShareLink = value;
+          }
+          return currentShareLink;
+        },
+        currentRestrictions: function () { return currentRestrictions; },
+        isEmbedMode: function () { return isEmbedMode; }
+      }
+    });
+  }
+
+  if (RestrictionUI.init) {
     RestrictionUI.init({
       t: t,
       lang: currentLang,
@@ -629,7 +676,30 @@
         }
       });
     }
-    if (RestrictionUI.init) {
+    if (Share.init) {
+    Share.init({
+      t: t,
+      ui: UI,
+      restrictions: Restrictions,
+      context: {
+        output: output,
+        copyButton: copyButton,
+        embedButton: embedButton,
+        openLink: openLink,
+        stepThree: stepThree,
+        currentShareLink: function (value) {
+          if (arguments.length) {
+            currentShareLink = value;
+          }
+          return currentShareLink;
+        },
+        currentRestrictions: function () { return currentRestrictions; },
+        isEmbedMode: function () { return isEmbedMode; }
+      }
+    });
+  }
+
+  if (RestrictionUI.init) {
       RestrictionUI.init({
         t: t,
         lang: currentLang,
@@ -703,25 +773,6 @@
   }
 
 
-  function setShareLink(link) {
-    currentShareLink = link || '';
-    output.textContent = currentShareLink || t('main.output.placeholder');
-    if (copyButton) {
-      copyButton.disabled = !currentShareLink || !Restrictions.allowShare(currentRestrictions);
-    }
-    if (embedButton) {
-      embedButton.disabled = !currentShareLink || !Restrictions.allowEmbed(currentRestrictions);
-    }
-    if (openLink) {
-      openLink.href = currentShareLink || '#';
-      openLink.setAttribute('aria-disabled', currentShareLink ? 'false' : 'true');
-    }
-    if (currentShareLink && stepThree && !isEmbedMode) {
-      stepThree.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      stepThree.setAttribute('tabindex', '-1');
-      stepThree.focus({ preventScroll: true });
-    }
-  }
 
 
 
@@ -1778,7 +1829,7 @@
       .then(function (result) {
         currentZipUrl = effectiveZipUrl;
         var shareLink = buildShareLink(effectiveZipUrl, true);
-        setShareLink(shareLink);
+        Share.setShareLink(shareLink);
 
         if (result.cached && !opts.force) {
           if (result.site && Restrictions.isRestrictionActive(result.site.restrictions) && !Restrictions.isRestrictionAllowedNow(result.site.restrictions)) {
@@ -2000,11 +2051,11 @@
       .catch(function (err) {
         var message = formatUserError(err);
         if (opts.embed) {
-          setShareLink('');
+          Share.setShareLink('');
           showEmbedFallback(effectiveZipUrl, message);
           return;
         }
-        setShareLink('');
+        Share.setShareLink('');
         currentRestrictions = null;
         RestrictionUI.applyRestrictionsToActions(currentRestrictions);
         if (!err || !err.skipStatus) {
@@ -2020,40 +2071,13 @@
       });
   }
 
-  function copyText(value, sourceButton) {
-    if (!value) return;
-    var done = function () {
-      if (sourceButton) {
-        UI.showInlineToast(sourceButton, t('status.copySuccess'));
-      } else {
-        UI.flashMessage(t('status.copySuccess'));
-      }
-    };
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(value).then(done, done);
-      return;
-    }
-    var textarea = document.createElement('textarea');
-    textarea.value = value;
-    textarea.setAttribute('readonly', '');
-    textarea.style.position = 'absolute';
-    textarea.style.left = '-9999px';
-    document.body.appendChild(textarea);
-    textarea.select();
-    try {
-      document.execCommand('copy');
-      done();
-    } finally {
-      document.body.removeChild(textarea);
-    }
-  }
 
   if (copyButton) {
     copyButton.addEventListener('click', function () {
       if (!currentShareLink) {
         return;
       }
-      copyText(currentShareLink);
+      Share.copyText(currentShareLink);
     });
   }
 
@@ -2086,7 +2110,7 @@
       if (!embedCode || !embedCode.value) {
         return;
       }
-      copyText(embedCode.value, embedCopyButton);
+      Share.copyText(embedCode.value, embedCopyButton);
     });
   }
 
@@ -2352,11 +2376,11 @@
         return;
       }
       if (action === 'share' && zipUrl) {
-        copyText(buildShareLink(zipUrl, true), button);
+        Share.copyText(buildShareLink(zipUrl, true), button);
         return;
       }
       if (action === 'embed' && zipUrl) {
-        copyText(buildEmbedSnippet(zipUrl), button);
+        Share.copyText(buildEmbedSnippet(zipUrl), button);
         return;
       }
       if (action === 'download' && zipUrl) {
@@ -2556,7 +2580,7 @@
         if (!reactPrompt || !reactPrompt.value) {
           return;
         }
-        copyText(reactPrompt.value, reactCopyButton);
+        Share.copyText(reactPrompt.value, reactCopyButton);
       });
     }
     document.addEventListener('keydown', function (event) {
