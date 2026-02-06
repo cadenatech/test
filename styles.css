@@ -1684,6 +1684,31 @@ textarea:focus-visible {
   overflow: auto;
 }
 
+.modal__card--help {
+  width: 720px;
+  max-width: min(720px, 96vw);
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal__card--help .modal__header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--surface);
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0;
+}
+
+.modal__card--help .modal__content {
+  padding: 18px 20px 22px;
+  overflow: auto;
+  max-height: min(740px, calc(100vh - 210px));
+}
+
 .modal__card--narrow {
   width: fit-content;
   max-width: 92vw;
@@ -1705,6 +1730,11 @@ textarea:focus-visible {
 .modal__close {
   border: none;
   background: none;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
   font-size: 1.5rem;
   line-height: 1;
   cursor: pointer;
@@ -1735,12 +1765,65 @@ textarea:focus-visible {
 }
 
 .about-guide {
-  display: grid;
-  gap: 14px;
+  color: var(--ink);
+  font-size: 0.98rem;
+  line-height: 1.55;
 }
 
-.about-guide > p {
+.about-guide p {
+  margin: 10px 0;
+}
+
+.about-guide a {
+  color: var(--accent);
+}
+
+.about-index {
+  margin: 12px 0 16px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: #f8fafc;
+}
+
+.about-index__title {
+  margin: 0 0 8px;
+  font-weight: 800;
+  color: var(--ink);
+  font-size: 0.95rem;
+}
+
+.about-index ul {
   margin: 0;
+  padding-left: 18px;
+}
+
+.about-section-title {
+  margin: 18px 0 8px;
+  font-size: 1.05rem;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.about-subtitle {
+  margin: 14px 0 6px;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.about-steps {
+  margin: 8px 0 0 18px;
+}
+
+.about-note {
+  margin: 10px 0 0;
+  padding: 10px 12px;
+  border-left: 4px solid rgba(37, 99, 235, 0.35);
+  background: #eff6ff;
+  border-radius: 10px;
+  color: var(--ink);
 }
 
 .about-guide > :first-child {

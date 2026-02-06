@@ -2641,17 +2641,95 @@
     });
   }
   if (aboutOpen && aboutModal) {
-    aboutOpen.addEventListener('click', function () {
+    var aboutDialog = aboutModal.querySelector('[role="dialog"]') || aboutModal;
+    var aboutLastFocus = null;
+
+    function getFocusableElements(container) {
+      if (!container) return [];
+      return Array.prototype.slice.call(container.querySelectorAll(
+        'a[href],button:not([disabled]),textarea:not([disabled]),input:not([disabled]),select:not([disabled]),[tabindex]:not([tabindex="-1"])'
+      )).filter(function (el) {
+        return !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length);
+      });
+    }
+
+    function closeAboutModal() {
+      if (aboutModal.hasAttribute('hidden')) return;
+      aboutModal.setAttribute('hidden', '');
+      if (aboutLastFocus && aboutLastFocus.focus) {
+        try { aboutLastFocus.focus(); } catch (e) { /* ignore */ }
+      }
+      aboutLastFocus = null;
+    }
+
+    function openAboutModal() {
+      aboutLastFocus = document.activeElement;
       aboutModal.removeAttribute('hidden');
+      var title = aboutModal.querySelector('#about-title');
+      if (title && title.focus) {
+        try { title.focus(); } catch (e) { /* ignore */ }
+      }
+    }
+
+    aboutOpen.addEventListener('click', function () {
+      openAboutModal();
     });
+
     aboutCloseButtons.forEach(function (button) {
       button.addEventListener('click', function () {
-        aboutModal.setAttribute('hidden', '');
+        closeAboutModal();
       });
     });
-    document.addEventListener('keydown', function (event) {
+
+    aboutModal.addEventListener('keydown', function (event) {
+      if (aboutModal.hasAttribute('hidden')) return;
       if (event.key === 'Escape') {
-        aboutModal.setAttribute('hidden', '');
+        event.preventDefault();
+        closeAboutModal();
+        return;
+      }
+      if (event.key !== 'Tab') return;
+
+      var focusables = getFocusableElements(aboutDialog);
+      if (!focusables.length) return;
+
+      var first = focusables[0];
+      var last = focusables[focusables.length - 1];
+      var active = document.activeElement;
+
+      if (!aboutDialog.contains(active)) {
+        event.preventDefault();
+        first.focus();
+        return;
+      }
+
+      if (event.shiftKey) {
+        if (active === first) {
+          event.preventDefault();
+          last.focus();
+        }
+        return;
+      }
+
+      if (active === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+
+    // Internal navigation inside the help dialog, without changing the URL hash.
+    aboutModal.addEventListener('click', function (event) {
+      var link = event.target && event.target.closest ? event.target.closest('[data-help-nav] a[href^="#"]') : null;
+      if (!link) return;
+      var href = link.getAttribute('href') || '';
+      var id = href.slice(1);
+      if (!id) return;
+      var target = document.getElementById(id);
+      if (!target) return;
+      event.preventDefault();
+      try { target.scrollIntoView({ block: 'start', behavior: 'smooth' }); } catch (e) { target.scrollIntoView(true); }
+      if (target.focus) {
+        try { target.focus(); } catch (e) { /* ignore */ }
       }
     });
   }
