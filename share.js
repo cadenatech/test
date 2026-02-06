@@ -36,10 +36,13 @@
       get('output').textContent = getValue('currentShareLink') || t('main.output.placeholder');
     }
     if (get('copyButton')) {
-      get('copyButton').disabled = !getValue('currentShareLink') || !Restrictions.allowShare(getValue('currentRestrictions'));
+      // In the "share" step, the author must always be able to copy the generated link.
+      // Restrictions are enforced when opening the link, not when distributing it.
+      get('copyButton').disabled = !getValue('currentShareLink');
     }
     if (get('embedButton')) {
-      get('embedButton').disabled = !getValue('currentShareLink') || !Restrictions.allowEmbed(getValue('currentRestrictions'));
+      // Same rationale as copy: embedding can be restricted at runtime, but the snippet should be obtainable.
+      get('embedButton').disabled = !getValue('currentShareLink');
     }
     if (get('openLink')) {
       get('openLink').href = getValue('currentShareLink') || '#';
