@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;600;800&family=Spectral:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=3">
+  <link rel="stylesheet" href="styles.css?v=4">
 </head>
 <body>
 
@@ -32,16 +32,16 @@
           <p class="header-subtitle" data-i18n="header.subtitle">Autopublicación de recursos educativos desde tu almacenamiento en la nube.</p>
         </div>
         <div class="title-actions">
-          <button class="icon-button" type="button" data-lang-open data-i18n-aria-label="header.language" data-i18n-tooltip="header.languageHint">
-            <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="2" y1="12" x2="22" y2="12"></line>
-              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"></path>
-            </svg>
-          </button>
-          <div class="lang-panel" data-lang-panel hidden>
+          <div class="lang-picker" data-i18n-tooltip="header.languageHint">
+            <span class="lang-picker__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"></path>
+              </svg>
+            </span>
             <label for="lang-select" class="sr-only" data-i18n="lang.label">Idioma</label>
-            <select id="lang-select" data-lang-select>
+            <select id="lang-select" class="lang-picker__select" data-lang-select data-i18n-aria-label="header.language" aria-label="Idioma">
               <option value="es" data-i18n="lang.es">Español</option>
               <option value="ca" data-i18n="lang.ca">Català</option>
               <option value="gl" data-i18n="lang.gl">Galego</option>
@@ -174,7 +174,7 @@
                   <li data-i18n-html="zipper.subtitle.item3">Si usas <strong>eXeLearning 2.x</strong>, exporta el proyecto a <strong>ZIP</strong> desde el programa y continúa con la opción <strong>“Ya tengo un ZIP”</strong>.</li>
                 </ul>
                 <div class="zipper-restrict-summary" data-restrict-summary hidden>
-                  <span class="zipper-restrict-summary__label" data-i18n="zipper.restrict.summaryTitle">Disponibilidad</span>
+                  <span class="zipper-restrict-summary__label" data-restrict-summary-label data-i18n="zipper.restrict.summaryTitle">Acceso limitado por fechas</span>
                   <div class="zipper-restrict-summary__items" data-restrict-summary-items></div>
                 </div>
               </div>
@@ -483,7 +483,7 @@
     <footer class="site-footer">
       <a class="footer-link" href="https://bilateria.org" target="_blank" rel="noopener">(c) 2026 Juan Jose de Haro</a>
       <span class="footer-sep">·</span>
-    <span class="footer-link">v1.7.4</span>
+    <span class="footer-link">v1.7.5</span>
       <span class="footer-sep">·</span>
       <a class="footer-link" href="https://github.com/visor-webzip/visor-webzip.github.io" target="_blank" rel="noopener">
         <svg class="footer-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
@@ -509,7 +509,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/fflate@0.8.2/umd/index.js"></script>
   <script src="config.js"></script>
-	  <script src="i18n.js?v=1"></script>
+		  <script src="i18n.js?v=2"></script>
 	  <script src="restrictions.js?v=1"></script>
 	  <script src="ui.js?v=1"></script>
 	  <script src="downloads.js?v=1"></script>
@@ -517,9 +517,9 @@
 	  <script src="html-picker.js?v=1"></script>
 	  <script src="storage.js?v=1"></script>
 	  <script src="manager.js?v=1"></script>
-	  <script src="restriction-ui.js?v=2"></script>
+		  <script src="restriction-ui.js?v=3"></script>
 	  <script src="share.js?v=1"></script>
 	  <script src="nav.js?v=1"></script>
-	  <script src="app.js?v=32"></script>
+		  <script src="app.js?v=33"></script>
  </body>
  </html>

@@ -33,6 +33,10 @@
     }
   }
 
+  function setLang(lang) {
+    if (lang) currentLang = lang;
+  }
+
 
   function applyRestrictionUiState() {
     var enabled = !!(get('restrictionToggle') && get('restrictionToggle').checked);
@@ -137,6 +141,11 @@
 
   function updateRestrictionSummary() {
     if (!get('restrictionSummary') || !get('restrictionSummaryItems')) return;
+    if (get('restrictionSummaryLabel')) {
+      // Avoid keeping the previous language label when a translation key is missing
+      // (e.g., older cached assets). Fall back to Spanish instead of mixing languages.
+      get('restrictionSummaryLabel').textContent = t('zipper.restrict.summaryTitle') || 'Acceso limitado por fechas';
+    }
     var enabled = !!(get('restrictionToggle') && get('restrictionToggle').checked);
     if (!enabled) {
       get('restrictionSummary').setAttribute('hidden', '');
@@ -280,6 +289,7 @@
 
   window.RestrictionUI = {
     init: init,
+    setLang: setLang,
     applyRestrictionUiState: applyRestrictionUiState,
     updateRestrictionDefaults: updateRestrictionDefaults,
     buildRestrictionsPayload: buildRestrictionsPayload,

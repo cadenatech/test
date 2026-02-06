@@ -69,8 +69,6 @@
   var managerSettingsOpenButton = document.querySelector('[data-manager-settings-open]');
   var managerSettingsModal = document.querySelector('[data-manager-settings-modal]');
   var managerSettingsCloseButtons = document.querySelectorAll('[data-manager-settings-close]');
-  var languageOpenButton = document.querySelector('[data-lang-open]');
-  var languagePanel = document.querySelector('[data-lang-panel]');
   var mainSettingsOpenButtons = document.querySelectorAll('[data-main-settings-open]');
   var mainSettingsModal = document.querySelector('[data-main-settings-modal]');
   var mainSettingsCloseButtons = document.querySelectorAll('[data-main-settings-close]');
@@ -456,6 +454,7 @@
         restrictionZipStatus: restrictionZipStatus,
         restrictionZipFile: function () { return restrictionZipFile; },
         restrictionSummary: restrictionSummary,
+        restrictionSummaryLabel: document.querySelector('[data-restrict-summary-label]'),
         restrictionSummaryItems: restrictionSummaryItems,
         shareRestrictSummary: shareRestrictSummary,
         shareRestrictItems: shareRestrictItems,
@@ -574,9 +573,6 @@
     if (langSelect) {
       langSelect.value = currentLang;
     }
-    if (languagePanel) {
-      languagePanel.setAttribute('hidden', '');
-    }
     try {
       localStorage.setItem(LANG_KEY, currentLang);
     } catch (err) {
@@ -584,6 +580,15 @@
     }
     document.documentElement.setAttribute('lang', currentLang);
     applyTranslations();
+    if (RestrictionUI && RestrictionUI.setLang) {
+      RestrictionUI.setLang(currentLang);
+    }
+    if (RestrictionUI && RestrictionUI.updateRestrictionSummary) {
+      RestrictionUI.updateRestrictionSummary();
+    }
+    if (RestrictionUI && RestrictionUI.updateShareRestrictionSummary) {
+      RestrictionUI.updateShareRestrictionSummary(currentRestrictions);
+    }
     updateServiceInfo();
     syncZipNameDefault();
     setCleanupThreshold(getCleanupThreshold());
@@ -669,6 +674,7 @@
         restrictionZipStatus: restrictionZipStatus,
         restrictionZipFile: restrictionZipFile,
         restrictionSummary: restrictionSummary,
+        restrictionSummaryLabel: document.querySelector('[data-restrict-summary-label]'),
         restrictionSummaryItems: restrictionSummaryItems,
         shareRestrictSummary: shareRestrictSummary,
         shareRestrictItems: shareRestrictItems,
@@ -768,6 +774,7 @@
           restrictionZipStatus: restrictionZipStatus,
           restrictionZipFile: function () { return restrictionZipFile; },
           restrictionSummary: restrictionSummary,
+          restrictionSummaryLabel: document.querySelector('[data-restrict-summary-label]'),
           restrictionSummaryItems: restrictionSummaryItems,
           shareRestrictSummary: shareRestrictSummary,
           shareRestrictItems: shareRestrictItems,
@@ -2602,42 +2609,6 @@
           openMainSettingsModal();
         }
       });
-    });
-  }
-  if (languageOpenButton && languagePanel) {
-    languageOpenButton.addEventListener('click', function (event) {
-      event.preventDefault();
-      if (languagePanel.hasAttribute('hidden')) {
-        languagePanel.removeAttribute('hidden');
-      } else {
-        languagePanel.setAttribute('hidden', '');
-      }
-      if (langSelect) {
-        try {
-          langSelect.focus();
-          langSelect.click();
-          setTimeout(function () {
-            try {
-              langSelect.click();
-            } catch (e) {
-              // ignore
-            }
-          }, 0);
-        } catch (e) {
-          // ignore
-        }
-      }
-    });
-    document.addEventListener('click', function (event) {
-      if (languagePanel.hasAttribute('hidden')) return;
-      if (!languagePanel.contains(event.target) && !languageOpenButton.contains(event.target)) {
-        languagePanel.setAttribute('hidden', '');
-      }
-    });
-    document.addEventListener('keydown', function (event) {
-      if (event.key === 'Escape' && !languagePanel.hasAttribute('hidden')) {
-        languagePanel.setAttribute('hidden', '');
-      }
     });
   }
   if (aboutOpen && aboutModal) {

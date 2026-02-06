@@ -61,7 +61,7 @@
         back: 'Volver al inicio',
         zipHelp: {
           summary: '¿Qué es un ZIP?',
-          bodyHtml: 'Un <strong>ZIP</strong> es un archivo comprimido que agrupa varios archivos (y carpetas) en uno solo. En <strong>eXeLearning 3+</strong>, el archivo <code>.elpx</code> también sirve porque ya es un ZIP.'
+          bodyHtml: 'Un <strong>ZIP</strong> es un archivo comprimido que agrupa varios archivos (y carpetas) en uno solo.'
         },
         htmlHelp: {
           summary: '¿Qué es el HTML y dónde lo obtengo?',
@@ -455,7 +455,7 @@
         back: "Tornar a l'inici",
         zipHelp: {
           summary: 'Què és un ZIP?',
-          bodyHtml: 'Un <strong>ZIP</strong> és un fitxer comprimit que agrupa diversos fitxers (i carpetes) en un de sol. A <strong>eXeLearning 3+</strong>, el fitxer <code>.elpx</code> també serveix perquè ja és un ZIP.'
+          bodyHtml: 'Un <strong>ZIP</strong> és un fitxer comprimit que agrupa diversos fitxers (i carpetes) en un de sol.'
         },
         htmlHelp: {
           summary: 'Què és l’HTML i d’on l’obtinc?',
@@ -847,7 +847,7 @@
         back: 'Volver ao inicio',
         zipHelp: {
           summary: 'Que é un ZIP?',
-          bodyHtml: 'Un <strong>ZIP</strong> é un ficheiro comprimido que agrupa varios ficheiros (e cartafoles) nun só. En <strong>eXeLearning 3+</strong>, o ficheiro <code>.elpx</code> tamén serve porque xa é un ZIP.'
+          bodyHtml: 'Un <strong>ZIP</strong> é un ficheiro comprimido que agrupa varios ficheiros (e cartafoles) nun só.'
         },
         htmlHelp: {
           summary: 'Que é o HTML e onde o consigo?',
@@ -1239,7 +1239,7 @@
         back: 'Hasierara itzuli',
         zipHelp: {
           summary: 'Zer da ZIP bat?',
-          bodyHtml: '<strong>ZIP</strong> bat fitxategi konprimatua da: hainbat fitxategi (eta karpeta) fitxategi bakarrean biltzen ditu. <strong>eXeLearning 3+</strong> bertsioan, <code>.elpx</code> fitxategiak ere balio du, dagoeneko ZIP bat delako.'
+          bodyHtml: '<strong>ZIP</strong> bat fitxategi konprimatua da: hainbat fitxategi (eta karpeta) fitxategi bakarrean biltzen ditu.'
         },
         htmlHelp: {
           summary: 'Zer da HTMLa eta non lortzen dut?',
@@ -1631,7 +1631,7 @@
         back: 'Back to start',
         zipHelp: {
           summary: 'What is a ZIP?',
-          bodyHtml: 'A <strong>ZIP</strong> is a compressed file that bundles multiple files (and folders) into one. In <strong>eXeLearning 3+</strong>, the <code>.elpx</code> file also works because it’s already a ZIP.'
+          bodyHtml: 'A <strong>ZIP</strong> is a compressed file that bundles multiple files (and folders) into one.'
         },
         htmlHelp: {
           summary: 'What is HTML and where do I get it?',
@@ -2024,7 +2024,7 @@
         back: 'Zurück zum Start',
         zipHelp: {
           summary: 'Was ist eine ZIP-Datei?',
-          bodyHtml: 'Eine <strong>ZIP</strong>-Datei ist ein komprimiertes Archiv, das mehrere Dateien (und Ordner) in einer Datei bündelt. In <strong>eXeLearning 3+</strong> funktioniert auch die <code>.elpx</code>-Datei, weil sie bereits ein ZIP ist.'
+          bodyHtml: 'Eine <strong>ZIP</strong>-Datei ist ein komprimiertes Archiv, das mehrere Dateien (und Ordner) in einer Datei bündelt.'
         },
         htmlHelp: {
           summary: 'Was ist HTML und woher bekomme ich es?',
