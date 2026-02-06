@@ -24,12 +24,12 @@
         title: 'Ajustes de visibilidad',
         languageTitle: 'Idioma',
         restrictTitle: 'Acceso por fechas',
-        restrictHint: 'Aquí puedes limitar cuándo se ve el recurso y qué acciones estarán disponibles en el gestor de recursos.',
+        restrictHint: 'Aquí puedes definir cuándo estará visible el recurso y qué acciones estarán disponibles en el gestor de recursos.',
         restrictToggle: 'Limitar el acceso por fechas',
         startLabel: 'Inicio',
         endLabel: 'Fin',
-        neverExpires: 'No caducar nunca',
-        actionsTitle: 'Acciones permitidas mientras el acceso esté abierto',
+        neverExpires: 'Acceso sin fecha de fin',
+        actionsTitle: 'Acciones disponibles durante el acceso',
         allowShare: 'Compartir',
         allowEmbed: 'Insertar en web',
         allowDownload: 'Descargar'
@@ -170,14 +170,15 @@
       zipper: {
         title: 'Crear ZIP para el visor',
         restrict: {
-          summaryTitle: 'Disponibilidad'
+          summaryTitle: 'Acceso limitado por fechas'
         },
         accordion: {
           filesTitle: '¿Tienes archivos? Crea el ZIP'
         },
         subtitle: {
-          lead: 'Para compartir tu recurso, comprime los archivos (o la carpeta que los contiene) en un archivo .zip.',
-          exeSentenceHtml: 'Si usas <strong>eXeLearning</strong>, en la versión 3+ puedes usar directamente el archivo <code>.elpx</code> (ya es un ZIP). En otras versiones, exporta a ZIP desde el propio programa y, si quieres, continúa con la opción “Ya tengo un ZIP”.'
+          item1: 'Para publicar tu recurso, guarda todos los archivos en una carpeta y comprímela en un archivo <strong>.zip</strong>.',
+          item2: 'Si tu recurso está hecho con <strong>eXeLearning 3 o superior</strong>, puedes usar directamente el archivo <strong>.elpx</strong>.',
+          item3: 'Si usas <strong>eXeLearning 2.x</strong>, exporta el proyecto a <strong>ZIP</strong> desde el programa y continúa con la opción <strong>“Ya tengo un ZIP”</strong>.'
         },
         exe: {
           tooltip: 'eXeLearning: en la versión 3+ puedes usar directamente un .elpx (ya es un ZIP). Versión 2.x: Archivo > Exportar > Sitio Web > Archivo comprimido ZIP.',
@@ -361,12 +362,12 @@
         title: 'Ajustos de visibilitat',
         languageTitle: 'Idioma',
         restrictTitle: 'Accés per dates',
-        restrictHint: 'Aquí pots limitar quan es veu el recurs i quines accions estaran disponibles al gestor de recursos.',
+        restrictHint: 'Aquí pots definir quan estarà visible el recurs i quines accions estaran disponibles al gestor de recursos.',
         restrictToggle: 'Limitar l’accés per dates',
         startLabel: 'Inici',
         endLabel: 'Fi',
-        neverExpires: 'No caduca mai',
-        actionsTitle: 'Accions permeses mentre l’accés estigui obert',
+        neverExpires: 'Accés sense data de fi',
+        actionsTitle: 'Accions disponibles durant l’accés',
         allowShare: 'Compartir',
         allowEmbed: 'Inserir en web',
         allowDownload: 'Descarregar'
@@ -510,8 +511,9 @@
           filesTitle: 'Tens fitxers? Crea el ZIP'
         },
         subtitle: {
-          lead: 'Per compartir el teu recurs has de comprimir els fitxers (o la carpeta que els conté) en un arxiu ZIP.',
-          exeSentenceHtml: "Si fas servir <strong>eXeLearning</strong>, a la versió 3+ pots usar directament el fitxer <code>.elpx</code> (ja és un ZIP). En altres versions, exporta a ZIP des del mateix programa i, si vols, continua amb l’opció “Ja tinc un ZIP”."
+          item1: 'Per publicar el teu recurs, guarda tots els fitxers en una carpeta i comprimeix-la en un fitxer <strong>.zip</strong>.',
+          item2: 'Si el teu recurs està fet amb <strong>eXeLearning 3 o superior</strong>, pots usar directament el fitxer <strong>.elpx</strong>.',
+          item3: 'Si uses <strong>eXeLearning 2.x</strong>, exporta el projecte a <strong>ZIP</strong> des del programa i continua amb l’opció <strong>“Ja tinc un ZIP”</strong>.'
         },
         exe: {
           tooltip: "eXeLearning: a la versió 3+ pots usar directament un .elpx (ja és un ZIP). Versió 2.x: Fitxer > Exportar > Lloc web > Arxiu comprimit ZIP. Versió 3.x: Fitxer > Descarregar com > Lloc web.",
@@ -575,7 +577,7 @@
             done: 'ZIP llest amb restriccions.',
             failed: 'No s’ha pogut modificar el ZIP. Revisa el fitxer.'
           },
-          summaryTitle: 'Disponibilitat'
+          summaryTitle: 'Accés limitat per dates'
         },
         help: {
           inline: 'Si ja has creat un fitxer ZIP i l’has compartit en un servei amb enllaç públic, ves a la secció: “Ja tinc un ZIP o ELPX”.',
@@ -696,12 +698,12 @@
         title: 'Axustes de visibilidade',
         languageTitle: 'Idioma',
         restrictTitle: 'Acceso por datas',
-        restrictHint: 'Aquí podes limitar cando se ve o recurso e que accións estarán dispoñibles no xestor de recursos.',
+        restrictHint: 'Aquí podes definir cando estará visible o recurso e que accións estarán dispoñibles no xestor de recursos.',
         restrictToggle: 'Limitar o acceso por datas',
         startLabel: 'Inicio',
         endLabel: 'Fin',
-        neverExpires: 'Non caduca nunca',
-        actionsTitle: 'Accións permitidas mentres o acceso estea aberto',
+        neverExpires: 'Acceso sen data de fin',
+        actionsTitle: 'Accións dispoñibles durante o acceso',
         allowShare: 'Compartir',
         allowEmbed: 'Inserir nunha web',
         allowDownload: 'Descargar'
@@ -845,8 +847,9 @@
           filesTitle: 'Tes ficheiros? Crea o ZIP'
         },
         subtitle: {
-          lead: 'Para compartir o teu recurso necesitas comprimir os ficheiros (ou o cartafol que os contén) nun arquivo ZIP.',
-          exeSentenceHtml: 'Se usas <strong>eXeLearning</strong>, na versión 3+ podes usar directamente o ficheiro <code>.elpx</code> (xa é un ZIP). Noutras versións, exporta a ZIP desde o propio programa e, se queres, continúa coa opción “Xa teño un ZIP”.'
+          item1: 'Para publicar o teu recurso, garda todos os ficheiros nun cartafol e comprímeo nun ficheiro <strong>.zip</strong>.',
+          item2: 'Se o teu recurso está feito con <strong>eXeLearning 3 ou superior</strong>, podes usar directamente o ficheiro <strong>.elpx</strong>.',
+          item3: 'Se usas <strong>eXeLearning 2.x</strong>, exporta o proxecto a <strong>ZIP</strong> desde o programa e continúa coa opción <strong>“Xa teño un ZIP”</strong>.'
         },
         exe: {
           tooltip: 'eXeLearning: na versión 3+ podes usar directamente un .elpx (xa é un ZIP). Versión 2.x: Arquivo > Exportar > Sitio web > Arquivo comprimido ZIP. Versión 3.x: Arquivo > Descargar como > Sitio web.',
@@ -910,7 +913,7 @@
             done: 'ZIP listo con restricións.',
             failed: 'Non se puido modificar o ZIP. Revisa o ficheiro.'
           },
-          summaryTitle: 'Disponibilidade'
+          summaryTitle: 'Acceso limitado por datas'
         },
         help: {
           inline: 'Se xa creaches un arquivo ZIP e o compartiches nun servizo con ligazón pública, vai á sección: “Xa teño un ZIP ou ELPX”.',
@@ -1031,12 +1034,12 @@
         title: 'Ikusgarritasun ezarpenak',
         languageTitle: 'Hizkuntza',
         restrictTitle: 'Sarbidea daten bidez',
-        restrictHint: 'Hemen baliabidea noiz ikus daitekeen eta baliabide kudeatzailean zer ekintza egongo diren eskuragarri muga ditzakezu.',
+        restrictHint: 'Hemen zehaztu dezakezu baliabidea noiz egongo den ikusgai eta zein ekintza egongo diren eskuragarri baliabideen kudeatzailean.',
         restrictToggle: 'Sarbidea daten bidez mugatu',
         startLabel: 'Hasiera',
         endLabel: 'Amaiera',
-        neverExpires: 'Ez da inoiz iraungiko',
-        actionsTitle: 'Sarbidea irekita dagoenean baimendutako ekintzak',
+        neverExpires: 'Amaiera-datarik gabeko sarbidea',
+        actionsTitle: 'Sarbidean erabilgarri dauden ekintzak',
         allowShare: 'Partekatu',
         allowEmbed: 'Web batean txertatu',
         allowDownload: 'Deskargatu'
@@ -1180,8 +1183,9 @@
           filesTitle: 'Fitxategiak dituzu? Sortu ZIPa'
         },
         subtitle: {
-          lead: 'Zure baliabidea partekatzeko, fitxategiak (edo horiek dituen karpeta) ZIP fitxategi batean konprimitu behar dituzu.',
-          exeSentenceHtml: '<strong>eXeLearning</strong> erabiltzen baduzu, 3+ bertsioan <code>.elpx</code> fitxategia zuzenean erabil dezakezu (dagoeneko ZIP bat da). Beste bertsioetan, esportatu ZIPera programatik bertatik eta, nahi baduzu, “ZIP bat badaukat” aukerarekin jarraitu.'
+          item1: 'Zure baliabidea argitaratzeko, gorde fitxategi guztiak karpeta batean eta konprimitu <strong>.zip</strong> fitxategi batean.',
+          item2: 'Zure baliabidea <strong>eXeLearning 3 edo goragokoarekin</strong> egina badago, <strong>.elpx</strong> fitxategia zuzenean erabil dezakezu.',
+          item3: '<strong>eXeLearning 2.x</strong> erabiltzen baduzu, esportatu proiektua <strong>ZIP</strong>era programatik eta jarraitu <strong>“ZIP bat badaukat”</strong> aukerarekin.'
         },
         exe: {
           tooltip: 'eXeLearning: 3+ bertsioan .elpx zuzenean erabil dezakezu (dagoeneko ZIP bat da). 2.x bertsioa: Fitxategia > Esportatu > Webgunea > ZIP fitxategi konprimatua. 3.x bertsioa: Fitxategia > Deskargatu honela > Webgunea.',
@@ -1245,7 +1249,7 @@
             done: 'ZIPa prest murrizketekin.',
             failed: 'Ezin izan da ZIPa aldatu. Berrikusi fitxategia.'
           },
-          summaryTitle: 'Erabilgarritasuna'
+          summaryTitle: 'Sarbide mugatua daten arabera'
         },
         help: {
           inline: 'ZIP fitxategi bat sortu eta esteka publikoarekin duen zerbitzu batean partekatu baduzu, joan atalera: “ZIP bat badaukat edo ELPX”.',
@@ -1366,12 +1370,12 @@
         title: 'Visibility settings',
         languageTitle: 'Language',
         restrictTitle: 'Date access',
-        restrictHint: 'Here you can limit when the resource is visible and which actions are available in the resource manager.',
+        restrictHint: 'Here you can define when the resource will be visible and which actions will be available in the resource manager.',
         restrictToggle: 'Limit access by dates',
         startLabel: 'Start',
         endLabel: 'End',
-        neverExpires: 'Never expires',
-        actionsTitle: 'Allowed actions while access is open',
+        neverExpires: 'Access with no end date',
+        actionsTitle: 'Actions available during access',
         allowShare: 'Share',
         allowEmbed: 'Embed',
         allowDownload: 'Download'
@@ -1515,8 +1519,9 @@
           filesTitle: 'Have files? Create the ZIP'
         },
         subtitle: {
-          lead: 'To share your resource, compress the files (or the folder that contains them) into a .zip file.',
-          exeSentenceHtml: 'If you use <strong>eXeLearning</strong>, in version 3+ you can use the <code>.elpx</code> file directly (it’s already a ZIP). In other versions, export to ZIP from the program and, if you want, continue with “I already have a ZIP”.'
+          item1: 'To publish your resource, put all files in a folder and compress it into a <strong>.zip</strong> file.',
+          item2: 'If your resource was made with <strong>eXeLearning 3 or later</strong>, you can use the <strong>.elpx</strong> file directly.',
+          item3: 'If you use <strong>eXeLearning 2.x</strong>, export the project to <strong>ZIP</strong> from the program and continue with <strong>“I already have a ZIP”</strong>.'
         },
         exe: {
           tooltip: 'eXeLearning: in version 3+ you can use a .elpx directly (it’s already a ZIP). Version 2.x: File > Export > Website > Compressed ZIP file. Version 3.x: File > Download as > Website.',
@@ -1581,7 +1586,7 @@
             failed: 'Could not modify the ZIP. Check the file.'
           },
           
-          summaryTitle: 'Availability'
+          summaryTitle: 'Access limited by dates'
         },
         help: {
           inline: 'If you already created a ZIP file and shared it on a service with a public link, go to: “I already have a ZIP or ELPX”.',
@@ -1706,8 +1711,8 @@
         restrictToggle: 'Zugriff nach Datum begrenzen',
         startLabel: 'Start',
         endLabel: 'Ende',
-        neverExpires: 'Nie ablaufen',
-        actionsTitle: 'Erlaubte Aktionen, solange der Zugriff offen ist',
+        neverExpires: 'Zugriff ohne Enddatum',
+        actionsTitle: 'Aktionen während des Zugriffs',
         allowShare: 'Teilen',
         allowEmbed: 'Einbetten',
         allowDownload: 'Herunterladen'
@@ -1851,8 +1856,9 @@
           filesTitle: 'Dateien vorhanden? ZIP erstellen'
         },
         subtitle: {
-          lead: 'Um deine Ressource zu teilen, komprimiere die Dateien (oder den Ordner, der sie enthält) in eine ZIP-Datei.',
-          exeSentenceHtml: 'Wenn du <strong>eXeLearning</strong> nutzt, kannst du in Version 3+ die <code>.elpx</code>-Datei direkt verwenden (sie ist bereits ein ZIP). In anderen Versionen exportiere als ZIP und fahre bei Bedarf mit „Ich habe bereits ein ZIP“ fort.'
+          item1: 'Um deine Ressource zu veröffentlichen, lege alle Dateien in einen Ordner und komprimiere ihn zu einer <strong>.zip</strong>-Datei.',
+          item2: 'Wenn deine Ressource mit <strong>eXeLearning 3 oder höher</strong> erstellt wurde, kannst du die <strong>.elpx</strong>-Datei direkt verwenden.',
+          item3: 'Wenn du <strong>eXeLearning 2.x</strong> nutzt, exportiere das Projekt als <strong>ZIP</strong> aus dem Programm und fahre mit der Option <strong>„Ich habe bereits ein ZIP“</strong> fort.'
         },
         exe: {
           tooltip: 'eXeLearning: In Version 3+ kannst du eine .elpx direkt verwenden (sie ist bereits ein ZIP). Version 2.x: Datei > Exportieren > Website > Komprimierte ZIP-Datei. Version 3.x: Datei > Herunterladen als > Website.',
@@ -1917,7 +1923,7 @@
             failed: 'ZIP konnte nicht geändert werden. Prüfe die Datei.'
           },
           
-          summaryTitle: 'Verfügbarkeit'
+          summaryTitle: 'Zugriff zeitlich begrenzt'
         },
         help: {
           inline: 'Wenn du bereits eine ZIP-Datei erstellt und sie über einen Dienst mit öffentlichem Link geteilt hast, gehe zu: „Ich habe bereits ein ZIP oder ELPX“.',

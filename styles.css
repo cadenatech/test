@@ -320,6 +320,14 @@ header {
   box-shadow: none;
 }
 
+.info-dot__tooltip .tooltip-block {
+  display: block;
+}
+
+.info-dot__tooltip .tooltip-block + .tooltip-block {
+  margin-top: 8px;
+}
+
 .help-pill:focus-visible,
 .info-dot:focus-visible {
   outline: 3px solid rgba(37, 99, 235, 0.25);
@@ -1114,6 +1122,11 @@ textarea:focus-visible {
 
 .next-step__btn:hover {
   background: #075985;
+  color: #fff;
+}
+
+.next-step__btn:visited {
+  color: #fff;
 }
 
 .next-step__btn:focus {
@@ -1171,9 +1184,9 @@ textarea:focus-visible {
   margin-top: 12px;
   padding: 10px 12px;
   border-radius: 12px;
-  border: 1px solid #fecdca;
-  background: #fef3f2;
-  color: #b42318;
+  border: 1px solid #f3b8b5;
+  background: #fdf1f0;
+  color: #a13a35;
   display: inline-flex;
   flex-direction: column;
   gap: 6px;
@@ -1182,8 +1195,6 @@ textarea:focus-visible {
 .zipper-restrict-summary__label {
   font-size: 0.75rem;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
 }
 
 .zipper-restrict-summary__items {
@@ -1195,9 +1206,9 @@ textarea:focus-visible {
 .zipper-restrict-summary__item {
   padding: 2px 8px;
   border-radius: 999px;
-  border: 1px solid #fecdca;
-  background: #fee4e2;
-  color: #b42318;
+  border: 1px solid #f3b8b5;
+  background: #fbe2e1;
+  color: #a13a35;
   font-size: 0.78rem;
   font-weight: 600;
 }
