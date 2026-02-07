@@ -169,6 +169,8 @@
       shareButton.className = 'icon-button';
       shareButton.setAttribute('data-action', 'share');
       shareButton.setAttribute('data-zip-url', site.url || '');
+      // Include the selected entry file in share links (important when the ZIP has no index.html).
+      shareButton.setAttribute('data-index-path', site.indexPath || '');
       shareButton.setAttribute('aria-label', t('manager.actions.share'));
       shareButton.setAttribute('data-tooltip', t('manager.actions.share'));
       shareButton.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><path d="M8.6 10.7l6.8-3.4"></path><path d="M8.6 13.3l6.8 3.4"></path></svg>';
@@ -179,6 +181,7 @@
       embedManagerButton.className = 'icon-button';
       embedManagerButton.setAttribute('data-action', 'embed');
       embedManagerButton.setAttribute('data-zip-url', site.url || '');
+      embedManagerButton.setAttribute('data-index-path', site.indexPath || '');
       embedManagerButton.setAttribute('aria-label', t('manager.actions.embed'));
       embedManagerButton.setAttribute('data-tooltip', t('manager.actions.embed'));
       embedManagerButton.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M16 18l6-6-6-6"></path><path d="M8 6l-6 6 6 6"></path><path d="M14 4l-4 16"></path></svg>';
