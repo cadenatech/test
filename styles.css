@@ -1588,7 +1588,7 @@ textarea:focus-visible {
   border-radius: 8px;
   white-space: normal;
   text-align: center;
-  min-width: 180px;
+  width: max-content;
   max-width: min(360px, calc(100vw - 32px));
   opacity: 0;
   pointer-events: none;
