@@ -41,7 +41,6 @@
   var publishChoice = document.querySelector('[data-publish-choice]');
   var publishModules = document.querySelectorAll('[data-publish-module]');
   var publishStartButtons = document.querySelectorAll('[data-publish-start]');
-  var publishBackButtons = document.querySelectorAll('[data-publish-back]');
   var managerList = document.querySelector('[data-manager-list]');
   var storageUsed = document.querySelector('[data-storage-used]');
   var storageUsedPercent = document.querySelector('[data-storage-used-percent]');
@@ -2432,14 +2431,6 @@
       });
     });
   }
-  if (publishBackButtons.length) {
-    publishBackButtons.forEach(function (button) {
-      button.addEventListener('click', function () {
-        Nav.setActiveTab('publish');
-        Nav.setPublishModule('');
-      });
-    });
-  }
   var goPublishButtons = document.querySelectorAll('[data-go-publish]');
   if (goPublishButtons.length) {
     goPublishButtons.forEach(function (button) {
@@ -2451,6 +2442,7 @@
     });
   }
   if (tabButtons.length && tabPanels.length) {
+    var tabButtonList = Array.prototype.slice.call(tabButtons);
     tabButtons.forEach(function (button) {
       button.addEventListener('click', function () {
         var tab = button.getAttribute('data-tab');
@@ -2458,6 +2450,27 @@
         if (tab === 'publish') {
           Nav.setPublishModule('');
         }
+      });
+      button.addEventListener('keydown', function (event) {
+        var key = event.key;
+        if (key !== 'ArrowLeft' && key !== 'ArrowRight' && key !== 'Home' && key !== 'End') return;
+        event.preventDefault();
+        if (!tabButtonList.length) return;
+        var currentIndex = tabButtonList.indexOf(button);
+        if (currentIndex < 0) currentIndex = 0;
+        var nextIndex = currentIndex;
+        if (key === 'Home') nextIndex = 0;
+        if (key === 'End') nextIndex = tabButtonList.length - 1;
+        if (key === 'ArrowLeft') nextIndex = (currentIndex - 1 + tabButtonList.length) % tabButtonList.length;
+        if (key === 'ArrowRight') nextIndex = (currentIndex + 1) % tabButtonList.length;
+        var nextButton = tabButtonList[nextIndex];
+        if (!nextButton) return;
+        var tab = nextButton.getAttribute('data-tab');
+        Nav.setActiveTab(tab);
+        if (tab === 'publish') {
+          Nav.setPublishModule('');
+        }
+        nextButton.focus();
       });
     });
     Nav.setActiveTab('publish');

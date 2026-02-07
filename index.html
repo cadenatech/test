@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;600;800&family=Spectral:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=4">
+  <link rel="stylesheet" href="styles.css?v=5">
 </head>
 <body>
 
@@ -58,12 +58,40 @@
       </div>
     </header>
 
-    <div class="tabs" role="tablist" aria-label="Secciones" data-i18n-aria-label="tabs.label">
-      <button class="tab-button is-active" type="button" role="tab" aria-selected="true" data-tab="publish" data-i18n="tab.publish">Publicar</button>
-      <button class="tab-button" type="button" role="tab" aria-selected="false" data-tab="manager" data-i18n="tab.manager">Gestor de recursos</button>
-    </div>
+    <div class="tabs-shell">
+      <div class="tabs" role="tablist" aria-label="Secciones" data-i18n-aria-label="tabs.label">
+        <button
+          id="tab-publish"
+          class="tab-button is-active"
+          type="button"
+          role="tab"
+          aria-selected="true"
+          aria-controls="panel-publish"
+          tabindex="0"
+          data-tab="publish"
+          data-i18n="tab.publish"
+        >Publicar</button>
+        <button
+          id="tab-manager"
+          class="tab-button"
+          type="button"
+          role="tab"
+          aria-selected="false"
+          aria-controls="panel-manager"
+          tabindex="-1"
+          data-tab="manager"
+          data-i18n="tab.manager"
+        >Gestor de recursos</button>
+      </div>
 
-    <section class="tab-panel is-active" role="tabpanel" data-tab-panel="publish">
+      <section
+        id="panel-publish"
+        class="tab-panel is-active"
+        role="tabpanel"
+        aria-labelledby="tab-publish"
+        tabindex="0"
+        data-tab-panel="publish"
+      >
       <div class="publish">
         <div class="manager-card" data-publish-choice>
           <div class="manager-header">
@@ -118,21 +146,11 @@
 
         </div>
 
-        <div class="publish-module" data-publish-module="main" id="ya-tengo-zip-elpx" hidden>
-          <div class="publish-module__nav">
-            <button class="publish-back" type="button" data-publish-back>
-              <span class="publish-back__icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
-                  <path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-              <span class="publish-back__label" data-i18n="publish.back">Volver al inicio</span>
-            </button>
-          </div>
-          <form data-form>
-            <span class="field-title" data-i18n="main.form.title">Ya tengo un ZIP o ELPX</span>
-            <p class="step-note" data-i18n="main.subtitle">Si ya tienes tu recurso en formato ZIP (o .elpx de eXeLearning 3+) en un servicio con enlace público (Drive, Dropbox, etc.), pega aquí el enlace para generar el enlace.</p>
-            <input data-url type="url" placeholder="Pega aqui el enlace publico del ZIP o del .elpx" data-i18n-placeholder="main.form.placeholder" required>
+	        <div class="publish-module" data-publish-module="main" id="ya-tengo-zip-elpx" hidden>
+	          <form data-form>
+	            <span class="field-title" data-i18n="main.form.title">Ya tengo un ZIP o ELPX</span>
+	            <p class="step-note" data-i18n="main.subtitle">Si ya tienes tu recurso en formato ZIP (o .elpx de eXeLearning 3+) en un servicio con enlace público (Drive, Dropbox, etc.), pega aquí el enlace para generar el enlace.</p>
+	            <input data-url type="url" placeholder="Pega aqui el enlace publico del ZIP o del .elpx" data-i18n-placeholder="main.form.placeholder" required>
             <button type="submit" data-create-link data-i18n="main.form.submit">Crear enlace</button>
           </form>
 
@@ -151,23 +169,13 @@
 	              <a class="open-link" data-open href="#" target="_blank" rel="noopener" aria-disabled="true" data-i18n="main.output.open">Abrir vista previa</a>
             </div>
           </div>
-        </div>
+	        </div>
 
-        <div class="publish-module" data-publish-module="zipper" hidden>
-          <div class="publish-module__nav">
-            <button class="publish-back" type="button" data-publish-back>
-              <span class="publish-back__icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
-                  <path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-              <span class="publish-back__label" data-i18n="publish.back">Volver al inicio</span>
-            </button>
-          </div>
-          <div class="manager-card">
-            <div class="manager-header">
-              <div>
-                <h2 data-i18n="zipper.title">Crear ZIP para el visor</h2>
+	        <div class="publish-module" data-publish-module="zipper" hidden>
+	          <div class="manager-card">
+	            <div class="manager-header">
+	              <div>
+	                <h2 data-i18n="zipper.title">Crear ZIP para el visor</h2>
                 <ul class="manager-subtitle zipper-subtitle">
                   <li data-i18n-html="zipper.subtitle.item1">Para publicar tu recurso, guarda todos los archivos en una carpeta y comprímela en un archivo <strong>.zip</strong>.</li>
                   <li data-i18n-html="zipper.subtitle.item2">Si tu recurso está hecho con <strong>eXeLearning 3 o superior</strong>, puedes usar directamente el archivo <strong>.elpx</strong>.</li>
@@ -255,7 +263,15 @@
       </div>
     </section>
 
-    <section class="tab-panel" role="tabpanel" data-tab-panel="manager">
+    <section
+      id="panel-manager"
+      class="tab-panel"
+      role="tabpanel"
+      aria-labelledby="tab-manager"
+      tabindex="0"
+      data-tab-panel="manager"
+      hidden
+    >
       <div class="manager-card">
         <div class="manager-header">
           <div>
@@ -304,6 +320,7 @@
         <div class="manager-list" data-manager-list></div>
       </div>
     </section>
+    </div>
 
     <div class="modal" data-manager-settings-modal hidden>
       <div class="modal__overlay" data-manager-settings-close></div>
@@ -483,7 +500,7 @@
     <footer class="site-footer">
       <a class="footer-link" href="https://bilateria.org" target="_blank" rel="noopener">(c) 2026 Juan Jose de Haro</a>
       <span class="footer-sep">·</span>
-    <span class="footer-link">v1.7.7</span>
+    <span class="footer-link">v1.7.8</span>
       <span class="footer-sep">·</span>
       <a class="footer-link" href="https://github.com/visor-webzip/visor-webzip.github.io" target="_blank" rel="noopener">
         <svg class="footer-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
@@ -520,6 +537,6 @@
 		  <script src="restriction-ui.js?v=3"></script>
 	  <script src="share.js?v=1"></script>
 	  <script src="nav.js?v=1"></script>
-		  <script src="app.js?v=34"></script>
+			  <script src="app.js?v=35"></script>
  </body>
  </html>

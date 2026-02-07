@@ -19,12 +19,19 @@
         var isActive = button.getAttribute('data-tab') === name;
         button.classList.toggle('is-active', isActive);
         button.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        // Roving tabindex: only the active tab is reachable by Tab key.
+        button.setAttribute('tabindex', isActive ? '0' : '-1');
       });
     }
     if (get('tabPanels')) {
       get('tabPanels').forEach(function (panel) {
         var isActive = panel.getAttribute('data-tab-panel') === name;
         panel.classList.toggle('is-active', isActive);
+        if (isActive) {
+          panel.removeAttribute('hidden');
+        } else {
+          panel.setAttribute('hidden', '');
+        }
       });
     }
     if (name === 'manager' && Manager.refreshManager) {
