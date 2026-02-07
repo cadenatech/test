@@ -1706,7 +1706,8 @@ textarea:focus-visible {
   position: relative;
   z-index: 1;
   width: fit-content;
-  max-width: 96vw;
+  /* Fit inside .modal padding on small screens (avoid right-side clipping). */
+  max-width: 100%;
   background: var(--surface);
   border-radius: 20px;
   border: 1px solid var(--border);
@@ -1717,8 +1718,8 @@ textarea:focus-visible {
 }
 
 .modal__card--help {
-  width: 720px;
-  max-width: min(720px, 96vw);
+  width: min(720px, 100%);
+  max-width: 100%;
   padding: 0;
   overflow: hidden;
   display: flex;
@@ -1738,6 +1739,7 @@ textarea:focus-visible {
 .modal__card--help .modal__content {
   padding: 18px 20px 22px;
   overflow: auto;
+  overflow-x: hidden;
   max-height: min(740px, calc(100vh - 210px));
 }
 
