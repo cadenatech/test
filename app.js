@@ -2207,48 +2207,53 @@
     });
   }
 
+  function openQrWindow(shareLink) {
+    if (!shareLink) return;
+    var target = 'qr.html#' + encodeURIComponent(shareLink);
+    var w = null;
+    try {
+      // Best-effort "new window" (popup). Browsers/user settings may still open a new tab,
+      // especially on mobile.
+      var width = 560;
+      var height = 720;
+      var left = 0;
+      var top = 0;
+      try {
+        left = Math.max(0, Math.round((window.screenX || 0) + ((window.outerWidth || width) - width) / 2));
+        top = Math.max(0, Math.round((window.screenY || 0) + ((window.outerHeight || height) - height) / 2));
+      } catch (e) {}
+      var features = [
+        'popup=yes',
+        'width=' + width,
+        'height=' + height,
+        'left=' + left,
+        'top=' + top,
+        'resizable=yes',
+        'scrollbars=yes',
+        'toolbar=no',
+        'menubar=no',
+        'location=no',
+        'status=no'
+      ].join(',');
+      w = window.open(target, 'vwz-qr', features);
+      if (!w) {
+        // Fallback (popup blocked): open a new tab.
+        w = window.open(target, '_blank');
+      }
+    } catch (e) {
+      w = null;
+    }
+    try {
+      if (w) w.opener = null;
+    } catch (e) {}
+  }
+
   if (qrButton) {
     qrButton.addEventListener('click', function () {
       if (!currentShareLink) {
         return;
       }
-      var target = 'qr.html#' + encodeURIComponent(currentShareLink);
-      var w = null;
-      try {
-        // Best-effort "new window" (popup). Browsers/user settings may still open a new tab,
-        // especially on mobile.
-        var width = 560;
-        var height = 720;
-        var left = 0;
-        var top = 0;
-        try {
-          left = Math.max(0, Math.round((window.screenX || 0) + ((window.outerWidth || width) - width) / 2));
-          top = Math.max(0, Math.round((window.screenY || 0) + ((window.outerHeight || height) - height) / 2));
-        } catch (e) {}
-        var features = [
-          'popup=yes',
-          'width=' + width,
-          'height=' + height,
-          'left=' + left,
-          'top=' + top,
-          'resizable=yes',
-          'scrollbars=yes',
-          'toolbar=no',
-          'menubar=no',
-          'location=no',
-          'status=no'
-        ].join(',');
-        w = window.open(target, 'vwz-qr', features);
-        if (!w) {
-          // Fallback (popup blocked): open a new tab.
-          w = window.open(target, '_blank');
-        }
-      } catch (e) {
-        w = null;
-      }
-      try {
-        if (w) w.opener = null;
-      } catch (e) {}
+      openQrWindow(currentShareLink);
     });
   }
 
@@ -2566,6 +2571,14 @@
           Share.copyText(shareLink, button);
         }).catch(function () {
           Share.copyText(buildShareLink(zipUrl, true, indexPath || ''), button);
+        });
+        return;
+      }
+      if (action === 'qr' && zipUrl) {
+        buildShareLinkAsync(zipUrl, true, indexPath || '').then(function (shareLink) {
+          openQrWindow(shareLink);
+        }).catch(function () {
+          openQrWindow(buildShareLink(zipUrl, true, indexPath || ''));
         });
         return;
       }

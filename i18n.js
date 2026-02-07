@@ -158,6 +158,7 @@
         actions: {
           view: 'Ver',
           share: 'Compartir',
+          qr: 'QR',
           embed: 'Insertar en una web',
           edit: 'Editar el título',
           download: 'Descargar archivo'
@@ -565,6 +566,7 @@
         actions: {
           view: 'Veure',
           share: 'Compartir',
+          qr: 'QR',
           embed: 'Inserir en una web',
           edit: 'Editar el títol',
           download: 'Descarregar fitxer'
@@ -970,6 +972,7 @@
         actions: {
           view: 'Ver',
           share: 'Compartir',
+          qr: 'QR',
           embed: 'Inserir nunha web',
           edit: 'Editar o título',
           download: 'Descargar ficheiro'
@@ -1375,6 +1378,7 @@
         actions: {
           view: 'Ikusi',
           share: 'Partekatu',
+          qr: 'QR',
           embed: 'Web batean txertatu',
           edit: 'Izenburua editatu',
           download: 'Fitxategia deskargatu'
@@ -1780,6 +1784,7 @@
         actions: {
           view: 'View',
           share: 'Share',
+          qr: 'QR',
           embed: 'Embed in a website',
           edit: 'Edit title',
           download: 'Download file'
@@ -2186,6 +2191,7 @@
         actions: {
           view: 'Ansehen',
           share: 'Teilen',
+          qr: 'QR',
           embed: 'In eine Website einbetten',
           edit: 'Titel bearbeiten',
           download: 'Datei herunterladen'
