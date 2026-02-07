@@ -262,7 +262,7 @@
       },
       embed: {
         title: 'Insertar en una web',
-        subtitle: 'Copia y pega este código HTML en tu web. Incluye autoajuste de altura si la página permite scripts.',
+        subtitle: 'Copia y pega este código HTML en tu web para insertar tu recurso.',
         copy: 'Copiar código',
         fallback: {
           title: 'No se puede abrir incrustado',
@@ -668,7 +668,7 @@
       },
       embed: {
         title: 'Inserir en una web',
-        subtitle: 'Copia i enganxa aquest codi HTML a la teva web. Inclou autoajust d’alçada si la pàgina permet scripts.',
+        subtitle: 'Copia i enganxa aquest codi HTML a la teva web per inserir el recurs.',
         copy: 'Copiar codi',
         fallback: {
           title: 'No es pot obrir incrustat',
@@ -1074,7 +1074,7 @@
       },
       embed: {
         title: 'Inserir nunha web',
-        subtitle: 'Copia e pega este código HTML na túa web. Inclúe autoaxuste de altura se a páxina permite scripts.',
+        subtitle: 'Copia e pega este código HTML na túa web para inserir o teu recurso.',
         copy: 'Copiar código',
         fallback: {
           title: 'Non se pode abrir incrustado',
@@ -1480,7 +1480,7 @@
       },
       embed: {
         title: 'Web batean txertatu',
-        subtitle: 'Kopiatu eta itsatsi HTML kode hau zure webgunean. Altuera automatikoki egokitzen du orriak scriptak onartzen baditu.',
+        subtitle: 'Kopiatu eta itsatsi HTML kode hau zure webgunean zure baliabidea txertatzeko.',
         copy: 'Kodea kopiatu',
         fallback: {
           title: 'Ezin da txertatuta ireki',
@@ -1887,7 +1887,7 @@
       },
       embed: {
         title: 'Embed in a website',
-        subtitle: 'Copy and paste this HTML code into your website. It includes auto height resizing if the page allows scripts.',
+        subtitle: 'Copy and paste this HTML code into your website to embed your resource.',
         copy: 'Copy code',
         fallback: {
           title: 'Cannot open embedded',
@@ -2294,7 +2294,7 @@
       },
       embed: {
         title: 'In Website einbetten',
-        subtitle: 'Kopiere diesen HTML-Code und füge ihn in deine Website ein. Er enthält eine automatische Höhenanpassung, wenn die Seite Skripte erlaubt.',
+        subtitle: 'Kopiere diesen HTML-Code und füge ihn in deine Website ein, um deine Ressource einzubetten.',
         copy: 'Code kopieren',
         fallback: {
           title: 'Eingebettet nicht möglich',

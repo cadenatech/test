@@ -1595,6 +1595,10 @@ textarea:focus-visible {
   transition: opacity 0.12s ease;
 }
 
+[data-embed-modal] .modal__content > .manager-subtitle {
+  margin-bottom: 14px;
+}
+
 .icon-button:not(:disabled):not([aria-disabled="true"]):hover::after,
 .icon-button:not(:disabled):not([aria-disabled="true"]):focus-visible::after {
   opacity: 1;
