@@ -1546,24 +1546,34 @@ textarea:focus-visible {
   max-width: 220px;
 }
 
+.icon-button:disabled,
+.icon-button[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.55;
+  background: var(--surface-muted);
+  border-color: var(--border);
+  color: #94a3b8;
+  box-shadow: none;
+  transform: none;
+}
+
 .icon-button[aria-disabled="true"] {
   pointer-events: none;
-  opacity: 0.5;
 }
 
 .actions--icons {
   gap: 10px;
 }
 
-.icon-button:active,
-.icon-button.is-active {
+.icon-button:not(:disabled):not([aria-disabled="true"]):active,
+.icon-button:not(:disabled):not([aria-disabled="true"]).is-active {
   transform: scale(0.96);
   box-shadow: 0 10px 26px rgba(15, 23, 42, 0.08);
   color: var(--accent);
 }
 
-.icon-button:hover,
-.icon-button:focus-visible {
+.icon-button:not(:disabled):not([aria-disabled="true"]):hover,
+.icon-button:not(:disabled):not([aria-disabled="true"]):focus-visible {
   color: var(--accent);
   border-color: rgba(37, 99, 235, 0.4);
 }
@@ -1586,8 +1596,8 @@ textarea:focus-visible {
   transition: opacity 0.12s ease;
 }
 
-.icon-button:hover::after,
-.icon-button:focus-visible::after {
+.icon-button:not(:disabled):not([aria-disabled="true"]):hover::after,
+.icon-button:not(:disabled):not([aria-disabled="true"]):focus-visible::after {
   opacity: 1;
 }
 
