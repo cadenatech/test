@@ -1584,15 +1584,17 @@ textarea:focus-visible {
   font-size: 0.75rem;
   font-weight: 500;
   line-height: 1.25;
-  padding: 6px 10px;
+  padding: 0;
   border-radius: 8px;
   white-space: normal;
   text-align: center;
-  width: max-content;
-  max-width: min(360px, calc(100vw - 32px));
+  width: 0;
+  max-width: 0;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.12s ease;
+  visibility: hidden;
+  overflow: hidden;
+  transition: opacity 0.12s ease, visibility 0.12s ease;
 }
 
 [data-embed-modal] .modal__content > .manager-subtitle {
@@ -1602,6 +1604,11 @@ textarea:focus-visible {
 .icon-button:not(:disabled):not([aria-disabled="true"]):hover::after,
 .icon-button:not(:disabled):not([aria-disabled="true"]):focus-visible::after {
   opacity: 1;
+  visibility: visible;
+  padding: 6px 10px;
+  width: max-content;
+  max-width: min(360px, calc(100vw - 32px));
+  overflow: visible;
 }
 
 .icon-button .inline-toast {
