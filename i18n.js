@@ -98,6 +98,10 @@
           placeholder: 'Aquí se mostrará el enlace',
           copy: 'Copiar enlace',
           qr: 'QR',
+          copyTooltip: 'Copiar enlace',
+          qrTooltip: 'QR (ideal para proyectar o imprimir)',
+          embedTooltip: 'Insertar en una web (genera un iframe listo para pegar)',
+          openTooltip: 'Abrir vista previa',
           embed: 'Insertar en una web',
           open: 'Abrir vista previa'
         }
@@ -501,6 +505,10 @@
           placeholder: 'Enllaç per compartir',
           copy: 'Copiar enllaç',
           qr: 'QR',
+          copyTooltip: 'Copiar enllaç',
+          qrTooltip: 'QR (ideal per projectar o imprimir)',
+          embedTooltip: 'Inserir en una web (genera un iframe llest per enganxar)',
+          openTooltip: 'Obrir vista prèvia',
           embed: 'Inserir en una web',
           open: 'Obrir vista prèvia'
         }
@@ -902,6 +910,10 @@
           placeholder: 'Ligazón para compartir',
           copy: 'Copiar ligazón',
           qr: 'QR',
+          copyTooltip: 'Copiar ligazón',
+          qrTooltip: 'QR (ideal para proxectar ou imprimir)',
+          embedTooltip: 'Inserir nunha web (xera un iframe listo para pegar)',
+          openTooltip: 'Abrir vista previa',
           embed: 'Inserir nunha web',
           open: 'Abrir vista previa'
         }
@@ -1303,6 +1315,10 @@
           placeholder: 'Partekatze esteka',
           copy: 'Esteka kopiatu',
           qr: 'QR',
+          copyTooltip: 'Esteka kopiatu',
+          qrTooltip: 'QR (proiektatzeko edo inprimatzeko egokia)',
+          embedTooltip: 'Web batean txertatu (itsasteko prest dagoen iframe-a sortzen du)',
+          openTooltip: 'Aurrebista ireki',
           embed: 'Web batean txertatu',
           open: 'Aurrebista ireki'
         }
@@ -1704,6 +1720,10 @@
           placeholder: 'Shareable link',
           copy: 'Copy link',
           qr: 'QR',
+          copyTooltip: 'Copy link',
+          qrTooltip: 'QR (great for projecting or printing)',
+          embedTooltip: 'Embed in a website (generates an iframe ready to paste)',
+          openTooltip: 'Open preview',
           embed: 'Embed in a website',
           open: 'Open preview'
         }
@@ -2106,6 +2126,10 @@
           placeholder: 'Link zum Teilen',
           copy: 'Link kopieren',
           qr: 'QR',
+          copyTooltip: 'Link kopieren',
+          qrTooltip: 'QR (ideal zum Projizieren oder Drucken)',
+          embedTooltip: 'In Website einbetten (erstellt ein fertiges iframe zum Einfügen)',
+          openTooltip: 'Vorschau öffnen',
           embed: 'In Website einbetten',
           open: 'Vorschau öffnen'
         }

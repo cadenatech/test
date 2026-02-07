@@ -50,6 +50,11 @@
     if (get('openLink')) {
       get('openLink').href = getValue('currentShareLink') || '#';
       get('openLink').setAttribute('aria-disabled', getValue('currentShareLink') ? 'false' : 'true');
+      if (getValue('currentShareLink')) {
+        get('openLink').removeAttribute('tabindex');
+      } else {
+        get('openLink').setAttribute('tabindex', '-1');
+      }
     }
     if (getValue('currentShareLink') && get('stepThree') && !getValue('isEmbedMode')) {
       get('stepThree').scrollIntoView({ behavior: 'smooth', block: 'center' });

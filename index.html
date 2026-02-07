@@ -163,14 +163,41 @@
 	              </div>
 	              <section class="output" data-output data-i18n="main.output.placeholder" data-i18n-dynamic>Aquí se mostrará el enlace</section>
 	            </div>
-	            <div class="actions">
-	              <button class="ghost-button" type="button" data-copy disabled data-i18n="main.output.copy">Copiar enlace</button>
-	              <button class="ghost-button" type="button" data-qr disabled data-i18n="main.output.qr">QR</button>
-	              <button class="ghost-button" type="button" data-embed disabled data-i18n="main.output.embed">Insertar en una web</button>
-	              <a class="open-link" data-open href="#" target="_blank" rel="noopener" aria-disabled="true" data-i18n="main.output.open">Abrir vista previa</a>
+		            <div class="actions actions--icons">
+		              <button class="icon-button icon-button--lg" type="button" data-copy disabled data-i18n-aria-label="main.output.copy" data-i18n-tooltip="main.output.copyTooltip">
+		                <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+		                  <path d="M10 13a5 5 0 0 1 0-7l1-1a5 5 0 0 1 7 7l-1 1"></path>
+		                  <path d="M14 11a5 5 0 0 1 0 7l-1 1a5 5 0 1 1-7-7l1-1"></path>
+		                </svg>
+		              </button>
+		              <button class="icon-button icon-button--lg icon-button--wrap" type="button" data-qr disabled data-i18n-aria-label="main.output.qr" data-i18n-tooltip="main.output.qrTooltip">
+		                <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+		                  <rect x="3" y="3" width="6" height="6" rx="1"></rect>
+		                  <rect x="15" y="3" width="6" height="6" rx="1"></rect>
+		                  <rect x="3" y="15" width="6" height="6" rx="1"></rect>
+		                  <path d="M15 15h2v2h-2z"></path>
+		                  <path d="M19 15h2"></path>
+		                  <path d="M15 19h6"></path>
+		                  <path d="M11 11h2"></path>
+		                  <path d="M11 15h2v2h-2z"></path>
+		                </svg>
+		              </button>
+		              <button class="icon-button icon-button--lg icon-button--wrap" type="button" data-embed disabled data-i18n-aria-label="main.output.embed" data-i18n-tooltip="main.output.embedTooltip">
+		                <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+		                  <path d="M16 18l6-6-6-6"></path>
+		                  <path d="M8 6l-6 6 6 6"></path>
+		                  <path d="M14 4l-4 16"></path>
+		                </svg>
+		              </button>
+		              <a class="icon-button icon-button--lg" data-open href="#" target="_blank" rel="noopener" aria-disabled="true" data-i18n-aria-label="main.output.open" data-i18n-tooltip="main.output.openTooltip">
+		                <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+		                  <path d="M1.5 12s3.5-7 10.5-7 10.5 7 10.5 7-3.5 7-10.5 7-10.5-7-10.5-7z"></path>
+		                  <circle cx="12" cy="12" r="3.5"></circle>
+		                </svg>
+		              </a>
             </div>
           </div>
-	        </div>
+		        </div>
 
 	        <div class="publish-module" data-publish-module="zipper" hidden>
 	          <div class="manager-card">
