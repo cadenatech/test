@@ -127,6 +127,7 @@
 
   var currentShareLink = '';
   var currentZipUrl = '';
+  var currentIndexPath = '';
   var selectedFiles = [];
   var zipNameDirty = false;
   var activeTitleEdit = null;
@@ -1495,10 +1496,13 @@
 
 
 
-  function buildShareLink(zipUrl, fullView) {
+  function buildShareLink(zipUrl, fullView, entryPath) {
     var base = appBase() + '?url=' + encodeURIComponent(zipUrl);
     if (fullView) {
       base += '&view=full';
+    }
+    if (entryPath) {
+      base += '&entry=' + encodeURIComponent(entryPath);
     }
     return base;
   }
@@ -1506,10 +1510,13 @@
   var shortLinkCache = {};
   var shortResolveCache = {};
 
-  function buildShortShareLink(token, fullView) {
+  function buildShortShareLink(token, fullView, entryPath) {
     var base = appBase() + '?key=' + encodeURIComponent(token);
     if (fullView) {
       base += '&view=full';
+    }
+    if (entryPath) {
+      base += '&entry=' + encodeURIComponent(entryPath);
     }
     return base;
   }
@@ -1552,19 +1559,19 @@
       });
   }
 
-  function buildShareLinkAsync(zipUrl, fullView) {
+  function buildShareLinkAsync(zipUrl, fullView, entryPath) {
     if (!zipUrl) return Promise.resolve('');
     return createShortToken(zipUrl)
       .then(function (token) {
-        return buildShortShareLink(token, fullView);
+        return buildShortShareLink(token, fullView, entryPath);
       })
       .catch(function () {
-        return buildShareLink(zipUrl, fullView);
+        return buildShareLink(zipUrl, fullView, entryPath);
       });
   }
 
-  function refreshShareLink(zipUrl) {
-    return buildShareLinkAsync(zipUrl, true).then(function (shareLink) {
+  function refreshShareLink(zipUrl, entryPath) {
+    return buildShareLinkAsync(zipUrl, true, entryPath).then(function (shareLink) {
       Share.setShareLink(shareLink);
       return shareLink;
     });
@@ -1574,18 +1581,21 @@
     return 'vwz-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 7);
   }
 
-  function buildEmbedLink(zipUrl, embedId) {
+  function buildEmbedLink(zipUrl, embedId, entryPath) {
     var base = appBase() + '?url=' + encodeURIComponent(zipUrl) + '&embed=1';
     if (embedId) {
       base += '&embedId=' + encodeURIComponent(embedId);
     }
+    if (entryPath) {
+      base += '&entry=' + encodeURIComponent(entryPath);
+    }
     return base;
   }
 
-  function buildEmbedSnippet(zipUrl) {
+  function buildEmbedSnippet(zipUrl, entryPath) {
     var embedId = createEmbedId();
     var iframeId = 'visor-webzip-' + embedId;
-    var src = buildEmbedLink(zipUrl, embedId);
+    var src = buildEmbedLink(zipUrl, embedId, entryPath);
     var origin = window.location.origin;
     return '<iframe id="' + iframeId + '" src="' + src + '" style="width:100%;height:80vh;border:0" loading="lazy" allow="fullscreen"></iframe>\n'
       + '<script>\n'
@@ -1619,7 +1629,7 @@
 
   function openEmbedModalForZip(zipUrl) {
     if (!embedModal || !embedCode || !zipUrl) return;
-    embedCode.value = buildEmbedSnippet(zipUrl);
+    embedCode.value = buildEmbedSnippet(zipUrl, currentIndexPath);
     embedModal.removeAttribute('hidden');
     try {
       embedCode.focus();
@@ -1782,7 +1792,7 @@
       embedFallback.removeAttribute('hidden');
     }
     if (embedOpenFallback) {
-      embedOpenFallback.href = buildShareLink(zipUrl, true);
+      embedOpenFallback.href = buildShareLink(zipUrl, true, currentIndexPath);
     }
     if (message) {
       sendEmbedError(message);
@@ -1860,13 +1870,20 @@
     return paths[0] || '';
   }
 
-  function pickIndexPath(paths) {
+  function pickIndexPath(paths, preferredIndexPath) {
     var htmlPaths = paths.filter(function (path) {
       var lower = path.toLowerCase();
       return lower.endsWith('.html') || lower.endsWith('.htm');
     });
     if (!htmlPaths.length) {
       return Promise.reject(new Error(t('error.needHtmlFile')));
+    }
+    var preferredFromUrl = preferredIndexPath ? normalizePath(preferredIndexPath) : '';
+    if (preferredFromUrl) {
+      var match = htmlPaths.find(function (p) { return p === preferredFromUrl; });
+      if (match) {
+        return Promise.resolve(match);
+      }
     }
     var preferred = findIndexPath(paths);
     if (preferred && /index\.html?$/.test(preferred.toLowerCase())) {
@@ -1875,7 +1892,7 @@
     if (htmlPaths.length === 1) {
       return Promise.resolve(htmlPaths[0]);
     }
-    return HtmlPicker.open(htmlPaths, preferred || htmlPaths[0]);
+    return HtmlPicker.open(htmlPaths, preferredFromUrl || preferred || htmlPaths[0]);
   }
 
   function loadZip(zipUrl, options) {
@@ -1926,9 +1943,14 @@
       })
       .then(function (result) {
         currentZipUrl = effectiveZipUrl;
-        refreshShareLink(effectiveZipUrl);
+        // If the share URL contains an explicit entry HTML path, keep it in the generated links.
+        refreshShareLink(effectiveZipUrl, opts.preferredIndexPath || '');
 
         if (result.cached && !opts.force) {
+          var cachedIndexPath = result.site ? (result.site.indexPath || '') : '';
+          var effectiveIndexPath = opts.preferredIndexPath ? normalizePath(opts.preferredIndexPath) : cachedIndexPath;
+          currentIndexPath = effectiveIndexPath || cachedIndexPath || '';
+          refreshShareLink(effectiveZipUrl, currentIndexPath);
           if (result.site && Restrictions.isRestrictionActive(result.site.restrictions) && !Restrictions.isRestrictionAllowedNow(result.site.restrictions)) {
             if (Restrictions.isRestrictionExpired(result.site.restrictions)) {
               if (opts.allowInactive) {
@@ -1964,7 +1986,7 @@
           if (opts.embed && result.site && Restrictions.isRestrictionActive(result.site.restrictions) && !Restrictions.allowEmbed(result.site.restrictions)) {
             throw new Error(t('error.embedNotAllowed'));
           }
-          var siteUrl = buildSiteUrl(result.siteId, result.site.indexPath);
+          var siteUrl = buildSiteUrl(result.siteId, currentIndexPath || (result.site ? result.site.indexPath : ''));
           return controlPromise.then(function () {
             if (opts.embed) {
               openEmbedSite(siteUrl);
@@ -2065,7 +2087,9 @@
           }
 
           var paths = files.map(function (file) { return file.path; });
-          return pickIndexPath(paths).then(function (indexPath) {
+          return pickIndexPath(paths, opts.preferredIndexPath || '').then(function (indexPath) {
+            currentIndexPath = indexPath || '';
+            refreshShareLink(effectiveZipUrl, currentIndexPath);
             if (HtmlPicker.consumeWasLoading && HtmlPicker.consumeWasLoading()) {
               UI.setLoading(true);
               UI.setLoadingMessage(t('status.saving'));
@@ -2149,10 +2173,12 @@
         var message = formatUserError(err);
         if (opts.embed) {
           Share.setShareLink('');
+          currentIndexPath = '';
           showEmbedFallback(effectiveZipUrl, message);
           return;
         }
         Share.setShareLink('');
+        currentIndexPath = '';
         currentRestrictions = null;
         RestrictionUI.applyRestrictionsToActions(currentRestrictions);
         if (!err || !err.skipStatus) {
@@ -2474,15 +2500,15 @@
         return;
       }
       if (action === 'share' && zipUrl) {
-        buildShareLinkAsync(zipUrl, true).then(function (shareLink) {
+        buildShareLinkAsync(zipUrl, true, indexPath || '').then(function (shareLink) {
           Share.copyText(shareLink, button);
         }).catch(function () {
-          Share.copyText(buildShareLink(zipUrl, true), button);
+          Share.copyText(buildShareLink(zipUrl, true, indexPath || ''), button);
         });
         return;
       }
       if (action === 'embed' && zipUrl) {
-        Share.copyText(buildEmbedSnippet(zipUrl), button);
+        Share.copyText(buildEmbedSnippet(zipUrl, indexPath || ''), button);
         return;
       }
       if (action === 'download' && zipUrl) {
@@ -2737,6 +2763,7 @@
     if (input) {
       input.value = resolvedUrl;
     }
+    var entryParam = params.get('entry') || params.get('index') || params.get('path') || '';
     var viewParam = (params.get('view') || '').toLowerCase();
     var embedParam = (params.get('embed') || '').toLowerCase();
     var embedActive = embedParam === '1' || embedParam === 'true' || embedParam === 'yes';
@@ -2744,12 +2771,12 @@
     if (embedActive) {
       var embedIdParam = params.get('embedId') || '';
       setEmbedMode(true, embedIdParam);
-      loadZip(resolvedUrl, { force: false, autoOpen: false, embed: true, embedId: embedIdParam });
+      loadZip(resolvedUrl, { force: false, autoOpen: false, embed: true, embedId: embedIdParam, preferredIndexPath: entryParam });
     } else {
       setEmbedMode(false, '');
       Nav.setActiveTab('publish');
       Nav.setPublishModule('main');
-      loadZip(resolvedUrl, { force: false, autoOpen: autoOpen });
+      loadZip(resolvedUrl, { force: false, autoOpen: autoOpen, preferredIndexPath: entryParam });
     }
   }
 
