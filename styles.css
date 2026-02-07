@@ -2,6 +2,12 @@
   display: none !important;
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 :root {
   color-scheme: light;
   font-family: "Libre Franklin", "Segoe UI", sans-serif;
@@ -627,7 +633,7 @@ textarea:focus-visible {
   display: none;
   border: none;
   border-radius: 0;
-  padding: 22px 14px 14px;
+  padding: 22px 18px 18px;
   background: transparent;
   box-shadow: none;
 }
@@ -2009,6 +2015,10 @@ body[data-loading="true"] main {
 
   .manager-card {
     padding: 18px;
+  }
+
+  .tab-panel {
+    padding: 20px 16px 16px;
   }
 
   .manager-settings {
