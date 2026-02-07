@@ -4,6 +4,7 @@
   var output = document.querySelector('[data-output]');
   var createLinkButton = document.querySelector('[data-create-link]');
   var copyButton = document.querySelector('[data-copy]');
+  var qrButton = document.querySelector('[data-qr]');
   var embedButton = document.querySelector('[data-embed]');
   var openLink = document.querySelector('[data-open]');
   var shareRestrictSummary = document.querySelector('[data-share-restrict-summary]');
@@ -417,6 +418,7 @@
       context: {
         output: output,
         copyButton: copyButton,
+        qrButton: qrButton,
         embedButton: embedButton,
         openLink: openLink,
         stepThree: stepThree,
@@ -637,6 +639,7 @@
       context: {
         output: output,
         copyButton: copyButton,
+        qrButton: qrButton,
         embedButton: embedButton,
         openLink: openLink,
         stepThree: stepThree,
@@ -737,6 +740,7 @@
       context: {
         output: output,
         copyButton: copyButton,
+        qrButton: qrButton,
         embedButton: embedButton,
         openLink: openLink,
         stepThree: stepThree,
@@ -2200,6 +2204,24 @@
         return;
       }
       Share.copyText(currentShareLink);
+    });
+  }
+
+  if (qrButton) {
+    qrButton.addEventListener('click', function () {
+      if (!currentShareLink) {
+        return;
+      }
+      var target = 'qr.html#' + encodeURIComponent(currentShareLink);
+      var w = null;
+      try {
+        w = window.open(target, '_blank');
+      } catch (e) {
+        w = null;
+      }
+      try {
+        if (w) w.opener = null;
+      } catch (e) {}
     });
   }
 

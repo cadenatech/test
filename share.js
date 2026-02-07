@@ -44,6 +44,9 @@
       // Same rationale as copy: embedding can be restricted at runtime, but the snippet should be obtainable.
       get('embedButton').disabled = !getValue('currentShareLink');
     }
+    if (get('qrButton')) {
+      get('qrButton').disabled = !getValue('currentShareLink');
+    }
     if (get('openLink')) {
       get('openLink').href = getValue('currentShareLink') || '#';
       get('openLink').setAttribute('aria-disabled', getValue('currentShareLink') ? 'false' : 'true');

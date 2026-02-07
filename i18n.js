@@ -97,6 +97,7 @@
           step: 'Copia el enlace para compartir, copia el código para insertar el recurso en otra web o abre la vista previa.',
           placeholder: 'Aquí se mostrará el enlace',
           copy: 'Copiar enlace',
+          qr: 'QR',
           embed: 'Insertar en una web',
           open: 'Abrir vista previa'
         }
@@ -499,6 +500,7 @@
           step: 'Copia l’enllaç o obre la vista prèvia.',
           placeholder: 'Enllaç per compartir',
           copy: 'Copiar enllaç',
+          qr: 'QR',
           embed: 'Inserir en una web',
           open: 'Obrir vista prèvia'
         }
@@ -899,6 +901,7 @@
           step: 'Copia a ligazón ou abre a vista previa.',
           placeholder: 'Ligazón para compartir',
           copy: 'Copiar ligazón',
+          qr: 'QR',
           embed: 'Inserir nunha web',
           open: 'Abrir vista previa'
         }
@@ -1299,6 +1302,7 @@
           step: 'Kopiatu esteka edo ireki aurrebista.',
           placeholder: 'Partekatze esteka',
           copy: 'Esteka kopiatu',
+          qr: 'QR',
           embed: 'Web batean txertatu',
           open: 'Aurrebista ireki'
         }
@@ -1699,6 +1703,7 @@
           step: 'Copy the link or open the preview.',
           placeholder: 'Shareable link',
           copy: 'Copy link',
+          qr: 'QR',
           embed: 'Embed in a website',
           open: 'Open preview'
         }
@@ -2100,6 +2105,7 @@
           step: 'Kopiere den Link oder öffne die Vorschau.',
           placeholder: 'Link zum Teilen',
           copy: 'Link kopieren',
+          qr: 'QR',
           embed: 'In Website einbetten',
           open: 'Vorschau öffnen'
         }
