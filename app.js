@@ -2215,7 +2215,34 @@
       var target = 'qr.html#' + encodeURIComponent(currentShareLink);
       var w = null;
       try {
-        w = window.open(target, '_blank');
+        // Best-effort "new window" (popup). Browsers/user settings may still open a new tab,
+        // especially on mobile.
+        var width = 560;
+        var height = 720;
+        var left = 0;
+        var top = 0;
+        try {
+          left = Math.max(0, Math.round((window.screenX || 0) + ((window.outerWidth || width) - width) / 2));
+          top = Math.max(0, Math.round((window.screenY || 0) + ((window.outerHeight || height) - height) / 2));
+        } catch (e) {}
+        var features = [
+          'popup=yes',
+          'width=' + width,
+          'height=' + height,
+          'left=' + left,
+          'top=' + top,
+          'resizable=yes',
+          'scrollbars=yes',
+          'toolbar=no',
+          'menubar=no',
+          'location=no',
+          'status=no'
+        ].join(',');
+        w = window.open(target, 'vwz-qr', features);
+        if (!w) {
+          // Fallback (popup blocked): open a new tab.
+          w = window.open(target, '_blank');
+        }
       } catch (e) {
         w = null;
       }
