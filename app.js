@@ -79,6 +79,7 @@
   var updateCheckModal = document.querySelector('[data-update-check-modal]');
   var updateCheckCloseButtons = document.querySelectorAll('[data-update-check-close]');
   var updateCheckStatus = document.querySelector('[data-update-check-status]');
+  var updateCheckNote = document.querySelector('[data-update-check-note]');
   var updateCheckProgress = document.querySelector('[data-update-check-progress]');
   var updateCheckBarWrap = document.querySelector('[data-update-check-bar-wrap]');
   var updateCheckBar = document.querySelector('[data-update-check-bar]');
@@ -1785,6 +1786,12 @@
     }
   }
 
+  function setUpdateCheckNote(text) {
+    if (updateCheckNote) {
+      updateCheckNote.textContent = text;
+    }
+  }
+
   function setUpdateCheckProgress(done, total) {
     if (updateCheckProgress) {
       updateCheckProgress.textContent = t('manager.checkUpdatesProgress', { done: done, total: total });
@@ -1810,13 +1817,18 @@
     openUpdateCheckModal();
     if (!Downloads || !Downloads.fetchZipBundleMeta || !Downloads.hasGas || !Downloads.hasGas()) {
       setUpdateCheckStatus(t('manager.checkUpdatesUnavailable'));
+      setUpdateCheckNote(t('manager.checkUpdatesNote'));
       setUpdateCheckProgress(0, 0);
+      if (UI.showInlineToast && managerCheckUpdatesButton) {
+        UI.showInlineToast(managerCheckUpdatesButton, t('manager.checkUpdatesUnavailable'));
+      }
       return;
     }
     if (managerCheckUpdatesButton) {
       managerCheckUpdatesButton.disabled = true;
     }
     setUpdateCheckStatus(t('manager.checkingUpdates'));
+    setUpdateCheckNote(t('manager.checkUpdatesNote'));
     Storage.getAllSites().then(function (sites) {
       total = sites.length;
       checked = 0;
@@ -1842,10 +1854,18 @@
         if (changedIds.length && Manager.highlightSites) {
           Manager.highlightSites(changedIds);
         }
-        setUpdateCheckStatus(t('manager.checkUpdatesDoneSummary', { changed: changedIds.length, total: total }));
+        var summary = t('manager.checkUpdatesDoneSummary', { changed: changedIds.length, total: total });
+        setUpdateCheckStatus(summary);
+        if (UI.showInlineToast && managerCheckUpdatesButton) {
+          UI.showInlineToast(managerCheckUpdatesButton, summary);
+        }
       });
     }).catch(function () {
-      setUpdateCheckStatus(t('manager.checkUpdatesDone'));
+      var doneMsg = t('manager.checkUpdatesDone');
+      setUpdateCheckStatus(doneMsg);
+      if (UI.showInlineToast && managerCheckUpdatesButton) {
+        UI.showInlineToast(managerCheckUpdatesButton, doneMsg);
+      }
     }).finally(function () {
       if (managerCheckUpdatesButton) {
         managerCheckUpdatesButton.disabled = false;
