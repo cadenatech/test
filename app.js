@@ -679,10 +679,25 @@
 
 
 
-  function formatUserError(err) {
+  function isGoogleDriveUrl(url) {
+    if (!url) return false;
+    try {
+      var host = (new URL(url)).hostname || '';
+      host = host.toLowerCase();
+      if (host === 'drive.google.com' || host.endsWith('.drive.google.com')) return true;
+    } catch (e) {
+      // ignore
+    }
+    return /drive\.google\.com/i.test(url);
+  }
+
+  function formatUserError(err, zipUrl) {
     var message = (err && err.message) ? err.message : '';
     if (/no devolvio un ZIP|recibio HTML|devolvio HTML/i.test(message)) {
-      return t('error.driveTooLarge');
+      // Only show the Drive-specific hint for Drive URLs.
+      if (isGoogleDriveUrl(zipUrl)) {
+        return t('error.driveTooLarge');
+      }
     }
     return message || t('error.loadZip');
   }
@@ -1171,7 +1186,7 @@
     if (match && match[1]) {
       return match[1];
     }
-    match = url.match(/drive\.google\.com\/uc\?id=([a-zA-Z0-9_-]+)/);
+    match = url.match(/drive\.google\.com\/uc\?(?:[^#]*[?&])?id=([a-zA-Z0-9_-]+)/);
     if (match && match[1]) {
       return match[1];
     }
@@ -2299,7 +2314,7 @@
         UI.setStatus(currentShareLink);
       })
       .catch(function (err) {
-        var message = formatUserError(err);
+        var message = formatUserError(err, effectiveZipUrl);
         if (opts.embed) {
           Share.setShareLink('');
           currentIndexPath = '';
