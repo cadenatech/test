@@ -268,11 +268,9 @@
             restrictCountdownTimer = null;
           }
           get('restrictModal').setAttribute('hidden', '');
-          if (window.location.search.indexOf('url=') !== -1) {
-            var previewUrl = currentZipUrl || urlParam;
-            if (previewUrl) {
-              loadZip(previewUrl, { force: false, autoOpen: true });
-            }
+          var openAllowed = getValue('openAllowedResource');
+          if (typeof openAllowed === 'function') {
+            openAllowed();
           }
           return;
         }

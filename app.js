@@ -481,6 +481,23 @@
         restrictModal: restrictModal,
         restrictRange: restrictRange,
         restrictionCountdown: restrictionCountdown,
+        openAllowedResource: function () {
+          var hasUrl = urlParam || shortParam;
+          if (!hasUrl) return;
+          var entryParam = params.get('entry') || params.get('index') || params.get('path') || '';
+          var viewParam = (params.get('view') || '').toLowerCase();
+          var embedParam = (params.get('embed') || '').toLowerCase();
+          var embedActive = embedParam === '1' || embedParam === 'true' || embedParam === 'yes';
+          var embedIdParam = params.get('embedId') || '';
+          var autoOpen = viewParam === 'full' || viewParam === '1';
+          var previewUrl = currentZipUrl || urlParam;
+          if (!previewUrl) return;
+          if (embedActive) {
+            loadZip(previewUrl, { force: false, autoOpen: false, embed: true, embedId: embedIdParam, preferredIndexPath: entryParam });
+          } else {
+            loadZip(previewUrl, { force: false, autoOpen: autoOpen, preferredIndexPath: entryParam });
+          }
+        },
         currentShareLink: function () { return currentShareLink; },
         currentRestrictions: function (value) {
           if (arguments.length) {
