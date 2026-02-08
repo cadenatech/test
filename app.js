@@ -76,6 +76,12 @@
   var mainSettingsModal = document.querySelector('[data-main-settings-modal]');
   var mainSettingsCloseButtons = document.querySelectorAll('[data-main-settings-close]');
   var managerCheckUpdatesButton = document.querySelector('[data-manager-check-updates]');
+  var updateCheckModal = document.querySelector('[data-update-check-modal]');
+  var updateCheckCloseButtons = document.querySelectorAll('[data-update-check-close]');
+  var updateCheckStatus = document.querySelector('[data-update-check-status]');
+  var updateCheckProgress = document.querySelector('[data-update-check-progress]');
+  var updateCheckBarWrap = document.querySelector('[data-update-check-bar-wrap]');
+  var updateCheckBar = document.querySelector('[data-update-check-bar]');
   var restrictionToggle = document.querySelector('[data-restrict-toggle]');
   var restrictionFields = document.querySelector('[data-restrict-fields]');
   var restrictionActions = document.querySelector('[data-restrict-actions]');
@@ -1747,7 +1753,7 @@
         if (changed && opts.showBanner) {
           showUpdateBanner(opts.zipUrl || site.url, opts.indexPath || site.indexPath || '');
         }
-        return;
+        return changed;
       }
       site.remoteMeta = mergedSignature;
       site.updateAvailable = changed;
@@ -1758,30 +1764,88 @@
         if (changed && Manager && Manager.refreshManager) {
           Manager.refreshManager();
         }
+        return changed;
       });
     });
   }
 
+  function openUpdateCheckModal() {
+    if (!updateCheckModal) return;
+    updateCheckModal.removeAttribute('hidden');
+  }
+
+  function closeUpdateCheckModal() {
+    if (!updateCheckModal) return;
+    updateCheckModal.setAttribute('hidden', '');
+  }
+
+  function setUpdateCheckStatus(text) {
+    if (updateCheckStatus) {
+      updateCheckStatus.textContent = text;
+    }
+  }
+
+  function setUpdateCheckProgress(done, total) {
+    if (updateCheckProgress) {
+      updateCheckProgress.textContent = t('manager.checkUpdatesProgress', { done: done, total: total });
+    }
+    if (updateCheckBar) {
+      var pct = total ? Math.round((done / total) * 100) : 0;
+      updateCheckBar.style.width = pct + '%';
+    }
+    if (updateCheckBarWrap) {
+      if (total > 0) {
+        updateCheckBarWrap.removeAttribute('hidden');
+      } else {
+        updateCheckBarWrap.setAttribute('hidden', '');
+      }
+    }
+  }
+
   function checkUpdatesForAllSites() {
+    var total = 0;
+    var checked = 0;
+    var changedIds = [];
+    var skipSummary = false;
+    openUpdateCheckModal();
     if (!Downloads || !Downloads.fetchZipBundleMeta || !Downloads.hasGas || !Downloads.hasGas()) {
-      UI.flashMessage(t('manager.checkUpdatesUnavailable'));
+      setUpdateCheckStatus(t('manager.checkUpdatesUnavailable'));
+      setUpdateCheckProgress(0, 0);
       return;
     }
     if (managerCheckUpdatesButton) {
       managerCheckUpdatesButton.disabled = true;
     }
-    UI.flashMessage(t('manager.checkingUpdates'));
+    setUpdateCheckStatus(t('manager.checkingUpdates'));
     Storage.getAllSites().then(function (sites) {
+      total = sites.length;
+      checked = 0;
+      changedIds = [];
+      setUpdateCheckProgress(0, total);
+      if (!total) {
+        setUpdateCheckStatus(t('manager.checkUpdatesNone'));
+        skipSummary = true;
+        return Manager.refreshManager();
+      }
       return sites.reduce(function (promise, site) {
         return promise.then(function () {
-          return checkForRemoteUpdate(site, { showBanner: false });
+          return checkForRemoteUpdate(site, { showBanner: false }).then(function (changed) {
+            checked += 1;
+            if (changed) changedIds.push(site.id);
+            setUpdateCheckProgress(checked, total);
+          });
         });
       }, Promise.resolve());
     }).then(function () {
-      Manager.refreshManager();
-      UI.flashMessage(t('manager.checkUpdatesDone'));
+      if (skipSummary) return;
+      return Manager.refreshManager().then(function () {
+        if (changedIds.length && Manager.highlightSites) {
+          Manager.highlightSites(changedIds);
+        }
+        setUpdateCheckStatus(t('manager.checkUpdatesDoneSummary', { changed: changedIds.length, total: total }));
+      });
     }).catch(function () {
-      UI.flashMessage(t('manager.checkUpdatesDone'));
+      setUpdateCheckStatus(t('manager.checkUpdatesDone'));
     }).finally(function () {
       if (managerCheckUpdatesButton) {
         managerCheckUpdatesButton.disabled = false;
@@ -2263,6 +2327,20 @@
     document.addEventListener('keydown', function (event) {
       if (event.key === 'Escape') {
         closeEmbedModal();
+      }
+    });
+  }
+  if (updateCheckModal) {
+    if (updateCheckCloseButtons && updateCheckCloseButtons.length) {
+      updateCheckCloseButtons.forEach(function (button) {
+        button.addEventListener('click', function () {
+          closeUpdateCheckModal();
+        });
+      });
+    }
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && !updateCheckModal.hasAttribute('hidden')) {
+        closeUpdateCheckModal();
       }
     });
   }

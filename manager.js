@@ -115,6 +115,7 @@
       var canDownload = Restrictions.allowDownload(restrictions);
       var item = document.createElement('div');
       item.className = 'manager-item';
+      item.setAttribute('data-site-id', site.id);
       var info = document.createElement('div');
       var title = document.createElement('div');
       title.className = 'manager-item__title';
@@ -234,7 +235,7 @@
       updateButton.setAttribute('data-tooltip', t('manager.actions.update'));
       updateButton.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 12a9 9 0 1 1-2.6-6.4"></path><path d="M21 3v6h-6"></path></svg>';
       actions.appendChild(updateButton);
-      updateButton.disabled = !site.url || !canDownload;
+      updateButton.disabled = !site.url;
       var delButton = document.createElement('button');
       delButton.type = 'button';
       delButton.className = 'icon-button';
@@ -326,6 +327,18 @@
     cleanupOldSites: cleanupOldSites,
     renderManagerList: renderManagerList,
     refreshManager: refreshManager,
-    sortManagerSites: sortManagerSites
+    sortManagerSites: sortManagerSites,
+    highlightSites: function (siteIds) {
+      if (!siteIds || !siteIds.length || !ctx('managerList')) return;
+      var list = ctx('managerList');
+      siteIds.forEach(function (siteId) {
+        var item = list.querySelector('[data-site-id="' + siteId + '"]');
+        if (!item) return;
+        item.classList.add('manager-item--highlight');
+        setTimeout(function () {
+          item.classList.remove('manager-item--highlight');
+        }, 2200);
+      });
+    }
   };
 })();

@@ -1455,6 +1455,11 @@ textarea:focus-visible {
   border: 1px solid var(--border);
 }
 
+.manager-item--highlight {
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+}
+
 
 .manager-item__title {
   font-weight: 600;
