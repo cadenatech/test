@@ -189,12 +189,11 @@ function buildBundle_(rawUrl) {
 
 function buildBundleChunk_(rawUrl, e) {
   var url = normalizeDownloadUrl_(rawUrl);
-  if (extractDriveId_(url)) {
-    throw new Error('La descarga por trozos no esta disponible para enlaces de Drive en este backend.');
-  }
-
   if (wantsBundleMeta_(e)) {
     return fetchRemoteMeta_(url);
+  }
+  if (extractDriveId_(url)) {
+    throw new Error('La descarga por trozos no esta disponible para enlaces de Drive en este backend.');
   }
 
   var part = parsePositiveInt_(e.parameter.part, 0);
@@ -745,6 +744,18 @@ function clamp_(value, min, max) {
 }
 
 function fetchRemoteMeta_(url) {
+  var driveId = extractDriveId_(url);
+  if (driveId) {
+    var driveFile = DriveApp.getFileById(driveId);
+    var driveUpdated = driveFile.getLastUpdated();
+    return {
+      name: driveFile.getName() || 'site.zip',
+      size: driveFile.getSize() || null,
+      acceptRanges: false,
+      etag: '',
+      lastModified: driveUpdated ? driveUpdated.toISOString() : ''
+    };
+  }
   // Apps Script UrlFetchApp does not support HEAD reliably. Use a tiny Range probe instead.
   var resp = UrlFetchApp.fetch(url, {
     method: 'get',
@@ -772,11 +783,17 @@ function fetchRemoteMeta_(url) {
   if (!len || isNaN(len)) {
     len = parseInt(headers['Content-Length'] || headers['content-length'] || '', 10);
   }
+  var etagHeader = headers['ETag'] || headers['etag'] || '';
+  if (Array.isArray(etagHeader)) etagHeader = etagHeader.join(',');
+  var lastModifiedHeader = headers['Last-Modified'] || headers['last-modified'] || '';
+  if (Array.isArray(lastModifiedHeader)) lastModifiedHeader = lastModifiedHeader.join(',');
 
   return {
     name: name,
     size: (len && !isNaN(len)) ? len : null,
-    acceptRanges: !!(acceptRanges || code === 206)
+    acceptRanges: !!(acceptRanges || code === 206),
+    etag: etagHeader ? String(etagHeader) : '',
+    lastModified: lastModifiedHeader ? String(lastModifiedHeader) : ''
   };
 }
 

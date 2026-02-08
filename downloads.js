@@ -357,7 +357,7 @@
   }
 
   function fetchZipBundleChunked(zipUrl) {
-    var meta = { name: 'site.zip', size: 0, acceptRanges: false };
+    var meta = { name: 'site.zip', size: 0, acceptRanges: false, etag: '', lastModified: '' };
     var chunkSize = 20 * 1024 * 1024;
     var chunks = [];
     var downloaded = 0;
@@ -638,6 +638,8 @@
       if (data && data.name) meta.name = data.name;
       if (data && data.size) meta.size = data.size;
       if (data && data.acceptRanges) meta.acceptRanges = true;
+      if (data && data.etag) meta.etag = data.etag;
+      if (data && data.lastModified) meta.lastModified = data.lastModified;
       if (meta.size) totalSize = meta.size;
     }).catch(function () {
       // ignore meta errors

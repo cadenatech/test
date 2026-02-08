@@ -124,6 +124,11 @@
         deleteAll: 'Eliminar todos los recursos',
         deleteAllConfirm: '¿Seguro que quieres eliminar todos los recursos guardados en este navegador? Esta acción no se puede deshacer.',
         savedAt: 'Guardado:',
+        checkUpdates: 'Comprobar actualizaciones',
+        checkUpdatesHelp: 'Verifica si los ZIP han cambiado en la nube.',
+        checkingUpdates: 'Comprobando actualizaciones...',
+        checkUpdatesDone: 'Comprobación finalizada.',
+        checkUpdatesUnavailable: 'No se puede comprobar sin el backend configurado.',
         stats: {
           used: 'Espacio usado',
           total: 'Espacio total',
@@ -161,7 +166,8 @@
           qr: 'QR',
           embed: 'Insertar en una web',
           edit: 'Editar el título',
-          download: 'Descargar archivo'
+          download: 'Descargar archivo',
+          update: 'Actualizar'
         },
         editPrompt: 'Título del recurso',
         empty: 'No hay recursos guardados en este navegador.',
@@ -171,7 +177,14 @@
       badges: {
         scheduled: 'Programado',
         opening: 'Inicio: {date}',
-        closing: 'Fin: {date}'
+        closing: 'Fin: {date}',
+        updateAvailable: 'Actualización disponible'
+      },
+      updates: {
+        title: 'Nueva versión disponible',
+        body: 'El recurso ha cambiado en la nube. Puedes actualizarlo ahora.',
+        action: 'Actualizar',
+        dismiss: 'Ahora no'
       },
       zipper: {
         title: 'Crear ZIP para el visor',
@@ -533,6 +546,11 @@
         deleteAllConfirm: 'Segur que vols eliminar tots els recursos desats en aquest navegador? Aquesta acció no es pot desfer.',
         deleteAllHelp: 'Esborra tots els recursos desats en aquest navegador.',
         savedAt: 'Desat:',
+        checkUpdates: 'Comprovar actualitzacions',
+        checkUpdatesHelp: 'Comprova si els ZIP han canviat al núvol.',
+        checkingUpdates: 'Comprovant actualitzacions...',
+        checkUpdatesDone: 'Comprovació finalitzada.',
+        checkUpdatesUnavailable: 'No es pot comprovar sense el backend configurat.',
         stats: {
           used: 'Espai usat',
           total: 'Espai total',
@@ -569,7 +587,8 @@
           qr: 'QR',
           embed: 'Inserir en una web',
           edit: 'Editar el títol',
-          download: 'Descarregar fitxer'
+          download: 'Descarregar fitxer',
+          update: 'Actualitzar'
         },
         editPrompt: 'Títol del recurs',
         empty: 'No hi ha recursos desats en aquest navegador.',
@@ -579,7 +598,14 @@
       badges: {
         scheduled: 'Programat',
         opening: 'Inici: {date}',
-        closing: 'Fi: {date}'
+        closing: 'Fi: {date}',
+        updateAvailable: 'Actualització disponible'
+      },
+      updates: {
+        title: 'Nova versió disponible',
+        body: 'El recurs ha canviat al núvol. Pots actualitzar-lo ara.',
+        action: 'Actualitzar',
+        dismiss: 'Ara no'
       },
       zipper: {
         title: 'Crear ZIP per al visor',
@@ -939,6 +965,11 @@
         deleteAllConfirm: 'Seguro que queres eliminar todos os recursos gardados neste navegador? Esta acción non se pode desfacer.',
         deleteAllHelp: 'Borra todos os recursos gardados neste navegador.',
         savedAt: 'Gardado:',
+        checkUpdates: 'Comprobar actualizacións',
+        checkUpdatesHelp: 'Comproba se os ZIP cambiaron na nube.',
+        checkingUpdates: 'Comprobando actualizacións...',
+        checkUpdatesDone: 'Comprobación finalizada.',
+        checkUpdatesUnavailable: 'Non se pode comprobar sen o backend configurado.',
         stats: {
           used: 'Espazo usado',
           total: 'Espazo total',
@@ -975,7 +1006,8 @@
           qr: 'QR',
           embed: 'Inserir nunha web',
           edit: 'Editar o título',
-          download: 'Descargar ficheiro'
+          download: 'Descargar ficheiro',
+          update: 'Actualizar'
         },
         editPrompt: 'Título do recurso',
         empty: 'Non hai recursos gardados neste navegador.',
@@ -985,7 +1017,14 @@
       badges: {
         scheduled: 'Programado',
         opening: 'Inicio: {date}',
-        closing: 'Fin: {date}'
+        closing: 'Fin: {date}',
+        updateAvailable: 'Actualización dispoñible'
+      },
+      updates: {
+        title: 'Nova versión dispoñible',
+        body: 'O recurso cambiou na nube. Podes actualizalo agora.',
+        action: 'Actualizar',
+        dismiss: 'Agora non'
       },
       zipper: {
         title: 'Crear ZIP para o visor',
@@ -1345,6 +1384,11 @@
         deleteAllConfirm: 'Ziur zaude nabigatzaile honetan gordetako baliabide guztiak ezabatu nahi dituzula? Ekintza hau ezin da desegin.',
         deleteAllHelp: 'Nabigatzaile honetan gordetako baliabide guztiak ezabatzen ditu.',
         savedAt: 'Gordeta:',
+        checkUpdates: 'Eguneratzeak egiaztatu',
+        checkUpdatesHelp: 'Egiaztatu ZIPak hodeian aldatu diren.',
+        checkingUpdates: 'Eguneratzeak egiaztatzen...',
+        checkUpdatesDone: 'Egiaztapena amaituta.',
+        checkUpdatesUnavailable: 'Ezin da egiaztatu backend konfiguratu gabe.',
         stats: {
           used: 'Erabilitako espazioa',
           total: 'Guztizko espazioa',
@@ -1381,7 +1425,8 @@
           qr: 'QR',
           embed: 'Web batean txertatu',
           edit: 'Izenburua editatu',
-          download: 'Fitxategia deskargatu'
+          download: 'Fitxategia deskargatu',
+          update: 'Eguneratu'
         },
         editPrompt: 'Baliabidearen izenburua',
         empty: 'Ez dago gordetako baliabiderik nabigatzaile honetan.',
@@ -1391,7 +1436,14 @@
       badges: {
         scheduled: 'Programatua',
         opening: 'Hasiera: {date}',
-        closing: 'Amaiera: {date}'
+        closing: 'Amaiera: {date}',
+        updateAvailable: 'Eguneraketa eskuragarri'
+      },
+      updates: {
+        title: 'Bertsio berria eskuragarri',
+        body: 'Baliabidea hodeian aldatu da. Orain eguneratu dezakezu.',
+        action: 'Eguneratu',
+        dismiss: 'Orain ez'
       },
       zipper: {
         title: 'Bisorerako ZIP sortu',
@@ -1751,6 +1803,11 @@
         deleteAllConfirm: 'Are you sure you want to delete all resources saved in this browser? This action cannot be undone.',
         deleteAllHelp: 'Deletes all resources saved in this browser.',
         savedAt: 'Saved:',
+        checkUpdates: 'Check updates',
+        checkUpdatesHelp: 'Check whether ZIPs changed in the cloud.',
+        checkingUpdates: 'Checking updates...',
+        checkUpdatesDone: 'Check complete.',
+        checkUpdatesUnavailable: 'Cannot check without the backend configured.',
         stats: {
           used: 'Space used',
           total: 'Total space',
@@ -1787,7 +1844,8 @@
           qr: 'QR',
           embed: 'Embed in a website',
           edit: 'Edit title',
-          download: 'Download file'
+          download: 'Download file',
+          update: 'Update'
         },
         editPrompt: 'Resource title',
         empty: 'No saved resources in this browser.',
@@ -1797,7 +1855,14 @@
       badges: {
         scheduled: 'Scheduled',
         opening: 'Start: {date}',
-        closing: 'End: {date}'
+        closing: 'End: {date}',
+        updateAvailable: 'Update available'
+      },
+      updates: {
+        title: 'New version available',
+        body: 'This resource changed in the cloud. You can update it now.',
+        action: 'Update',
+        dismiss: 'Not now'
       },
       zipper: {
         title: 'Create ZIP for the viewer',
@@ -2158,6 +2223,11 @@
         deleteAllConfirm: 'Möchtest du wirklich alle in diesem Browser gespeicherten Ressourcen löschen? Diese Aktion kann nicht rückgängig gemacht werden.',
         deleteAllHelp: 'Löscht alle in diesem Browser gespeicherten Ressourcen.',
         savedAt: 'Gespeichert:',
+        checkUpdates: 'Updates prüfen',
+        checkUpdatesHelp: 'Prüft, ob sich ZIPs in der Cloud geändert haben.',
+        checkingUpdates: 'Updates werden geprüft...',
+        checkUpdatesDone: 'Prüfung abgeschlossen.',
+        checkUpdatesUnavailable: 'Prüfung ohne Backend nicht möglich.',
         stats: {
           used: 'Belegter Speicher',
           total: 'Gesamtspeicher',
@@ -2194,7 +2264,8 @@
           qr: 'QR',
           embed: 'In eine Website einbetten',
           edit: 'Titel bearbeiten',
-          download: 'Datei herunterladen'
+          download: 'Datei herunterladen',
+          update: 'Aktualisieren'
         },
         editPrompt: 'Titel der Ressource',
         empty: 'Keine gespeicherten Ressourcen in diesem Browser.',
@@ -2204,7 +2275,14 @@
       badges: {
         scheduled: 'Geplant',
         opening: 'Beginn: {date}',
-        closing: 'Ende: {date}'
+        closing: 'Ende: {date}',
+        updateAvailable: 'Update verfügbar'
+      },
+      updates: {
+        title: 'Neue Version verfügbar',
+        body: 'Diese Ressource hat sich in der Cloud geändert. Du kannst jetzt aktualisieren.',
+        action: 'Aktualisieren',
+        dismiss: 'Jetzt nicht'
       },
       zipper: {
         title: 'ZIP für den Viewer erstellen',

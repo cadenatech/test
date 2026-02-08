@@ -2,7 +2,7 @@
 
 ![Release](https://img.shields.io/github/v/release/visor-webzip/visor-webzip.github.io?label=version&sort=semver)
 
-Versión actual: v1.7.9
+Versión actual: v1.8.0
 
 Este proyecto permite mostrar contenidos web (eXeLearning, recursos IA, webs interactivas, etc.) empaquetados en un ZIP, sin tener que publicar en un hosting tradicional.
 
@@ -75,3 +75,4 @@ Enlaces:
 - El primer acceso descarga y descomprime el ZIP en el navegador.
 - Para ZIPs grandes, el modo `bundle=1` en una sola respuesta puede fallar por el tamano del base64. La solucion es la **descarga por trozos** (`meta=1` + `part=`), ya incluida en `gas/Code.js` y con fallback automatico en el frontend.
 - Si cambias el ZIP pero mantienes el mismo enlace, los alumnos deben volver a abrir la URL para actualizar el cache.
+- El visor intenta detectar cambios en el ZIP (tamaño/ETag/fecha) y mostrará un aviso de “Nueva versión disponible” cuando sea posible.

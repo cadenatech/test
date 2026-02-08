@@ -126,6 +126,12 @@
       var date = site.updatedAt ? new Date(site.updatedAt).toLocaleString(currentLang) : t('manager.noDate');
       var savedLabel = t('manager.savedAt') || '';
       meta.textContent = ctx('formatBytes')(site.totalBytes || 0) + ' · ' + (savedLabel ? (savedLabel + ' ' + date) : date);
+      if (site.updateAvailable) {
+        var updateBadge = document.createElement('span');
+        updateBadge.className = 'manager-badge manager-badge--update';
+        updateBadge.textContent = t('badges.updateAvailable');
+        meta.appendChild(updateBadge);
+      }
       if (restrictions && restrictions.enabled) {
         var startLabel = restrictions.startAt ? Restrictions.formatRestrictionDate(restrictions.startAt, currentLang) : '';
         var endLabel = (!restrictions.neverExpires && restrictions.endAt) ? Restrictions.formatRestrictionDate(restrictions.endAt, currentLang) : '';
@@ -218,6 +224,17 @@
       downloadButton.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 3v10"></path><path d="M7 9l5 5 5-5"></path><path d="M5 21h14"></path></svg>';
       actions.appendChild(downloadButton);
       downloadButton.disabled = !site.url || !canDownload;
+      var updateButton = document.createElement('button');
+      updateButton.type = 'button';
+      updateButton.className = 'icon-button';
+      updateButton.setAttribute('data-action', 'update');
+      updateButton.setAttribute('data-zip-url', site.url || '');
+      updateButton.setAttribute('data-index-path', site.indexPath || '');
+      updateButton.setAttribute('aria-label', t('manager.actions.update'));
+      updateButton.setAttribute('data-tooltip', t('manager.actions.update'));
+      updateButton.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 12a9 9 0 1 1-2.6-6.4"></path><path d="M21 3v6h-6"></path></svg>';
+      actions.appendChild(updateButton);
+      updateButton.disabled = !site.url || !canDownload;
       var delButton = document.createElement('button');
       delButton.type = 'button';
       delButton.className = 'icon-button';

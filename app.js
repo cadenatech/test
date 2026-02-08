@@ -9,6 +9,9 @@
   var openLink = document.querySelector('[data-open]');
   var shareRestrictSummary = document.querySelector('[data-share-restrict-summary]');
   var shareRestrictItems = document.querySelector('[data-share-restrict-items]');
+  var updateBanner = document.querySelector('[data-update-banner]');
+  var updateActionButton = document.querySelector('[data-update-action]');
+  var updateDismissButton = document.querySelector('[data-update-dismiss]');
   var stepThree = document.querySelector('[data-step-three]');
   var loadingScreen = document.querySelector('[data-loading]');
   var loadingMessage = document.querySelector('[data-loading-message]');
@@ -72,6 +75,7 @@
   var mainSettingsOpenButtons = document.querySelectorAll('[data-main-settings-open]');
   var mainSettingsModal = document.querySelector('[data-main-settings-modal]');
   var mainSettingsCloseButtons = document.querySelectorAll('[data-main-settings-close]');
+  var managerCheckUpdatesButton = document.querySelector('[data-manager-check-updates]');
   var restrictionToggle = document.querySelector('[data-restrict-toggle]');
   var restrictionFields = document.querySelector('[data-restrict-fields]');
   var restrictionActions = document.querySelector('[data-restrict-actions]');
@@ -1651,6 +1655,140 @@
     return bytes;
   }
 
+  function normalizeMetaSignature(meta) {
+    if (!meta) return null;
+    var signature = {};
+    if (meta.size) signature.size = meta.size;
+    if (meta.etag) signature.etag = meta.etag;
+    if (meta.lastModified) signature.lastModified = meta.lastModified;
+    return Object.keys(signature).length ? signature : null;
+  }
+
+  function mergeMetaSignature(stored, remote) {
+    var signature = {};
+    if (stored) {
+      if (stored.size) signature.size = stored.size;
+      if (stored.etag) signature.etag = stored.etag;
+      if (stored.lastModified) signature.lastModified = stored.lastModified;
+    }
+    if (remote) {
+      if (remote.size) signature.size = remote.size;
+      if (remote.etag) signature.etag = remote.etag;
+      if (remote.lastModified) signature.lastModified = remote.lastModified;
+    }
+    return Object.keys(signature).length ? signature : null;
+  }
+
+  function metaEqual(a, b) {
+    if (!a && !b) return true;
+    if (!a || !b) return false;
+    return (a.size || null) === (b.size || null)
+      && (a.etag || '') === (b.etag || '')
+      && (a.lastModified || '') === (b.lastModified || '');
+  }
+
+  function isMetaChanged(stored, remote) {
+    if (!stored || !remote) return false;
+    var comparable = false;
+    if (stored.etag && remote.etag) {
+      comparable = true;
+      if (stored.etag !== remote.etag) return true;
+    }
+    if (stored.lastModified && remote.lastModified) {
+      comparable = true;
+      if (stored.lastModified !== remote.lastModified) return true;
+    }
+    if (stored.size && remote.size) {
+      comparable = true;
+      if (stored.size !== remote.size) return true;
+    }
+    return comparable ? false : false;
+  }
+
+  function fetchRemoteMetaSignature(zipUrl) {
+    if (!Downloads || !Downloads.fetchZipBundleMeta || !Downloads.hasGas || !Downloads.hasGas()) {
+      return Promise.resolve(null);
+    }
+    return Downloads.fetchZipBundleMeta(zipUrl).then(function (meta) {
+      return normalizeMetaSignature(meta);
+    }).catch(function () {
+      return null;
+    });
+  }
+
+  function showUpdateBanner(zipUrl, indexPath) {
+    if (!updateBanner) return;
+    updateBanner.removeAttribute('hidden');
+    if (updateActionButton) {
+      updateActionButton.setAttribute('data-zip-url', zipUrl || '');
+      updateActionButton.setAttribute('data-index-path', indexPath || '');
+    }
+  }
+
+  function hideUpdateBanner() {
+    if (!updateBanner) return;
+    updateBanner.setAttribute('hidden', '');
+    if (updateActionButton) {
+      updateActionButton.removeAttribute('data-zip-url');
+      updateActionButton.removeAttribute('data-index-path');
+    }
+  }
+
+  function checkForRemoteUpdate(site, options) {
+    if (!site || !site.url) return Promise.resolve();
+    var opts = options || {};
+    return fetchRemoteMetaSignature(site.url).then(function (remoteSignature) {
+      if (!remoteSignature) return;
+      var storedSignature = site.remoteMeta || null;
+      var mergedSignature = mergeMetaSignature(storedSignature, remoteSignature);
+      var changed = storedSignature ? isMetaChanged(storedSignature, remoteSignature) : false;
+      var needsSave = !metaEqual(storedSignature, mergedSignature) || site.updateAvailable !== changed;
+      if (!needsSave) {
+        if (changed && opts.showBanner) {
+          showUpdateBanner(opts.zipUrl || site.url, opts.indexPath || site.indexPath || '');
+        }
+        return;
+      }
+      site.remoteMeta = mergedSignature;
+      site.updateAvailable = changed;
+      return Storage.saveSite(site).then(function () {
+        if (changed && opts.showBanner) {
+          showUpdateBanner(opts.zipUrl || site.url, opts.indexPath || site.indexPath || '');
+        }
+        if (changed && Manager && Manager.refreshManager) {
+          Manager.refreshManager();
+        }
+      });
+    });
+  }
+
+  function checkUpdatesForAllSites() {
+    if (!Downloads || !Downloads.fetchZipBundleMeta || !Downloads.hasGas || !Downloads.hasGas()) {
+      UI.flashMessage(t('manager.checkUpdatesUnavailable'));
+      return;
+    }
+    if (managerCheckUpdatesButton) {
+      managerCheckUpdatesButton.disabled = true;
+    }
+    UI.flashMessage(t('manager.checkingUpdates'));
+    Storage.getAllSites().then(function (sites) {
+      return sites.reduce(function (promise, site) {
+        return promise.then(function () {
+          return checkForRemoteUpdate(site, { showBanner: false });
+        });
+      }, Promise.resolve());
+    }).then(function () {
+      Manager.refreshManager();
+      UI.flashMessage(t('manager.checkUpdatesDone'));
+    }).catch(function () {
+      UI.flashMessage(t('manager.checkUpdatesDone'));
+    }).finally(function () {
+      if (managerCheckUpdatesButton) {
+        managerCheckUpdatesButton.disabled = false;
+      }
+    });
+  }
+
 
 
 
@@ -1754,6 +1892,14 @@
       return waitForServiceWorkerControl();
     });
 
+    var remoteMetaPromise = null;
+    function getRemoteMetaPromise() {
+      if (!remoteMetaPromise) {
+        remoteMetaPromise = fetchRemoteMetaSignature(effectiveZipUrl);
+      }
+      return remoteMetaPromise;
+    }
+
     return computeSiteId(effectiveZipUrl)
       .then(function (siteId) {
         return Storage.getSite(siteId).then(function (site) {
@@ -1770,6 +1916,11 @@
           var effectiveIndexPath = opts.preferredIndexPath ? normalizePath(opts.preferredIndexPath) : cachedIndexPath;
           currentIndexPath = effectiveIndexPath || cachedIndexPath || '';
           refreshShareLink(effectiveZipUrl, currentIndexPath);
+          checkForRemoteUpdate(result.site, {
+            showBanner: !autoOpen && !opts.embed,
+            zipUrl: effectiveZipUrl,
+            indexPath: currentIndexPath
+          });
           if (result.site && Restrictions.isRestrictionActive(result.site.restrictions) && !Restrictions.isRestrictionAllowedNow(result.site.restrictions)) {
             if (Restrictions.isRestrictionExpired(result.site.restrictions)) {
               if (opts.allowInactive) {
@@ -1933,50 +2084,55 @@
             }).then(function () {
               return extractTitleFromFiles(files, indexPath).then(function (foundTitle) {
                 var siteTitle = foundTitle || deriveTitleFromPath(indexPath) || deriveTitleFromUrl(effectiveZipUrl);
-                var site = {
-                  id: result.siteId,
-                  url: effectiveZipUrl,
-                  indexPath: indexPath,
-                  updatedAt: Date.now(),
-                  fileCount: files.length,
-                  totalBytes: totalBytes,
-                  title: siteTitle,
-                  restrictions: restrictions || null
-                };
-                return Storage.saveSite(site).then(function () {
-                  return Storage.saveFiles(files).then(function () {
-                    var siteUrl = buildSiteUrl(result.siteId, indexPath);
-                    return controlPromise.then(function () {
-                      currentRestrictions = restrictions || null;
-                      RestrictionUI.applyRestrictionsToActions(currentRestrictions);
-                      if (opts.embed) {
-                        openEmbedSite(siteUrl);
-                        return { siteId: result.siteId, siteUrl: siteUrl };
-                      }
-                      if (blockedNow && !opts.allowInactive) {
-                        RestrictionUI.showRestrictionModal(restrictions);
-                        if (showProgress || autoOpen) {
+                return getRemoteMetaPromise().then(function (remoteSignature) {
+                  var site = {
+                    id: result.siteId,
+                    url: effectiveZipUrl,
+                    indexPath: indexPath,
+                    updatedAt: Date.now(),
+                    fileCount: files.length,
+                    totalBytes: totalBytes,
+                    title: siteTitle,
+                    restrictions: restrictions || null,
+                    remoteMeta: remoteSignature || null,
+                    updateAvailable: false
+                  };
+                  return Storage.saveSite(site).then(function () {
+                    return Storage.saveFiles(files).then(function () {
+                      var siteUrl = buildSiteUrl(result.siteId, indexPath);
+                      return controlPromise.then(function () {
+                        currentRestrictions = restrictions || null;
+                        RestrictionUI.applyRestrictionsToActions(currentRestrictions);
+                        hideUpdateBanner();
+                        if (opts.embed) {
+                          openEmbedSite(siteUrl);
+                          return { siteId: result.siteId, siteUrl: siteUrl };
+                        }
+                        if (blockedNow && !opts.allowInactive) {
+                          RestrictionUI.showRestrictionModal(restrictions);
+                          if (showProgress || autoOpen) {
+                            UI.stopProgress();
+                            UI.setLoading(false);
+                          }
+                          if (loadingMessage) {
+                            loadingMessage.textContent = t('loading.message');
+                          }
+                          if (loadingEta) {
+                            UI.setLoadingEtaVisible(false);
+                          }
+                          return { siteId: result.siteId, siteUrl: null };
+                        }
+                        if (autoOpen) {
+                          window.location.assign(siteUrl);
+                        }
+                        if (showProgress && !autoOpen) {
+                          UI.setProgress(100);
                           UI.stopProgress();
                           UI.setLoading(false);
                         }
-                        if (loadingMessage) {
-                          loadingMessage.textContent = t('loading.message');
-                        }
-                        if (loadingEta) {
-                          UI.setLoadingEtaVisible(false);
-                        }
-                        return { siteId: result.siteId, siteUrl: null };
-                      }
-                      if (autoOpen) {
-                        window.location.assign(siteUrl);
-                      }
-                      if (showProgress && !autoOpen) {
-                        UI.setProgress(100);
-                        UI.stopProgress();
-                        UI.setLoading(false);
-                      }
-                      Manager.refreshManager();
-                      return { siteId: result.siteId, siteUrl: siteUrl };
+                        Manager.refreshManager();
+                        return { siteId: result.siteId, siteUrl: siteUrl };
+                      });
                     });
                   });
                 });
@@ -2020,6 +2176,20 @@
         return;
       }
       Share.copyText(currentShareLink);
+    });
+  }
+  if (updateActionButton) {
+    updateActionButton.addEventListener('click', function () {
+      var zipUrl = updateActionButton.getAttribute('data-zip-url') || currentZipUrl || '';
+      var indexPath = updateActionButton.getAttribute('data-index-path') || '';
+      if (!zipUrl) return;
+      hideUpdateBanner();
+      loadZip(zipUrl, { force: true, autoOpen: false, preferredIndexPath: indexPath });
+    });
+  }
+  if (updateDismissButton) {
+    updateDismissButton.addEventListener('click', function () {
+      hideUpdateBanner();
     });
   }
 
@@ -2407,6 +2577,10 @@
         window.open(downloadUrl, '_blank');
         return;
       }
+      if (action === 'update' && zipUrl) {
+        loadZip(zipUrl, { force: true, autoOpen: false, preferredIndexPath: indexPath || '' });
+        return;
+      }
       if (action === 'edit' && siteId) {
         var item = button.closest('.manager-item');
         if (!item) return;
@@ -2421,6 +2595,11 @@
     managerSortSelect.addEventListener('change', function () {
       Manager.setManagerSort(managerSortSelect.value);
       Manager.refreshManager();
+    });
+  }
+  if (managerCheckUpdatesButton) {
+    managerCheckUpdatesButton.addEventListener('click', function () {
+      checkUpdatesForAllSites();
     });
   }
   if (sortDirButton) {
@@ -2657,17 +2836,19 @@
     var entryParam = params.get('entry') || params.get('index') || params.get('path') || '';
     var viewParam = (params.get('view') || '').toLowerCase();
     var embedParam = (params.get('embed') || '').toLowerCase();
+    var forceParam = (params.get('force') || params.get('update') || params.get('refresh') || '').toLowerCase();
     var embedActive = embedParam === '1' || embedParam === 'true' || embedParam === 'yes';
     var autoOpen = viewParam === 'full' || viewParam === '1';
+    var force = forceParam === '1' || forceParam === 'true' || forceParam === 'yes';
     if (embedActive) {
       var embedIdParam = params.get('embedId') || '';
       setEmbedMode(true, embedIdParam);
-      loadZip(resolvedUrl, { force: false, autoOpen: false, embed: true, embedId: embedIdParam, preferredIndexPath: entryParam });
+      loadZip(resolvedUrl, { force: force, autoOpen: false, embed: true, embedId: embedIdParam, preferredIndexPath: entryParam });
     } else {
       setEmbedMode(false, '');
       Nav.setActiveTab('publish');
       Nav.setPublishModule('main');
-      loadZip(resolvedUrl, { force: false, autoOpen: autoOpen, preferredIndexPath: entryParam });
+      loadZip(resolvedUrl, { force: force, autoOpen: autoOpen, preferredIndexPath: entryParam });
     }
   }
 
