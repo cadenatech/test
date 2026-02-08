@@ -4,7 +4,8 @@
     loadingActive: false,
     progressTimer: null,
     lastProgressValue: 0,
-    inlineToastTimer: null
+    inlineToastTimer: null,
+    toastTimer: null
   };
 
   function init(options) {
@@ -124,6 +125,20 @@
     }, 1300);
   }
 
+  function showToast(message) {
+    if (!els.globalToast) return;
+    els.globalToast.textContent = message;
+    els.globalToast.removeAttribute('hidden');
+    if (state.toastTimer) {
+      clearTimeout(state.toastTimer);
+    }
+    state.toastTimer = setTimeout(function () {
+      if (els.globalToast) {
+        els.globalToast.setAttribute('hidden', '');
+      }
+    }, 2800);
+  }
+
   function setUploadStatus(message) {
     if (els.uploadStatus) {
       els.uploadStatus.textContent = message;
@@ -156,6 +171,7 @@
     setStatus: setStatus,
     flashMessage: flashMessage,
     showInlineToast: showInlineToast,
+    showToast: showToast,
     setUploadStatus: setUploadStatus,
     setZipStatus: setZipStatus,
     setHtmlZipStatus: setHtmlZipStatus

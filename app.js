@@ -124,6 +124,7 @@
       uploadStatus: uploadStatus,
       zipStatus: zipStatus,
       htmlZipStatus: htmlZipStatus,
+      globalToast: document.querySelector('[data-global-toast]'),
       getCurrentShareLink: function () { return currentShareLink; }
     });
   }
@@ -1822,6 +1823,9 @@
       if (UI.showInlineToast && managerCheckUpdatesButton) {
         UI.showInlineToast(managerCheckUpdatesButton, t('manager.checkUpdatesUnavailable'));
       }
+      if (UI.showToast) {
+        UI.showToast(t('manager.checkUpdatesUnavailable'));
+      }
       return;
     }
     if (managerCheckUpdatesButton) {
@@ -1859,12 +1863,18 @@
         if (UI.showInlineToast && managerCheckUpdatesButton) {
           UI.showInlineToast(managerCheckUpdatesButton, summary);
         }
+        if (UI.showToast) {
+          UI.showToast(summary);
+        }
       });
     }).catch(function () {
       var doneMsg = t('manager.checkUpdatesDone');
       setUpdateCheckStatus(doneMsg);
       if (UI.showInlineToast && managerCheckUpdatesButton) {
         UI.showInlineToast(managerCheckUpdatesButton, doneMsg);
+      }
+      if (UI.showToast) {
+        UI.showToast(doneMsg);
       }
     }).finally(function () {
       if (managerCheckUpdatesButton) {

@@ -1780,6 +1780,20 @@ textarea:focus-visible {
   padding: 32px;
 }
 
+.global-toast {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 9999;
+  background: rgba(27, 31, 35, 0.92);
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+  max-width: min(360px, calc(100vw - 32px));
+}
+
 .modal__overlay {
   position: absolute;
   inset: 0;
