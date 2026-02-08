@@ -1178,7 +1178,36 @@
     return '';
   }
 
+  function normalizeGithubBlobUrl(url) {
+    // Convert GitHub "blob" URLs to raw URLs so the backend fetches the ZIP bytes, not HTML.
+    // Example:
+    // https://github.com/u/r/blob/main/file.zip -> https://raw.githubusercontent.com/u/r/main/file.zip
+    var parsed;
+    try {
+      parsed = new URL(url);
+    } catch (e) {
+      return url;
+    }
+    var host = (parsed.hostname || '').toLowerCase();
+    if (host === 'raw.githubusercontent.com') return url;
+    if (host !== 'github.com' && host !== 'www.github.com') return url;
+
+    var path = parsed.pathname || '';
+    var parts = path.split('/').filter(Boolean);
+    // /{user}/{repo}/blob/{ref}/{path...}
+    if (parts.length < 5) return url;
+    if (parts[2] !== 'blob') return url;
+
+    var user = parts[0];
+    var repo = parts[1];
+    var ref = parts[3];
+    var filePath = parts.slice(4).join('/');
+    if (!user || !repo || !ref || !filePath) return url;
+    return 'https://raw.githubusercontent.com/' + user + '/' + repo + '/' + ref + '/' + filePath;
+  }
+
   function normalizeZipUrl(url) {
+    url = normalizeGithubBlobUrl(url);
     var driveId = extractDriveId(url);
     if (driveId) {
       return 'https://drive.google.com/uc?export=download&id=' + driveId;
@@ -1974,6 +2003,18 @@
     }
     if (zipUrl.indexOf('dropbox.com') !== -1) {
       shouldUseNormalized = true;
+    }
+    // GitHub "blob" pages are HTML. Use the raw URL when normalizeZipUrl() converted it.
+    if (!shouldUseNormalized && normalizedZipUrl !== zipUrl) {
+      try {
+        var parsedZip = new URL(zipUrl);
+        var hostZip = (parsedZip.hostname || '').toLowerCase();
+        if ((hostZip === 'github.com' || hostZip === 'www.github.com') && parsedZip.pathname.indexOf('/blob/') !== -1) {
+          shouldUseNormalized = true;
+        }
+      } catch (e) {
+        // ignore
+      }
     }
     var effectiveZipUrl = shouldUseNormalized ? normalizedZipUrl : zipUrl;
     if (shouldUseNormalized && input && input.value && input.value.trim() === zipUrl && normalizedZipUrl !== zipUrl) {
