@@ -182,7 +182,8 @@
         scheduled: 'Programado',
         opening: 'Inicio: {date}',
         closing: 'Fin: {date}',
-        updateAvailable: 'Actualización disponible'
+        updateAvailable: 'Actualización disponible',
+        updatedAt: 'Actualizado: {date}'
       },
       updates: {
         title: 'Nueva versión disponible',
@@ -607,7 +608,8 @@
         scheduled: 'Programat',
         opening: 'Inici: {date}',
         closing: 'Fi: {date}',
-        updateAvailable: 'Actualització disponible'
+        updateAvailable: 'Actualització disponible',
+        updatedAt: 'Actualitzat: {date}'
       },
       updates: {
         title: 'Nova versió disponible',
@@ -1030,7 +1032,8 @@
         scheduled: 'Programado',
         opening: 'Inicio: {date}',
         closing: 'Fin: {date}',
-        updateAvailable: 'Actualización dispoñible'
+        updateAvailable: 'Actualización dispoñible',
+        updatedAt: 'Actualizado: {date}'
       },
       updates: {
         title: 'Nova versión dispoñible',
@@ -1453,7 +1456,8 @@
         scheduled: 'Programatua',
         opening: 'Hasiera: {date}',
         closing: 'Amaiera: {date}',
-        updateAvailable: 'Eguneraketa eskuragarri'
+        updateAvailable: 'Eguneraketa eskuragarri',
+        updatedAt: 'Eguneratua: {date}'
       },
       updates: {
         title: 'Bertsio berria eskuragarri',
@@ -1876,7 +1880,8 @@
         scheduled: 'Scheduled',
         opening: 'Start: {date}',
         closing: 'End: {date}',
-        updateAvailable: 'Update available'
+        updateAvailable: 'Update available',
+        updatedAt: 'Updated: {date}'
       },
       updates: {
         title: 'New version available',
@@ -2300,7 +2305,8 @@
         scheduled: 'Geplant',
         opening: 'Beginn: {date}',
         closing: 'Ende: {date}',
-        updateAvailable: 'Update verfügbar'
+        updateAvailable: 'Update verfügbar',
+        updatedAt: 'Aktualisiert: {date}'
       },
       updates: {
         title: 'Neue Version verfügbar',

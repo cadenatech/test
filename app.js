@@ -2149,6 +2149,7 @@
               return extractTitleFromFiles(files, indexPath).then(function (foundTitle) {
                 var siteTitle = foundTitle || deriveTitleFromPath(indexPath) || deriveTitleFromUrl(effectiveZipUrl);
                 return getRemoteMetaPromise().then(function (remoteSignature) {
+                  var updatedFromRemoteAt = (opts.force && result.cached) ? Date.now() : (result.site && result.site.updatedFromRemoteAt ? result.site.updatedFromRemoteAt : null);
                   var site = {
                     id: result.siteId,
                     url: effectiveZipUrl,
@@ -2159,7 +2160,8 @@
                     title: siteTitle,
                     restrictions: restrictions || null,
                     remoteMeta: remoteSignature || null,
-                    updateAvailable: false
+                    updateAvailable: false,
+                    updatedFromRemoteAt: updatedFromRemoteAt
                   };
                   return Storage.saveSite(site).then(function () {
                     return Storage.saveFiles(files).then(function () {
@@ -2947,4 +2949,10 @@
     Nav.setPublishModule('');
     UI.setLoading(false);
   }
+
+  window.addEventListener('pageshow', function (event) {
+    if (event.persisted && Manager && Manager.refreshManager) {
+      Manager.refreshManager();
+    }
+  });
 })();

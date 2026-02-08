@@ -1528,6 +1528,12 @@ textarea:focus-visible {
   border-color: #f59e0b;
 }
 
+.manager-badge--updated {
+  background: #ecfdf3;
+  color: #067647;
+  border-color: #a6f4c5;
+}
+
 .manager-item__actions {
   display: flex;
   gap: 8px;

@@ -127,6 +127,13 @@
       var date = site.updatedAt ? new Date(site.updatedAt).toLocaleString(currentLang) : t('manager.noDate');
       var savedLabel = t('manager.savedAt') || '';
       meta.textContent = ctx('formatBytes')(site.totalBytes || 0) + ' · ' + (savedLabel ? (savedLabel + ' ' + date) : date);
+      if (site.updatedFromRemoteAt) {
+        var updatedLabel = new Date(site.updatedFromRemoteAt).toLocaleString(currentLang);
+        var updatedBadge = document.createElement('span');
+        updatedBadge.className = 'manager-badge manager-badge--updated';
+        updatedBadge.textContent = t('badges.updatedAt', { date: updatedLabel });
+        meta.appendChild(updatedBadge);
+      }
       if (site.updateAvailable) {
         var updateBadge = document.createElement('span');
         updateBadge.className = 'manager-badge manager-badge--update';
