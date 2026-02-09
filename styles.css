@@ -1962,6 +1962,20 @@ textarea:focus-visible {
   color: var(--ink);
 }
 
+.inline-callout {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-left: 4px solid rgba(245, 158, 11, 0.45);
+  background: #fffbeb;
+  border-radius: 10px;
+  color: var(--ink);
+}
+
+.inline-callout__text {
+  margin: 0 0 10px;
+  line-height: 1.4;
+}
+
 .about-guide > :first-child {
   grid-column: 1 / -1;
 }

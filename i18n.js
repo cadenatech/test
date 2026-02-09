@@ -259,6 +259,9 @@
         restrict: {
           title: '¿Quieres limitar el acceso a un ZIP ya creado?',
           note: 'Sube tu ZIP y el visor añadirá las restricciones. Después tendrás que subirlo a Drive, Dropbox, etc.',
+          lockedText: 'Para usar esta opción, primero activa la limitación de visibilidad del recurso.',
+          lockedAction: 'Activar limitación',
+          lockedStatus: 'Activa la limitación de visibilidad para continuar.',
           pick: 'Seleccionar ZIP',
           apply: 'Aplicar restricciones y descargar',
           status: {
@@ -697,6 +700,9 @@
         restrict: {
           title: 'Vols limitar l’accés a un ZIP ja creat?',
           note: 'Puja el teu ZIP i el visor afegirà les restriccions. Després l’hauràs de pujar a Drive, Dropbox, etc.',
+          lockedText: 'Per fer servir aquesta opció, primer activa la limitació de visibilitat del recurs.',
+          lockedAction: 'Activar limitació',
+          lockedStatus: 'Activa la limitació de visibilitat per continuar.',
           pick: 'Seleccionar ZIP',
           apply: 'Aplicar restriccions i descarregar',
           status: {
@@ -1136,6 +1142,9 @@
         restrict: {
           title: 'Queres limitar o acceso a un ZIP xa creado?',
           note: 'Sube o teu ZIP e o visor engadirá as restricións. Despois terás que subilo a Drive, Dropbox, etc.',
+          lockedText: 'Para usar esta opción, primeiro activa a limitación de visibilidade do recurso.',
+          lockedAction: 'Activar limitación',
+          lockedStatus: 'Activa a limitación de visibilidade para continuar.',
           pick: 'Seleccionar ZIP',
           apply: 'Aplicar restricións e descargar',
           status: {
@@ -1575,6 +1584,9 @@
         restrict: {
           title: 'ZIP bat jada sortuta badago, sarbidea mugatu nahi?',
           note: 'Igo zure ZIPa eta bisoreak murrizketak gehituko ditu. Ondoren Drive, Dropbox, etab. zerbitzuetara igo beharko duzu.',
+          lockedText: 'Aukera hau erabiltzeko, lehenik aktibatu baliabidearen ikusgarritasun-muga.',
+          lockedAction: 'Aktibatu muga',
+          lockedStatus: 'Aktibatu ikusgarritasun-muga jarraitzeko.',
           pick: 'ZIPa hautatu',
           apply: 'Murrizketak aplikatu eta deskargatu',
           status: {
@@ -2014,6 +2026,9 @@
         restrict: {
           title: 'Want to limit access to an existing ZIP?',
           note: 'Upload your ZIP and the viewer will add restrictions. Then upload it to Drive, Dropbox, etc.',
+          lockedText: 'To use this option, first enable the resource visibility limit.',
+          lockedAction: 'Enable limit',
+          lockedStatus: 'Enable the visibility limit to continue.',
           pick: 'Select ZIP',
           apply: 'Apply restrictions and download',
           status: {
@@ -2454,6 +2469,9 @@
         restrict: {
           title: 'Zugriff auf ein vorhandenes ZIP begrenzen?',
           note: 'Lade dein ZIP hoch und der Viewer fügt die Einschränkungen hinzu. Danach musst du es zu Drive, Dropbox usw. hochladen.',
+          lockedText: 'Um diese Option zu nutzen, aktiviere zuerst die Sichtbarkeitsbegrenzung der Ressource.',
+          lockedAction: 'Begrenzung aktivieren',
+          lockedStatus: 'Aktiviere die Sichtbarkeitsbegrenzung, um fortzufahren.',
           pick: 'ZIP auswählen',
           apply: 'Einschränkungen anwenden und herunterladen',
           status: {

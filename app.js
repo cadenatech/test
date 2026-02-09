@@ -98,6 +98,8 @@
   var restrictionZipPick = document.querySelector('[data-restrict-zip-pick]');
   var restrictionZipApply = document.querySelector('[data-restrict-zip-apply]');
   var restrictionZipStatus = document.querySelector('[data-restrict-zip-status]');
+  var restrictionZipLock = document.querySelector('[data-restrict-zip-lock]');
+  var restrictionZipEnable = document.querySelector('[data-restrict-zip-enable]');
   var restrictionCountdown = document.querySelector('[data-restrict-countdown]');
   var UI = window.UI || {};
   var Downloads = window.Downloads || {};
@@ -658,6 +660,37 @@
     var info = SERVICE_INFO.default;
     if (input) {
       input.placeholder = t(info.placeholderKey);
+    }
+  }
+
+  function updateRestrictZipAccordionState() {
+    if (!restrictionAccordion) return;
+    if (!restrictionToggle) return;
+    var enabled = !!restrictionToggle.checked;
+    if (restrictionZipLock) {
+      if (enabled) {
+        restrictionZipLock.setAttribute('hidden', '');
+      } else {
+        restrictionZipLock.removeAttribute('hidden');
+      }
+    }
+    if (restrictionZipPick) restrictionZipPick.disabled = !enabled;
+    if (restrictionZipInput) restrictionZipInput.disabled = !enabled;
+    if (!enabled) {
+      if (restrictionZipStatus) {
+        restrictionZipStatus.textContent = t('zipper.restrict.lockedStatus');
+      }
+      if (restrictionZipApply) {
+        restrictionZipApply.disabled = true;
+      }
+      return;
+    }
+    // Enabled: restore status and apply enablement based on file selection.
+    if (restrictionZipStatus) {
+      restrictionZipStatus.textContent = restrictionZipFile ? restrictionZipFile.name : t('zipper.restrict.status.ready');
+    }
+    if (restrictionZipApply) {
+      restrictionZipApply.disabled = !restrictionZipFile;
     }
   }
 
@@ -2559,15 +2592,13 @@
       }
       RestrictionUI.applyRestrictionUiState();
       RestrictionUI.updateRestrictionDefaults();
-      if (restrictionZipStatus) {
-        restrictionZipStatus.textContent = t('zipper.restrict.status.ready');
-      }
       if (!restrictionToggle.checked) {
         restrictionZipFile = null;
-        if (restrictionZipApply) {
-          restrictionZipApply.disabled = true;
+        if (restrictionZipInput) {
+          restrictionZipInput.value = '';
         }
       }
+      updateRestrictZipAccordionState();
     });
   }
   if (restrictionNoEnd) {
@@ -2593,17 +2624,23 @@
   if (restrictionZipInput) {
     restrictionZipInput.addEventListener('change', function () {
       restrictionZipFile = restrictionZipInput.files && restrictionZipInput.files[0] ? restrictionZipInput.files[0] : null;
-      if (restrictionZipApply) {
-        restrictionZipApply.disabled = !restrictionZipFile;
-      }
-      if (restrictionZipStatus) {
-        restrictionZipStatus.textContent = restrictionZipFile ? restrictionZipFile.name : t('zipper.restrict.status.ready');
-      }
+      updateRestrictZipAccordionState();
     });
   }
   if (restrictionZipApply) {
     restrictionZipApply.addEventListener('click', function () {
       applyRestrictionsToZipFile(restrictionZipFile);
+    });
+  }
+  if (restrictionZipEnable) {
+    restrictionZipEnable.addEventListener('click', function () {
+      openMainSettingsModal();
+      // After opening, move focus to the toggle to make the next action obvious.
+      setTimeout(function () {
+        try {
+          if (restrictionToggle && restrictionToggle.focus) restrictionToggle.focus();
+        } catch (e) {}
+      }, 0);
     });
   }
 
@@ -2641,6 +2678,7 @@
   }
   setLanguage(getInitialLang());
   updateServiceInfo();
+  updateRestrictZipAccordionState();
   var goTabButtons = document.querySelectorAll('[data-go-tab]');
   if (goTabButtons.length) {
     goTabButtons.forEach(function (button) {

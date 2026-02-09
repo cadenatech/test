@@ -270,11 +270,15 @@
                 </section>
               </div>
             </details>
-            <details class="html-zip-accordion" data-restrict-accordion hidden>
+            <details class="html-zip-accordion" data-restrict-accordion>
               <summary class="html-zip-accordion__summary" data-i18n="zipper.restrict.title">¿Quieres limitar el acceso a un ZIP ya creado?</summary>
               <div class="html-zip-card">
                 <div class="html-zip-card__header">
                   <p class="step-note" data-i18n="zipper.restrict.note">Sube tu ZIP y el visor añadirá las restricciones. Después tendrás que subirlo a Drive, Dropbox, etc.</p>
+                  <div class="inline-callout" data-restrict-zip-lock hidden>
+                    <p class="inline-callout__text" data-i18n="zipper.restrict.lockedText">Para usar esta opción, primero activa la limitación de visibilidad del recurso.</p>
+                    <button class="ghost-button ghost-button--small" type="button" data-restrict-zip-enable data-i18n="zipper.restrict.lockedAction">Activar limitación</button>
+                  </div>
                 </div>
                 <div class="upload-actions">
                   <button class="ghost-button" type="button" data-restrict-zip-pick data-i18n="zipper.restrict.pick">Seleccionar ZIP</button>

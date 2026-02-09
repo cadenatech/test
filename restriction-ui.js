@@ -62,9 +62,10 @@
       if (enabled) get('restrictionHint').removeAttribute('hidden');
       else get('restrictionHint').setAttribute('hidden', '');
     }
+    // The "restrict existing ZIP" accordion should always be visible. It is enabled/disabled
+    // elsewhere based on the toggle state.
     if (get('restrictionAccordion')) {
-      if (enabled) get('restrictionAccordion').removeAttribute('hidden');
-      else get('restrictionAccordion').setAttribute('hidden', '');
+      get('restrictionAccordion').removeAttribute('hidden');
     }
     if (get('restrictionNoEnd') && get('restrictionEndInput')) {
       get('restrictionEndInput').disabled = get('restrictionNoEnd').checked;
