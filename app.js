@@ -2252,7 +2252,16 @@
               return extractTitleFromFiles(files, indexPath).then(function (foundTitle) {
                 var siteTitle = foundTitle || deriveTitleFromPath(indexPath) || deriveTitleFromUrl(effectiveZipUrl);
                 return getRemoteMetaPromise().then(function (remoteSignature) {
-                  var updatedFromRemoteAt = (opts.force && result.cached) ? Date.now() : (result.site && result.site.updatedFromRemoteAt ? result.site.updatedFromRemoteAt : null);
+                  var storedSignature = (result.site && result.site.remoteMeta) ? result.site.remoteMeta : null;
+                  var mergedSignature = mergeMetaSignature(storedSignature, remoteSignature);
+                  var changed = storedSignature ? isMetaChanged(storedSignature, remoteSignature) : false;
+                  var forcedUpdate = !!(opts.force && result.cached);
+                  // Only mark as "updated" when there was an actual update (or we already knew an update
+                  // was available). Otherwise manual refreshes would incorrectly show a green update date.
+                  var shouldMarkUpdated = forcedUpdate && !!((result.site && result.site.updateAvailable) || changed);
+                  var updatedFromRemoteAt = shouldMarkUpdated
+                    ? Date.now()
+                    : (result.site && result.site.updatedFromRemoteAt ? result.site.updatedFromRemoteAt : null);
                   // Preserve the original "saved" date in the Manager. The update date is already shown
                   // separately via `updatedFromRemoteAt` (green badge).
                   var firstSavedAt = (result.site && result.site.updatedAt) ? result.site.updatedAt : Date.now();
@@ -2265,7 +2274,7 @@
                     totalBytes: totalBytes,
                     title: siteTitle,
                     restrictions: restrictions || null,
-                    remoteMeta: remoteSignature || null,
+                    remoteMeta: mergedSignature,
                     updateAvailable: false,
                     updatedFromRemoteAt: updatedFromRemoteAt
                   };
