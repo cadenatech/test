@@ -258,7 +258,7 @@
         },
         restrict: {
           title: '¿Quieres limitar el acceso a un ZIP ya creado?',
-          note: 'Sube tu ZIP y el visor añadirá las restricciones en un archivo JSON. Después tendrás que volver a subirlo a Drive, Dropbox, etc.',
+          note: 'Sube tu ZIP y el visor añadirá las restricciones. Después tendrás que subirlo a Drive, Dropbox, etc.',
           pick: 'Seleccionar ZIP',
           apply: 'Aplicar restricciones y descargar',
           status: {
@@ -696,7 +696,7 @@
         },
         restrict: {
           title: 'Vols limitar l’accés a un ZIP ja creat?',
-          note: 'Puja el teu ZIP i el visor afegirà les restriccions en un fitxer JSON. Després l’hauràs de tornar a pujar a Drive, Dropbox, etc.',
+          note: 'Puja el teu ZIP i el visor afegirà les restriccions. Després l’hauràs de pujar a Drive, Dropbox, etc.',
           pick: 'Seleccionar ZIP',
           apply: 'Aplicar restriccions i descarregar',
           status: {
@@ -1135,7 +1135,7 @@
         },
         restrict: {
           title: 'Queres limitar o acceso a un ZIP xa creado?',
-          note: 'Sube o teu ZIP e o visor engadirá as restricións nun ficheiro JSON. Despois terás que volver subilo a Drive, Dropbox, etc.',
+          note: 'Sube o teu ZIP e o visor engadirá as restricións. Despois terás que subilo a Drive, Dropbox, etc.',
           pick: 'Seleccionar ZIP',
           apply: 'Aplicar restricións e descargar',
           status: {
@@ -1574,7 +1574,7 @@
         },
         restrict: {
           title: 'ZIP bat jada sortuta badago, sarbidea mugatu nahi?',
-          note: 'Igo zure ZIPa eta bisoreak murrizketak JSON fitxategi batean gehituko ditu. Ondoren berriro igo beharko duzu Drive, Dropbox, etab.',
+          note: 'Igo zure ZIPa eta bisoreak murrizketak gehituko ditu. Ondoren Drive, Dropbox, etab. zerbitzuetara igo beharko duzu.',
           pick: 'ZIPa hautatu',
           apply: 'Murrizketak aplikatu eta deskargatu',
           status: {
@@ -2013,7 +2013,7 @@
         },
         restrict: {
           title: 'Want to limit access to an existing ZIP?',
-          note: 'Upload your ZIP and the viewer will add restrictions in a JSON file. Then upload it again to Drive, Dropbox, etc.',
+          note: 'Upload your ZIP and the viewer will add restrictions. Then upload it to Drive, Dropbox, etc.',
           pick: 'Select ZIP',
           apply: 'Apply restrictions and download',
           status: {
@@ -2453,7 +2453,7 @@
         },
         restrict: {
           title: 'Zugriff auf ein vorhandenes ZIP begrenzen?',
-          note: 'Lade dein ZIP hoch und der Viewer fügt die Einschränkungen in einer JSON-Datei hinzu. Danach musst du es erneut zu Drive, Dropbox usw. hochladen.',
+          note: 'Lade dein ZIP hoch und der Viewer fügt die Einschränkungen hinzu. Danach musst du es zu Drive, Dropbox usw. hochladen.',
           pick: 'ZIP auswählen',
           apply: 'Einschränkungen anwenden und herunterladen',
           status: {
