@@ -509,7 +509,7 @@ button:focus-visible {
   transform: translateY(1px);
 }
 
-.ghost-button::after {
+.ghost-button[data-tooltip]::after {
   content: attr(data-tooltip);
   position: absolute;
   bottom: calc(100% + 8px);
@@ -527,8 +527,8 @@ button:focus-visible {
   transition: opacity 0.12s ease;
 }
 
-.ghost-button:hover::after,
-.ghost-button:focus-visible::after {
+.ghost-button[data-tooltip]:hover::after,
+.ghost-button[data-tooltip]:focus-visible::after {
   opacity: 1;
 }
 
@@ -1616,7 +1616,7 @@ textarea:focus-visible {
   border-color: rgba(37, 99, 235, 0.4);
 }
 
-.icon-button::after {
+.icon-button[data-tooltip]::after {
   content: attr(data-tooltip);
   position: absolute;
   bottom: calc(100% + 8px);
@@ -1644,8 +1644,8 @@ textarea:focus-visible {
   margin-bottom: 14px;
 }
 
-.icon-button:not(:disabled):not([aria-disabled="true"]):hover::after,
-.icon-button:not(:disabled):not([aria-disabled="true"]):focus-visible::after {
+.icon-button[data-tooltip]:not(:disabled):not([aria-disabled="true"]):hover::after,
+.icon-button[data-tooltip]:not(:disabled):not([aria-disabled="true"]):focus-visible::after {
   opacity: 1;
   visibility: visible;
   padding: 6px 10px;

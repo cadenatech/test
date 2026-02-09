@@ -59,8 +59,8 @@
       else restrictNote.setAttribute('hidden', '');
     }
     if (get('restrictionHint')) {
-      if (enabled) get('restrictionHint').removeAttribute('hidden');
-      else get('restrictionHint').setAttribute('hidden', '');
+      // This hint is part of the "Create a ZIP" publish choice card and should always be visible.
+      get('restrictionHint').removeAttribute('hidden');
     }
     // The "restrict existing ZIP" accordion should always be visible. It is enabled/disabled
     // elsewhere based on the toggle state.
