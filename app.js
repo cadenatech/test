@@ -2253,11 +2253,14 @@
                 var siteTitle = foundTitle || deriveTitleFromPath(indexPath) || deriveTitleFromUrl(effectiveZipUrl);
                 return getRemoteMetaPromise().then(function (remoteSignature) {
                   var updatedFromRemoteAt = (opts.force && result.cached) ? Date.now() : (result.site && result.site.updatedFromRemoteAt ? result.site.updatedFromRemoteAt : null);
+                  // Preserve the original "saved" date in the Manager. The update date is already shown
+                  // separately via `updatedFromRemoteAt` (green badge).
+                  var firstSavedAt = (result.site && result.site.updatedAt) ? result.site.updatedAt : Date.now();
                   var site = {
                     id: result.siteId,
                     url: effectiveZipUrl,
                     indexPath: indexPath,
-                    updatedAt: Date.now(),
+                    updatedAt: firstSavedAt,
                     fileCount: files.length,
                     totalBytes: totalBytes,
                     title: siteTitle,
