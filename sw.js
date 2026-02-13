@@ -85,6 +85,30 @@ function guessMimeType(path) {
   return 'application/octet-stream';
 }
 
+function isLiveEndExpired(site) {
+  var restrictions = site && site.restrictions ? site.restrictions : null;
+  if (!restrictions || !restrictions.enabled || restrictions.neverExpires || !restrictions.enforceEndDuringView || !restrictions.endAt) {
+    return false;
+  }
+  var endTs = Date.parse(restrictions.endAt);
+  if (isNaN(endTs)) return false;
+  return Date.now() > endTs;
+}
+
+function restrictedHtmlResponse() {
+  var html = '<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">'
+    + '<title>Acceso restringido</title><style>'
+    + 'body{margin:0;min-height:100vh;display:grid;place-items:center;background:#f6f8fc;color:#0f172a;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:16px;}'
+    + '.card{max-width:560px;width:min(100%,560px);background:#fff;border:1px solid #dbe4f0;border-radius:16px;padding:22px 20px;box-shadow:0 18px 45px rgba(15,23,42,0.12);text-align:center;}'
+    + '.title{font-size:1.6rem;line-height:1.1;font-weight:700;margin:0 0 10px;}'
+    + '.body{margin:0;color:#334155;font-size:1.05rem;line-height:1.4;}'
+    + '</style></head><body><div class="card"><h1 class="title">Acceso restringido</h1><p class="body">Este recurso no está disponible en este momento.</p></div></body></html>';
+  return new Response(new Blob([html], { type: 'text/html' }), {
+    status: 403,
+    headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' }
+  });
+}
+
 self.addEventListener('install', function (event) {
   event.waitUntil(self.skipWaiting());
 });
@@ -127,10 +151,17 @@ function handleSiteRequest(url, scopePath) {
         return new Response('Not cached', { status: 404 });
       }
       var type = record.type || guessMimeType(resolvedPath);
+      if (isLiveEndExpired(site)) {
+        if (type && type.indexOf('text/html') === 0) {
+          return restrictedHtmlResponse();
+        }
+        return new Response('Restricted', { status: 403 });
+      }
       if (type && type.indexOf('text/html') === 0) {
         return injectOverlayResponse(record.blob, {
           siteId: siteId,
-          updateAvailable: !!(site && site.updateAvailable)
+          updateAvailable: !!(site && site.updateAvailable),
+          restrictions: site && site.restrictions ? site.restrictions : null
         });
       }
       return new Response(record.blob, {
@@ -145,6 +176,14 @@ function injectOverlayResponse(blob, payload) {
   return blob.text().then(function (html) {
     var siteId = payload && payload.siteId ? String(payload.siteId) : '';
     var updateFlag = payload && payload.updateAvailable ? '1' : '0';
+    var restrictions = payload && payload.restrictions ? payload.restrictions : null;
+    var restrictLiveEnd = !!(restrictions && restrictions.enabled && !restrictions.neverExpires && restrictions.enforceEndDuringView);
+    var restrictEndAt = restrictions && restrictions.endAt ? String(restrictions.endAt) : '';
+    var hasWarningMinutes = !!(restrictions && restrictions.warningMinutes !== undefined && restrictions.warningMinutes !== null);
+    var warningMinutes = hasWarningMinutes ? parseInt(restrictions.warningMinutes, 10) : 5;
+    if (isNaN(warningMinutes) || warningMinutes < 0) warningMinutes = 5;
+    warningMinutes = Math.min(180, warningMinutes);
+    var warningMessage = restrictions && restrictions.warningMessage ? String(restrictions.warningMessage) : '';
     var overlay = [
       '<div id="vwz-update-overlay" data-site-id="', siteId, '" data-update-available="', updateFlag, '" class="vwz-update-overlay">',
       '<div class="vwz-update-card" role="dialog" aria-live="polite" aria-label="Actualización disponible">',
@@ -171,14 +210,18 @@ function injectOverlayResponse(blob, payload) {
       'var overlay=document.getElementById("vwz-update-overlay");if(!overlay)return;',
       'var btnUpdate=overlay.querySelector("[data-vwz-update]");',
       'var btnDismiss=overlay.querySelector("[data-vwz-dismiss]");',
+      'var restrictLiveEnd=', (restrictLiveEnd ? 'true' : 'false'), ';',
+      'var restrictEndAt=', JSON.stringify(restrictEndAt), ';',
+      'var warningMinutes=', String(warningMinutes), ';',
+      'var warningMessage=', JSON.stringify(warningMessage), ';',
       'function normalizeLang(l){if(!l)return "es";l=(String(l).toLowerCase()).split(/[-_]/)[0];return ["es","ca","gl","eu","en","de"].indexOf(l)!==-1?l:"es";}',
       'var strings={',
-      'es:{t:"Nueva version disponible",b:"Este recurso ha cambiado en la nube. Quieres actualizarlo?",u:"Actualizar",d:"Ahora no"},',
-      'ca:{t:"Nova versio disponible",b:"Aquest recurs ha canviat al nuvol. Vols actualitzar-lo?",u:"Actualitzar",d:"Ara no"},',
-      'gl:{t:"Nova version dispoñible",b:"Este recurso cambiou na nube. Queres actualizalo?",u:"Actualizar",d:"Agora non"},',
-      'eu:{t:"Bertsio berria eskuragarri",b:"Baliabidea hodeian aldatu da. Eguneratu nahi duzu?",u:"Eguneratu",d:"Orain ez"},',
-      'en:{t:"New version available",b:"This resource changed in the cloud. Update now?",u:"Update",d:"Not now"},',
-      'de:{t:"Neue Version verfugbar",b:"Diese Ressource hat sich in der Cloud geandert. Jetzt aktualisieren?",u:"Aktualisieren",d:"Jetzt nicht"}',
+      'es:{t:"Nueva version disponible",b:"Este recurso ha cambiado en la nube. Quieres actualizarlo?",u:"Actualizar",d:"Ahora no",rt:"Acceso restringido",rb:"Este recurso no esta disponible en este momento.",wt:"Aviso",wb:"El tiempo de acceso se agota en {minutes} minutos.",wc:"Cerrar"},',
+      'ca:{t:"Nova versio disponible",b:"Aquest recurs ha canviat al nuvol. Vols actualitzar-lo?",u:"Actualitzar",d:"Ara no",rt:"Acces restringit",rb:"Aquest recurs no esta disponible en aquest moment.",wt:"Avís",wb:"El temps d\'acces s\'esgota en {minutes} minuts.",wc:"Tancar"},',
+      'gl:{t:"Nova version dispoñible",b:"Este recurso cambiou na nube. Queres actualizalo?",u:"Actualizar",d:"Agora non",rt:"Acceso restrinxido",rb:"Este recurso non esta dispoñible neste momento.",wt:"Aviso",wb:"O tempo de acceso esgótase en {minutes} minutos.",wc:"Pechar"},',
+      'eu:{t:"Bertsio berria eskuragarri",b:"Baliabidea hodeian aldatu da. Eguneratu nahi duzu?",u:"Eguneratu",d:"Orain ez",rt:"Sarbide mugatua",rb:"Baliabide hau une honetan ez dago eskuragarri.",wt:"Abisua",wb:"Sarbide-denbora {minutes} minututan amaituko da.",wc:"Itxi"},',
+      'en:{t:"New version available",b:"This resource changed in the cloud. Update now?",u:"Update",d:"Not now",rt:"Restricted access",rb:"This resource is not available right now.",wt:"Warning",wb:"Access time will end in {minutes} minutes.",wc:"Close"},',
+      'de:{t:"Neue Version verfugbar",b:"Diese Ressource hat sich in der Cloud geandert. Jetzt aktualisieren?",u:"Aktualisieren",d:"Jetzt nicht",rt:"Zugriff eingeschrankt",rb:"Diese Ressource ist im Moment nicht verfugbar.",wt:"Hinweis",wb:"Die Zugriffszeit endet in {minutes} Minuten.",wc:"Schliessen"}',
       '};',
       'var lang=normalizeLang((function(){try{return localStorage.getItem("visor-lang");}catch(e){return null;}})()||navigator.language||"es");',
       'var s=strings[lang]||strings.es;',
@@ -187,7 +230,17 @@ function injectOverlayResponse(blob, payload) {
       'if(btnUpdate)btnUpdate.textContent=s.u;if(btnDismiss)btnDismiss.textContent=s.d;',
       'function show(){overlay.classList.add("vwz-show");}',
       'function hide(){overlay.classList.remove("vwz-show");}',
+      'var restrictHost=null;',
+      'function showRestrict(){if(restrictHost)return;restrictHost=document.createElement("div");restrictHost.style.cssText="position:fixed;inset:0;z-index:2147483647;";var root=restrictHost.attachShadow?restrictHost.attachShadow({mode:"open"}):restrictHost;root.innerHTML="<style>.vwz-restrict-overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(15,23,42,0.5);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;}.vwz-restrict-card{max-width:520px;width:min(100%,520px);background:#fff;color:#0f172a;border:1px solid #dbe4f0;border-radius:16px;padding:22px 20px;box-shadow:0 18px 45px rgba(15,23,42,0.22);text-align:center;}.vwz-restrict-title{font-weight:700;font-size:1.5rem;line-height:1.15;margin-bottom:10px;}.vwz-restrict-body{font-size:1.08rem;line-height:1.4;color:#334155;}</style><div class=\\"vwz-restrict-overlay\\"><div class=\\"vwz-restrict-card\\" role=\\"dialog\\" aria-live=\\"assertive\\"><div class=\\"vwz-restrict-title\\"></div><div class=\\"vwz-restrict-body\\"></div></div></div>";var rt=root.querySelector(".vwz-restrict-title");var rb=root.querySelector(".vwz-restrict-body");if(rt)rt.textContent=s.rt;if(rb)rb.textContent=s.rb;document.documentElement.appendChild(restrictHost);}',
+      'var warningHost=null;',
+      'var warningKey=(overlay.getAttribute("data-site-id")||"")+"::"+String(restrictEndAt||"");',
+      'function fillMessage(template){var base=template||s.wb||"";return base.replace(/\\{minutes\\}/g,String(warningMinutes));}',
+      'function hasShownWarning(){try{return sessionStorage.getItem("vwz-warning-shown:"+warningKey)==="1";}catch(e){return false;}}',
+      'function markWarningShown(){try{sessionStorage.setItem("vwz-warning-shown:"+warningKey,"1");}catch(e){}}',
+      'function closeWarning(){if(warningHost&&warningHost.parentNode){warningHost.parentNode.removeChild(warningHost);}warningHost=null;}',
+      'function showWarning(){if(warningHost||hasShownWarning())return;markWarningShown();warningHost=document.createElement("div");warningHost.style.cssText="position:fixed;inset:0;z-index:2147483646;";var root=warningHost.attachShadow?warningHost.attachShadow({mode:"open"}):warningHost;root.innerHTML="<style>.vwz-warning-wrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(15,23,42,0.48);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;}.vwz-warning-card{max-width:620px;width:min(100%,620px);background:#fff;color:#0f172a;border:1px solid #dbe4f0;border-radius:16px;padding:20px 18px;box-shadow:0 18px 45px rgba(15,23,42,0.22);text-align:center;}.vwz-warning-title{font-weight:700;font-size:1.28rem;line-height:1.15;margin-bottom:10px;}.vwz-warning-body{font-size:1rem;line-height:1.4;color:#334155;margin-bottom:14px;}.vwz-warning-close{appearance:none;border:1px solid #cbd5e1;background:#fff;border-radius:999px;padding:8px 14px;font-size:0.9rem;font-weight:600;color:#0f172a;cursor:pointer;}</style><div class=\\"vwz-warning-wrap\\"><div class=\\"vwz-warning-card\\" role=\\"dialog\\" aria-live=\\"polite\\"><div class=\\"vwz-warning-title\\"></div><div class=\\"vwz-warning-body\\"></div><button type=\\"button\\" class=\\"vwz-warning-close\\"></button></div></div>";var wt=root.querySelector(".vwz-warning-title");var wb=root.querySelector(".vwz-warning-body");var wc=root.querySelector(".vwz-warning-close");if(wt)wt.textContent=s.wt||"Warning";if(wb)wb.textContent=fillMessage(warningMessage);if(wc)wc.textContent=s.wc||"Close";if(wc)wc.addEventListener("click",closeWarning);document.documentElement.appendChild(warningHost);}',
       'if(overlay.getAttribute("data-update-available")==="1"){show();}',
+      'if(restrictLiveEnd){var endTs=Date.parse(restrictEndAt||"");var endTimer=null;var reloadRestricted=function(){try{location.reload();}catch(e){showRestrict();}};var checkEnd=function(){if(isNaN(endTs))return;var now=Date.now();var warnEnabled=warningMinutes>0;var warnTs=endTs-(warningMinutes*60000);if(warnEnabled&&now>=warnTs&&now<endTs){showWarning();}if(now>endTs){if(endTimer){clearInterval(endTimer);endTimer=null;}reloadRestricted();}};checkEnd();if(!isNaN(endTs)&&Date.now()<=endTs){endTimer=setInterval(checkEnd,1000);if(warningMinutes>0){var warnDelay=Math.max(0,(endTs-warningMinutes*60000)-Date.now());if(warnDelay<=2147483647){setTimeout(function(){if(Date.now()<endTs){showWarning();}},warnDelay);}}var delay=Math.max(0,endTs-Date.now()+200);if(delay<=2147483647){setTimeout(reloadRestricted,delay);}else{setTimeout(function(){if(Date.now()>endTs){reloadRestricted();}},2147483647);}}}',
       'function getBasePath(){var p=location.pathname;var idx=p.indexOf("/site/");if(idx!==-1){return p.slice(0,idx+1);}return "/";}',
       'function fetchConfig(){var url=getBasePath()+"config.js";return fetch(url,{cache:"no-store"}).then(function(r){return r.ok?r.text():"";}).then(function(text){var m=text.match(/GAS_WEBAPP_URL\\s*=\\s*[\"\\\']([^\"\\\']+)[\"\\\']/);return m?m[1]:"";}).catch(function(){return "";});}',
       'function openDb(){return new Promise(function(resolve,reject){var req=indexedDB.open("visor-web-sites",1);req.onupgradeneeded=function(){var db=req.result;if(!db.objectStoreNames.contains("sites")){db.createObjectStore("sites",{keyPath:"id"});}if(!db.objectStoreNames.contains("files")){var store=db.createObjectStore("files",{keyPath:"key"});store.createIndex("siteId","siteId",{unique:false});}};req.onsuccess=function(){resolve(req.result);};req.onerror=function(){reject(req.error);};});}',

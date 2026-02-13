@@ -35,6 +35,40 @@
 
   function setLang(lang) {
     if (lang) currentLang = lang;
+    syncWarningMessageDefaultForLang();
+    updateRestrictionPeriodHint();
+  }
+
+  function getKnownWarningDefaultMessages() {
+    var list = [];
+    var dict = window.I18N || {};
+    Object.keys(dict).forEach(function (lang) {
+      var value = dict[lang]
+        && dict[lang].settings
+        && dict[lang].settings.warningMessageDefault
+        ? String(dict[lang].settings.warningMessageDefault).trim()
+        : '';
+      if (value && list.indexOf(value) === -1) {
+        list.push(value);
+      }
+    });
+    list.push('El tiempo de acceso se agota en 5 minutos.');
+    return list;
+  }
+
+  function syncWarningMessageDefaultForLang() {
+    var input = get('restrictionWarningMessage');
+    if (!input) return;
+    var current = input.value ? String(input.value).trim() : '';
+    var translatedDefault = t('settings.warningMessageDefault') || 'El tiempo de acceso se agota en {minutes} minutos.';
+    if (!current) {
+      input.value = translatedDefault;
+      return;
+    }
+    var knownDefaults = getKnownWarningDefaultMessages();
+    if (knownDefaults.indexOf(current) !== -1) {
+      input.value = translatedDefault;
+    }
   }
 
   function toLocalIso(date, options) {
@@ -102,6 +136,34 @@
     if (get('restrictionNoEnd') && get('restrictionEndInput')) {
       get('restrictionEndInput').disabled = get('restrictionNoEnd').checked;
     }
+    if (get('restrictionLiveEnd')) {
+      var liveEndDisabled = !enabled || (get('restrictionNoEnd') && get('restrictionNoEnd').checked);
+      get('restrictionLiveEnd').disabled = !!liveEndDisabled;
+      if (liveEndDisabled) {
+        get('restrictionLiveEnd').checked = false;
+      }
+      if (get('restrictionLiveEndWrap')) {
+        if (liveEndDisabled) {
+          get('restrictionLiveEndWrap').setAttribute('hidden', '');
+        } else {
+          get('restrictionLiveEndWrap').removeAttribute('hidden');
+        }
+      }
+      if (get('restrictionWarningWrap')) {
+        var showWarning = !liveEndDisabled && !!get('restrictionLiveEnd').checked;
+        if (showWarning) {
+          get('restrictionWarningWrap').removeAttribute('hidden');
+        } else {
+          get('restrictionWarningWrap').setAttribute('hidden', '');
+        }
+      }
+      if (get('restrictionWarningMinutes')) {
+        get('restrictionWarningMinutes').disabled = liveEndDisabled || !get('restrictionLiveEnd').checked;
+      }
+      if (get('restrictionWarningMessage')) {
+        get('restrictionWarningMessage').disabled = liveEndDisabled || !get('restrictionLiveEnd').checked;
+      }
+    }
     if (get('restrictionZipApply')) {
       get('restrictionZipApply').disabled = !enabled || !getValue('restrictionZipFile');
     }
@@ -141,6 +203,15 @@
     if (get('restrictionNoEnd') && get('restrictionNoEnd').checked) {
       get('restrictionEndInput').value = '';
     }
+    if (get('restrictionWarningMinutes')) {
+      var currentMinutes = parseInt(get('restrictionWarningMinutes').value, 10);
+      if (isNaN(currentMinutes) || currentMinutes < 0) {
+        get('restrictionWarningMinutes').value = '5';
+      }
+    }
+    if (get('restrictionWarningMessage') && !get('restrictionWarningMessage').value) {
+      get('restrictionWarningMessage').value = t('settings.warningMessageDefault') || 'El tiempo de acceso se agota en {minutes} minutos.';
+    }
   }
 
 
@@ -155,12 +226,20 @@
     if (!neverExpires && endValue) {
       endAt = new Date(endValue).toISOString();
     }
+    var warningMinutesRaw = get('restrictionWarningMinutes') ? parseInt(get('restrictionWarningMinutes').value, 10) : 5;
+    var warningMinutes = isNaN(warningMinutesRaw) ? 5 : Math.min(180, Math.max(0, warningMinutesRaw));
+    var warningMessage = (get('restrictionWarningMessage') && get('restrictionWarningMessage').value)
+      ? String(get('restrictionWarningMessage').value).trim()
+      : '';
     return {
       version: 1,
       enabled: true,
       startAt: startAt,
       endAt: endAt,
       neverExpires: neverExpires,
+      enforceEndDuringView: !neverExpires && !!(get('restrictionLiveEnd') && get('restrictionLiveEnd').checked),
+      warningMinutes: warningMinutes,
+      warningMessage: warningMessage || (t('settings.warningMessageDefault') || 'El tiempo de acceso se agota en {minutes} minutos.'),
       allowShare: !!(get('restrictionAllowShare') && get('restrictionAllowShare').checked),
       allowEmbed: !!(get('restrictionAllowEmbed') && get('restrictionAllowEmbed').checked),
       allowDownload: !!(get('restrictionAllowDownload') && get('restrictionAllowDownload').checked),
@@ -169,8 +248,38 @@
     };
   }
 
+  function getWarningMinutesValue() {
+    var raw = get('restrictionWarningMinutes') ? parseInt(get('restrictionWarningMinutes').value, 10) : 5;
+    if (isNaN(raw)) return 5;
+    return Math.min(180, Math.max(0, raw));
+  }
+
+  function updateRestrictionPeriodHint() {
+    var hintNode = get('restrictionPeriodHint');
+    if (!hintNode) return;
+    var base = t('settings.periodHint') || 'El recurso solo será visible dentro de este intervalo.';
+    var enabled = !!(get('restrictionToggle') && get('restrictionToggle').checked);
+    if (!enabled) {
+      hintNode.textContent = base;
+      return;
+    }
+    var liveEndEnabled = !!(get('restrictionLiveEnd') && get('restrictionLiveEnd').checked && !get('restrictionLiveEnd').disabled);
+    var liveEndText = liveEndEnabled
+      ? (t('settings.periodHintLiveEndOn') || 'La visualización se desactivará al llegar a la fecha de fin.')
+      : (t('settings.periodHintLiveEndOff') || 'La visualización no se desactivará automáticamente al llegar a la fecha de fin.');
+    var warningText = t('settings.periodHintWarningOff') || 'No habrá aviso previo.';
+    if (liveEndEnabled) {
+      var minutes = getWarningMinutesValue();
+      if (minutes > 0) {
+        warningText = t('settings.periodHintWarningOn', { minutes: String(minutes) }) || ('Habrá aviso ' + minutes + ' minutos antes.');
+      }
+    }
+    hintNode.textContent = [base, liveEndText, warningText].join(' ');
+  }
+
 
   function updateRestrictionSummary() {
+    updateRestrictionPeriodHint();
     if (!get('restrictionSummary') || !get('restrictionSummaryItems')) return;
     if (get('restrictionSummaryLabel')) {
       // Avoid keeping the previous language label when a translation key is missing
@@ -203,16 +312,21 @@
         items.push(closeText);
       }
     }
-
-    // Add the actions currently allowed during access.
-    if (get('restrictionAllowShare') && get('restrictionAllowShare').checked) {
-      items.push(t('settings.allowShare') || 'Compartir');
-    }
-    if (get('restrictionAllowEmbed') && get('restrictionAllowEmbed').checked) {
-      items.push(t('settings.allowEmbed') || 'Insertar en web');
-    }
-    if (get('restrictionAllowDownload') && get('restrictionAllowDownload').checked) {
-      items.push(t('settings.allowDownload') || 'Descargar');
+    var liveEndEnabled = !!(get('restrictionLiveEnd') && get('restrictionLiveEnd').checked && !get('restrictionLiveEnd').disabled);
+    items.push(
+      liveEndEnabled
+        ? (t('settings.summaryLiveEndOn') || 'Desactiva al llegar al fin')
+        : (t('settings.summaryLiveEndOff') || 'Sin desactivación automática')
+    );
+    if (liveEndEnabled) {
+      var minutes = getWarningMinutesValue();
+      if (minutes > 0) {
+        items.push(t('settings.summaryWarningOn', { minutes: String(minutes) }) || ('Aviso: ' + minutes + ' min antes'));
+      } else {
+        items.push(t('settings.summaryWarningOff') || 'Sin aviso previo');
+      }
+    } else {
+      items.push(t('settings.summaryWarningOff') || 'Sin aviso previo');
     }
 
     if (!items.length) {

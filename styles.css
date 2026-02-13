@@ -227,9 +227,75 @@ header {
   margin-top: 0;
 }
 
+.settings-end-options {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 6px;
+  margin-top: 4px;
+  padding: 10px 12px 12px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-left: 3px solid rgba(148, 163, 184, 0.3);
+  border-radius: 10px;
+  background: rgba(241, 245, 249, 0.6);
+}
+
+.settings-end-options > .settings-check--dependent {
+  margin-top: 0;
+  padding-left: 8px;
+}
+
+.settings-end-options > .settings-check--dependent + .settings-check--dependent {
+  padding-left: 20px;
+  font-size: 0.84rem;
+  color: #7a8899;
+}
+
+[data-restrict-live-end-wrap] span {
+  line-height: 1.3;
+}
+
+.settings-live-warning {
+  margin-top: 2px;
+  margin-left: 20px;
+  display: grid;
+  gap: 8px;
+  max-width: 100%;
+}
+
+.settings-field--compact {
+  gap: 4px;
+}
+
+.settings-field--compact .stat-label {
+  font-size: 0.78rem;
+  color: #748297;
+}
+
+.settings-field--compact input[type="number"],
+.settings-field--compact input[type="text"] {
+  min-height: 34px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.86rem;
+  width: 100%;
+}
+
+[data-restrict-warning-minutes] {
+  width: 88px !important;
+  max-width: 88px;
+  min-width: 88px;
+}
+
+[data-restrict-warning-message] {
+  width: 100%;
+}
+
 .setting-help--period {
   grid-column: 1 / -1;
-  margin: 2px 0 0;
+  margin: 14px 0 0;
   font-size: 0.84rem;
   line-height: 1.35;
   color: #7a8899;

@@ -89,6 +89,12 @@
   var restrictionStartInput = document.querySelector('[data-restrict-start]');
   var restrictionEndInput = document.querySelector('[data-restrict-end]');
   var restrictionNoEnd = document.querySelector('[data-restrict-no-end]');
+  var restrictionLiveEnd = document.querySelector('[data-restrict-live-end]');
+  var restrictionLiveEndWrap = document.querySelector('[data-restrict-live-end-wrap]');
+  var restrictionWarningWrap = document.querySelector('[data-restrict-warning-wrap]');
+  var restrictionWarningMinutes = document.querySelector('[data-restrict-warning-minutes]');
+  var restrictionWarningMessage = document.querySelector('[data-restrict-warning-message]');
+  var restrictionPeriodHint = document.querySelector('[data-restrict-period-hint]');
   var restrictionAllowShare = document.querySelector('[data-restrict-allow-share]');
   var restrictionAllowEmbed = document.querySelector('[data-restrict-allow-embed]');
   var restrictionAllowDownload = document.querySelector('[data-restrict-allow-download]');
@@ -466,6 +472,12 @@
         restrictionStartInput: restrictionStartInput,
         restrictionEndInput: restrictionEndInput,
         restrictionNoEnd: restrictionNoEnd,
+        restrictionLiveEnd: restrictionLiveEnd,
+        restrictionLiveEndWrap: restrictionLiveEndWrap,
+        restrictionWarningWrap: restrictionWarningWrap,
+        restrictionWarningMinutes: restrictionWarningMinutes,
+        restrictionWarningMessage: restrictionWarningMessage,
+        restrictionPeriodHint: restrictionPeriodHint,
         restrictionAllowShare: restrictionAllowShare,
         restrictionAllowEmbed: restrictionAllowEmbed,
         restrictionAllowDownload: restrictionAllowDownload,
@@ -1162,7 +1174,12 @@
     if (!('serviceWorker' in navigator)) {
       return Promise.reject(new Error(t('error.serviceWorkerUnavailable')));
     }
-    return navigator.serviceWorker.register('sw.js', { scope: './' }).then(function () {
+    return navigator.serviceWorker.register('sw.js', { scope: './' }).then(function (registration) {
+      try {
+        if (registration && registration.update) {
+          registration.update();
+        }
+      } catch (e) {}
       return navigator.serviceWorker.ready;
     });
   }
@@ -2629,6 +2646,22 @@
   if (restrictionNoEnd) {
     restrictionNoEnd.addEventListener('change', function () {
       RestrictionUI.applyRestrictionUiState();
+    });
+  }
+  if (restrictionLiveEnd) {
+    restrictionLiveEnd.addEventListener('change', function () {
+      RestrictionUI.applyRestrictionUiState();
+      RestrictionUI.updateRestrictionSummary();
+    });
+  }
+  if (restrictionWarningMinutes) {
+    restrictionWarningMinutes.addEventListener('change', function () {
+      RestrictionUI.updateRestrictionSummary();
+    });
+  }
+  if (restrictionWarningMessage) {
+    restrictionWarningMessage.addEventListener('input', function () {
+      RestrictionUI.updateRestrictionSummary();
     });
   }
   if (restrictionStartInput) {
