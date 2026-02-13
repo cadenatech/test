@@ -95,8 +95,8 @@
         <div class="manager-card" data-publish-choice>
           <div class="manager-header">
             <div>
-              <h2 data-i18n="publish.title">Publicar un recurso</h2>
-              <p class="manager-subtitle" data-i18n="publish.subtitle">Elige cómo quieres empezar.</p>
+              <h2 class="publish-flow-title" data-i18n="publish.title">Publicar un recurso</h2>
+              <p class="manager-subtitle publish-flow-subtitle" data-i18n="publish.subtitle">Elige cómo quieres empezar.</p>
             </div>
           </div>
           <div class="publish-choice-grid">
@@ -122,8 +122,8 @@
                   </span>
                 </span>
               </div>
-              <span class="publish-choice-card__note" data-i18n="publish.choice.zipper.note">Empieza creando un ZIP desde tus archivos o desde HTML.</span>
-              <span class="publish-choice-card__note" data-restrict-hint data-i18n="publish.choice.zipper.restrictHint">También puedes subir un ZIP para limitar su acceso por fechas.</span>
+              <span class="publish-choice-card__note" data-i18n="publish.choice.zipper.note">Crea un ZIP desde archivos locales o desde HTML.</span>
+              <span class="publish-choice-card__note publish-choice-card__note--secondary" data-restrict-hint data-i18n="publish.choice.zipper.restrictHint">También puedes aplicar limitación de acceso por fechas.</span>
             </button>
             <button class="publish-choice-card" type="button" data-publish-start="main">
               <span class="publish-choice-card__icon" aria-hidden="true">
@@ -135,7 +135,8 @@
               <div class="publish-choice-card__title">
                 <span data-i18n="publish.choice.main.title">Ya tengo un ZIP en la nube con enlace</span>
               </div>
-              <span class="publish-choice-card__note" data-i18n-html="publish.choice.main.note">Pega un enlace público al ZIP (o al archivo .elpx <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="¿Qué es ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Un archivo .elpx es un proyecto de eXeLearning que internamente utiliza el formato ZIP, lo que permite que el visor acceda a su contenido y lo muestre correctamente.</span></span> de eXeLearning) y genera el enlace del visor.</span>
+              <span class="publish-choice-card__note" data-i18n="publish.choice.main.note">Pega el enlace público y crea el enlace del visor.</span>
+              <span class="publish-choice-card__note publish-choice-card__note--secondary" data-i18n-html="publish.choice.main.secondaryHtml">Si usas .elpx de eXeLearning, también puedes abrirlo aquí <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="¿Qué es ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Un archivo .elpx es un proyecto de eXeLearning que internamente utiliza el formato ZIP, lo que permite que el visor acceda a su contenido y lo muestre correctamente.</span></span></span>
             </button>
           </div>
 
@@ -503,40 +504,45 @@
         </div>
         <div class="modal__content">
           <p class="setting-help" data-i18n="settings.restrictHint">No limites el acceso a no ser que tengas un buen motivo para hacerlo.</p>
-          <label class="settings-check">
+          <label class="settings-check settings-check--primary">
             <input type="checkbox" data-restrict-toggle>
             <span data-i18n="settings.restrictToggle">Limitar el acceso</span>
           </label>
 
-          <div class="settings-grid" data-restrict-fields hidden>
-            <label class="settings-field">
+          <div class="settings-grid settings-grid--dates" data-restrict-fields hidden>
+            <div class="settings-field">
               <span class="stat-label" data-i18n="settings.startLabel">Inicio</span>
               <input type="datetime-local" data-restrict-start>
-            </label>
-            <label class="settings-field">
+            </div>
+            <div class="settings-field settings-field--end">
               <span class="stat-label" data-i18n="settings.endLabel">Fin</span>
               <input type="datetime-local" data-restrict-end>
-            </label>
-            <label class="settings-check">
-              <input type="checkbox" data-restrict-no-end checked>
-              <span data-i18n="settings.neverExpires">No caducar nunca</span>
-            </label>
+              <label class="settings-check settings-check--dependent">
+                <input type="checkbox" data-restrict-no-end checked>
+                <span data-i18n="settings.neverExpires">No caducar nunca</span>
+              </label>
+            </div>
+            <p class="setting-help setting-help--period" data-i18n="settings.periodHint">El recurso solo será visible dentro de este intervalo.</p>
           </div>
 
-          <div class="settings-panel__title" data-restrict-actions-title data-i18n="settings.actionsTitle" hidden>Acciones permitidas</div>
-          <div class="settings-grid" data-restrict-actions hidden>
-            <label class="settings-check">
-              <input type="checkbox" data-restrict-allow-share checked>
-              <span data-i18n="settings.allowShare">Compartir</span>
-            </label>
-            <label class="settings-check">
-              <input type="checkbox" data-restrict-allow-embed checked>
-              <span data-i18n="settings.allowEmbed">Insertar en web</span>
-            </label>
-            <label class="settings-check">
-              <input type="checkbox" data-restrict-allow-download>
-              <span data-i18n="settings.allowDownload">Descargar</span>
-            </label>
+          <div class="settings-panel__title settings-panel__title--sub" data-restrict-actions-title data-i18n="settings.actionsTitle" hidden>Acciones permitidas</div>
+          <div class="settings-grid settings-actions" data-restrict-actions hidden>
+            <div class="settings-actions__group settings-actions__group--share">
+              <label class="settings-check">
+                <input type="checkbox" data-restrict-allow-share checked>
+                <span data-i18n="settings.allowShare">Compartir</span>
+              </label>
+              <label class="settings-check">
+                <input type="checkbox" data-restrict-allow-embed checked>
+                <span data-i18n="settings.allowEmbed">Insertar en web</span>
+              </label>
+            </div>
+            <div class="settings-actions__group settings-actions__group--download">
+              <label class="settings-check">
+                <input type="checkbox" data-restrict-allow-download>
+                <span data-i18n="settings.allowDownload">Descargar</span>
+              </label>
+            </div>
           </div>
 
           <div class="html-picker__actions">

@@ -29,6 +29,7 @@
         startLabel: 'Inicio',
         endLabel: 'Fin',
         neverExpires: 'Acceso sin fecha de fin',
+        periodHint: 'El recurso solo será visible dentro de este intervalo.',
         actionsTitle: 'Acciones disponibles durante el acceso',
         allowShare: 'Compartir',
         allowEmbed: 'Insertar en web',
@@ -70,12 +71,13 @@
         choice: {
           zipper: {
             title: 'Crea un ZIP',
-            note: 'Empieza creando un ZIP desde tus archivos o desde HTML.',
-            restrictHint: 'También puedes subir un ZIP para limitar su acceso por fechas.'
+            note: 'Crea un ZIP desde archivos locales o desde HTML.',
+            restrictHint: 'También puedes aplicar limitación de acceso por fechas.'
           },
           main: {
             title: 'Ya tengo un ZIP en la nube con enlace',
-            note: 'Pega un enlace público al ZIP (o al archivo .elpx <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="¿Qué es ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Un archivo .elpx es un proyecto de eXeLearning que internamente utiliza el formato ZIP, lo que permite que el visor acceda a su contenido y lo muestre correctamente.</span></span> de eXeLearning) y genera el enlace del visor.',
+            note: 'Pega el enlace público y crea el enlace del visor.',
+            secondaryHtml: 'Si usas .elpx de eXeLearning, también puedes abrirlo aquí <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="¿Qué es ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Un archivo .elpx es un proyecto de eXeLearning que internamente utiliza el formato ZIP, lo que permite que el visor acceda a su contenido y lo muestre correctamente.</span></span>',
             elpxTooltip: '¿Qué es ELPX?',
             elpxTooltipHtml: 'Un archivo .elpx es un proyecto de eXeLearning que internamente utiliza el formato ZIP, lo que permite que el visor acceda a su contenido y lo muestre correctamente.'
           }
@@ -473,6 +475,7 @@
         startLabel: 'Inici',
         endLabel: 'Fi',
         neverExpires: 'Accés sense data de fi',
+        periodHint: 'El recurs només serà visible dins d’aquest interval.',
         actionsTitle: 'Accions disponibles durant l’accés',
         allowShare: 'Compartir',
         allowEmbed: 'Inserir en web',
@@ -514,12 +517,13 @@
         choice: {
           zipper: {
             title: 'Crear un ZIP',
-            note: 'Comença creant un ZIP des dels teus fitxers o des d’HTML.',
-            restrictHint: 'També pots pujar un ZIP per limitar-ne l’accés per dates.'
+            note: 'Crea un ZIP des de fitxers locals o des d’HTML.',
+            restrictHint: 'També pots aplicar una limitació d’accés per dates.'
           },
           main: {
             title: 'Ja tinc un ZIP al núvol amb enllaç',
-            note: 'Enganxa un enllaç públic al ZIP (o al fitxer .elpx <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="Què és ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Un fitxer .elpx és un projecte d’eXeLearning que internament utilitza el format ZIP, cosa que permet al visor accedir al contingut i mostrar-lo correctament.</span></span> d’eXeLearning) i genera l’enllaç del visor.',
+            note: 'Enganxa l’enllaç públic i crea l’enllaç del visor.',
+            secondaryHtml: 'Si uses .elpx d’eXeLearning, també el pots obrir aquí <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="Què és ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Un fitxer .elpx és un projecte d’eXeLearning que internament utilitza el format ZIP, cosa que permet al visor accedir al contingut i mostrar-lo correctament.</span></span>',
             elpxTooltip: 'Què és ELPX?',
             elpxTooltipHtml: 'Un fitxer .elpx és un projecte d’eXeLearning que internament utilitza el format ZIP, cosa que permet al visor accedir al contingut i mostrar-lo correctament.'
           }
@@ -915,6 +919,7 @@
         startLabel: 'Inicio',
         endLabel: 'Fin',
         neverExpires: 'Acceso sen data de fin',
+        periodHint: 'O recurso só será visible dentro deste intervalo.',
         actionsTitle: 'Accións dispoñibles durante o acceso',
         allowShare: 'Compartir',
         allowEmbed: 'Inserir nunha web',
@@ -956,12 +961,13 @@
         choice: {
           zipper: {
             title: 'Crear un ZIP',
-            note: 'Comeza creando un ZIP desde os teus ficheiros ou desde HTML.',
-            restrictHint: 'Tamén podes subir un ZIP para limitar o acceso por datas.'
+            note: 'Crea un ZIP desde ficheiros locais ou desde HTML.',
+            restrictHint: 'Tamén podes aplicar limitación de acceso por datas.'
           },
           main: {
             title: 'Xa teño un ZIP na nube con ligazón',
-            note: 'Pega unha ligazón pública ao ZIP (ou ao ficheiro .elpx <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="Que é ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Un ficheiro .elpx é un proxecto de eXeLearning que internamente utiliza o formato ZIP, o que permite que o visor acceda ao seu contido e o mostre correctamente.</span></span> de eXeLearning) e xera a ligazón do visor.',
+            note: 'Pega a ligazón pública e crea a ligazón do visor.',
+            secondaryHtml: 'Se usas .elpx de eXeLearning, tamén o podes abrir aquí <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="Que é ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Un ficheiro .elpx é un proxecto de eXeLearning que internamente utiliza o formato ZIP, o que permite que o visor acceda ao seu contido e o mostre correctamente.</span></span>',
             elpxTooltip: 'Que é ELPX?',
             elpxTooltipHtml: 'Un ficheiro .elpx é un proxecto de eXeLearning que internamente utiliza o formato ZIP, o que permite que o visor acceda ao seu contido e o mostre correctamente.'
           }
@@ -1357,6 +1363,7 @@
         startLabel: 'Hasiera',
         endLabel: 'Amaiera',
         neverExpires: 'Amaiera-datarik gabeko sarbidea',
+        periodHint: 'Baliabidea tarte honetan bakarrik egongo da ikusgai.',
         actionsTitle: 'Sarbidean erabilgarri dauden ekintzak',
         allowShare: 'Partekatu',
         allowEmbed: 'Web batean txertatu',
@@ -1398,12 +1405,13 @@
         choice: {
           zipper: {
             title: 'ZIP bat sortu',
-            note: 'Hasi ZIP bat sortzen zure fitxategietatik edo HTMLtik.',
-            restrictHint: 'ZIP bat ere igo dezakezu sarbidea daten bidez mugatzeko.'
+            note: 'Sortu ZIP bat fitxategi lokaletatik edo HTMLtik.',
+            restrictHint: 'Sarbidea datekin mugatzeko aukera ere baduzu.'
           },
           main: {
             title: 'ZIP bat hodeian daukat estekarekin',
-            note: 'Itsatsi ZIParen esteka publikoa (edo eXeLearning-eko .elpx <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="Zer da ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">.elpx fitxategia eXeLearning-eko proiektu bat da, eta barnean ZIP formatua erabiltzen du; horri esker, bisoreak edukira sartu eta behar bezala bistaratu dezake.</span></span> fitxategiarena) eta sortu bisorearen esteka.',
+            note: 'Itsatsi esteka publikoa eta sortu bisorearen esteka.',
+            secondaryHtml: 'eXeLearning-eko .elpx erabiltzen baduzu, hemen ere ireki dezakezu <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="Zer da ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">.elpx fitxategia eXeLearning-eko proiektu bat da, eta barnean ZIP formatua erabiltzen du; horri esker, bisoreak edukira sartu eta behar bezala bistaratu dezake.</span></span>',
             elpxTooltip: 'Zer da ELPX?',
             elpxTooltipHtml: '.elpx fitxategia eXeLearning-eko proiektu bat da, eta barnean ZIP formatua erabiltzen du; horri esker, bisoreak edukira sartu eta behar bezala bistaratu dezake.'
           }
@@ -1799,6 +1807,7 @@
         startLabel: 'Start',
         endLabel: 'End',
         neverExpires: 'Access with no end date',
+        periodHint: 'The resource will only be visible within this time range.',
         actionsTitle: 'Actions available during access',
         allowShare: 'Share',
         allowEmbed: 'Embed',
@@ -1840,12 +1849,13 @@
         choice: {
           zipper: {
             title: 'Create a ZIP',
-            note: 'Start by creating a ZIP from your files or from HTML.',
-            restrictHint: 'You can also upload a ZIP to limit access by dates.'
+            note: 'Create a ZIP from local files or from HTML.',
+            restrictHint: 'You can also apply date-based access limits.'
           },
           main: {
             title: 'I already have a ZIP in the cloud with link',
-            note: 'Paste a public link to the ZIP (or an eXeLearning .elpx <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="What is ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">An .elpx file is an eXeLearning project that internally uses the ZIP format, which allows the viewer to access its content and display it correctly.</span></span> file) and generate the viewer link.',
+            note: 'Paste the public link and create the viewer link.',
+            secondaryHtml: 'If you use an eXeLearning .elpx, you can open it here too <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="What is ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">An .elpx file is an eXeLearning project that internally uses the ZIP format, which allows the viewer to access its content and display it correctly.</span></span>',
             elpxTooltip: 'What is ELPX?',
             elpxTooltipHtml: 'An .elpx file is an eXeLearning project that internally uses the ZIP format, which allows the viewer to access its content and display it correctly.'
           }
@@ -2242,6 +2252,7 @@
         startLabel: 'Start',
         endLabel: 'Ende',
         neverExpires: 'Zugriff ohne Enddatum',
+        periodHint: 'Die Ressource ist nur innerhalb dieses Zeitraums sichtbar.',
         actionsTitle: 'Aktionen während des Zugriffs',
         allowShare: 'Teilen',
         allowEmbed: 'Einbetten',
@@ -2283,12 +2294,13 @@
         choice: {
           zipper: {
             title: 'ZIP erstellen',
-            note: 'Starte, indem du ein ZIP aus deinen Dateien oder aus HTML erstellst.',
-            restrictHint: 'Du kannst auch ein ZIP hochladen, um den Zugriff zeitlich zu begrenzen.'
+            note: 'Erstelle ein ZIP aus lokalen Dateien oder aus HTML.',
+            restrictHint: 'Du kannst den Zugriff auch zeitlich begrenzen.'
           },
           main: {
             title: 'Ich habe bereits eine ZIP-Datei in der Cloud mit Link',
-            note: 'Füge einen öffentlichen Link zur ZIP-Datei (oder zu einer eXeLearning-.elpx <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="Was ist ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Eine .elpx-Datei ist ein eXeLearning-Projekt, das intern das ZIP-Format verwendet. Dadurch kann der Viewer auf den Inhalt zugreifen und ihn korrekt anzeigen.</span></span>-Datei) ein und erzeuge den Viewer-Link.',
+            note: 'Füge den öffentlichen Link ein und erstelle den Viewer-Link.',
+            secondaryHtml: 'Wenn du eine eXeLearning-.elpx nutzt, kannst du sie hier ebenfalls öffnen <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="Was ist ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Eine .elpx-Datei ist ein eXeLearning-Projekt, das intern das ZIP-Format verwendet. Dadurch kann der Viewer auf den Inhalt zugreifen und ihn korrekt anzeigen.</span></span>',
             elpxTooltip: 'Was ist ELPX?',
             elpxTooltipHtml: 'Eine .elpx-Datei ist ein eXeLearning-Projekt, das intern das ZIP-Format verwendet. Dadurch kann der Viewer auf den Inhalt zugreifen und ihn korrekt anzeigen.'
           }
