@@ -175,6 +175,18 @@
         items.push(closeText);
       }
     }
+
+    // Add the actions currently allowed during access.
+    if (get('restrictionAllowShare') && get('restrictionAllowShare').checked) {
+      items.push(t('settings.allowShare') || 'Compartir');
+    }
+    if (get('restrictionAllowEmbed') && get('restrictionAllowEmbed').checked) {
+      items.push(t('settings.allowEmbed') || 'Insertar en web');
+    }
+    if (get('restrictionAllowDownload') && get('restrictionAllowDownload').checked) {
+      items.push(t('settings.allowDownload') || 'Descargar');
+    }
+
     if (!items.length) {
       get('restrictionSummary').setAttribute('hidden', '');
       get('restrictionSummaryItems').innerHTML = '';

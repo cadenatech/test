@@ -548,6 +548,75 @@ form button {
   font-weight: 700;
 }
 
+/* Main publish flow: "I already have a ZIP link" (presentation only). */
+[data-publish-module="main"] form {
+  gap: 14px;
+}
+
+[data-publish-module="main"] form .step-note {
+  font-size: 1rem;
+  color: #5f728c;
+  line-height: 1.45;
+}
+
+[data-publish-module="main"] form .step-note strong {
+  color: #24364d;
+}
+
+[data-publish-module="main"] form [data-url] {
+  min-height: 46px;
+  font-size: 1.08rem;
+  border-color: #bfccdc;
+  background: #fdfefe;
+}
+
+[data-publish-module="main"] form [data-url]:focus {
+  border-color: rgba(37, 99, 235, 0.6);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  outline: none;
+}
+
+[data-publish-module="main"] form [data-create-link] {
+  padding: 10px 15px;
+  font-size: 0.96rem;
+  font-weight: 700;
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.2);
+}
+
+[data-publish-module="main"] .output-row {
+  margin-top: 2px;
+  background: #fbfcfe;
+}
+
+[data-publish-module="main"] .output-group > .field-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1f3147;
+}
+
+[data-publish-module="main"] .output-group > .step-note {
+  font-size: 0.96rem;
+  color: #6b7f97;
+  line-height: 1.4;
+}
+
+[data-publish-module="main"] [data-output] {
+  min-height: 42px;
+  border-color: #d4deea;
+  color: #2a3e56;
+}
+
+[data-publish-module="main"] .actions--icons {
+  margin-top: 2px;
+  gap: 10px;
+}
+
+[data-publish-module="main"] .actions--icons .icon-button {
+  border-color: #d9e2ee;
+  color: #7a8da4;
+  background: #f7f9fc;
+}
+
 input[type="url"] {
   padding: 14px 16px;
   font-size: 1rem;
@@ -1299,6 +1368,97 @@ textarea:focus-visible {
   white-space: nowrap;
 }
 
+/* Visual hierarchy refinement for the ZIP creation flow (presentation only). */
+[data-publish-module="zipper"] .manager-card {
+  gap: 22px;
+}
+
+[data-publish-module="zipper"] .zipper-subtitle {
+  margin-top: 8px;
+}
+
+[data-publish-module="zipper"] .zipper-subtitle > li:first-child {
+  font-size: 1.04rem;
+  line-height: 1.42;
+  color: var(--ink);
+}
+
+[data-publish-module="zipper"] .zipper-subtitle__compact {
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: #66758a;
+}
+
+[data-publish-module="zipper"] .html-zip-accordion {
+  margin: 0;
+  border-radius: 16px;
+}
+
+[data-publish-module="zipper"] .html-zip-accordion__summary {
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+[data-publish-module="zipper"] .html-zip-accordion__summary::after {
+  float: none;
+  margin-left: 14px;
+  flex: 0 0 auto;
+}
+
+[data-publish-module="zipper"] .next-step {
+  margin-top: 24px;
+  padding: 16px 18px;
+  border-color: #d8e2ee;
+  background: #f3f8fd;
+}
+
+[data-publish-module="zipper"] .next-step__text p {
+  font-size: 1.02rem;
+  line-height: 1.42;
+  color: #334a62;
+}
+
+[data-publish-module="zipper"] .next-step__btn {
+  padding: 11px 16px;
+  border-radius: 11px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  box-shadow: 0 8px 18px rgba(3, 105, 161, 0.22);
+}
+
+[data-publish-module="zipper"] .html-zip-card__header .step-note {
+  font-size: 0.92rem;
+  color: #62758f;
+}
+
+[data-publish-module="zipper"] .html-zip-card [data-html-zip-input] + .upload-actions {
+  margin-top: 10px;
+}
+
+[data-publish-module="zipper"] .html-zip-accordion .upload-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+[data-publish-module="zipper"] .html-zip-accordion .upload-grid .upload-card {
+  min-height: 100%;
+}
+
+[data-publish-module="zipper"] .inline-callout {
+  background: #fff9ec;
+  border-left-color: rgba(245, 158, 11, 0.36);
+}
+
+[data-publish-module="zipper"] .inline-callout__text {
+  color: #6d5a2d;
+  font-size: 0.92rem;
+}
+
 .next-step__btn:hover {
   background: #075985;
   color: #fff;
@@ -1454,6 +1614,46 @@ textarea:focus-visible {
   font-weight: 700;
   color: var(--ink);
   text-align: center;
+}
+
+[data-restrict-modal] .modal__card {
+  min-width: min(640px, 92vw);
+  padding: 24px 28px;
+}
+
+[data-restrict-modal] .modal__header {
+  margin-bottom: 10px;
+}
+
+[data-restrict-modal] .modal__content {
+  display: grid;
+  gap: 10px;
+}
+
+[data-restrict-modal] .modal__content > .manager-subtitle {
+  margin: 0;
+  font-size: 1.04rem;
+  line-height: 1.4;
+  color: #22344a;
+}
+
+[data-restrict-modal] [data-restrict-range] {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.35;
+  color: #6c7e95;
+}
+
+[data-restrict-modal] [data-restrict-countdown] {
+  margin-top: 8px;
+  padding-top: 12px;
+  border-top: 1px solid #e2e8f0;
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.1;
+  color: #0f172a;
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
 }
 
 .setting-control {
@@ -2277,12 +2477,31 @@ body[data-loading="true"] main {
     grid-template-columns: 1fr;
   }
 
+  [data-publish-module="zipper"] .html-zip-accordion__summary {
+    min-height: 54px;
+    font-size: 0.98rem;
+  }
+
+  [data-publish-module="zipper"] .html-zip-accordion .upload-grid {
+    grid-template-columns: 1fr;
+  }
+
   .manager-item {
     grid-template-columns: 1fr;
   }
 
   .manager-item__actions {
     justify-content: flex-start;
+  }
+
+  [data-restrict-modal] .modal__card {
+    min-width: 0;
+    width: min(640px, 92vw);
+    padding: 20px 20px;
+  }
+
+  [data-restrict-modal] [data-restrict-countdown] {
+    font-size: 1.55rem;
   }
 
   .setting-card {

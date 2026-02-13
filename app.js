@@ -2628,9 +2628,30 @@
     restrictionStartInput.addEventListener('change', function () {
       RestrictionUI.updateRestrictionSummary();
     });
+    restrictionStartInput.addEventListener('input', function () {
+      RestrictionUI.updateRestrictionSummary();
+    });
   }
   if (restrictionEndInput) {
     restrictionEndInput.addEventListener('change', function () {
+      RestrictionUI.updateRestrictionSummary();
+    });
+    restrictionEndInput.addEventListener('input', function () {
+      RestrictionUI.updateRestrictionSummary();
+    });
+  }
+  if (restrictionAllowShare) {
+    restrictionAllowShare.addEventListener('change', function () {
+      RestrictionUI.updateRestrictionSummary();
+    });
+  }
+  if (restrictionAllowEmbed) {
+    restrictionAllowEmbed.addEventListener('change', function () {
+      RestrictionUI.updateRestrictionSummary();
+    });
+  }
+  if (restrictionAllowDownload) {
+    restrictionAllowDownload.addEventListener('change', function () {
       RestrictionUI.updateRestrictionSummary();
     });
   }
