@@ -101,6 +101,7 @@
   var restrictionZipLock = document.querySelector('[data-restrict-zip-lock]');
   var restrictionZipEnable = document.querySelector('[data-restrict-zip-enable]');
   var restrictionCountdown = document.querySelector('[data-restrict-countdown]');
+  var appVersionNode = document.querySelector('[data-app-version]');
   var UI = window.UI || {};
   var Downloads = window.Downloads || {};
   var Zipper = window.Zipper || {};
@@ -596,6 +597,23 @@
         node.setAttribute('data-tooltip', value);
       }
     });
+  }
+
+  function refreshFooterVersion() {
+    if (!appVersionNode || !window.fetch) return;
+    fetch('version.json', { cache: 'no-cache' })
+      .then(function (response) {
+        if (!response.ok) throw new Error('version file not available');
+        return response.json();
+      })
+      .then(function (payload) {
+        var version = payload && payload.version ? String(payload.version).trim() : '';
+        if (!version) return;
+        appVersionNode.textContent = version;
+      })
+      .catch(function () {
+        // Keep fallback version already rendered in HTML.
+      });
   }
 
 
@@ -3087,6 +3105,7 @@
 
   Manager.cleanupOldSites();
   Manager.refreshManager();
+  refreshFooterVersion();
   if (!urlParam && shortParam) {
     UI.setLoading(true);
     resolveShortToken(shortParam).then(function (resolvedUrl) {
