@@ -94,7 +94,9 @@ header {
 
 .zipper-subtitle {
   margin: 0;
-  padding-left: 18px;
+  padding-left: 0;
+  list-style: none;
+  color: var(--ink);
 }
 
 .zipper-subtitle li {
@@ -104,6 +106,15 @@ header {
 
 .zipper-subtitle li + li {
   margin-top: 6px;
+}
+
+.zipper-subtitle__compact {
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.zipper-subtitle__compact span + span::before {
+  content: " ";
 }
 
 .zipper-subtitle .info-dot {
@@ -444,6 +455,11 @@ form button {
   font-size: 1rem;
   color: var(--ink);
   font-weight: 600;
+}
+
+.field-title--module {
+  font-size: 1.4rem;
+  font-weight: 700;
 }
 
 input[type="url"] {

@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;600;800&family=Spectral:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=9">
+  <link rel="stylesheet" href="styles.css?v=10">
 </head>
 <body>
 
@@ -133,13 +133,9 @@
                 </svg>
               </span>
               <div class="publish-choice-card__title">
-                <span data-i18n="publish.choice.main.title">Ya tengo un ZIP o ELPX</span>
-                <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="¿Qué es ELPX?">
-                  ?
-                  <span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Un archivo <code>.elpx</code> es un proyecto de eXeLearning. Por dentro es un ZIP, así que el visor puede abrirlo.</span>
-                </span>
+                <span data-i18n="publish.choice.main.title">Ya tengo un ZIP en la nube con enlace</span>
               </div>
-              <span class="publish-choice-card__note" data-i18n="publish.choice.main.note">Pega un enlace público al ZIP (o al archivo .elpx de eXeLearning) y genera el enlace del visor.</span>
+              <span class="publish-choice-card__note" data-i18n-html="publish.choice.main.note">Pega un enlace público al ZIP (o al archivo .elpx <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="¿Qué es ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Un archivo .elpx es un proyecto de eXeLearning que internamente utiliza el formato ZIP, lo que permite que el visor acceda a su contenido y lo muestre correctamente.</span></span> de eXeLearning) y genera el enlace del visor.</span>
             </button>
           </div>
 
@@ -147,8 +143,8 @@
 
 	        <div class="publish-module" data-publish-module="main" id="ya-tengo-zip-elpx" hidden>
 	          <form data-form>
-	            <span class="field-title" data-i18n="main.form.title">Ya tengo un ZIP o ELPX</span>
-	            <p class="step-note" data-i18n="main.subtitle">Si ya tienes tu recurso en formato ZIP (o .elpx de eXeLearning 3+) en un servicio con enlace público (Drive, Dropbox, etc.), pega aquí el enlace para generar el enlace.</p>
+	            <span class="field-title field-title--module" data-i18n="main.form.title">Ya tengo un ZIP en la nube con enlace</span>
+	            <p class="step-note" data-i18n-html="main.subtitle">Si ya tienes tu recurso en formato ZIP (o .elpx de eXeLearning 3+) en un servicio con <strong>enlace público</strong> (Drive, Dropbox, etc.), pega aquí el enlace para generar el enlace.</p>
 	            <input data-url type="url" placeholder="Pega aqui el enlace publico del ZIP o del .elpx" data-i18n-placeholder="main.form.placeholder" required>
             <button type="submit" data-create-link data-i18n="main.form.submit">Crear enlace</button>
           </form>
@@ -212,8 +208,10 @@
 	                <h2 data-i18n="zipper.title">Crear ZIP para el visor</h2>
                 <ul class="manager-subtitle zipper-subtitle">
                   <li data-i18n-html="zipper.subtitle.item1">Para publicar tu recurso, guarda todos los archivos en una carpeta y comprímela en un archivo <strong>.zip</strong>.</li>
-                  <li data-i18n-html="zipper.subtitle.item2">Si tu recurso está hecho con <strong>eXeLearning 3 o superior</strong>, puedes usar directamente el archivo <strong>.elpx</strong>.</li>
-                  <li data-i18n-html="zipper.subtitle.item3">Si usas <strong>eXeLearning 2.x</strong>, exporta el proyecto a <strong>ZIP</strong> desde el programa y continúa con la opción <strong>“Ya tengo un ZIP”</strong>.</li>
+                  <li class="zipper-subtitle__compact">
+                    <span data-i18n-html="zipper.subtitle.item2">Si el recurso está hecho con <strong>eXeLearning 3 o superior</strong>, puedes usar directamente el archivo <strong>.elpx</strong>.</span>
+                    <span data-i18n-html="zipper.subtitle.item3">Si usas <strong>eXeLearning 2.x</strong>, exporta el proyecto a <strong>ZIP</strong> desde el programa y continúa con la opción “Ya tengo un ZIP”.</span>
+                  </li>
                 </ul>
                 <div class="zipper-restrict-summary" data-restrict-summary hidden>
                   <span class="zipper-restrict-summary__label" data-restrict-summary-label data-i18n="zipper.restrict.summaryTitle">Acceso limitado por fechas</span>
@@ -507,7 +505,7 @@
           <p class="setting-help" data-i18n="settings.restrictHint">No limites el acceso a no ser que tengas un buen motivo para hacerlo.</p>
           <label class="settings-check">
             <input type="checkbox" data-restrict-toggle>
-            <span data-i18n="settings.restrictToggle">Limitar el acceso por fechas</span>
+            <span data-i18n="settings.restrictToggle">Limitar el acceso</span>
           </label>
 
           <div class="settings-grid" data-restrict-fields hidden>
@@ -569,7 +567,7 @@
     <footer class="site-footer">
       <a class="footer-link" href="https://bilateria.org" target="_blank" rel="noopener">(c) 2026 Juan Jose de Haro</a>
       <span class="footer-sep">·</span>
-    <span class="footer-link">v1.8.6</span>
+    <span class="footer-link">v1.8.7</span>
       <span class="footer-sep">·</span>
       <a class="footer-link" href="https://github.com/visor-webzip/visor-webzip.github.io" target="_blank" rel="noopener">
         <svg class="footer-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
@@ -596,7 +594,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/fflate@0.8.2/umd/index.js"></script>
   <script src="config.js"></script>
-			  <script src="i18n.js?v=6"></script>
+			  <script src="i18n.js?v=7"></script>
 	  <script src="restrictions.js?v=1"></script>
 	  <script src="ui.js?v=1"></script>
 	  <script src="downloads.js?v=1"></script>
