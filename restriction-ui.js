@@ -37,6 +37,38 @@
     if (lang) currentLang = lang;
   }
 
+  function toLocalIso(date, options) {
+    if (!(date instanceof Date) || isNaN(date.getTime())) return '';
+    options = options || {};
+    var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+    var year = date.getFullYear();
+    var month = pad(date.getMonth() + 1);
+    var day = pad(date.getDate());
+    var hour = options.endOfDay ? 23 : date.getHours();
+    var minute = options.endOfDay ? 59 : date.getMinutes();
+    return year + '-' + month + '-' + day + 'T' + pad(hour) + ':' + pad(minute);
+  }
+
+  function normalizeInputDateTime(inputEl, options) {
+    var raw = inputEl ? inputEl.value : '';
+    var normalized = Restrictions.normalizeDateTimeValue(raw, options);
+    if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(normalized)) {
+      return normalized;
+    }
+    if (!inputEl) return normalized;
+    try {
+      if (inputEl.valueAsDate && !isNaN(inputEl.valueAsDate.getTime())) {
+        var fromDate = toLocalIso(inputEl.valueAsDate, options);
+        if (fromDate) return fromDate;
+      }
+      if (typeof inputEl.valueAsNumber === 'number' && !isNaN(inputEl.valueAsNumber)) {
+        var fromNumber = toLocalIso(new Date(inputEl.valueAsNumber), options);
+        if (fromNumber) return fromNumber;
+      }
+    } catch (e) {}
+    return normalized;
+  }
+
 
   function applyRestrictionUiState() {
     var enabled = !!(get('restrictionToggle') && get('restrictionToggle').checked);
@@ -115,10 +147,8 @@
   function buildRestrictionsPayload() {
     if (!get('restrictionToggle') || !get('restrictionToggle').checked) return null;
     updateRestrictionDefaults();
-    var startValue = get('restrictionStartInput') ? get('restrictionStartInput').value : '';
-    var endValue = get('restrictionEndInput') ? get('restrictionEndInput').value : '';
-    startValue = Restrictions.normalizeDateTimeValue(startValue);
-    endValue = Restrictions.normalizeDateTimeValue(endValue);
+    var startValue = normalizeInputDateTime(get('restrictionStartInput'));
+    var endValue = normalizeInputDateTime(get('restrictionEndInput'), { endOfDay: true });
     var startAt = startValue ? new Date(startValue).toISOString() : new Date().toISOString();
     var neverExpires = !!(get('restrictionNoEnd') && get('restrictionNoEnd').checked);
     var endAt = null;
@@ -154,10 +184,8 @@
       return;
     }
     updateRestrictionDefaults();
-    var startValue = get('restrictionStartInput') ? get('restrictionStartInput').value : '';
-    var endValue = get('restrictionEndInput') ? get('restrictionEndInput').value : '';
-    startValue = Restrictions.normalizeDateTimeValue(startValue);
-    endValue = Restrictions.normalizeDateTimeValue(endValue);
+    var startValue = normalizeInputDateTime(get('restrictionStartInput'));
+    var endValue = normalizeInputDateTime(get('restrictionEndInput'), { endOfDay: true });
     var items = [];
     if (startValue) {
       var startText = Restrictions.formatRestrictionDate(startValue, currentLang) || startValue;

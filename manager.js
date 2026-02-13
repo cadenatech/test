@@ -235,6 +235,9 @@
       var updateButton = document.createElement('button');
       updateButton.type = 'button';
       updateButton.className = 'icon-button';
+      if (site.updateAvailable) {
+        updateButton.classList.add('is-update-available');
+      }
       updateButton.setAttribute('data-action', 'update');
       updateButton.setAttribute('data-zip-url', site.url || '');
       updateButton.setAttribute('data-index-path', site.indexPath || '');

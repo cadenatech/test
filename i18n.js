@@ -174,7 +174,9 @@
           embed: 'Insertar en una web',
           edit: 'Editar el título',
           download: 'Descargar archivo',
-          update: 'Actualizar'
+          update: 'Actualizar',
+          updating: 'Actualizando...',
+          updated: 'Actualizado'
         },
         editPrompt: 'Título del recurso',
         empty: 'No hay recursos guardados en este navegador.',
@@ -620,7 +622,9 @@
           embed: 'Inserir en una web',
           edit: 'Editar el títol',
           download: 'Descarregar fitxer',
-          update: 'Actualitzar'
+          update: 'Actualitzar',
+          updating: 'Actualitzant...',
+          updated: 'Actualitzat'
         },
         editPrompt: 'Títol del recurs',
         empty: 'No hi ha recursos desats en aquest navegador.',
@@ -1064,7 +1068,9 @@
           embed: 'Inserir nunha web',
           edit: 'Editar o título',
           download: 'Descargar ficheiro',
-          update: 'Actualizar'
+          update: 'Actualizar',
+          updating: 'Actualizando...',
+          updated: 'Actualizado'
         },
         editPrompt: 'Título do recurso',
         empty: 'Non hai recursos gardados neste navegador.',
@@ -1508,7 +1514,9 @@
           embed: 'Web batean txertatu',
           edit: 'Izenburua editatu',
           download: 'Fitxategia deskargatu',
-          update: 'Eguneratu'
+          update: 'Eguneratu',
+          updating: 'Eguneratzen...',
+          updated: 'Eguneratuta'
         },
         editPrompt: 'Baliabidearen izenburua',
         empty: 'Ez dago gordetako baliabiderik nabigatzaile honetan.',
@@ -1952,7 +1960,9 @@
           embed: 'Embed in a website',
           edit: 'Edit title',
           download: 'Download file',
-          update: 'Update'
+          update: 'Update',
+          updating: 'Updating...',
+          updated: 'Updated'
         },
         editPrompt: 'Resource title',
         empty: 'No saved resources in this browser.',
@@ -2397,7 +2407,9 @@
           embed: 'In eine Website einbetten',
           edit: 'Titel bearbeiten',
           download: 'Datei herunterladen',
-          update: 'Aktualisieren'
+          update: 'Aktualisieren',
+          updating: 'Wird aktualisiert...',
+          updated: 'Aktualisiert'
         },
         editPrompt: 'Titel der Ressource',
         empty: 'Keine gespeicherten Ressourcen in diesem Browser.',

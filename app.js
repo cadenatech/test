@@ -1860,17 +1860,23 @@
     return fetchRemoteMetaSignature(site.url).then(function (remoteSignature) {
       if (!remoteSignature) return;
       var storedSignature = site.remoteMeta || null;
-      var mergedSignature = mergeMetaSignature(storedSignature, remoteSignature);
       var changed = storedSignature ? isMetaChanged(storedSignature, remoteSignature) : false;
-      var needsSave = !metaEqual(storedSignature, mergedSignature) || site.updateAvailable !== changed;
+      var nextUpdateAvailable = !!changed;
+
+      // IMPORTANT:
+      // Keep `remoteMeta` as the local baseline while an update is pending.
+      // If we overwrite it with remote values here, the next check would think
+      // there is no change and the update badge/banner would disappear.
+      var nextSignature = changed ? storedSignature : mergeMetaSignature(storedSignature, remoteSignature);
+      var needsSave = !metaEqual(storedSignature, nextSignature) || site.updateAvailable !== nextUpdateAvailable;
       if (!needsSave) {
         if (changed && opts.showBanner) {
           showUpdateBanner(opts.zipUrl || site.url, opts.indexPath || site.indexPath || '');
         }
         return changed;
       }
-      site.remoteMeta = mergedSignature;
-      site.updateAvailable = changed;
+      site.remoteMeta = nextSignature;
+      site.updateAvailable = nextUpdateAvailable;
       return Storage.saveSite(site).then(function () {
         if (changed && opts.showBanner) {
           showUpdateBanner(opts.zipUrl || site.url, opts.indexPath || site.indexPath || '');
@@ -2060,7 +2066,8 @@
 
   function loadZip(zipUrl, options) {
     var opts = options || {};
-    var autoOpen = !!opts.autoOpen;
+    var fromManager = !!opts.fromManager;
+    var autoOpen = !!opts.autoOpen && !fromManager;
     var showProgress = opts.showProgress !== false;
     var normalizedZipUrl = normalizeZipUrl(zipUrl);
     var shouldUseNormalized = false;
@@ -2633,11 +2640,52 @@
     });
   }
   if (restrictionEndInput) {
-    restrictionEndInput.addEventListener('change', function () {
+    var isFirefoxBrowser = typeof navigator !== 'undefined' && /firefox/i.test(navigator.userAgent || '');
+    var ensureFirefoxEndHasTime = function () {
+      if (!isFirefoxBrowser) return;
+      if (restrictionNoEnd && restrictionNoEnd.checked) return;
+      var currentValue = restrictionEndInput.value ? String(restrictionEndInput.value).trim() : '';
+      var normalizedCurrent = Restrictions.normalizeDateTimeValue(currentValue, { endOfDay: true });
+      if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(normalizedCurrent)) {
+        if (!currentValue || /--\s*:\s*--/.test(currentValue) || /^\d{4}-\d{2}-\d{2}$/.test(currentValue) || /^\d{4}-\d{2}-\d{2}T$/.test(currentValue)) {
+          restrictionEndInput.value = normalizedCurrent;
+        }
+        return;
+      }
+      var startValue = restrictionStartInput && restrictionStartInput.value ? restrictionStartInput.value : '';
+      var normalizedStart = Restrictions.normalizeDateTimeValue(startValue);
+      var dayMatch = normalizedStart.match(/^(\d{4}-\d{2}-\d{2})/);
+      var baseDay = dayMatch ? dayMatch[1] : formatLocalDateTime(new Date()).slice(0, 10);
+      restrictionEndInput.value = baseDay + 'T23:59';
+    };
+    var maybeAutofillRestrictionEndTime = function () {
+      var raw = restrictionEndInput.value ? String(restrictionEndInput.value).trim() : '';
+      if (!raw) return;
+      var missingTime = /^\d{4}-\d{2}-\d{2}$/.test(raw)
+        || /^\d{4}-\d{2}-\d{2}T$/.test(raw)
+        || /--\s*:\s*--/.test(raw);
+      if (!missingTime) return;
+      var normalized = Restrictions.normalizeDateTimeValue(raw, { endOfDay: true });
+      if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(normalized)) {
+        restrictionEndInput.value = normalized;
+      }
+    };
+    var refreshRestrictionEndSummary = function () {
+      maybeAutofillRestrictionEndTime();
+      RestrictionUI.updateRestrictionSummary();
+    };
+    restrictionEndInput.addEventListener('change', refreshRestrictionEndSummary);
+    restrictionEndInput.addEventListener('input', refreshRestrictionEndSummary);
+    restrictionEndInput.addEventListener('blur', refreshRestrictionEndSummary);
+    restrictionEndInput.addEventListener('focus', function () {
+      ensureFirefoxEndHasTime();
       RestrictionUI.updateRestrictionSummary();
     });
-    restrictionEndInput.addEventListener('input', function () {
-      RestrictionUI.updateRestrictionSummary();
+    restrictionEndInput.addEventListener('mousedown', function () {
+      ensureFirefoxEndHasTime();
+    });
+    restrictionEndInput.addEventListener('click', function () {
+      setTimeout(refreshRestrictionEndSummary, 0);
     });
   }
   if (restrictionAllowShare) {
@@ -2850,7 +2898,25 @@
         return;
       }
       if (action === 'update' && zipUrl) {
-        loadZip(zipUrl, { force: true, autoOpen: false, preferredIndexPath: indexPath || '' });
+        button.classList.add('is-updating');
+        button.disabled = true;
+        UI.showInlineToast(button, t('manager.actions.updating'));
+        Promise.resolve(loadZip(zipUrl, {
+          force: true,
+          autoOpen: false,
+          showProgress: false,
+          fromManager: true,
+          preferredIndexPath: indexPath || ''
+        })).then(function () {
+          UI.showInlineToast(button, t('manager.actions.updated'));
+        }).catch(function (err) {
+          UI.showInlineToast(button, (err && err.userMessage) || t('errors.loadZip'));
+        }).finally(function () {
+          if (document.body.contains(button)) {
+            button.classList.remove('is-updating');
+            button.disabled = false;
+          }
+        });
         return;
       }
       if (action === 'edit' && siteId) {

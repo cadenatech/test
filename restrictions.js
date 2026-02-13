@@ -1,13 +1,55 @@
 (function () {
-  function normalizeDateTimeValue(value) {
+  function normalizeDateTimeValue(value, options) {
+    options = options || {};
+    var defaultTime = options.endOfDay ? '23:59' : '00:00';
     if (!value) return '';
-    if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
-      return value + 'T00:00';
+    var text = String(value)
+      .replace(/[\u200e\u200f\u202f]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    if (!text) return '';
+
+    var withDefault = function (hour, minute) {
+      if (hour === '--' || minute === '--' || hour === undefined || minute === undefined || hour === null || minute === null) {
+        return defaultTime;
+      }
+      var h = parseInt(hour, 10);
+      var m = parseInt(minute, 10);
+      if (isNaN(h) || isNaN(m) || h < 0 || h > 23 || m < 0 || m > 59) {
+        return defaultTime;
+      }
+      var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+      return pad(h) + ':' + pad(m);
+    };
+
+    var pad2 = function (n) { return (n < 10 ? '0' : '') + n; };
+    var buildIso = function (year, month, day, hour, minute) {
+      var y = parseInt(year, 10);
+      var mo = parseInt(month, 10);
+      var d = parseInt(day, 10);
+      if (isNaN(y) || isNaN(mo) || isNaN(d)) return '';
+      if (mo < 1 || mo > 12 || d < 1 || d > 31) return '';
+      return y + '-' + pad2(mo) + '-' + pad2(d) + 'T' + withDefault(hour, minute);
+    };
+
+    var numbers = text.match(/\d+/g) || [];
+    var timeMissing = /--\s*:\s*--/.test(text);
+    var hour = timeMissing ? null : (numbers.length > 3 ? numbers[3] : null);
+    var minute = timeMissing ? null : (numbers.length > 4 ? numbers[4] : null);
+    if (numbers.length >= 3) {
+      // YYYY-MM-DD...
+      if (String(numbers[0]).length === 4) {
+        var ymdIso = buildIso(numbers[0], numbers[1], numbers[2], hour, minute);
+        if (ymdIso) return ymdIso;
+      }
+      // DD/MM/YYYY...
+      if (String(numbers[2]).length === 4) {
+        var dmyIso = buildIso(numbers[2], numbers[1], numbers[0], hour, minute);
+        if (dmyIso) return dmyIso;
+      }
     }
-    if (/^\d{4}-\d{2}-\d{2}T$/.test(value)) {
-      return value + '00:00';
-    }
-    return value;
+
+    return text;
   }
 
   function resolveLocale(lang) {

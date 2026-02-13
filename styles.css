@@ -703,6 +703,29 @@ button:focus-visible {
   opacity: 1;
 }
 
+.ghost-button .inline-toast {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0f172a;
+  color: #fff;
+  font-size: 0.8rem;
+  padding: 6px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s ease, transform 0.12s ease;
+  box-shadow: var(--shadow-sm);
+  z-index: 5;
+}
+
+.ghost-button.show-toast .inline-toast {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-2px);
+}
+
 button[disabled],
 button[disabled]:hover,
 button[disabled]:active {
@@ -1523,9 +1546,9 @@ textarea:focus-visible {
   margin-top: 12px;
   padding: 10px 12px;
   border-radius: 12px;
-  border: 1px solid #f3b8b5;
-  background: #fdf1f0;
-  color: #a13a35;
+  border: 1px solid var(--border-strong);
+  background: var(--surface-muted);
+  color: var(--ink-muted);
   display: inline-flex;
   flex-direction: column;
   gap: 6px;
@@ -1545,9 +1568,9 @@ textarea:focus-visible {
 .zipper-restrict-summary__item {
   padding: 2px 8px;
   border-radius: 999px;
-  border: 1px solid #f3b8b5;
-  background: #fbe2e1;
-  color: #a13a35;
+  border: 1px solid #8ed8ab;
+  background: #e7f8ee;
+  color: #1f7a45;
   font-size: 0.78rem;
   font-weight: 600;
 }
@@ -1714,6 +1737,105 @@ textarea:focus-visible {
 
 .manager-toolbar__right {
   justify-content: flex-end;
+}
+
+/* Manager panel: visual hierarchy refinement (presentation only). */
+[data-tab-panel="manager"] .manager-header {
+  align-items: flex-start;
+}
+
+[data-tab-panel="manager"] .manager-subtitle {
+  font-size: 0.98rem;
+  line-height: 1.4;
+  color: #667a93;
+}
+
+[data-tab-panel="manager"] [data-manager-settings-open] {
+  width: 34px;
+  height: 34px;
+  color: #7f90a5;
+  background: #f8fafd;
+}
+
+[data-tab-panel="manager"] .manager-stats {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+[data-tab-panel="manager"] .stat {
+  min-height: 90px;
+  align-content: start;
+}
+
+[data-tab-panel="manager"] .manager-toolbar {
+  margin-top: 8px;
+  margin-bottom: 10px;
+}
+
+[data-tab-panel="manager"] .manager-toolbar__left {
+  gap: 8px;
+}
+
+[data-tab-panel="manager"] .manager-toolbar__right {
+  gap: 10px;
+  margin-left: auto;
+  padding-left: 14px;
+  border-left: 1px solid var(--border);
+}
+
+[data-tab-panel="manager"] .manager-sort {
+  min-height: 36px;
+}
+
+[data-tab-panel="manager"] .manager-sort-dir {
+  width: 36px;
+  height: 36px;
+}
+
+[data-tab-panel="manager"] .manager-list {
+  gap: 10px;
+}
+
+[data-tab-panel="manager"] .manager-item {
+  min-height: 74px;
+  padding: 11px 12px;
+  align-items: center;
+}
+
+[data-tab-panel="manager"] .manager-item__title {
+  font-size: 0.97rem;
+  line-height: 1.25;
+}
+
+[data-tab-panel="manager"] .manager-item__meta {
+  font-size: 0.84rem;
+  color: #71839a;
+}
+
+[data-tab-panel="manager"] .manager-badge {
+  font-size: 0.73rem;
+}
+
+[data-tab-panel="manager"] .manager-item--highlight {
+  border-color: #d9e2ee;
+  box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.18);
+}
+
+[data-tab-panel="manager"] .manager-item__actions {
+  gap: 8px;
+}
+
+[data-tab-panel="manager"] .manager-item__actions .icon-button:not(:disabled):not([aria-disabled="true"]) {
+  color: #4b5f79;
+  border-color: #c3d1e2;
+  background: #ffffff;
+}
+
+[data-tab-panel="manager"] .manager-item__actions .icon-button:not(:disabled):not([aria-disabled="true"]):hover,
+[data-tab-panel="manager"] .manager-item__actions .icon-button:not(:disabled):not([aria-disabled="true"]):focus-visible {
+  color: #1f3f68;
+  border-color: #8fb0cf;
+  background: #f3f8fd;
 }
 
 .manager-sort {
@@ -1898,6 +2020,32 @@ textarea:focus-visible {
   border-color: #a6f4c5;
 }
 
+.icon-button.is-update-available:not(:disabled):not([aria-disabled="true"]) {
+  color: #1d4ed8;
+  background: #eff6ff;
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.15) inset;
+}
+
+.icon-button.is-update-available:not(:disabled):not([aria-disabled="true"]):hover,
+.icon-button.is-update-available:not(:disabled):not([aria-disabled="true"]):focus-visible {
+  color: #1e40af;
+  border-color: #60a5fa;
+  background: #dbeafe;
+}
+
+.icon-button.is-updating {
+  color: #1d4ed8;
+  border-color: #60a5fa;
+  background: #e0edff;
+  opacity: 1;
+  cursor: progress;
+}
+
+.icon-button.is-updating svg {
+  animation: manager-update-spin 1s linear infinite;
+}
+
 .icon-button svg {
   width: 16px;
   height: 16px;
@@ -1927,6 +2075,14 @@ textarea:focus-visible {
 
 .icon-button[aria-disabled="true"] {
   pointer-events: none;
+}
+
+.icon-button.is-updating:disabled,
+.icon-button.is-updating[aria-disabled="true"] {
+  opacity: 1;
+  color: #1d4ed8;
+  border-color: #60a5fa;
+  background: #e0edff;
 }
 
 .actions--icons {
@@ -2004,6 +2160,15 @@ textarea:focus-visible {
 .icon-button.show-toast .inline-toast {
   opacity: 1;
   transform: translateX(-50%) translateY(-2px);
+}
+
+@keyframes manager-update-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .actions {
@@ -2475,6 +2640,16 @@ body[data-loading="true"] main {
 
   .manager-settings {
     grid-template-columns: 1fr;
+  }
+
+  [data-tab-panel="manager"] .manager-stats {
+    grid-template-columns: 1fr;
+  }
+
+  [data-tab-panel="manager"] .manager-toolbar__right {
+    margin-left: 0;
+    padding-left: 0;
+    border-left: none;
   }
 
   [data-publish-module="zipper"] .html-zip-accordion__summary {
