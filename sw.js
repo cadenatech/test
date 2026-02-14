@@ -216,7 +216,7 @@ function injectOverlayResponse(blob, payload) {
       'var warningMessage=', JSON.stringify(warningMessage), ';',
       'function normalizeLang(l){if(!l)return "es";l=(String(l).toLowerCase()).split(/[-_]/)[0];return ["es","ca","gl","eu","en","de"].indexOf(l)!==-1?l:"es";}',
       'var strings={',
-      'es:{t:"Nueva version disponible",b:"Este recurso ha cambiado en la nube. Quieres actualizarlo?",u:"Actualizar",d:"Ahora no",rt:"Acceso restringido",rb:"Este recurso no esta disponible en este momento.",wt:"Aviso",wb:"El tiempo de acceso se agota en {minutes} minutos.",wc:"Cerrar"},',
+      'es:{t:"Nueva versión disponible",b:"Este recurso ha cambiado en la nube. ¿Quieres actualizarlo?",u:"Actualizar",d:"Ahora no",rt:"Acceso restringido",rb:"Este recurso no está disponible en este momento.",wt:"Aviso",wb:"El tiempo de acceso se agota en {minutes} minutos.",wc:"Cerrar"},',
       'ca:{t:"Nova versio disponible",b:"Aquest recurs ha canviat al nuvol. Vols actualitzar-lo?",u:"Actualitzar",d:"Ara no",rt:"Acces restringit",rb:"Aquest recurs no esta disponible en aquest moment.",wt:"Avís",wb:"El temps d\'acces s\'esgota en {minutes} minuts.",wc:"Tancar"},',
       'gl:{t:"Nova version dispoñible",b:"Este recurso cambiou na nube. Queres actualizalo?",u:"Actualizar",d:"Agora non",rt:"Acceso restrinxido",rb:"Este recurso non esta dispoñible neste momento.",wt:"Aviso",wb:"O tempo de acceso esgótase en {minutes} minutos.",wc:"Pechar"},',
       'eu:{t:"Bertsio berria eskuragarri",b:"Baliabidea hodeian aldatu da. Eguneratu nahi duzu?",u:"Eguneratu",d:"Orain ez",rt:"Sarbide mugatua",rb:"Baliabide hau une honetan ez dago eskuragarri.",wt:"Abisua",wb:"Sarbide-denbora {minutes} minututan amaituko da.",wc:"Itxi"},',
