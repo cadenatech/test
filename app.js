@@ -2078,9 +2078,15 @@
   }
 
   function buildPdfIndexHtml(pdfPaths, selectedPath) {
+    var pageLang = normalizeLang(currentLang);
+    var pdfViewerTitle = t('pdfViewer.documentsTitle') || 'Documentos PDF';
+    var hideListLabel = t('pdfViewer.hideList') || 'Ocultar lista';
+    var showListLabel = t('pdfViewer.showList') || 'Mostrar lista';
+    var hideListLabelJs = JSON.stringify(hideListLabel);
+    var showListLabelJs = JSON.stringify(showListLabel);
     if (!pdfPaths || pdfPaths.length <= 1) {
       return '<!doctype html>'
-        + '<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">'
+        + '<html lang="' + escapeHtml(pageLang) + '"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">'
         + '<title>' + escapeHtml(deriveTitleFromPath(selectedPath) || 'PDF') + '</title>'
         + '<style>'
         + 'html,body{height:100%;margin:0;background:#e2e8f0}'
@@ -2096,7 +2102,7 @@
       return '<li><a data-pdf-link' + selected + ' href="' + escapeHtml(href) + '" target="vwz-pdf-frame">' + escapeHtml(title) + '</a></li>';
     }).join('');
     return '<!doctype html>'
-      + '<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">'
+      + '<html lang="' + escapeHtml(pageLang) + '"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">'
       + '<title>' + escapeHtml(deriveTitleFromPath(selectedPath) || 'PDF') + '</title>'
       + '<style>'
       + ':root{color-scheme:light;--surface:#fff;--surface-muted:#f3f5f8;--ink:#0f172a;--border:#e2e8f0;--border-strong:#cbd5e1;--accent:#2563eb;--accent-wash:#eff6ff;--shadow:0 10px 26px rgba(15,23,42,.06)}'
@@ -2121,10 +2127,10 @@
       + '.viewer iframe{width:100%;height:100%;border:0;background:#fff;display:block}'
       + '@media (max-width:900px){.layout{grid-template-columns:1fr;grid-template-rows:auto 1fr}body.sidebar-collapsed .layout{grid-template-columns:1fr;grid-template-rows:auto 1fr}}'
       + '</style></head><body>'
-      + '<div class="layout"><aside class="sidebar"><button type="button" class="sidebar-toggle" data-sidebar-toggle aria-expanded="true" title="Ocultar lista" aria-label="Ocultar lista"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M9 3v18"></path><path d="m16 9-3 3 3 3"></path></svg></button><div class="sidebar-content" data-sidebar-content><h1>Documentos PDF</h1><ul>'
+      + '<div class="layout"><aside class="sidebar"><button type="button" class="sidebar-toggle" data-sidebar-toggle aria-expanded="true" title="' + escapeHtml(hideListLabel) + '" aria-label="' + escapeHtml(hideListLabel) + '"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M9 3v18"></path><path d="m16 9-3 3 3 3"></path></svg></button><div class="sidebar-content" data-sidebar-content><h1>' + escapeHtml(pdfViewerTitle) + '</h1><ul>'
       + listItems
       + '</ul></div></aside><main class="viewer"><iframe name="vwz-pdf-frame" src="' + escapeHtml(encodePathForHref(selectedPath)) + '" title="PDF"></iframe></main></div>'
-      + '<script>(function(){var body=document.body;var btn=document.querySelector("[data-sidebar-toggle]");var frame=document.querySelector("iframe[name=\\"vwz-pdf-frame\\"]");var links=[].slice.call(document.querySelectorAll("[data-pdf-link]"));var iconOpen="<svg viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\"><rect x=\\"3\\" y=\\"3\\" width=\\"18\\" height=\\"18\\" rx=\\"2\\"></rect><path d=\\"M9 3v18\\"></path><path d=\\"m16 9-3 3 3 3\\"></path></svg>";var iconClosed="<svg viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\"><rect x=\\"3\\" y=\\"3\\" width=\\"18\\" height=\\"18\\" rx=\\"2\\"></rect><path d=\\"M9 3v18\\"></path><path d=\\"m13 9 3 3-3 3\\"></path></svg>";function markActive(link){links.forEach(function(node){node.classList.toggle("is-active",node===link);});if(link){var title=(link.textContent||"").replace(/\\s+/g," ").trim();if(title){document.title=title;}}}function syncToggle(){if(!btn)return;var collapsed=body.classList.contains("sidebar-collapsed");var label=collapsed?"Mostrar lista":"Ocultar lista";btn.innerHTML=collapsed?iconClosed:iconOpen;btn.title=label;btn.setAttribute("aria-label",label);btn.setAttribute("aria-expanded",collapsed?"false":"true");}if(btn){btn.addEventListener("click",function(){body.classList.toggle("sidebar-collapsed");syncToggle();});syncToggle();}links.forEach(function(link){link.addEventListener("click",function(ev){ev.preventDefault();var href=link.getAttribute("href")||"";if(frame&&href){frame.setAttribute("src",href);}markActive(link);});});var initial=links.find(function(link){return link.classList.contains("is-active");})||links[0]||null;markActive(initial);})();</script>'
+      + '<script>(function(){var body=document.body;var btn=document.querySelector("[data-sidebar-toggle]");var frame=document.querySelector("iframe[name=\\"vwz-pdf-frame\\"]");var links=[].slice.call(document.querySelectorAll("[data-pdf-link]"));var iconOpen="<svg viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\"><rect x=\\"3\\" y=\\"3\\" width=\\"18\\" height=\\"18\\" rx=\\"2\\"></rect><path d=\\"M9 3v18\\"></path><path d=\\"m16 9-3 3 3 3\\"></path></svg>";var iconClosed="<svg viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\"><rect x=\\"3\\" y=\\"3\\" width=\\"18\\" height=\\"18\\" rx=\\"2\\"></rect><path d=\\"M9 3v18\\"></path><path d=\\"m13 9 3 3-3 3\\"></path></svg>";var labelHide=' + hideListLabelJs + ';var labelShow=' + showListLabelJs + ';function markActive(link){links.forEach(function(node){node.classList.toggle("is-active",node===link);});if(link){var title=(link.textContent||"").replace(/\\s+/g," ").trim();if(title){document.title=title;}}}function syncToggle(){if(!btn)return;var collapsed=body.classList.contains("sidebar-collapsed");var label=collapsed?labelShow:labelHide;btn.innerHTML=collapsed?iconClosed:iconOpen;btn.title=label;btn.setAttribute("aria-label",label);btn.setAttribute("aria-expanded",collapsed?"false":"true");}if(btn){btn.addEventListener("click",function(){body.classList.toggle("sidebar-collapsed");syncToggle();});syncToggle();}links.forEach(function(link){link.addEventListener("click",function(ev){ev.preventDefault();var href=link.getAttribute("href")||"";if(frame&&href){frame.setAttribute("src",href);}markActive(link);});});var initial=links.find(function(link){return link.classList.contains("is-active");})||links[0]||null;markActive(initial);})();</script>'
       + '</body></html>';
   }
 

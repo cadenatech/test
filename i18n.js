@@ -449,6 +449,11 @@
         saving: 'Guardando en el navegador...',
         copySuccess: 'Enlace copiado.'
       },
+      pdfViewer: {
+        documentsTitle: 'Documentos PDF',
+        hideList: 'Ocultar lista',
+        showList: 'Mostrar lista'
+      },
       common: {
         close: 'Cerrar',
         cancel: 'Cancelar',
@@ -899,6 +904,11 @@
         unpacking: 'Descomprimint...',
         saving: 'Desant al navegador...',
         copySuccess: 'Enllaç copiat.'
+      },
+      pdfViewer: {
+        documentsTitle: 'Documents PDF',
+        hideList: 'Amagar llista',
+        showList: 'Mostrar llista'
       },
       common: {
         close: 'Tancar',
@@ -1351,6 +1361,11 @@
         saving: 'Gardando no navegador...',
         copySuccess: 'Ligazón copiada.'
       },
+      pdfViewer: {
+        documentsTitle: 'Documentos PDF',
+        hideList: 'Ocultar lista',
+        showList: 'Amosar lista'
+      },
       common: {
         close: 'Pechar',
         cancel: 'Cancelar',
@@ -1801,6 +1816,11 @@
         unpacking: 'Deskonprimatzen...',
         saving: 'Nabigatzailean gordetzen...',
         copySuccess: 'Esteka kopiatuta.'
+      },
+      pdfViewer: {
+        documentsTitle: 'PDF dokumentuak',
+        hideList: 'Zerrenda ezkutatu',
+        showList: 'Zerrenda erakutsi'
       },
       common: {
         close: 'Itxi',
@@ -2254,6 +2274,11 @@
         saving: 'Saving in the browser...',
         copySuccess: 'Link copied.'
       },
+      pdfViewer: {
+        documentsTitle: 'PDF documents',
+        hideList: 'Hide list',
+        showList: 'Show list'
+      },
       common: {
         close: 'Close',
         cancel: 'Cancel',
@@ -2705,6 +2730,11 @@
         unpacking: 'Entpacken...',
         saving: 'Im Browser speichern...',
         copySuccess: 'Link kopiert.'
+      },
+      pdfViewer: {
+        documentsTitle: 'PDF-Dokumente',
+        hideList: 'Liste ausblenden',
+        showList: 'Liste anzeigen'
       },
       common: {
         close: 'Schließen',
