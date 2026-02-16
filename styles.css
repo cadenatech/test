@@ -72,12 +72,14 @@ header {
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .title-stack {
   display: grid;
   gap: 4px;
+  min-width: 0;
+  flex: 1 1 auto;
 }
 
 .header-subtitle {
@@ -132,6 +134,7 @@ header {
   display: flex;
   flex-direction: row;
   align-items: center;
+  align-self: flex-start;
   gap: 12px;
   position: relative;
 }
@@ -2677,6 +2680,15 @@ body[data-loading="true"] main {
 }
 
 @media (max-width: 720px) {
+  .title-row {
+    flex-wrap: wrap;
+  }
+
+  .title-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
   form,
   .output-row {
     grid-template-columns: 1fr;
