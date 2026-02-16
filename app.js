@@ -2129,6 +2129,44 @@
   }
 
   function preparePdfOnlyZip(files, siteId, preferredIndexPath) {
+    function comparePdfPaths(a, b) {
+      var left = String(a || '');
+      var right = String(b || '');
+      function numericPrefixSequence(path) {
+        return path.split('/').filter(function (part) { return !!part; }).map(function (part) {
+          var match = /^(\d+)(?:[\s._-]+|$)/.exec(part);
+          return match ? parseInt(match[1], 10) : null;
+        });
+      }
+
+      var leftSeq = numericPrefixSequence(left);
+      var rightSeq = numericPrefixSequence(right);
+      var maxLen = Math.max(leftSeq.length, rightSeq.length);
+
+      for (var i = 0; i < maxLen; i += 1) {
+        var leftNum = i < leftSeq.length ? leftSeq[i] : null;
+        var rightNum = i < rightSeq.length ? rightSeq[i] : null;
+
+        if (leftNum !== null && rightNum !== null) {
+          if (leftNum !== rightNum) {
+            return leftNum - rightNum;
+          }
+          continue;
+        }
+        if (leftNum !== null && rightNum === null) {
+          return -1;
+        }
+        if (leftNum === null && rightNum !== null) {
+          return 1;
+        }
+      }
+
+      return left.localeCompare(right, undefined, {
+        numeric: true,
+        sensitivity: 'base'
+      });
+    }
+
     var htmlExists = files.some(function (file) {
       var lower = (file.path || '').toLowerCase();
       return lower.endsWith('.html') || lower.endsWith('.htm');
@@ -2137,9 +2175,7 @@
       return { files: files, preferredIndexPath: preferredIndexPath || '' };
     }
     var pdfPaths = files.map(function (file) { return file.path; }).filter(isPdfPath);
-    pdfPaths.sort(function (a, b) {
-      return String(a || '').localeCompare(String(b || ''), undefined, { sensitivity: 'base' });
-    });
+    pdfPaths.sort(comparePdfPaths);
     if (!pdfPaths.length) {
       return { files: files, preferredIndexPath: preferredIndexPath || '' };
     }
