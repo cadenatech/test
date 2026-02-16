@@ -66,6 +66,7 @@ function getFile(siteId, path) {
 function guessMimeType(path) {
   var lower = path.toLowerCase();
   if (lower.endsWith('.html') || lower.endsWith('.htm')) return 'text/html';
+  if (lower.endsWith('.pdf')) return 'application/pdf';
   if (lower.endsWith('.css')) return 'text/css';
   if (lower.endsWith('.js')) return 'text/javascript';
   if (lower.endsWith('.json')) return 'application/json';

@@ -1226,6 +1226,7 @@
   function guessMimeType(path) {
     var lower = path.toLowerCase();
     if (lower.endsWith('.html') || lower.endsWith('.htm')) return 'text/html';
+    if (lower.endsWith('.pdf')) return 'application/pdf';
     if (lower.endsWith('.css')) return 'text/css';
     if (lower.endsWith('.js')) return 'text/javascript';
     if (lower.endsWith('.json')) return 'application/json';
@@ -2056,6 +2057,114 @@
     return paths[0] || '';
   }
 
+  function isPdfPath(path) {
+    var lower = (path || '').toLowerCase();
+    return lower.endsWith('.pdf');
+  }
+
+  function encodePathForHref(path) {
+    return (path || '').split('/').map(function (segment) {
+      return encodeURIComponent(segment);
+    }).join('/');
+  }
+
+  function escapeHtml(value) {
+    return String(value || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function buildPdfIndexHtml(pdfPaths, selectedPath) {
+    if (!pdfPaths || pdfPaths.length <= 1) {
+      return '<!doctype html>'
+        + '<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">'
+        + '<title>' + escapeHtml(deriveTitleFromPath(selectedPath) || 'PDF') + '</title>'
+        + '<style>'
+        + 'html,body{height:100%;margin:0;background:#e2e8f0}'
+        + 'iframe{width:100%;height:100%;border:0;background:#fff;display:block}'
+        + '</style></head><body>'
+        + '<iframe src="' + escapeHtml(encodePathForHref(selectedPath)) + '" title="PDF"></iframe>'
+        + '</body></html>';
+    }
+    var listItems = pdfPaths.map(function (path) {
+      var title = deriveTitleFromPath(path) || path;
+      var href = encodePathForHref(path);
+      var selected = path === selectedPath ? ' class="is-active"' : '';
+      return '<li><a data-pdf-link' + selected + ' href="' + escapeHtml(href) + '" target="vwz-pdf-frame">' + escapeHtml(title) + '</a></li>';
+    }).join('');
+    return '<!doctype html>'
+      + '<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">'
+      + '<title>' + escapeHtml(deriveTitleFromPath(selectedPath) || 'PDF') + '</title>'
+      + '<style>'
+      + ':root{color-scheme:light;--surface:#fff;--surface-muted:#f3f5f8;--ink:#0f172a;--border:#e2e8f0;--border-strong:#cbd5e1;--accent:#2563eb;--accent-wash:#eff6ff;--shadow:0 10px 26px rgba(15,23,42,.06)}'
+      + '*{box-sizing:border-box}html,body{height:100%;margin:0}'
+      + 'body{font-family:"Libre Franklin","Segoe UI",sans-serif;background:#f6f8fc;color:var(--ink)}'
+      + '.layout{display:grid;grid-template-columns:minmax(230px,330px) 1fr;height:100%;gap:12px;padding:12px}'
+      + '.sidebar{display:flex;flex-direction:column;min-height:0;background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}'
+      + '.sidebar-toggle{width:36px;height:36px;margin:10px 10px 8px;appearance:none;border:1px solid var(--border-strong);background:var(--surface-muted);color:#334155;border-radius:10px;padding:0;cursor:pointer;display:inline-grid;place-items:center}'
+      + '.sidebar-toggle:hover{background:var(--accent-wash);color:var(--accent)}'
+      + '.sidebar-toggle svg{width:18px;height:18px;display:block;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}'
+      + '.sidebar-content{padding:0 10px 10px;overflow:auto}'
+      + '.sidebar h1{margin:0 0 10px;font-size:1rem;line-height:1.2}'
+      + '.sidebar ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}'
+      + '.sidebar a{display:block;padding:10px 12px;border-radius:12px;text-decoration:none;color:var(--ink);border:1px solid var(--border);background:var(--surface-muted);font-weight:500}'
+      + '.sidebar a:hover{background:var(--accent-wash);border-color:#bfdbfe}'
+      + '.sidebar a.is-active{background:var(--accent-wash);border-color:#93c5fd;color:#1d4ed8;font-weight:700}'
+      + 'body.sidebar-collapsed .layout{grid-template-columns:78px 1fr}'
+      + 'body.sidebar-collapsed .sidebar{align-items:stretch}'
+      + 'body.sidebar-collapsed .sidebar-toggle{margin:10px auto 8px}'
+      + 'body.sidebar-collapsed .sidebar-content{display:none}'
+      + '.viewer{min-height:0;background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}'
+      + '.viewer iframe{width:100%;height:100%;border:0;background:#fff;display:block}'
+      + '@media (max-width:900px){.layout{grid-template-columns:1fr;grid-template-rows:auto 1fr}body.sidebar-collapsed .layout{grid-template-columns:1fr;grid-template-rows:auto 1fr}}'
+      + '</style></head><body>'
+      + '<div class="layout"><aside class="sidebar"><button type="button" class="sidebar-toggle" data-sidebar-toggle aria-expanded="true" title="Ocultar lista" aria-label="Ocultar lista"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M9 3v18"></path><path d="m16 9-3 3 3 3"></path></svg></button><div class="sidebar-content" data-sidebar-content><h1>Documentos PDF</h1><ul>'
+      + listItems
+      + '</ul></div></aside><main class="viewer"><iframe name="vwz-pdf-frame" src="' + escapeHtml(encodePathForHref(selectedPath)) + '" title="PDF"></iframe></main></div>'
+      + '<script>(function(){var body=document.body;var btn=document.querySelector("[data-sidebar-toggle]");var frame=document.querySelector("iframe[name=\\"vwz-pdf-frame\\"]");var links=[].slice.call(document.querySelectorAll("[data-pdf-link]"));var iconOpen="<svg viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\"><rect x=\\"3\\" y=\\"3\\" width=\\"18\\" height=\\"18\\" rx=\\"2\\"></rect><path d=\\"M9 3v18\\"></path><path d=\\"m16 9-3 3 3 3\\"></path></svg>";var iconClosed="<svg viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\"><rect x=\\"3\\" y=\\"3\\" width=\\"18\\" height=\\"18\\" rx=\\"2\\"></rect><path d=\\"M9 3v18\\"></path><path d=\\"m13 9 3 3-3 3\\"></path></svg>";function markActive(link){links.forEach(function(node){node.classList.toggle("is-active",node===link);});if(link){var title=(link.textContent||"").replace(/\\s+/g," ").trim();if(title){document.title=title;}}}function syncToggle(){if(!btn)return;var collapsed=body.classList.contains("sidebar-collapsed");var label=collapsed?"Mostrar lista":"Ocultar lista";btn.innerHTML=collapsed?iconClosed:iconOpen;btn.title=label;btn.setAttribute("aria-label",label);btn.setAttribute("aria-expanded",collapsed?"false":"true");}if(btn){btn.addEventListener("click",function(){body.classList.toggle("sidebar-collapsed");syncToggle();});syncToggle();}links.forEach(function(link){link.addEventListener("click",function(ev){ev.preventDefault();var href=link.getAttribute("href")||"";if(frame&&href){frame.setAttribute("src",href);}markActive(link);});});var initial=links.find(function(link){return link.classList.contains("is-active");})||links[0]||null;markActive(initial);})();</script>'
+      + '</body></html>';
+  }
+
+  function preparePdfOnlyZip(files, siteId, preferredIndexPath) {
+    var htmlExists = files.some(function (file) {
+      var lower = (file.path || '').toLowerCase();
+      return lower.endsWith('.html') || lower.endsWith('.htm');
+    });
+    if (htmlExists) {
+      return { files: files, preferredIndexPath: preferredIndexPath || '' };
+    }
+    var pdfPaths = files.map(function (file) { return file.path; }).filter(isPdfPath);
+    pdfPaths.sort(function (a, b) {
+      return String(a || '').localeCompare(String(b || ''), undefined, { sensitivity: 'base' });
+    });
+    if (!pdfPaths.length) {
+      return { files: files, preferredIndexPath: preferredIndexPath || '' };
+    }
+    var preferred = preferredIndexPath ? normalizePath(preferredIndexPath) : '';
+    var selectedPdf = pdfPaths.find(function (path) { return path === preferred; }) || pdfPaths[0];
+    var lowerPaths = files.map(function (file) { return (file.path || '').toLowerCase(); });
+    var indexPath = '__vwz_pdf_index.html';
+    var suffix = 2;
+    while (lowerPaths.indexOf(indexPath.toLowerCase()) !== -1) {
+      indexPath = '__vwz_pdf_index_' + suffix + '.html';
+      suffix += 1;
+    }
+    var blob = new Blob([buildPdfIndexHtml(pdfPaths, selectedPdf)], { type: 'text/html' });
+    var nextFiles = files.slice();
+    nextFiles.push({
+      key: siteId + '::' + indexPath,
+      siteId: siteId,
+      path: indexPath,
+      blob: blob,
+      size: blob.size,
+      type: 'text/html'
+    });
+    return { files: nextFiles, preferredIndexPath: indexPath };
+  }
+
   function pickIndexPath(paths, preferredIndexPath) {
     var htmlPaths = paths.filter(function (path) {
       var lower = path.toLowerCase();
@@ -2290,6 +2399,9 @@
             });
           });
 
+          var preparedPdf = preparePdfOnlyZip(files, result.siteId, opts.preferredIndexPath || '');
+          files = preparedPdf.files;
+
           if (!files.length) {
             throw new Error(t('error.zipNoWebFiles'));
           }
@@ -2299,7 +2411,7 @@
           }
 
           var paths = files.map(function (file) { return file.path; });
-          return pickIndexPath(paths, opts.preferredIndexPath || '').then(function (indexPath) {
+          return pickIndexPath(paths, preparedPdf.preferredIndexPath || opts.preferredIndexPath || '').then(function (indexPath) {
             currentIndexPath = indexPath || '';
             refreshShareLink(effectiveZipUrl, currentIndexPath);
             if (HtmlPicker.consumeWasLoading && HtmlPicker.consumeWasLoading()) {

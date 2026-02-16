@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title data-i18n="page.title">Visor Web-ZIP</title>
+  <title data-i18n="page.title">Visor Web-ZIP y PDF</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,8 +27,8 @@
       <div class="title-row">
         <img class="app-mark" src="favicon.svg" alt="" aria-hidden="true">
         <div class="title-stack">
-          <h1 data-i18n="header.title">Visor Web-ZIP</h1>
-          <p class="header-subtitle" data-i18n="header.subtitle">Autopublicación de recursos educativos desde tu almacenamiento en la nube.</p>
+          <h1 data-i18n="header.title">Visor Web-ZIP y PDF</h1>
+          <p class="header-subtitle" data-i18n="header.subtitle">Autopublicación de recursos educativos en formato web o PDF desde tu almacenamiento en la nube.</p>
         </div>
         <div class="title-actions">
           <div class="lang-picker" data-i18n-tooltip="header.languageHint">
@@ -113,16 +113,9 @@
                 </svg>
               </span>
               <div class="publish-choice-card__title">
-                <span data-i18n="publish.choice.zipper.title">Crea un ZIP</span>
-                <span class="info-dot" data-i18n-aria-label="publish.zipHelp.summary" aria-label="¿Qué es un ZIP?">
-                  ?
-                  <span class="info-dot__tooltip" role="tooltip">
-                    <span class="tooltip-block" data-i18n-html="publish.zipHelp.bodyHtml">Un <strong>ZIP</strong> es un archivo comprimido que agrupa varios archivos (y carpetas) en uno solo. En <strong>eXeLearning 3+</strong>, el archivo <code>.elpx</code> también sirve porque ya es un ZIP.</span>
-                    <span class="tooltip-block" data-i18n-html="publish.htmlHelp.bodyHtml">El <strong>HTML</strong> es el código de una página web. Si una IA crea una web, normalmente da el código y un botón de “Copiar” para copiarlo. El archivo principal se suele llamar <code>index.html</code></span>
-                  </span>
-                </span>
+                <span data-i18n="publish.choice.zipper.title">Crea un ZIP con archivos web o PDF</span>
               </div>
-              <span class="publish-choice-card__note" data-i18n="publish.choice.zipper.note">Crea un ZIP desde archivos locales o desde HTML.</span>
+              <span class="publish-choice-card__note" data-i18n="publish.choice.zipper.note">Crea un ZIP desde archivos web y PDF o desde código HTML.</span>
               <span class="publish-choice-card__note publish-choice-card__note--secondary" data-restrict-hint data-i18n="publish.choice.zipper.restrictHint">También puedes aplicar limitación de acceso por fechas.</span>
             </button>
             <button class="publish-choice-card" type="button" data-publish-start="main">
@@ -133,9 +126,9 @@
                 </svg>
               </span>
               <div class="publish-choice-card__title">
-                <span data-i18n="publish.choice.main.title">Ya tengo un ZIP en la nube con enlace</span>
+                <span data-i18n="publish.choice.main.title">Ya tengo un ZIP/ELPX en la nube con enlace</span>
               </div>
-              <span class="publish-choice-card__note" data-i18n="publish.choice.main.note">Pega el enlace público y crea el enlace del visor.</span>
+              <span class="publish-choice-card__note" data-i18n="publish.choice.main.note">Pega el enlace público (ZIP/ELPX) y crea el enlace del visor. También admite ZIP que solo contienen PDFs.</span>
               <span class="publish-choice-card__note publish-choice-card__note--secondary" data-i18n-html="publish.choice.main.secondaryHtml">Si usas .elpx de eXeLearning, también puedes abrirlo aquí <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="¿Qué es ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Un archivo .elpx es un proyecto de eXeLearning que internamente utiliza el formato ZIP, lo que permite que el visor acceda a su contenido y lo muestre correctamente.</span></span></span>
             </button>
           </div>
@@ -144,9 +137,9 @@
 
 	        <div class="publish-module" data-publish-module="main" id="ya-tengo-zip-elpx" hidden>
 	          <form data-form>
-	            <span class="field-title field-title--module" data-i18n="main.form.title">Ya tengo un ZIP en la nube con enlace</span>
-	            <p class="step-note" data-i18n-html="main.subtitle">Si ya tienes tu recurso en formato ZIP (o .elpx de eXeLearning 3+) en un servicio con <strong>enlace público</strong> (Drive, Dropbox, etc.), pega aquí el enlace para generar el enlace.</p>
-	            <input data-url type="url" placeholder="Pega aqui el enlace publico del ZIP o del .elpx" data-i18n-placeholder="main.form.placeholder" required>
+	            <span class="field-title field-title--module" data-i18n="main.form.title">Ya tengo un ZIP/ELPX en la nube con enlace</span>
+	            <p class="step-note" data-i18n-html="main.subtitle">Si ya tienes tu recurso en formato ZIP (o .elpx de eXeLearning 3+) en un servicio con <strong>enlace público</strong> (Drive, Dropbox, etc.), pega aquí el enlace para generar el enlace. El ZIP puede incluir HTML y/o PDF.</p>
+	            <input data-url type="url" placeholder="Pega aquí el enlace público del ZIP o del .elpx (también válido si incluye PDF)" data-i18n-placeholder="main.form.placeholder" required>
             <button type="submit" data-create-link data-i18n="main.form.submit">Crear enlace</button>
           </form>
 
@@ -206,9 +199,9 @@
 	          <div class="manager-card">
 	            <div class="manager-header">
 	              <div>
-	                <h2 data-i18n="zipper.title">Crear ZIP para el visor</h2>
+	                <h2 data-i18n="zipper.title">Crear ZIP para el visor (web o PDF)</h2>
                 <ul class="manager-subtitle zipper-subtitle">
-                  <li data-i18n-html="zipper.subtitle.item1">Para publicar tu recurso, guarda todos los archivos en una carpeta y comprímela en un archivo <strong>.zip</strong>.</li>
+                  <li data-i18n-html="zipper.subtitle.item1">Para publicar tu recurso, guarda todos los archivos en una carpeta y comprímela en un archivo <strong>.zip</strong>. Puede contener páginas web y/o uno o varios <strong>PDF</strong>.</li>
                   <li class="zipper-subtitle__compact">
                     <span data-i18n-html="zipper.subtitle.item2">Si el recurso está hecho con <strong>eXeLearning 3 o superior</strong>, puedes usar directamente el archivo <strong>.elpx</strong>.</span>
                     <span data-i18n-html="zipper.subtitle.item3">Si usas <strong>eXeLearning 2.x</strong>, exporta el proyecto a <strong>ZIP</strong> desde el programa y continúa con la opción “Ya tengo un ZIP”.</span>
@@ -289,7 +282,7 @@
             </details>
             <div class="next-step">
               <div class="next-step__text">
-                <p data-i18n="zipper.help.nextStepText">El siguiente paso es subir y compartir con enlace público el archivo ZIP o ELPX, cuando lo tengas pulsa sobre Continuar.</p>
+                <p data-i18n="zipper.help.nextStepText">El siguiente paso es subir y compartir con enlace público el archivo ZIP o ELPX (también si contiene PDF), cuando lo tengas pulsa sobre Continuar.</p>
               </div>
               <a class="next-step__btn" href="#ya-tengo-zip-elpx" data-go-publish="main">
                 Continuar <span aria-hidden="true">→</span>
@@ -589,7 +582,7 @@
     <footer class="site-footer">
       <a class="footer-link" href="https://bilateria.org" target="_blank" rel="noopener">(c) 2026 Juan Jose de Haro</a>
       <span class="footer-sep">·</span>
-    <span class="footer-link" data-app-version>v1.9.0</span>
+    <span class="footer-link" data-app-version>v1.10.0</span>
       <span class="footer-sep">·</span>
       <a class="footer-link" href="https://github.com/visor-webzip/visor-webzip.github.io" target="_blank" rel="noopener">
         <svg class="footer-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
@@ -627,6 +620,6 @@
 		  <script src="restriction-ui.js?v=13"></script>
 	  <script src="share.js?v=1"></script>
 	  <script src="nav.js?v=1"></script>
-			  <script src="app.js?v=57"></script>
+			  <script src="app.js?v=58"></script>
  </body>
  </html>

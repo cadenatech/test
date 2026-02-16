@@ -1,7 +1,7 @@
 (function () {
   window.I18N = {
     es: {
-      page: { title: 'Visor Web-ZIP' },
+      page: { title: 'Visor Web-ZIP y PDF' },
       loading: {
         title: 'Cargando material',
         message: 'Preparando...',
@@ -12,13 +12,13 @@
       },
       header: {
         eyebrow: 'Materiales en ZIP',
-        title: 'Visor Web-ZIP',
+        title: 'Visor Web-ZIP y PDF',
         help: 'Ayuda',
         settings: 'Ajustes',
         settingsHint: 'Configura la disponibilidad del recurso',
         language: 'Idioma',
         languageHint: 'Cambiar idioma',
-        subtitle: 'Autopublicación de recursos educativos desde tu almacenamiento en la nube.'
+        subtitle: 'Autopublicación de recursos educativos en formato web o PDF desde tu almacenamiento en la nube.'
       },
       settings: {
         title: 'Ajustes de visibilidad',
@@ -73,23 +73,15 @@
         title: 'Publicar un recurso',
         subtitle: 'Elige cómo quieres empezar.',
         back: 'Volver al inicio',
-        zipHelp: {
-          summary: '¿Qué es un ZIP?',
-          bodyHtml: 'Un <strong>ZIP</strong> es un archivo comprimido que agrupa varios archivos (y carpetas) en uno solo.'
-        },
-        htmlHelp: {
-          summary: '¿Qué es el HTML y dónde lo obtengo?',
-          bodyHtml: 'El <strong>HTML</strong> es el código de una página web. Si una IA crea una web, normalmente da el código y un botón de “Copiar” para copiarlo. El archivo principal se suele llamar <code>index.html</code>'
-        },
         choice: {
           zipper: {
-            title: 'Crea un ZIP',
-            note: 'Crea un ZIP desde archivos locales o desde HTML.',
+            title: 'Crea un ZIP con archivos web o PDF',
+            note: 'Crea un ZIP desde archivos web y PDF o desde código HTML.',
             restrictHint: 'También puedes aplicar limitación de acceso por fechas.'
           },
           main: {
-            title: 'Ya tengo un ZIP en la nube con enlace',
-            note: 'Pega el enlace público y crea el enlace del visor.',
+            title: 'Ya tengo un ZIP/ELPX en la nube con enlace',
+            note: 'Pega el enlace público (ZIP/ELPX) y crea el enlace del visor. También admite ZIP que solo contienen PDFs.',
             secondaryHtml: 'Si usas .elpx de eXeLearning, también puedes abrirlo aquí <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="¿Qué es ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Un archivo .elpx es un proyecto de eXeLearning que internamente utiliza el formato ZIP, lo que permite que el visor acceda a su contenido y lo muestre correctamente.</span></span>',
             elpxTooltip: '¿Qué es ELPX?',
             elpxTooltipHtml: 'Un archivo .elpx es un proyecto de eXeLearning que internamente utiliza el formato ZIP, lo que permite que el visor acceda a su contenido y lo muestre correctamente.'
@@ -100,11 +92,11 @@
         label: 'Secciones'
       },
       main: {
-        subtitle: 'Si ya tienes tu recurso en formato ZIP (o .elpx de eXeLearning 3+) en un servicio con <strong>enlace público</strong> (Drive, Dropbox, etc.), pega aquí el enlace para generar el enlace.',
+        subtitle: 'Si ya tienes tu recurso en formato ZIP (o .elpx de eXeLearning 3+) en un servicio con <strong>enlace público</strong> (Drive, Dropbox, etc.), pega aquí el enlace para generar el enlace. El ZIP puede incluir HTML y/o PDF.',
         form: {
-          title: 'Ya tengo un ZIP en la nube con enlace',
+          title: 'Ya tengo un ZIP/ELPX en la nube con enlace',
           step: 'Pega el enlace público al ZIP (o .elpx) y pulsa “Crear enlace”.',
-          placeholder: 'Pega aquí el enlace público del ZIP o del .elpx',
+          placeholder: 'Pega aquí el enlace público del ZIP o del .elpx (también válido si incluye PDF)',
           submit: 'Crear enlace'
         },
         output: {
@@ -210,7 +202,7 @@
         dismiss: 'Ahora no'
       },
       zipper: {
-        title: 'Crear ZIP para el visor',
+        title: 'Crear ZIP para el visor (web o PDF)',
         restrict: {
           summaryTitle: 'Acceso limitado por fechas'
         },
@@ -218,7 +210,7 @@
           filesTitle: '¿Tienes archivos? Crea el ZIP'
         },
         subtitle: {
-          item1: 'Para publicar tu recurso, guarda todos los archivos en una carpeta y comprímela en un archivo <strong>.zip</strong>.',
+          item1: 'Para publicar tu recurso, guarda todos los archivos en una carpeta y comprímela en un archivo <strong>.zip</strong>. Puede contener páginas web y/o uno o varios <strong>PDF</strong>.',
           item2: 'Si el recurso está hecho con <strong>eXeLearning 3 o superior</strong>, puedes usar directamente el archivo <strong>.elpx</strong>.',
           item3: 'Si usas <strong>eXeLearning 2.x</strong>, exporta el proyecto a <strong>ZIP</strong> desde el programa y continúa con la opción “Ya tengo un ZIP”.'
         },
@@ -290,7 +282,7 @@
         },
         help: {
           inline: 'Si ya has creado un archivo ZIP y lo has compartido en un servicio con enlace público, pasa a la sección: “Ya tengo un ZIP en la nube con enlace”.',
-          nextStepText: 'El siguiente paso es subir y compartir con enlace público el archivo ZIP o ELPX, cuando lo tengas pulsa sobre Continuar.',
+          nextStepText: 'El siguiente paso es subir y compartir con enlace público el archivo ZIP o ELPX (también si contiene PDF), cuando lo tengas pulsa sobre Continuar.',
           goTab: 'Siguiente: “Ya tengo un ZIP en la nube con enlace”'
         }
       },
@@ -323,13 +315,14 @@
           item1: 'ZIPs con páginas web estáticas y sus recursos (archivos HTML, imágenes, audio, vídeo, PDF, etc.).',
           item2: 'Materiales creados con eXeLearning u otras herramientas que exportan a web.',
           item3: 'Cualquier material creado con IA (documentos, infografías, etc.) que puedas descargar como página web (HTML).',
-          item4: 'Carpetas con un HTML principal (normalmente <code>index.html</code>).'
+          item4: 'Carpetas con un HTML principal (normalmente <code>index.html</code>).',
+          item5: 'ZIPs con uno o varios <strong>PDF</strong> (aunque no tengan archivos HTML).'
         },
         cant: {
           title: 'Qué no funciona o puede fallar',
           item1: 'Webs que necesitan servidor (formularios que guardan datos, bases de datos, PHP o similar).',
           item2: 'Enlaces externos que requieren iniciar sesión o permisos especiales.',
-          item3: 'ZIPs que no contienen ningún archivo HTML.'
+          item3: 'ZIPs vacíos o sin HTML ni PDF.'
         },
         how: {
           title: 'Cómo funciona',
@@ -354,7 +347,7 @@
           + '</nav>'
           + '<section aria-labelledby="help-que-hace">'
           + '<h3 class="about-section-title" id="help-que-hace" tabindex="-1">Qué hace este visor</h3>'
-          + '<p>Abre recursos web empaquetados en <strong>ZIP</strong> o <strong>ELPX</strong> directamente en el navegador.</p>'
+          + '<p>Abre recursos web y archivos PDF empaquetados en <strong>ZIP</strong> o <strong>ELPX</strong> directamente en el navegador.</p>'
           + '<p>El visor <strong>no sube ni publica</strong> tu material: solo genera un enlace y lo abre.</p>'
           + '<ul>'
           + '<li><strong>Tú alojas el ZIP</strong> en Drive, Dropbox, Nextcloud, GitHub… con enlace público.</li>'
@@ -379,10 +372,11 @@
           + '<li>Si tienes archivos, abre <strong>¿Tienes archivos? Crea el ZIP</strong>, añade la carpeta o los archivos y pulsa <strong>Crear y descargar ZIP</strong>.</li>'
           + '<li>Si tu ZIP no tiene <code>index.html</code>, el visor te pedirá elegir el HTML inicial.</li>'
           + '</ol>'
-          + '<h4 class="about-subtitle" id="help-ruta-tengo" tabindex="-1">Ruta: Ya tengo un ZIP en la nube con enlace</h4>'
+          + '<h4 class="about-subtitle" id="help-ruta-tengo" tabindex="-1">Ruta: Ya tengo un ZIP/ELPX en la nube con enlace</h4>'
           + '<ol class="about-steps">'
-          + '<li>En <strong>Publicar</strong>, entra en <strong>Ya tengo un ZIP en la nube con enlace</strong>.</li>'
+          + '<li>En <strong>Publicar</strong>, entra en <strong>Ya tengo un ZIP/ELPX en la nube con enlace</strong>.</li>'
           + '<li>Pega un enlace público al archivo <strong>ZIP</strong> o <strong>ELPX</strong> y pulsa <strong>Crear enlace</strong>.</li>'
+          + '<li>Si el ZIP contiene solo PDF, el visor crea automáticamente una portada: con 1 PDF se abre directo; con varios PDF muestra una lista lateral (replegable).</li>'
           + '<li>Usa <strong>Copiar enlace</strong>, <strong>Insertar en una web</strong> o <strong>Abrir vista previa</strong> según lo que necesites.</li>'
           + '</ol>'
           + '<h4 class="about-subtitle" id="help-visibilidad" tabindex="-1">Visibilidad y acceso</h4>'
@@ -415,6 +409,7 @@
           + '<li>En el <strong>Gestor</strong>, utiliza <strong>Comprobar actualizaciones</strong> para revisar todos los recursos guardados.</li>'
           + '<li>Cuando se detectan cambios, aparece la etiqueta <strong>«Actualización disponible»</strong> junto al recurso.</li>'
           + '<li>Al pulsar <strong>Actualizar</strong>, se descarga y se usa la versión nueva del ZIP.</li>'
+          + '<li>Este comportamiento aplica igual a recursos HTML y a ZIP con PDF.</li>'
           + '<li>Después de actualizar, se muestra una etiqueta verde con la <strong>fecha de la última actualización</strong>.</li>'
           + '</ul>'
           + '</section>'
@@ -423,7 +418,7 @@
           + '<ul>'
           + '<li>Funciona con webs estáticas. No funcionará bien con webs que necesitan servidor (bases de datos, PHP, formularios que guardan datos…).</li>'
           + '<li>El archivo debe estar en un enlace público (sin inicio de sesión). Si el servicio pide permisos, el visor no podrá descargarlo.</li>'
-          + '<li>Si el ZIP no contiene HTML, no se podrá abrir. Si falta <code>index.html</code>, tendrás que elegir el HTML inicial.</li>'
+          + '<li>Si el ZIP no contiene HTML pero sí PDF, se abrirá en modo visor PDF. Si hay HTML y falta <code>index.html</code>, tendrás que elegir el HTML inicial.</li>'
           + '<li>Google Drive puede limitar la descarga directa de archivos grandes (aprox. 25 MB). Si falla, prueba con Dropbox, Nextcloud u otro servicio.</li>'
           + '</ul>'
           + '</section>'
@@ -462,7 +457,7 @@
       units: ['B', 'KB', 'MB', 'GB']
     },
     ca: {
-      page: { title: 'Visor Web-ZIP' },
+      page: { title: 'Visor Web-ZIP y PDF' },
       loading: {
         title: 'Carregant material',
         message: 'Preparant...',
@@ -473,13 +468,13 @@
       },
       header: {
         eyebrow: 'Materials en ZIP',
-        title: 'Visor Web-ZIP',
+        title: 'Visor Web-ZIP y PDF',
         help: 'Ajuda',
         settings: 'Ajustos',
         settingsHint: 'Configura la disponibilitat del recurs',
         language: 'Idioma',
         languageHint: 'Canviar idioma',
-        subtitle: 'Comparteix els teus recursos educatius des del teu emmagatzematge favorit al núvol.'
+        subtitle: 'Autopublicació de recursos educatius en format web o PDF des del teu emmagatzematge al núvol.'
       },
       settings: {
         title: 'Ajustos de visibilitat',
@@ -534,23 +529,15 @@
         title: 'Publicar un recurs',
         subtitle: 'Tria com vols començar.',
         back: "Tornar a l'inici",
-        zipHelp: {
-          summary: 'Què és un ZIP?',
-          bodyHtml: 'Un <strong>ZIP</strong> és un fitxer comprimit que agrupa diversos fitxers (i carpetes) en un de sol.'
-        },
-        htmlHelp: {
-          summary: 'Què és l’HTML i d’on l’obtinc?',
-          bodyHtml: 'L’<strong>HTML</strong> és el codi d’una pàgina web. Si una IA crea una web, normalment dona el codi i un botó de “Copiar” per copiar-lo. El fitxer principal se sol dir <code>index.html</code>'
-        },
         choice: {
           zipper: {
-            title: 'Crear un ZIP',
-            note: 'Crea un ZIP des de fitxers locals o des d’HTML.',
+            title: 'Crear un ZIP (web o PDF)',
+            note: 'Crea un ZIP des de fitxers locals o des d’HTML. També pot incloure PDF.',
             restrictHint: 'També pots aplicar una limitació d’accés per dates.'
           },
           main: {
-            title: 'Ja tinc un ZIP al núvol amb enllaç',
-            note: 'Enganxa l’enllaç públic i crea l’enllaç del visor.',
+            title: 'Ja tinc un ZIP/ELPX al núvol amb enllaç',
+            note: 'Enganxa l’enllaç públic (ZIP/ELPX) i crea l’enllaç del visor. També admet ZIP amb PDF.',
             secondaryHtml: 'Si uses .elpx d’eXeLearning, també el pots obrir aquí <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="Què és ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Un fitxer .elpx és un projecte d’eXeLearning que internament utilitza el format ZIP, cosa que permet al visor accedir al contingut i mostrar-lo correctament.</span></span>',
             elpxTooltip: 'Què és ELPX?',
             elpxTooltipHtml: 'Un fitxer .elpx és un projecte d’eXeLearning que internament utilitza el format ZIP, cosa que permet al visor accedir al contingut i mostrar-lo correctament.'
@@ -561,11 +548,11 @@
         label: 'Seccions'
       },
       main: {
-        subtitle: "Si ja tens el teu recurs en format ZIP (o .elpx d’eXeLearning 3+) en un servei amb <strong>enllaç públic</strong> (Drive, Dropbox, etc.), enganxa aquí l'enllaç per generar l’enllaç del visor.",
+        subtitle: "Si ja tens el teu recurs en format ZIP (o .elpx d’eXeLearning 3+) en un servei amb <strong>enllaç públic</strong> (Drive, Dropbox, etc.), enganxa aquí l'enllaç per generar l’enllaç del visor. El ZIP pot incloure HTML i/o PDF.",
         form: {
-          title: 'Ja tinc un ZIP al núvol amb enllaç',
+          title: 'Ja tinc un ZIP/ELPX al núvol amb enllaç',
           step: 'Enganxa l’enllaç públic al ZIP (o .elpx) i prem “Crear enllaç”.',
-          placeholder: "Enganxa aquí l'enllaç públic del ZIP o del .elpx",
+          placeholder: "Enganxa aquí l'enllaç públic del ZIP o del .elpx (també vàlid si inclou PDF)",
           submit: 'Crear enllaç'
         },
         output: {
@@ -671,12 +658,12 @@
         dismiss: 'Ara no'
       },
       zipper: {
-        title: 'Crear ZIP per al visor',
+        title: 'Crear ZIP per al visor (web o PDF)',
         accordion: {
           filesTitle: 'Tens fitxers? Crea el ZIP'
         },
         subtitle: {
-          item1: 'Per publicar el teu recurs, guarda tots els fitxers en una carpeta i comprimeix-la en un fitxer <strong>.zip</strong>.',
+          item1: 'Per publicar el teu recurs, guarda tots els fitxers en una carpeta i comprimeix-la en un fitxer <strong>.zip</strong>. Pot contenir pàgines web i/o un o diversos <strong>PDF</strong>.',
           item2: 'Si el teu recurs està fet amb <strong>eXeLearning 3 o superior</strong>, pots usar directament el fitxer <strong>.elpx</strong>.',
           item3: 'Si uses <strong>eXeLearning 2.x</strong>, exporta el projecte a <strong>ZIP</strong> des del programa i continua amb l’opció <strong>“Ja tinc un ZIP”</strong>.'
         },
@@ -749,7 +736,7 @@
         },
         help: {
           inline: 'Si ja has creat un fitxer ZIP i l’has compartit en un servei amb enllaç públic, ves a la secció: “Ja tinc un ZIP al núvol amb enllaç”.',
-          nextStepText: 'El següent pas és pujar i compartir amb enllaç públic el fitxer ZIP o ELPX; quan el tinguis, prem “Continuar”.',
+          nextStepText: 'El següent pas és pujar i compartir amb enllaç públic el fitxer ZIP o ELPX (també si conté PDF); quan el tinguis, prem “Continuar”.',
           goTab: 'Següent: “Ja tinc un ZIP al núvol amb enllaç”'
         }
       },
@@ -813,7 +800,7 @@
           + '</nav>'
           + '<section aria-labelledby="help-que-hace">'
           + '<h3 class="about-section-title" id="help-que-hace" tabindex="-1">Què fa aquest visor</h3>'
-          + '<p>Obre recursos web empaquetats en <strong>ZIP</strong> o <strong>ELPX</strong> directament al navegador.</p>'
+          + '<p>Obre recursos web i arxius PDF empaquetats en <strong>ZIP</strong> o <strong>ELPX</strong> directament al navegador.</p>'
           + '<p>El visor <strong>no puja ni publica</strong> el teu material: només genera un enllaç i l’obre.</p>'
           + '<ul>'
           + '<li><strong>Tu allotges el ZIP</strong> a Drive, Dropbox, Nextcloud, GitHub… amb enllaç públic.</li>'
@@ -921,7 +908,7 @@
       units: ['B', 'KB', 'MB', 'GB']
     },
     gl: {
-      page: { title: 'Visor Web-ZIP' },
+      page: { title: 'Visor Web-ZIP y PDF' },
       loading: {
         title: 'Cargando material',
         message: 'Preparando...',
@@ -932,13 +919,13 @@
       },
       header: {
         eyebrow: 'Materiais en ZIP',
-        title: 'Visor Web-ZIP',
+        title: 'Visor Web-ZIP y PDF',
         help: 'Axuda',
         settings: 'Axustes',
         settingsHint: 'Configura a dispoñibilidade do recurso',
         language: 'Idioma',
         languageHint: 'Cambiar idioma',
-        subtitle: 'Comparte os teus recursos educativos desde o teu almacenamento favorito na nube.'
+        subtitle: 'Autopublicación de recursos educativos en formato web ou PDF desde o teu almacenamento na nube.'
       },
       settings: {
         title: 'Axustes de visibilidade',
@@ -993,23 +980,15 @@
         title: 'Publicar un recurso',
         subtitle: 'Escolle como queres comezar.',
         back: 'Volver ao inicio',
-        zipHelp: {
-          summary: 'Que é un ZIP?',
-          bodyHtml: 'Un <strong>ZIP</strong> é un ficheiro comprimido que agrupa varios ficheiros (e cartafoles) nun só.'
-        },
-        htmlHelp: {
-          summary: 'Que é o HTML e onde o consigo?',
-          bodyHtml: 'O <strong>HTML</strong> é o código dunha páxina web. Se unha IA crea unha web, normalmente dá o código e un botón de “Copiar” para copialo. O ficheiro principal adoita chamarse <code>index.html</code>'
-        },
         choice: {
           zipper: {
-            title: 'Crear un ZIP',
-            note: 'Crea un ZIP desde ficheiros locais ou desde HTML.',
+            title: 'Crear un ZIP (web ou PDF)',
+            note: 'Crea un ZIP desde ficheiros locais ou desde HTML. Tamén pode incluír PDF.',
             restrictHint: 'Tamén podes aplicar limitación de acceso por datas.'
           },
           main: {
-            title: 'Xa teño un ZIP na nube con ligazón',
-            note: 'Pega a ligazón pública e crea a ligazón do visor.',
+            title: 'Xa teño un ZIP/ELPX na nube con ligazón',
+            note: 'Pega a ligazón pública (ZIP/ELPX) e crea a ligazón do visor. Tamén admite ZIP con PDF.',
             secondaryHtml: 'Se usas .elpx de eXeLearning, tamén o podes abrir aquí <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="Que é ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Un ficheiro .elpx é un proxecto de eXeLearning que internamente utiliza o formato ZIP, o que permite que o visor acceda ao seu contido e o mostre correctamente.</span></span>',
             elpxTooltip: 'Que é ELPX?',
             elpxTooltipHtml: 'Un ficheiro .elpx é un proxecto de eXeLearning que internamente utiliza o formato ZIP, o que permite que o visor acceda ao seu contido e o mostre correctamente.'
@@ -1020,11 +999,11 @@
         label: 'Seccións'
       },
       main: {
-        subtitle: 'Se xa tes o teu recurso en formato ZIP (ou .elpx de eXeLearning 3+) nun servizo con <strong>ligazón pública</strong> (Drive, Dropbox, etc.), pega aquí a ligazón para xerar a ligazón do visor.',
+        subtitle: 'Se xa tes o teu recurso en formato ZIP (ou .elpx de eXeLearning 3+) nun servizo con <strong>ligazón pública</strong> (Drive, Dropbox, etc.), pega aquí a ligazón para xerar a ligazón do visor. O ZIP pode incluír HTML e/ou PDF.',
         form: {
-          title: 'Xa teño un ZIP na nube con ligazón',
+          title: 'Xa teño un ZIP/ELPX na nube con ligazón',
           step: 'Pega a ligazón pública ao ZIP (ou .elpx) e preme “Crear ligazón”.',
-          placeholder: 'Pega aquí a ligazón pública do ZIP ou do .elpx',
+          placeholder: 'Pega aquí a ligazón pública do ZIP ou do .elpx (tamén válida se inclúe PDF)',
           submit: 'Crear ligazón'
         },
         output: {
@@ -1130,12 +1109,12 @@
         dismiss: 'Agora non'
       },
       zipper: {
-        title: 'Crear ZIP para o visor',
+        title: 'Crear ZIP para o visor (web ou PDF)',
         accordion: {
           filesTitle: 'Tes ficheiros? Crea o ZIP'
         },
         subtitle: {
-          item1: 'Para publicar o teu recurso, garda todos os ficheiros nun cartafol e comprímeo nun ficheiro <strong>.zip</strong>.',
+          item1: 'Para publicar o teu recurso, garda todos os ficheiros nun cartafol e comprímeo nun ficheiro <strong>.zip</strong>. Pode conter páxinas web e/ou un ou varios <strong>PDF</strong>.',
           item2: 'Se o teu recurso está feito con <strong>eXeLearning 3 ou superior</strong>, podes usar directamente o ficheiro <strong>.elpx</strong>.',
           item3: 'Se usas <strong>eXeLearning 2.x</strong>, exporta o proxecto a <strong>ZIP</strong> desde o programa e continúa coa opción <strong>“Xa teño un ZIP”</strong>.'
         },
@@ -1208,7 +1187,7 @@
         },
         help: {
           inline: 'Se xa creaches un arquivo ZIP e o compartiches nun servizo con ligazón pública, vai á sección: “Xa teño un ZIP na nube con ligazón”.',
-          nextStepText: 'O seguinte paso é subir e compartir cunha ligazón pública o arquivo ZIP ou ELPX; cando o teñas, preme en “Continuar”.',
+          nextStepText: 'O seguinte paso é subir e compartir cunha ligazón pública o arquivo ZIP ou ELPX (tamén se contén PDF); cando o teñas, preme en “Continuar”.',
           goTab: 'Seguinte: “Xa teño un ZIP na nube con ligazón”'
         }
       },
@@ -1272,7 +1251,7 @@
           + '</nav>'
           + '<section aria-labelledby="help-que-hace">'
           + '<h3 class="about-section-title" id="help-que-hace" tabindex="-1">Que fai este visor</h3>'
-          + '<p>Abre recursos web empaquetados en <strong>ZIP</strong> ou <strong>ELPX</strong> directamente no navegador.</p>'
+          + '<p>Abre recursos web e arquivos PDF empaquetados en <strong>ZIP</strong> ou <strong>ELPX</strong> directamente no navegador.</p>'
           + '<p>O visor <strong>non sobe nin publica</strong> o teu material: só xera unha ligazón e ábrea.</p>'
           + '<ul>'
           + '<li><strong>Ti aloxas o ZIP</strong> en Drive, Dropbox, Nextcloud, GitHub… cunha ligazón pública.</li>'
@@ -1397,7 +1376,7 @@
         settingsHint: 'Ezarri baliabidearen erabilgarritasuna',
         language: 'Hizkuntza',
         languageHint: 'Hizkuntza aldatu',
-        subtitle: 'Partekatu zure hezkuntza-baliabideak hodeiko biltegiratze gogokoenetik.'
+        subtitle: 'Web edo PDF formatuko hezkuntza-baliabideen autoargitalpena zure hodeiko biltegiratzetik.'
       },
       settings: {
         title: 'Ikusgarritasun ezarpenak',
@@ -1452,23 +1431,15 @@
         title: 'Baliabide bat argitaratu',
         subtitle: 'Aukeratu nola hasi nahi duzun.',
         back: 'Hasierara itzuli',
-        zipHelp: {
-          summary: 'Zer da ZIP bat?',
-          bodyHtml: '<strong>ZIP</strong> bat fitxategi konprimatua da: hainbat fitxategi (eta karpeta) fitxategi bakarrean biltzen ditu.'
-        },
-        htmlHelp: {
-          summary: 'Zer da HTMLa eta non lortzen dut?',
-          bodyHtml: '<strong>HTML</strong>a web-orri baten kodea da. IA batek web bat sortzen duenean, normalean kodea eta “Kopiatu” botoia ematen du kopiatzeko. Fitxategi nagusia normalean <code>index.html</code> deitzen da'
-        },
         choice: {
           zipper: {
-            title: 'ZIP bat sortu',
-            note: 'Sortu ZIP bat fitxategi lokaletatik edo HTMLtik.',
+            title: 'Sortu ZIP bat (web edo PDF)',
+            note: 'Sortu ZIP bat fitxategi lokaletatik edo HTMLtik. PDF ere izan dezake.',
             restrictHint: 'Sarbidea datekin mugatzeko aukera ere baduzu.'
           },
           main: {
-            title: 'ZIP bat hodeian daukat estekarekin',
-            note: 'Itsatsi esteka publikoa eta sortu bisorearen esteka.',
+            title: 'ZIP/ELPX bat hodeian daukat estekarekin',
+            note: 'Itsatsi esteka publikoa (ZIP/ELPX) eta sortu bisorearen esteka. PDFa duen ZIPa ere onartzen da.',
             secondaryHtml: 'eXeLearning-eko .elpx erabiltzen baduzu, hemen ere ireki dezakezu <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="Zer da ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">.elpx fitxategia eXeLearning-eko proiektu bat da, eta barnean ZIP formatua erabiltzen du; horri esker, bisoreak edukira sartu eta behar bezala bistaratu dezake.</span></span>',
             elpxTooltip: 'Zer da ELPX?',
             elpxTooltipHtml: '.elpx fitxategia eXeLearning-eko proiektu bat da, eta barnean ZIP formatua erabiltzen du; horri esker, bisoreak edukira sartu eta behar bezala bistaratu dezake.'
@@ -1479,11 +1450,11 @@
         label: 'Atalak'
       },
       main: {
-        subtitle: 'Zure baliabidea ZIP formatuan (edo eXeLearning 3+eko .elpx) baduzu eta <strong>esteka publikoa</strong> duen zerbitzu batean badago (Drive, Dropbox, etab.), itsatsi hemen esteka bisorearen esteka sortzeko.',
+        subtitle: 'Zure baliabidea ZIP formatuan (edo eXeLearning 3+eko .elpx) baduzu eta <strong>esteka publikoa</strong> duen zerbitzu batean badago (Drive, Dropbox, etab.), itsatsi hemen esteka bisorearen esteka sortzeko. ZIPak HTML eta/edo PDF eduki ditzake.',
         form: {
-          title: 'ZIP bat hodeian daukat estekarekin',
+          title: 'ZIP/ELPX bat hodeian daukat estekarekin',
           step: 'Itsatsi ZIParen esteka publikoa (edo .elpx) eta sakatu “Esteka sortu”.',
-          placeholder: 'Itsatsi hemen ZIParen edo .elpx fitxategiaren esteka publikoa',
+          placeholder: 'Itsatsi hemen ZIParen edo .elpx fitxategiaren esteka publikoa (PDFa badu ere balio du)',
           submit: 'Esteka sortu'
         },
         output: {
@@ -1589,12 +1560,12 @@
         dismiss: 'Orain ez'
       },
       zipper: {
-        title: 'Bisorerako ZIP sortu',
+        title: 'Sortu ZIPa bisorerako (web edo PDF)',
         accordion: {
           filesTitle: 'Fitxategiak dituzu? Sortu ZIPa'
         },
         subtitle: {
-          item1: 'Zure baliabidea argitaratzeko, gorde fitxategi guztiak karpeta batean eta konprimitu <strong>.zip</strong> fitxategi batean.',
+          item1: 'Zure baliabidea argitaratzeko, gorde fitxategi guztiak karpeta batean eta konprimitu <strong>.zip</strong> fitxategi batean. Web-orriak eta/edo <strong>PDF</strong> bat edo gehiago izan ditzake.',
           item2: 'Zure baliabidea <strong>eXeLearning 3 edo goragokoarekin</strong> egina badago, <strong>.elpx</strong> fitxategia zuzenean erabil dezakezu.',
           item3: '<strong>eXeLearning 2.x</strong> erabiltzen baduzu, esportatu proiektua <strong>ZIP</strong>era programatik eta jarraitu <strong>“ZIP bat badaukat”</strong> aukerarekin.'
         },
@@ -1667,7 +1638,7 @@
         },
         help: {
           inline: 'ZIP fitxategi bat sortu eta esteka publikoarekin duen zerbitzu batean partekatu baduzu, joan atalera: “ZIP bat badaukat edo ELPX”.',
-          nextStepText: 'Hurrengo urratsa ZIP edo ELPX fitxategia esteka publikoarekin igo eta partekatzea da; prest duzunean, sakatu “Jarraitu”.',
+          nextStepText: 'Hurrengo urratsa ZIP edo ELPX fitxategia esteka publikoarekin igo eta partekatzea da (PDFa badu ere); prest duzunean, sakatu “Jarraitu”.',
           goTab: 'Hurrengoa: “ZIP bat badaukat edo ELPX”'
         }
       },
@@ -1731,7 +1702,7 @@
           + '</nav>'
           + '<section aria-labelledby="help-que-hace">'
           + '<h3 class="about-section-title" id="help-que-hace" tabindex="-1">Zer egiten du bisore honek</h3>'
-          + '<p><strong>ZIP</strong> edo <strong>ELPX</strong> fitxategietan paketatutako web-baliabideak zuzenean irekitzen ditu nabigatzailean.</p>'
+          + '<p><strong>ZIP</strong> edo <strong>ELPX</strong> fitxategietan paketatutako web-baliabideak eta PDF fitxategiak zuzenean irekitzen ditu nabigatzailean.</p>'
           + '<p>Bisoreak <strong>ez du zure materiala igotzen ezta argitaratzen ere</strong>: esteka sortu eta ireki besterik ez du egiten.</p>'
           + '<ul>'
           + '<li><strong>Zuk alokatzen duzu ZIPa</strong> Drive, Dropbox, Nextcloud, GitHub… bezalako zerbitzuetan, esteka publikoarekin.</li>'
@@ -1856,7 +1827,7 @@
         settingsHint: 'Set the resource availability',
         language: 'Language',
         languageHint: 'Change language',
-        subtitle: 'Share your educational resources from your favorite cloud storage.'
+        subtitle: 'Self-publishing of educational resources in web or PDF format from your cloud storage.'
       },
       settings: {
         title: 'Visibility settings',
@@ -1911,23 +1882,15 @@
         title: 'Publish a resource',
         subtitle: 'Choose how you want to start.',
         back: 'Back to start',
-        zipHelp: {
-          summary: 'What is a ZIP?',
-          bodyHtml: 'A <strong>ZIP</strong> is a compressed file that bundles multiple files (and folders) into one.'
-        },
-        htmlHelp: {
-          summary: 'What is HTML and where do I get it?',
-          bodyHtml: '<strong>HTML</strong> is the code of a web page. If an AI creates a website, it usually provides the code and a “Copy” button so you can copy it. The main file is usually called <code>index.html</code>'
-        },
         choice: {
           zipper: {
-            title: 'Create a ZIP',
-            note: 'Create a ZIP from local files or from HTML.',
+            title: 'Create a ZIP (web or PDF)',
+            note: 'Create a ZIP from local files or from HTML. It can also include PDF files.',
             restrictHint: 'You can also apply date-based access limits.'
           },
           main: {
-            title: 'I already have a ZIP in the cloud with link',
-            note: 'Paste the public link and create the viewer link.',
+            title: 'I already have a ZIP/ELPX in the cloud with link',
+            note: 'Paste the public link (ZIP/ELPX) and create the viewer link. ZIPs with PDF are also supported.',
             secondaryHtml: 'If you use an eXeLearning .elpx, you can open it here too <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="What is ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">An .elpx file is an eXeLearning project that internally uses the ZIP format, which allows the viewer to access its content and display it correctly.</span></span>',
             elpxTooltip: 'What is ELPX?',
             elpxTooltipHtml: 'An .elpx file is an eXeLearning project that internally uses the ZIP format, which allows the viewer to access its content and display it correctly.'
@@ -1938,11 +1901,11 @@
         label: 'Sections'
       },
       main: {
-        subtitle: 'If your resource is already a ZIP (or an eXeLearning 3+ .elpx file) hosted on a service with a <strong>public link</strong> (Drive, Dropbox, etc.), paste the link here to generate the viewer link.',
+        subtitle: 'If your resource is already a ZIP (or an eXeLearning 3+ .elpx file) hosted on a service with a <strong>public link</strong> (Drive, Dropbox, etc.), paste the link here to generate the viewer link. The ZIP can include HTML and/or PDF.',
         form: {
-          title: 'I already have a ZIP in the cloud with link',
+          title: 'I already have a ZIP/ELPX in the cloud with link',
           step: 'Paste the public ZIP link (or .elpx) and click “Create link”.',
-          placeholder: 'Paste the public ZIP or .elpx link here',
+          placeholder: 'Paste the public ZIP or .elpx link here (also valid if it includes PDF)',
           submit: 'Create link'
         },
         output: {
@@ -2048,12 +2011,12 @@
         dismiss: 'Not now'
       },
       zipper: {
-        title: 'Create ZIP for the viewer',
+        title: 'Create ZIP for the viewer (web or PDF)',
         accordion: {
           filesTitle: 'Have files? Create the ZIP'
         },
         subtitle: {
-          item1: 'To publish your resource, put all files in a folder and compress it into a <strong>.zip</strong> file.',
+          item1: 'To publish your resource, put all files in a folder and compress it into a <strong>.zip</strong> file. It can contain web pages and/or one or more <strong>PDF</strong> files.',
           item2: 'If your resource was made with <strong>eXeLearning 3 or later</strong>, you can use the <strong>.elpx</strong> file directly.',
           item3: 'If you use <strong>eXeLearning 2.x</strong>, export the project to <strong>ZIP</strong> from the program and continue with <strong>“I already have a ZIP”</strong>.'
         },
@@ -2127,7 +2090,7 @@
         },
         help: {
           inline: 'If you already created a ZIP file and shared it on a service with a public link, go to: “I already have a ZIP in the cloud with link”.',
-          nextStepText: 'The next step is to upload and share the ZIP or ELPX file with a public link; once you have it, click “Continue”.',
+          nextStepText: 'The next step is to upload and share the ZIP or ELPX file with a public link (also if it contains PDF); once you have it, click “Continue”.',
           goTab: 'Next: “I already have a ZIP in the cloud with link”'
         }
       },
@@ -2191,7 +2154,7 @@
           + '</nav>'
           + '<section aria-labelledby="help-que-hace">'
           + '<h3 class="about-section-title" id="help-que-hace" tabindex="-1">What this viewer does</h3>'
-          + '<p>Opens web resources packaged as <strong>ZIP</strong> or <strong>ELPX</strong> directly in the browser.</p>'
+          + '<p>Opens web resources and PDF files packaged as <strong>ZIP</strong> or <strong>ELPX</strong> directly in the browser.</p>'
           + '<p>The viewer <strong>does not upload or publish</strong> your content: it only generates a link and opens it.</p>'
           + '<ul>'
           + '<li><strong>You host the ZIP</strong> on Drive, Dropbox, Nextcloud, GitHub… with a public link.</li>'
@@ -2316,7 +2279,7 @@
         settingsHint: 'Verfügbarkeit des Materials einstellen',
         language: 'Sprache',
         languageHint: 'Sprache ändern',
-        subtitle: 'Teile deine Bildungsressourcen aus deinem bevorzugten Cloud-Speicher.'
+        subtitle: 'Selbstveröffentlichung von Bildungsressourcen im Web- oder PDF-Format aus deinem Cloud-Speicher.'
       },
       settings: {
         title: 'Sichtbarkeitseinstellungen',
@@ -2371,23 +2334,15 @@
         title: 'Ressource veröffentlichen',
         subtitle: 'Wähle, wie du starten möchtest.',
         back: 'Zurück zum Start',
-        zipHelp: {
-          summary: 'Was ist eine ZIP-Datei?',
-          bodyHtml: 'Eine <strong>ZIP</strong>-Datei ist ein komprimiertes Archiv, das mehrere Dateien (und Ordner) in einer Datei bündelt.'
-        },
-        htmlHelp: {
-          summary: 'Was ist HTML und woher bekomme ich es?',
-          bodyHtml: '<strong>HTML</strong> ist der Code einer Webseite. Wenn eine KI eine Webseite erstellt, liefert sie meist den Code und eine Schaltfläche „Kopieren“, um ihn zu kopieren. Die Hauptdatei heißt meistens <code>index.html</code>'
-        },
         choice: {
           zipper: {
-            title: 'ZIP erstellen',
-            note: 'Erstelle ein ZIP aus lokalen Dateien oder aus HTML.',
+            title: 'ZIP erstellen (Web oder PDF)',
+            note: 'Erstelle ein ZIP aus lokalen Dateien oder aus HTML. Es kann auch PDF enthalten.',
             restrictHint: 'Du kannst den Zugriff auch zeitlich begrenzen.'
           },
           main: {
-            title: 'Ich habe bereits eine ZIP-Datei in der Cloud mit Link',
-            note: 'Füge den öffentlichen Link ein und erstelle den Viewer-Link.',
+            title: 'Ich habe bereits eine ZIP/ELPX-Datei in der Cloud mit Link',
+            note: 'Füge den öffentlichen Link (ZIP/ELPX) ein und erstelle den Viewer-Link. ZIP mit PDF wird ebenfalls unterstützt.',
             secondaryHtml: 'Wenn du eine eXeLearning-.elpx nutzt, kannst du sie hier ebenfalls öffnen <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="Was ist ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Eine .elpx-Datei ist ein eXeLearning-Projekt, das intern das ZIP-Format verwendet. Dadurch kann der Viewer auf den Inhalt zugreifen und ihn korrekt anzeigen.</span></span>',
             elpxTooltip: 'Was ist ELPX?',
             elpxTooltipHtml: 'Eine .elpx-Datei ist ein eXeLearning-Projekt, das intern das ZIP-Format verwendet. Dadurch kann der Viewer auf den Inhalt zugreifen und ihn korrekt anzeigen.'
@@ -2398,11 +2353,11 @@
         label: 'Abschnitte'
       },
       main: {
-        subtitle: 'Wenn deine Ressource bereits als ZIP (oder als eXeLearning-3+-.elpx-Datei) mit <strong>öffentlichem Link</strong> verfügbar ist (Drive, Dropbox usw.), füge den Link hier ein, um den Viewer-Link zu erzeugen.',
+        subtitle: 'Wenn deine Ressource bereits als ZIP (oder als eXeLearning-3+-.elpx-Datei) mit <strong>öffentlichem Link</strong> verfügbar ist (Drive, Dropbox usw.), füge den Link hier ein, um den Viewer-Link zu erzeugen. Das ZIP kann HTML und/oder PDF enthalten.',
         form: {
-          title: 'Ich habe bereits eine ZIP-Datei in der Cloud mit Link',
+          title: 'Ich habe bereits eine ZIP/ELPX-Datei in der Cloud mit Link',
           step: 'Füge den öffentlichen Link zur ZIP-Datei (oder .elpx) ein und klicke auf „Link erstellen“.',
-          placeholder: 'Füge hier den öffentlichen ZIP- oder .elpx-Link ein',
+          placeholder: 'Füge hier den öffentlichen ZIP- oder .elpx-Link ein (auch gültig, wenn PDF enthalten ist)',
           submit: 'Link erstellen'
         },
         output: {
@@ -2508,12 +2463,12 @@
         dismiss: 'Jetzt nicht'
       },
       zipper: {
-        title: 'ZIP für den Viewer erstellen',
+        title: 'ZIP für den Viewer erstellen (Web oder PDF)',
         accordion: {
           filesTitle: 'Dateien vorhanden? ZIP erstellen'
         },
         subtitle: {
-          item1: 'Um deine Ressource zu veröffentlichen, lege alle Dateien in einen Ordner und komprimiere ihn zu einer <strong>.zip</strong>-Datei.',
+          item1: 'Um deine Ressource zu veröffentlichen, lege alle Dateien in einen Ordner und komprimiere ihn zu einer <strong>.zip</strong>-Datei. Sie kann Webseiten und/oder eine oder mehrere <strong>PDF</strong>-Dateien enthalten.',
           item2: 'Wenn deine Ressource mit <strong>eXeLearning 3 oder höher</strong> erstellt wurde, kannst du die <strong>.elpx</strong>-Datei direkt verwenden.',
           item3: 'Wenn du <strong>eXeLearning 2.x</strong> nutzt, exportiere das Projekt als <strong>ZIP</strong> aus dem Programm und fahre mit der Option <strong>„Ich habe bereits ein ZIP“</strong> fort.'
         },
@@ -2587,7 +2542,7 @@
         },
         help: {
           inline: 'Wenn du bereits eine ZIP-Datei erstellt und sie über einen Dienst mit öffentlichem Link geteilt hast, gehe zu: „Ich habe bereits eine ZIP-Datei in der Cloud mit Link“.',
-          nextStepText: 'Der nächste Schritt ist, die ZIP- oder ELPX-Datei mit öffentlichem Link hochzuladen und zu teilen; sobald du sie hast, klicke auf „Weiter“.',
+          nextStepText: 'Der nächste Schritt ist, die ZIP- oder ELPX-Datei mit öffentlichem Link hochzuladen und zu teilen (auch wenn sie PDF enthält); sobald du sie hast, klicke auf „Weiter“.',
           goTab: 'Weiter: „Ich habe bereits eine ZIP-Datei in der Cloud mit Link“'
         }
       },
@@ -2651,7 +2606,7 @@
           + '</nav>'
           + '<section aria-labelledby="help-que-hace">'
           + '<h3 class="about-section-title" id="help-que-hace" tabindex="-1">Was dieser Viewer macht</h3>'
-          + '<p>Öffnet Web-Ressourcen, die als <strong>ZIP</strong> oder <strong>ELPX</strong> verpackt sind, direkt im Browser.</p>'
+          + '<p>Öffnet Web-Ressourcen und PDF-Dateien, die als <strong>ZIP</strong> oder <strong>ELPX</strong> verpackt sind, direkt im Browser.</p>'
           + '<p>Der Viewer <strong>lädt dein Material nicht hoch und veröffentlicht es nicht</strong>: er erzeugt nur einen Link und öffnet ihn.</p>'
           + '<ul>'
           + '<li><strong>Du hostest die ZIP</strong> auf Drive, Dropbox, Nextcloud, GitHub… mit einem öffentlichen Link.</li>'
