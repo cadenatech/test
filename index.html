@@ -255,6 +255,9 @@
                   <h3 data-i18n="zipper.step2.title">Descarga el ZIP</h3>
                   <p class="step-note" data-i18n="zipper.step2.note">Crea el ZIP y se descargará automáticamente.</p>
                   <p class="upload-note" data-i18n="zipper.step2.detail">Al crear el ZIP se descargará un archivo que puedes subir a Drive, Dropbox, Nextcloud, etc.</p>
+                  <label class="upload-note" for="resource-title-input" data-i18n="zipper.resourceTitle.label">Título del recurso</label>
+                  <input id="resource-title-input" class="zip-title-input" type="text" data-resource-title data-i18n-placeholder="zipper.resourceTitle.placeholder" placeholder="Mi recurso" autocomplete="off">
+                  <p class="upload-note" data-i18n="zipper.resourceTitle.note">Se usa cuando el ZIP no incluye HTML (por ejemplo, ZIP solo con PDF o DOCX).</p>
                   <div class="upload-actions">
                     <button type="button" data-build-zip data-i18n="zipper.build">Crear y descargar ZIP</button>
                   </div>

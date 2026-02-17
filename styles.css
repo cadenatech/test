@@ -1299,6 +1299,18 @@ textarea:focus-visible {
   color: var(--ink);
 }
 
+.zip-title-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-family: "Libre Franklin", "Segoe UI", sans-serif;
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
 .embed-code-textarea {
   min-height: 180px;
   width: 100%;

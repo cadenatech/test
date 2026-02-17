@@ -76,3 +76,9 @@ Enlaces:
 - Para ZIPs grandes, el modo `bundle=1` en una sola respuesta puede fallar por el tamano del base64. La solucion es la **descarga por trozos** (`meta=1` + `part=`), ya incluida en `gas/Code.js` y con fallback automatico en el frontend.
 - Si cambias el ZIP pero mantienes el mismo enlace, los alumnos deben volver a abrir la URL para actualizar el cache.
 - El visor intenta detectar cambios en el ZIP (tamaño/ETag/fecha) y mostrará un aviso de “Nueva versión disponible” cuando sea posible.
+- Si el ZIP contiene solo PDF:
+  - con un unico PDF, se abre directamente;
+  - con varios PDF, se genera un indice con lista lateral replegable.
+- El indice/lateral del visor PDF usa el idioma activo de la interfaz (es, ca, gl, eu, en, de), incluyendo textos como el titulo de la lista y los botones de mostrar/ocultar.
+- El visor incluye ajustes de visibilidad por fechas (inicio/fin) y permisos durante el acceso (compartir, insertar y descargar).
+- El gestor de recursos permite revisar materiales guardados localmente, comprobar actualizaciones y forzar recarga del ZIP cuando haya cambios en la nube.

@@ -250,6 +250,11 @@
           placeholder: 'mi_recurso',
           default: 'mi_recurso'
         },
+        resourceTitle: {
+          label: 'Título del recurso',
+          placeholder: 'Mi recurso',
+          note: 'Se usa cuando el ZIP no incluye HTML (por ejemplo, ZIP solo con PDF o DOCX).'
+        },
         build: 'Crear y descargar ZIP',
         html: {
           title: '¿No tienes archivos? Pega el HTML',
@@ -449,10 +454,14 @@
         saving: 'Guardando en el navegador...',
         copySuccess: 'Enlace copiado.'
       },
-      pdfViewer: {
-        documentsTitle: 'Documentos PDF',
+      documentViewer: {
+        documentsTitle: 'Documentos',
         hideList: 'Ocultar lista',
-        showList: 'Mostrar lista'
+        showList: 'Mostrar lista',
+        loadingDocx: 'Cargando DOCX...',
+        failedDocx: 'No se pudo mostrar este DOCX.',
+        downloadDocx: 'Descargar DOCX',
+        missingDocxEngine: 'No se pudo cargar el visor DOCX.'
       },
       common: {
         close: 'Cerrar',
@@ -708,6 +717,11 @@
           placeholder: 'el_meu_recurs',
           default: 'el_meu_recurs'
         },
+        resourceTitle: {
+          label: 'Títol del recurs',
+          placeholder: 'El meu recurs',
+          note: 'S\'utilitza quan el ZIP no inclou HTML (per exemple, ZIP només amb PDF o DOCX).'
+        },
         build: 'Crear i descarregar ZIP',
         html: {
           title: 'No tens fitxers? Enganxa l’HTML',
@@ -905,10 +919,14 @@
         saving: 'Desant al navegador...',
         copySuccess: 'Enllaç copiat.'
       },
-      pdfViewer: {
-        documentsTitle: 'Documents PDF',
+      documentViewer: {
+        documentsTitle: 'Documents',
         hideList: 'Amagar llista',
-        showList: 'Mostrar llista'
+        showList: 'Mostrar llista',
+        loadingDocx: 'Carregant DOCX...',
+        failedDocx: 'No s\'ha pogut mostrar aquest DOCX.',
+        downloadDocx: 'Descarregar DOCX',
+        missingDocxEngine: 'No s\'ha pogut carregar el visor DOCX.'
       },
       common: {
         close: 'Tancar',
@@ -1164,6 +1182,11 @@
           placeholder: 'meu_recurso',
           default: 'meu_recurso'
         },
+        resourceTitle: {
+          label: 'Título do recurso',
+          placeholder: 'O meu recurso',
+          note: 'Úsase cando o ZIP non inclúe HTML (por exemplo, ZIP só con PDF ou DOCX).'
+        },
         build: 'Crear e descargar ZIP',
         html: {
           title: 'Non tes ficheiros? Pega o HTML',
@@ -1361,10 +1384,14 @@
         saving: 'Gardando no navegador...',
         copySuccess: 'Ligazón copiada.'
       },
-      pdfViewer: {
-        documentsTitle: 'Documentos PDF',
+      documentViewer: {
+        documentsTitle: 'Documentos',
         hideList: 'Ocultar lista',
-        showList: 'Amosar lista'
+        showList: 'Amosar lista',
+        loadingDocx: 'Cargando DOCX...',
+        failedDocx: 'Non se puido mostrar este DOCX.',
+        downloadDocx: 'Descargar DOCX',
+        missingDocxEngine: 'Non se puido cargar o visor DOCX.'
       },
       common: {
         close: 'Pechar',
@@ -1620,6 +1647,11 @@
           placeholder: 'nire_baliabidea',
           default: 'nire_baliabidea'
         },
+        resourceTitle: {
+          label: 'Baliabidearen izenburua',
+          placeholder: 'Nire baliabidea',
+          note: 'ZIPak HTMLrik ez duenean erabiltzen da (adibidez, PDF edo DOCX bakarrik duen ZIPa).'
+        },
         build: 'Sortu eta deskargatu ZIPa',
         html: {
           title: 'Ez duzu fitxategirik? Itsatsi HTMLa',
@@ -1817,10 +1849,14 @@
         saving: 'Nabigatzailean gordetzen...',
         copySuccess: 'Esteka kopiatuta.'
       },
-      pdfViewer: {
-        documentsTitle: 'PDF dokumentuak',
+      documentViewer: {
+        documentsTitle: 'Dokumentuak',
         hideList: 'Zerrenda ezkutatu',
-        showList: 'Zerrenda erakutsi'
+        showList: 'Zerrenda erakutsi',
+        loadingDocx: 'DOCX kargatzen...',
+        failedDocx: 'Ezin izan da DOCX hau bistaratu.',
+        downloadDocx: 'DOCX deskargatu',
+        missingDocxEngine: 'Ezin izan da DOCX bisorea kargatu.'
       },
       common: {
         close: 'Itxi',
@@ -2076,6 +2112,11 @@
           placeholder: 'my_resource',
           default: 'my_resource'
         },
+        resourceTitle: {
+          label: 'Resource title',
+          placeholder: 'My resource',
+          note: 'Used when the ZIP does not include HTML (for example, ZIP with only PDF or DOCX).'
+        },
         build: 'Create and download ZIP',
         html: {
           title: 'No files? Paste the HTML',
@@ -2274,10 +2315,14 @@
         saving: 'Saving in the browser...',
         copySuccess: 'Link copied.'
       },
-      pdfViewer: {
-        documentsTitle: 'PDF documents',
+      documentViewer: {
+        documentsTitle: 'Documents',
         hideList: 'Hide list',
-        showList: 'Show list'
+        showList: 'Show list',
+        loadingDocx: 'Loading DOCX...',
+        failedDocx: 'Could not display this DOCX.',
+        downloadDocx: 'Download DOCX',
+        missingDocxEngine: 'Could not load the DOCX viewer.'
       },
       common: {
         close: 'Close',
@@ -2533,6 +2578,11 @@
           placeholder: 'mein_ressource',
           default: 'mein_ressource'
         },
+        resourceTitle: {
+          label: 'Titel der Ressource',
+          placeholder: 'Meine Ressource',
+          note: 'Wird verwendet, wenn das ZIP kein HTML enthält (zum Beispiel ZIP nur mit PDF oder DOCX).'
+        },
         build: 'ZIP erstellen und herunterladen',
         html: {
           title: 'Keine Dateien? HTML einfügen',
@@ -2731,10 +2781,14 @@
         saving: 'Im Browser speichern...',
         copySuccess: 'Link kopiert.'
       },
-      pdfViewer: {
-        documentsTitle: 'PDF-Dokumente',
+      documentViewer: {
+        documentsTitle: 'Dokumente',
         hideList: 'Liste ausblenden',
-        showList: 'Liste anzeigen'
+        showList: 'Liste anzeigen',
+        loadingDocx: 'DOCX wird geladen...',
+        failedDocx: 'Dieses DOCX konnte nicht angezeigt werden.',
+        downloadDocx: 'DOCX herunterladen',
+        missingDocxEngine: 'DOCX-Viewer konnte nicht geladen werden.'
       },
       common: {
         close: 'Schließen',
