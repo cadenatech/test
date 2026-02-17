@@ -756,12 +756,13 @@ function fetchRemoteMeta_(url) {
       lastModified: driveUpdated ? driveUpdated.toISOString() : ''
     };
   }
-  // Apps Script UrlFetchApp does not support HEAD reliably. Use a tiny Range probe instead.
+  // Apps Script UrlFetchApp does not support HEAD reliably. Use a range probe instead.
+  // We read a small prefix to build a lightweight content signature.
   var resp = UrlFetchApp.fetch(url, {
     method: 'get',
     followRedirects: true,
     muteHttpExceptions: true,
-    headers: { Range: 'bytes=0-0' }
+    headers: { Range: 'bytes=0-65535' }
   });
   var code = resp.getResponseCode();
   if (code >= 400) {
@@ -787,14 +788,28 @@ function fetchRemoteMeta_(url) {
   if (Array.isArray(etagHeader)) etagHeader = etagHeader.join(',');
   var lastModifiedHeader = headers['Last-Modified'] || headers['last-modified'] || '';
   if (Array.isArray(lastModifiedHeader)) lastModifiedHeader = lastModifiedHeader.join(',');
+  var bytes = resp.getContent();
+  var sampleHash = '';
+  if (bytes && bytes.length) {
+    sampleHash = digestHex_(bytes);
+  }
 
   return {
     name: name,
     size: (len && !isNaN(len)) ? len : null,
     acceptRanges: !!(acceptRanges || code === 206),
     etag: etagHeader ? String(etagHeader) : '',
-    lastModified: lastModifiedHeader ? String(lastModifiedHeader) : ''
+    lastModified: lastModifiedHeader ? String(lastModifiedHeader) : '',
+    sampleHash: sampleHash
   };
+}
+
+function digestHex_(bytes) {
+  var digest = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_1, bytes);
+  return digest.map(function(b) {
+    var v = (b < 0) ? b + 256 : b;
+    return ('0' + v.toString(16)).slice(-2);
+  }).join('');
 }
 
 function extractFilenameFromDisposition_(disposition) {

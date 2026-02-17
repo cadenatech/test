@@ -340,8 +340,8 @@
   }
 
   function fetchZipBundleMeta(zipUrl) {
-    var endpoint = GAS_WEBAPP_URL + '?url=' + encodeURIComponent(zipUrl) + '&bundle=1&meta=1';
-    return fetch(endpoint)
+    var endpoint = GAS_WEBAPP_URL + '?url=' + encodeURIComponent(zipUrl) + '&bundle=1&meta=1&ts=' + Date.now();
+    return fetch(endpoint, { cache: 'no-store' })
       .then(function (res) {
         if (!res.ok) {
           throw new Error('HTTP ' + res.status);
