@@ -1372,6 +1372,11 @@ textarea:focus-visible {
   color: var(--ink-muted);
 }
 
+.upload-note--emphasis {
+  color: var(--ink);
+  font-weight: 700;
+}
+
 .dropzone {
   border: 2px dashed var(--border-strong);
   border-radius: 16px;
