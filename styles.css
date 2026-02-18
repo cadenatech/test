@@ -1208,6 +1208,8 @@ textarea:focus-visible {
   padding: 14px 18px;
   font-weight: 600;
   color: var(--ink);
+  background: #e5eefb;
+  border-bottom: 1px solid #d1deef;
 }
 
 .html-zip-accordion__summary:hover,
@@ -1377,6 +1379,230 @@ textarea:focus-visible {
   font-weight: 700;
 }
 
+.zipper-force-folder {
+  margin: 0;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(239, 246, 255, 0.7);
+}
+
+.zipper-force-folder__note {
+  margin-top: 0;
+}
+
+.zipper-force-folder .info-dot {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.zipper-force-folder .info-dot__tooltip {
+  top: calc(100% + 8px);
+  bottom: auto;
+  left: auto;
+  right: 0;
+  transform: none;
+  z-index: 40;
+}
+
+[data-publish-module="zipper"] .html-zip-card--download {
+  gap: 14px;
+  background: linear-gradient(180deg, #eef5ff 0%, #f4f9ff 100%);
+  border: 1px solid #d6e6fb;
+}
+
+[data-publish-module="zipper"] .zipper-force-card {
+  margin-top: 16px;
+  width: 100%;
+  background: linear-gradient(180deg, #eef5ff 0%, #f4f9ff 100%);
+  border: 1px solid #d6e6fb;
+  padding: 10px;
+}
+
+[data-publish-module="zipper"] .zipper-force-card .zipper-force-folder {
+  border: 0;
+  background: transparent;
+  padding: 2px 4px;
+}
+
+[data-publish-module="zipper"] .zipper-options-card {
+  display: grid;
+  gap: 10px;
+}
+
+[data-publish-module="zipper"] .zipper-options-card__title {
+  margin: 0;
+  font-size: 1rem;
+  color: #1e293b;
+}
+
+[data-publish-module="zipper"] .zipper-option-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid #d8e2ee;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+[data-publish-module="zipper"] .zipper-option-row__main {
+  min-width: 0;
+}
+
+[data-publish-module="zipper"] .zipper-option-row__title {
+  margin: 0;
+  font-size: 0.94rem;
+  color: #334155;
+}
+
+[data-publish-module="zipper"] .zipper-option-toggle {
+  width: 100%;
+  margin: 0 0 4px;
+  align-items: center;
+  gap: 10px;
+}
+
+[data-publish-module="zipper"] .zipper-option-toggle .info-dot {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+[data-publish-module="zipper"] .zipper-option-toggle .info-dot__tooltip {
+  top: calc(100% + 8px);
+  bottom: auto;
+  left: auto;
+  right: 0;
+  transform: none;
+  z-index: 40;
+}
+
+[data-publish-module="zipper"] .zipper-option-row--availability > .info-dot {
+  margin-top: 2px;
+}
+
+[data-publish-module="zipper"] .zipper-option-row--availability > .info-dot .info-dot__tooltip {
+  top: calc(100% + 8px);
+  bottom: auto;
+  left: auto;
+  right: 0;
+  transform: none;
+  z-index: 40;
+}
+
+[data-publish-module="zipper"] .zipper-option-row--force .zipper-force-folder {
+  width: 100%;
+}
+
+[data-publish-module="zipper"] .zipper-option-row--title {
+  align-items: flex-start;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+[data-publish-module="zipper"] .zipper-option-title-toggle {
+  margin: 0;
+}
+
+[data-publish-module="zipper"] .zipper-option-row--title .zipper-option-row__title {
+  white-space: normal;
+}
+
+[data-publish-module="zipper"] .zipper-option-row__input {
+  margin: 0 0 0 32px;
+  min-width: 220px;
+  width: calc(100% - 32px);
+}
+
+[data-publish-module="zipper"] .zipper-force-folder-wrap {
+  width: 100%;
+}
+
+[data-publish-module="zipper"] .zipper-force-folder__inline-note {
+  margin: 4px 4px 0 32px;
+  font-size: 0.88rem;
+  line-height: 1.35;
+  color: #475569;
+}
+
+[data-publish-module="zipper"] .zipper-restrict-edit-btn {
+  margin: 8px 0 0 32px;
+}
+
+[data-publish-module="zipper"] .zip-download-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) minmax(320px, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+[data-publish-module="zipper"] .zip-download-config {
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+  display: grid;
+  gap: 12px;
+}
+
+[data-publish-module="zipper"] .zip-preview-action {
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+}
+
+[data-publish-module="zipper"] .zip-preview-action > p {
+  margin: 0 0 8px;
+  font-size: 1.02rem;
+  line-height: 1.42;
+  color: #334a62;
+}
+
+[data-publish-module="zipper"] .zip-preview-action .upload-actions {
+  margin-top: 8px;
+}
+
+[data-publish-module="zipper"] .zip-preview-action [data-preview-status] {
+  margin-top: 10px;
+}
+
+[data-publish-module="zipper"] .zip-download-config .upload-note--emphasis {
+  margin: 0 0 6px;
+  font-weight: 600;
+  color: #334155;
+  font-size: 0.96rem;
+}
+
+[data-publish-module="zipper"] .zip-download-action {
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+}
+
+[data-publish-module="zipper"] .zip-download-action h3 {
+  margin: 0 0 6px;
+}
+
+[data-publish-module="zipper"] .zip-download-action .upload-note {
+  margin: 0 0 10px;
+}
+
+[data-publish-module="zipper"] .zip-download-action .upload-actions {
+  margin-top: 0;
+}
+
+[data-publish-module="zipper"] .zip-download-action [data-zip-status] {
+  margin-top: 10px;
+}
+
+[data-publish-module="zipper"] .upload-card h3 {
+  margin: 0 0 4px;
+}
+
 .dropzone {
   border: 2px dashed var(--border-strong);
   border-radius: 16px;
@@ -1414,6 +1640,15 @@ textarea:focus-visible {
   margin-top: 12px;
   font-size: 0.95rem;
   color: var(--ink-muted);
+}
+
+.upload-status.is-highlight {
+  color: #1f2937;
+  background: linear-gradient(135deg, #eff6ff, #ecfeff);
+  border: 1px solid #bfdbfe;
+  border-radius: 10px;
+  padding: 9px 11px;
+  font-weight: 600;
 }
 
 .upload-actions {
@@ -1477,6 +1712,42 @@ textarea:focus-visible {
   white-space: nowrap;
 }
 
+.next-step__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+[data-preview-status] {
+  margin: 6px 0 0;
+  font-size: 0.9rem;
+  width: 100%;
+  max-width: 320px;
+  line-height: 1.35;
+  white-space: normal;
+}
+
+[data-preview-status].is-highlight {
+  font-weight: 400;
+}
+
+[data-preview-status]:empty {
+  display: none;
+}
+
+[data-restrict-zip-status]:empty {
+  display: none;
+}
+
+[data-publish-module="zipper"] .next-step--preview .next-step__actions {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.settings-check--preview {
+  margin: 8px 0 4px;
+}
+
 /* Visual hierarchy refinement for the ZIP creation flow (presentation only). */
 [data-publish-module="zipper"] .manager-card {
   gap: 22px;
@@ -1526,6 +1797,32 @@ textarea:focus-visible {
   background: #f3f8fd;
 }
 
+[data-publish-module="zipper"] .next-step:not(.next-step--preview) {
+  border: 1px solid #d6e6fb;
+  background: linear-gradient(180deg, #eef5ff 0%, #f4f9ff 100%);
+  border-radius: 14px;
+  padding: 14px 16px;
+  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.08);
+  gap: 12px;
+}
+
+[data-publish-module="zipper"] .next-step:not(.next-step--preview) .next-step__text p {
+  margin: 0;
+  font-size: 0.97rem;
+  line-height: 1.45;
+  color: #334a62;
+}
+
+[data-publish-module="zipper"] .next-step:not(.next-step--preview) .next-step__btn {
+  align-self: center;
+}
+
+[data-publish-module="zipper"] .next-step--preview {
+  margin-top: 16px;
+  border-color: #c7dcfb;
+  background: #eef6ff;
+}
+
 [data-publish-module="zipper"] .next-step__text p {
   font-size: 1.02rem;
   line-height: 1.42;
@@ -1538,6 +1835,10 @@ textarea:focus-visible {
   font-size: 0.95rem;
   font-weight: 700;
   box-shadow: 0 8px 18px rgba(3, 105, 161, 0.22);
+}
+
+[data-publish-module="zipper"] .next-step__actions .ghost-button {
+  white-space: nowrap;
 }
 
 [data-publish-module="zipper"] .html-zip-card__header .step-note {
@@ -1556,6 +1857,34 @@ textarea:focus-visible {
 
 [data-publish-module="zipper"] .html-zip-accordion .upload-grid .upload-card {
   min-height: 100%;
+}
+
+[data-publish-module="zipper"] [data-zip-flow="files"] .upload-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+[data-publish-module="zipper"] [data-zip-flow="files"] .upload-card {
+  display: grid;
+  grid-template-columns: minmax(230px, 0.9fr) minmax(320px, 1.1fr);
+  column-gap: 26px;
+  row-gap: 8px;
+  align-items: start;
+}
+
+[data-publish-module="zipper"] [data-zip-flow="files"] .upload-card h3,
+[data-publish-module="zipper"] [data-zip-flow="files"] .upload-card > .step-note {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+[data-publish-module="zipper"] [data-zip-flow="files"] .upload-card [data-dropzone] {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+
+[data-publish-module="zipper"] [data-zip-flow="files"] .upload-card [data-upload-status] {
+  grid-column: 2;
+  margin-top: 6px;
 }
 
 [data-publish-module="zipper"] .inline-callout {
@@ -1591,6 +1920,11 @@ textarea:focus-visible {
   .next-step__btn {
     justify-content: center;
     width: 100%;
+  }
+
+  .next-step__actions {
+    flex-direction: column;
+    align-items: stretch;
   }
 }
 
@@ -1629,36 +1963,32 @@ textarea:focus-visible {
 }
 
 .zipper-restrict-summary {
-  margin-top: 12px;
-  padding: 10px 12px;
-  border-radius: 12px;
-  border: 1px solid var(--border-strong);
-  background: var(--surface-muted);
-  color: var(--ink-muted);
-  display: inline-flex;
-  flex-direction: column;
-  gap: 6px;
+  margin-top: 0;
+  margin-left: 32px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #475569;
+  display: grid;
+  gap: 2px;
 }
 
 .zipper-restrict-summary__label {
-  font-size: 0.75rem;
-  font-weight: 700;
+  display: none;
 }
 
 .zipper-restrict-summary__items {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+  display: grid;
+  gap: 2px;
 }
 
 .zipper-restrict-summary__item {
-  padding: 2px 8px;
-  border-radius: 999px;
-  border: 1px solid #8ed8ab;
-  background: #e7f8ee;
-  color: #1f7a45;
-  font-size: 0.78rem;
-  font-weight: 600;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #475569;
+  font-size: 0.88rem;
+  line-height: 1.35;
 }
 
 .step-note {
@@ -2754,6 +3084,22 @@ body[data-loading="true"] main {
 
   [data-publish-module="zipper"] .html-zip-accordion .upload-grid {
     grid-template-columns: 1fr;
+  }
+
+  [data-publish-module="zipper"] .zip-download-layout {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  [data-publish-module="zipper"] [data-zip-flow="files"] .upload-card {
+    grid-template-columns: 1fr;
+    row-gap: 10px;
+  }
+
+  [data-publish-module="zipper"] [data-zip-flow="files"] .upload-card [data-dropzone],
+  [data-publish-module="zipper"] [data-zip-flow="files"] .upload-card [data-upload-status] {
+    grid-column: auto;
+    grid-row: auto;
   }
 
   .manager-item {

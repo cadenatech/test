@@ -145,15 +145,19 @@
     }
   }
 
-  function setZipStatus(message) {
+  function setZipStatus(message, options) {
+    var opts = options || {};
     if (els.zipStatus) {
       els.zipStatus.textContent = message;
+      els.zipStatus.classList.toggle('is-highlight', !!opts.highlight);
     }
   }
 
-  function setHtmlZipStatus(message) {
+  function setHtmlZipStatus(message, options) {
+    var opts = options || {};
     if (els.htmlZipStatus) {
       els.htmlZipStatus.textContent = message;
+      els.htmlZipStatus.classList.toggle('is-highlight', !!opts.highlight);
     }
   }
 

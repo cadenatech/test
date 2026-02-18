@@ -106,17 +106,10 @@
                   <path d="M12 5v14m-7-7h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                 </svg>
               </span>
-              <span class="card-lock" role="button" tabindex="0" data-lock-indicator data-i18n-aria-label="header.settings" data-i18n-tooltip="header.settingsHint">
-                <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                  <path d="M7 11V7a5 5 0 0 1 9.9-1"></path>
-                </svg>
-              </span>
               <div class="publish-choice-card__title">
                 <span data-i18n="publish.choice.zipper.title">Crea un ZIP con archivos web, PDF o DOCX</span>
               </div>
               <span class="publish-choice-card__note" data-i18n="publish.choice.zipper.note">Crea un ZIP desde archivos web, PDF y DOCX o desde código HTML.</span>
-              <span class="publish-choice-card__note publish-choice-card__note--secondary" data-restrict-hint data-i18n="publish.choice.zipper.restrictHint">También puedes aplicar limitación de acceso por fechas.</span>
             </button>
             <button class="publish-choice-card" type="button" data-publish-start="main">
               <span class="publish-choice-card__icon" aria-hidden="true">
@@ -126,9 +119,9 @@
                 </svg>
               </span>
               <div class="publish-choice-card__title">
-                <span data-i18n="publish.choice.main.title">Ya tengo un ZIP/ELPX en la nube con enlace</span>
+                <span data-i18n="publish.choice.main.title">Ya tengo un ZIP en la nube con enlace</span>
               </div>
-              <span class="publish-choice-card__note" data-i18n="publish.choice.main.note">Pega el enlace público (ZIP/ELPX) y crea el enlace del visor. También admite ZIP que solo contienen PDFs.</span>
+              <span class="publish-choice-card__note" data-i18n="publish.choice.main.note">Pega el enlace público (ZIP/ELPX) y crea el enlace del visor.</span>
               <span class="publish-choice-card__note publish-choice-card__note--secondary" data-i18n-html="publish.choice.main.secondaryHtml">Si usas .elpx de eXeLearning, también puedes abrirlo aquí <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="¿Qué es ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Un archivo .elpx es un proyecto de eXeLearning que internamente utiliza el formato ZIP, lo que permite que el visor acceda a su contenido y lo muestre correctamente.</span></span></span>
             </button>
           </div>
@@ -137,7 +130,7 @@
 
 	        <div class="publish-module" data-publish-module="main" id="ya-tengo-zip-elpx" hidden>
 	          <form data-form>
-	            <span class="field-title field-title--module" data-i18n="main.form.title">Ya tengo un ZIP/ELPX en la nube con enlace</span>
+	            <span class="field-title field-title--module" data-i18n="main.form.title">Ya tengo un ZIP en la nube con enlace</span>
 	            <p class="step-note" data-i18n-html="main.subtitle">Si ya tienes tu recurso en formato ZIP (o .elpx de eXeLearning 3+) en un servicio con <strong>enlace público</strong> (Drive, Dropbox, etc.), pega aquí el enlace para generar el enlace. El ZIP puede incluir HTML y/o PDF.</p>
 	            <input data-url type="url" placeholder="Pega aquí el enlace público del ZIP o del .elpx (también válido si incluye PDF)" data-i18n-placeholder="main.form.placeholder" required>
             <button type="submit" data-create-link data-i18n="main.form.submit">Crear enlace</button>
@@ -199,18 +192,7 @@
 	          <div class="manager-card">
 	            <div class="manager-header">
 	              <div>
-	                <h2 data-i18n="zipper.title">Crear ZIP para el visor (web o PDF)</h2>
-                <ul class="manager-subtitle zipper-subtitle">
-                  <li data-i18n-html="zipper.subtitle.item1">Para publicar tu recurso, guarda todos los archivos en una carpeta y comprímela en un archivo <strong>.zip</strong>. Puede contener páginas web y/o uno o varios <strong>PDF</strong>.</li>
-                  <li class="zipper-subtitle__compact">
-                    <span data-i18n-html="zipper.subtitle.item2">Si el recurso está hecho con <strong>eXeLearning 3 o superior</strong>, puedes usar directamente el archivo <strong>.elpx</strong>.</span>
-                    <span data-i18n-html="zipper.subtitle.item3">Si usas <strong>eXeLearning 2.x</strong>, exporta el proyecto a <strong>ZIP</strong> desde el programa y continúa con la opción “Ya tengo un ZIP”.</span>
-                  </li>
-                </ul>
-                <div class="zipper-restrict-summary" data-restrict-summary hidden>
-                  <span class="zipper-restrict-summary__label" data-restrict-summary-label data-i18n="zipper.restrict.summaryTitle">Acceso limitado por fechas</span>
-                  <div class="zipper-restrict-summary__items" data-restrict-summary-items></div>
-                </div>
+	                <h2 data-i18n="zipper.title">Crear ZIP para el visor</h2>
               </div>
               <button class="card-lock" type="button" data-lock-indicator data-main-settings-open data-i18n-aria-label="header.settings" data-i18n-tooltip="header.settingsHint">
                 <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -219,26 +201,22 @@
                 </svg>
               </button>
             </div>
-            <details class="html-zip-accordion">
+            <details class="html-zip-accordion" data-zip-flow="html">
               <summary class="html-zip-accordion__summary" data-i18n="zipper.html.title">¿No tienes archivos? Pega el HTML</summary>
               <div class="html-zip-card">
                 <div class="html-zip-card__header">
                   <p class="step-note" data-i18n-html="zipper.html.note">Pega el HTML completo y el visor creará un ZIP con un <code>index.html</code> listo para descargar.</p>
                 </div>
                 <textarea class="html-zip-textarea" data-html-zip-input data-i18n-placeholder="zipper.html.placeholder" placeholder="&lt;!doctype html&gt;..."></textarea>
-                <div class="upload-actions">
-                  <button type="button" data-html-zip-build data-i18n="zipper.html.build">Crear ZIP desde HTML</button>
-                </div>
                 <p class="upload-status" data-html-zip-status data-i18n="zipper.html.status.ready" data-i18n-dynamic>Listo para crear el ZIP desde tu HTML.</p>
               </div>
             </details>
-            <details class="html-zip-accordion">
+            <details class="html-zip-accordion" data-zip-flow="files">
               <summary class="html-zip-accordion__summary" data-i18n="zipper.accordion.filesTitle">¿Tienes archivos? Crea el ZIP</summary>
               <div class="upload-grid">
                 <section class="upload-card">
                   <h3 data-i18n="zipper.step1.title">Añade tus archivos</h3>
                   <p class="step-note" data-i18n="zipper.step1.note">Arrastra la carpeta o selecciona los archivos desde el botón.</p>
-                  <p class="upload-note" data-i18n="zipper.step1.detail">Puedes arrastrar una carpeta o archivos. También puedes seleccionar una carpeta completa desde el botón.</p>
                   <div class="dropzone" data-dropzone>
                     <div class="dropzone__title" data-i18n="zipper.dropzone.title">Arrastra aquí la carpeta o los archivos</div>
                     <div class="dropzone__hint" data-i18n="zipper.dropzone.hint">Se respetan las carpetas internas.</div>
@@ -251,38 +229,82 @@
                   </div>
                   <p class="upload-status" data-upload-status data-i18n="zipper.status.empty" data-i18n-dynamic>No hay archivos seleccionados.</p>
                 </section>
-                <section class="upload-card">
-                  <h3 data-i18n="zipper.step2.title">Descarga el ZIP</h3>
-                  <p class="step-note" data-i18n="zipper.step2.note">Crea el ZIP y se descargará automáticamente.</p>
-                  <p class="upload-note" data-i18n="zipper.step2.detail">Al crear el ZIP se descargará un archivo que puedes subir a Drive, Dropbox, Nextcloud, etc.</p>
-                  <label class="upload-note upload-note--emphasis" for="resource-title-input" data-i18n="zipper.resourceTitle.label">Título del recurso</label>
-                  <input id="resource-title-input" class="zip-title-input" type="text" data-resource-title data-i18n-placeholder="zipper.resourceTitle.placeholder" placeholder="Mi recurso" autocomplete="off">
-                  <p class="upload-note" data-i18n="zipper.resourceTitle.note">Se usa cuando el ZIP no incluye HTML (por ejemplo, ZIP solo con PDF o DOCX).</p>
-                  <div class="upload-actions">
-                    <button type="button" data-build-zip data-i18n="zipper.build">Crear y descargar ZIP</button>
-                  </div>
-                  <p class="upload-status" data-zip-status data-i18n="zipper.status.readyHint" data-i18n-dynamic>Prepara el ZIP para obtener tu archivo.</p>
-                </section>
               </div>
             </details>
-            <details class="html-zip-accordion" data-restrict-accordion>
+            <details class="html-zip-accordion" data-restrict-accordion data-zip-flow="restrict">
               <summary class="html-zip-accordion__summary" data-i18n="zipper.restrict.title">¿Quieres limitar el acceso a un ZIP ya creado?</summary>
               <div class="html-zip-card">
                 <div class="html-zip-card__header">
                   <p class="step-note" data-i18n="zipper.restrict.note">Sube tu ZIP y el visor añadirá las restricciones. Después tendrás que subirlo a Drive, Dropbox, etc.</p>
                   <div class="inline-callout" data-restrict-zip-lock hidden>
-                    <p class="inline-callout__text" data-i18n="zipper.restrict.lockedText">Para usar esta opción, primero activa la limitación de visibilidad del recurso.</p>
-                    <button class="ghost-button ghost-button--small" type="button" data-restrict-zip-enable data-i18n="zipper.restrict.lockedAction">Activar limitación</button>
+                    <p class="inline-callout__text" data-i18n="zipper.restrict.lockedText">Para usar esta opción, activa la limitación de visibilidad en “Opciones” (debajo de este bloque).</p>
                   </div>
                 </div>
                 <div class="upload-actions">
                   <button class="ghost-button" type="button" data-restrict-zip-pick data-i18n="zipper.restrict.pick">Seleccionar ZIP</button>
                   <input type="file" accept=".zip,.elpx,application/zip" data-restrict-zip-input hidden>
-                  <button type="button" data-restrict-zip-apply data-i18n="zipper.restrict.apply" disabled>Aplicar restricciones y descargar</button>
                 </div>
-                <p class="upload-status" data-restrict-zip-status data-i18n="zipper.restrict.status.ready" data-i18n-dynamic>Selecciona un ZIP para añadir las restricciones.</p>
+                <p class="upload-status" data-restrict-zip-status data-i18n="zipper.restrict.status.ready" data-i18n-dynamic></p>
               </div>
             </details>
+            <section class="html-zip-card zipper-force-card zipper-options-card">
+              <h3 class="zipper-options-card__title">Opciones</h3>
+              <div class="zipper-option-row zipper-option-row--availability">
+                <div class="zipper-option-row__main">
+                  <label class="settings-check zipper-option-toggle" for="restrict-toggle-proxy">
+                    <input id="restrict-toggle-proxy" type="checkbox" data-restrict-toggle-proxy>
+                    <span class="zipper-option-row__title">Configurar la disponibilidad del recurso</span>
+                  </label>
+                  <div class="zipper-restrict-summary" data-restrict-summary hidden>
+                    <span class="zipper-restrict-summary__label" data-restrict-summary-label data-i18n="zipper.restrict.summaryTitle">Acceso limitado por fechas</span>
+                    <div class="zipper-restrict-summary__items" data-restrict-summary-items></div>
+                  </div>
+                  <button class="ghost-button ghost-button--small zipper-restrict-edit-btn" type="button" data-main-settings-open data-restrict-edit-button hidden>Cambiar configuración</button>
+                </div>
+                <span class="info-dot" aria-label="Más información">?<span class="info-dot__tooltip" role="tooltip">Definir cuándo estará visible el recurso y qué acciones estarán disponibles en el gestor de recursos.</span></span>
+              </div>
+              <div class="zipper-option-row zipper-option-row--force">
+                <div class="zipper-force-folder-wrap">
+                  <label class="settings-check zipper-force-folder" for="force-folder-viewer-input">
+                    <input id="force-folder-viewer-input" type="checkbox" data-force-folder-viewer>
+                    <span data-i18n="zipper.step2.forceFolderLabel">Forzar visor de carpetas</span>
+                    <span class="info-dot" data-i18n-aria-label="zipper.step2.forceFolderTooltip" aria-label="Más información">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="zipper.step2.forceFolderTooltipHtml">Si activas esta opción, el ZIP se abrirá en modo explorador de archivos: verás el contenido como archivos organizados en carpetas, incluso cuando incluya HTML o documentos.<br><br>Si no lo marcas, el programa detectará automáticamente el tipo de visor que utilizará.<br><br>Si no estás seguro, no lo marques.</span></span>
+                  </label>
+                  <p class="zipper-force-folder__inline-note" data-force-folder-note data-i18n="zipper.step2.forceFolderNote" hidden>El recurso se abirá en modo explorador de archivos con el contenido como archivos organizados en carpetas</p>
+                </div>
+              </div>
+              <div class="zipper-option-row zipper-option-row--title">
+                <label class="settings-check zipper-option-title-toggle" for="resource-title-toggle-input">
+                  <input id="resource-title-toggle-input" type="checkbox" data-resource-title-toggle>
+                  <span class="zipper-option-row__title" data-resource-title-toggle-label>Poner un título al recurso (título actual: sin título)</span>
+                </label>
+                <input id="resource-title-input" class="zip-title-input zipper-option-row__input" type="text" data-resource-title data-i18n-placeholder="zipper.resourceTitle.placeholder" placeholder="Mi recurso" autocomplete="off" hidden>
+              </div>
+            </section>
+            <section class="html-zip-card html-zip-card--download">
+              <div class="zip-download-layout">
+                <div class="zip-preview-action">
+                  <p data-i18n="zipper.help.previewTitle">Previsualiza el recurso antes de subirlo (opcional)</p>
+                  <label class="settings-check settings-check--preview" for="preview-apply-restrictions-input">
+                    <input id="preview-apply-restrictions-input" type="checkbox" data-preview-apply-restrictions>
+                    <span data-i18n="zipper.help.previewApplyRestrictions">Aplicar restricciones en la previsualización</span>
+                    <span class="info-dot" data-i18n-aria-label="zipper.help.previewApplyRestrictionsInfo" aria-label="Más información">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="zipper.help.previewApplyRestrictionsInfoHtml">Úsalo para comprobar cómo se abre y se cierra el recurso según las fechas configuradas.</span></span>
+                  </label>
+                  <div class="upload-actions">
+                    <button class="ghost-button" type="button" data-preview-resource data-i18n="zipper.help.previewAction">Previsualizar</button>
+                  </div>
+                  <p class="upload-status" data-preview-status></p>
+                </div>
+                <div class="zip-download-action">
+                  <h3 data-i18n="zipper.step2.title">Descarga el ZIP</h3>
+                  <p class="upload-note" data-i18n="zipper.step2.detail">Al crear el ZIP se descargará un archivo que puedes subir a Drive, Dropbox, Nextcloud, etc.</p>
+                  <div class="upload-actions">
+                    <button type="button" data-build-zip data-i18n="zipper.build">Crear y descargar ZIP</button>
+                  </div>
+                  <p class="upload-status" data-zip-status data-i18n-dynamic></p>
+                </div>
+              </div>
+            </section>
             <div class="next-step">
               <div class="next-step__text">
                 <p data-i18n="zipper.help.nextStepText">El siguiente paso es subir y compartir con enlace público el archivo ZIP o ELPX (también si contiene PDF), cuando lo tengas pulsa sobre Continuar.</p>
@@ -585,7 +607,7 @@
     <footer class="site-footer">
       <a class="footer-link" href="https://bilateria.org" target="_blank" rel="noopener">(c) 2026 Juan Jose de Haro</a>
       <span class="footer-sep">·</span>
-    <span class="footer-link" data-app-version>v1.12.1</span>
+    <span class="footer-link" data-app-version>v2.0.0</span>
       <span class="footer-sep">·</span>
       <a class="footer-link" href="https://github.com/visor-webzip/visor-webzip.github.io" target="_blank" rel="noopener">
         <svg class="footer-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
@@ -623,6 +645,6 @@
 		  <script src="restriction-ui.js?v=13"></script>
 	  <script src="share.js?v=1"></script>
 	  <script src="nav.js?v=1"></script>
-			  <script src="app.js?v=62"></script>
+			  <script src="app.js?v=63"></script>
  </body>
  </html>

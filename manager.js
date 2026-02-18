@@ -74,6 +74,7 @@
     var cutoff = Date.now() - ctx('getCleanupDays')() * 24 * 60 * 60 * 1000;
     return Storage.getAllSites().then(function (sites) {
       var oldIds = sites.filter(function (site) {
+        if (site && site.temporaryPreview) return true;
         return site.updatedAt && site.updatedAt < cutoff;
       }).map(function (site) { return site.id; });
       if (!oldIds.length) return;
@@ -266,7 +267,9 @@
     return Promise.all([Storage.getAllSites(), Storage.estimateStorage()]).then(function (result) {
       var sites = result[0];
       var estimate = result[1];
+      var visibleSites = sites.filter(function (site) { return !(site && site.temporaryPreview); });
       var expiredIds = sites.filter(function (site) {
+        if (site && site.temporaryPreview) return false;
         return Restrictions.isRestrictionActive(site.restrictions) && Restrictions.isRestrictionExpired(site.restrictions);
       }).map(function (site) { return site.id; });
       if (expiredIds.length) {
@@ -274,7 +277,7 @@
           return refreshManager();
         });
       }
-      var totalBytes = sumSiteBytes(sites);
+      var totalBytes = sumSiteBytes(visibleSites);
       if (ctx('storageUsed')) {
         ctx('storageUsed').textContent = ctx('formatBytes')(totalBytes);
       }
@@ -291,9 +294,9 @@
         ctx('storageTotal').textContent = estimate && estimate.quota ? ctx('formatBytes')(estimate.quota) : '--';
       }
       if (ctx('storageCount')) {
-        ctx('storageCount').textContent = String(sites.length);
+        ctx('storageCount').textContent = String(visibleSites.length);
       }
-      renderManagerList(sites);
+      renderManagerList(visibleSites);
     });
   }
 

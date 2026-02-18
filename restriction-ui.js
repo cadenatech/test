@@ -281,15 +281,10 @@
   function updateRestrictionSummary() {
     updateRestrictionPeriodHint();
     if (!get('restrictionSummary') || !get('restrictionSummaryItems')) return;
-    if (get('restrictionSummaryLabel')) {
-      // Avoid keeping the previous language label when a translation key is missing
-      // (e.g., older cached assets). Fall back to Spanish instead of mixing languages.
-      get('restrictionSummaryLabel').textContent = t('zipper.restrict.summaryTitle') || 'Acceso limitado por fechas';
-    }
     var enabled = !!(get('restrictionToggle') && get('restrictionToggle').checked);
+    get('restrictionSummaryItems').innerHTML = '';
     if (!enabled) {
       get('restrictionSummary').setAttribute('hidden', '');
-      get('restrictionSummaryItems').innerHTML = '';
       return;
     }
     updateRestrictionDefaults();
@@ -312,30 +307,45 @@
         items.push(closeText);
       }
     }
-    var liveEndEnabled = !!(get('restrictionLiveEnd') && get('restrictionLiveEnd').checked && !get('restrictionLiveEnd').disabled);
-    items.push(
-      liveEndEnabled
-        ? (t('settings.summaryLiveEndOn') || 'Desactiva al llegar al fin')
-        : (t('settings.summaryLiveEndOff') || 'Sin desactivación automática')
-    );
-    if (liveEndEnabled) {
-      var minutes = getWarningMinutesValue();
-      if (minutes > 0) {
-        items.push(t('settings.summaryWarningOn', { minutes: String(minutes) }) || ('Aviso: ' + minutes + ' min antes'));
-      } else {
-        items.push(t('settings.summaryWarningOff') || 'Sin aviso previo');
-      }
-    } else {
-      items.push(t('settings.summaryWarningOff') || 'Sin aviso previo');
+    var allowedActions = [];
+    if (get('restrictionAllowShare') && get('restrictionAllowShare').checked) {
+      allowedActions.push(t('settings.allowShare') || 'Compartir');
     }
-
+    if (get('restrictionAllowEmbed') && get('restrictionAllowEmbed').checked) {
+      allowedActions.push(t('settings.allowEmbed') || 'Insertar en web');
+    }
+    if (get('restrictionAllowDownload') && get('restrictionAllowDownload').checked) {
+      allowedActions.push(t('settings.allowDownload') || 'Descargar');
+    }
+    var actionsText = allowedActions.length
+      ? allowedActions.join(', ')
+      : (t('settings.summaryNoActions') || 'ninguna');
+    var actionsLineTpl = t('settings.summaryAllowedActions') || 'Acciones durante el acceso: {actions}';
+    items.push(actionsLineTpl.replace('{actions}', actionsText));
+    var blockedActions = [];
+    if (!(get('restrictionAllowShare') && get('restrictionAllowShare').checked)) {
+      blockedActions.push(t('settings.allowShare') || 'Compartir');
+    }
+    if (!(get('restrictionAllowEmbed') && get('restrictionAllowEmbed').checked)) {
+      blockedActions.push(t('settings.allowEmbed') || 'Insertar en web');
+    }
+    if (!(get('restrictionAllowDownload') && get('restrictionAllowDownload').checked)) {
+      blockedActions.push(t('settings.allowDownload') || 'Descargar');
+    }
+    var blockedText = blockedActions.length
+      ? blockedActions.join(', ')
+      : (t('settings.summaryNoBlockedActions') || 'ninguna');
+    var blockedLineTpl = t('settings.summaryBlockedActions') || 'No se podrá: {actions}';
+    items.push(blockedLineTpl.replace('{actions}', blockedText));
     if (!items.length) {
-      get('restrictionSummary').setAttribute('hidden', '');
-      get('restrictionSummaryItems').innerHTML = '';
+      var fallbackLine = document.createElement('span');
+      fallbackLine.className = 'zipper-restrict-summary__item';
+      fallbackLine.textContent = t('settings.restrictionsOnNoDates') || 'Limitación activa.';
+      get('restrictionSummaryItems').appendChild(fallbackLine);
+      get('restrictionSummary').removeAttribute('hidden');
       return;
     }
     get('restrictionSummary').removeAttribute('hidden');
-    get('restrictionSummaryItems').innerHTML = '';
     items.forEach(function (text) {
       var span = document.createElement('span');
       span.className = 'zipper-restrict-summary__item';

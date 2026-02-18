@@ -43,6 +43,11 @@
         summaryLiveEndOff: 'Sin desactivación automática',
         summaryWarningOn: 'Aviso: {minutes} min antes',
         summaryWarningOff: 'Sin aviso previo',
+        summaryNoRestrictions: 'Recurso sin restricciones de visibilidad.',
+        summaryAllowedActions: 'Acciones del gestor de recursos: {actions}',
+        summaryNoActions: 'ninguna',
+        summaryBlockedActions: 'No se podrá: {actions}',
+        summaryNoBlockedActions: 'ninguna',
         actionsTitle: 'Acciones disponibles durante el acceso',
         allowShare: 'Compartir',
         allowEmbed: 'Insertar en web',
@@ -75,13 +80,13 @@
         back: 'Volver al inicio',
         choice: {
           zipper: {
-            title: 'Crea un ZIP con archivos web, PDF o DOCX',
-            note: 'Crea un ZIP desde archivos web, PDF y DOCX o desde código HTML.',
-            restrictHint: 'También puedes aplicar limitación de acceso por fechas.'
+            title: 'Crea un ZIP con archivos web o carpeta compartida',
+            note: 'Crea un ZIP desde archivos web, PDF, DOCX y otros tipos, o desde código HTML.',
+            restrictHint: 'Se crearán tres tipos de visor según el contenido: 1) visor de páginas web (como recursos generados con IA o proyectos de eXeLearning), 2) visor de documentos (PDF y DOCX) y 3) visor de carpetas (para visualizar cualquier tipo de archivos).'
           },
           main: {
-            title: 'Ya tengo un ZIP/ELPX en la nube con enlace',
-            note: 'Pega el enlace público (ZIP/ELPX) y crea el enlace del visor. También admite ZIP que solo contienen PDFs o DOCX.',
+            title: 'Ya tengo un ZIP en la nube con enlace',
+            note: 'Pega el enlace público (ZIP/ELPX) y crea el enlace del visor.',
             secondaryHtml: 'Si usas .elpx de eXeLearning, también puedes abrirlo aquí <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="¿Qué es ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Un archivo .elpx es un proyecto de eXeLearning que internamente utiliza el formato ZIP, lo que permite que el visor acceda a su contenido y lo muestre correctamente.</span></span>',
             elpxTooltip: '¿Qué es ELPX?',
             elpxTooltipHtml: 'Un archivo .elpx es un proyecto de eXeLearning que internamente utiliza el formato ZIP, lo que permite que el visor acceda a su contenido y lo muestre correctamente.'
@@ -94,7 +99,7 @@
       main: {
         subtitle: 'Si ya tienes tu recurso en formato ZIP (o .elpx de eXeLearning 3+) en un servicio con <strong>enlace público</strong> (Drive, Dropbox, etc.), pega aquí el enlace para generar el enlace. El ZIP puede incluir HTML y/o documentos PDF y DOCX.',
         form: {
-          title: 'Ya tengo un ZIP/ELPX en la nube con enlace',
+          title: 'Ya tengo un ZIP en la nube con enlace',
           step: 'Pega el enlace público al ZIP (o .elpx) y pulsa “Crear enlace”.',
           placeholder: 'Pega aquí el enlace público del ZIP o del .elpx (también válido si incluye PDF o DOCX)',
           submit: 'Crear enlace'
@@ -202,7 +207,7 @@
         dismiss: 'Ahora no'
       },
       zipper: {
-        title: 'Crear ZIP para el visor (web, PDF o DOCX)',
+        title: 'Crear ZIP para el visor',
         restrict: {
           summaryTitle: 'Acceso limitado por fechas'
         },
@@ -220,8 +225,7 @@
         },
         step1: {
           title: 'Añade tus archivos',
-          note: 'Arrastra la carpeta o selecciona los archivos desde el botón.',
-          detail: 'Puedes arrastrar una carpeta o archivos. También puedes seleccionar una carpeta completa desde el botón.'
+          note: 'Arrastra la carpeta o selecciona los archivos desde el botón.'
         },
         dropzone: {
           title: 'Arrastra aquí la carpeta o los archivos',
@@ -235,15 +239,27 @@
           ready: 'Listo para crear el ZIP.',
           readyHint: 'Prepara el ZIP para obtener tu archivo.',
           selectFirst: 'Selecciona archivos o una carpeta primero.',
+          previewSelectFirst: 'Para previsualizar, selecciona archivos o pega HTML.',
+          previewPreparing: 'Preparando previsualización local...',
+          previewOpened: 'Previsualización abierta en una pestaña nueva.',
+          previewFailed: 'No se pudo abrir la previsualización.',
           engineMissing: 'No se pudo cargar el motor ZIP.',
           creating: 'Creando ZIP...',
           downloaded: 'ZIP descargado.',
-          failed: 'No se pudo crear el ZIP. Revisa los archivos.'
+          failed: 'No se pudo crear el ZIP. Revisa los archivos.',
+          created: {
+            html: 'ZIP creado: visor web HTML listo.',
+            documents: 'ZIP creado: visor de documentos listo.',
+            files: 'ZIP creado: visor de archivos listo.'
+          }
         },
         step2: {
           title: 'Descarga el ZIP',
-          note: 'Crea el ZIP y se descargará automáticamente.',
-          detail: 'Al crear el ZIP se descargará un archivo que puedes subir a Drive, Dropbox, Nextcloud, etc.'
+          detail: 'Al crear el ZIP se descargará un archivo que puedes subir a Drive, Dropbox, Nextcloud, etc.',
+          forceFolderLabel: 'Forzar visor de carpetas',
+          forceFolderNote: 'El recurso se abirá en modo explorador de archivos con el contenido como archivos organizados en carpetas',
+          forceFolderTooltip: 'Más información',
+          forceFolderTooltipHtml: 'Si activas esta opción, el ZIP se abrirá en modo explorador de archivos: verás el contenido como archivos organizados en carpetas, incluso cuando incluya HTML o documentos.<br><br>Si no lo marcas, el programa detectará automáticamente el tipo de visor que utilizará.<br><br>Si no estás seguro, no lo marques.'
         },
         zipName: {
           label: 'Nombre del ZIP',
@@ -253,7 +269,8 @@
         resourceTitle: {
           label: 'Título del recurso',
           placeholder: 'Mi recurso',
-          note: 'Se usa cuando el ZIP no incluye HTML (por ejemplo, ZIP solo con PDF o DOCX).'
+          toggleLabel: 'Poner un título al recurso (título actual: {title})',
+          currentEmpty: 'sin título'
         },
         build: 'Crear y descargar ZIP',
         html: {
@@ -273,13 +290,13 @@
         restrict: {
           title: '¿Quieres limitar el acceso a un ZIP ya creado?',
           note: 'Sube tu ZIP y el visor añadirá las restricciones. Después tendrás que subirlo a Drive, Dropbox, etc.',
-          lockedText: 'Para usar esta opción, primero activa la limitación de visibilidad del recurso.',
+          lockedText: 'Para usar esta opción, activa la limitación de visibilidad en “Opciones” (debajo de este bloque).',
           lockedAction: 'Activar limitación',
-          lockedStatus: 'Activa la limitación de visibilidad para continuar.',
+          lockedStatus: '',
           pick: 'Seleccionar ZIP',
           apply: 'Aplicar restricciones y descargar',
           status: {
-            ready: 'Selecciona un ZIP para añadir las restricciones.',
+            ready: '',
             working: 'Aplicando restricciones...',
             done: 'ZIP listo con restricciones.',
             failed: 'No se pudo modificar el ZIP. Revisa el archivo.'
@@ -287,7 +304,13 @@
         },
         help: {
           inline: 'Si ya has creado un archivo ZIP y lo has compartido en un servicio con enlace público, pasa a la sección: “Ya tengo un ZIP en la nube con enlace”.',
+          previewTitle: 'Previsualiza el recurso antes de subirlo (opcional)',
           nextStepText: 'El siguiente paso es subir y compartir con enlace público el archivo ZIP o ELPX (también si contiene PDF o DOCX), cuando lo tengas pulsa sobre Continuar.',
+          previewAction: 'Previsualizar',
+          previewApplyRestrictions: 'Aplicar restricciones en la previsualización',
+          previewApplyRestrictionsNote: 'Actívalo para comprobar cómo se abre y se cierra el recurso según las fechas configuradas.',
+          previewApplyRestrictionsInfo: 'Más información',
+          previewApplyRestrictionsInfoHtml: 'Úsalo para comprobar cómo se abre y se cierra el recurso según las fechas configuradas.',
           goTab: 'Siguiente: “Ya tengo un ZIP en la nube con enlace”'
         }
       },
@@ -423,7 +446,7 @@
           + '<ul>'
           + '<li>Funciona con webs estáticas. No funcionará bien con webs que necesitan servidor (bases de datos, PHP, formularios que guardan datos…).</li>'
           + '<li>El archivo debe estar en un enlace público (sin inicio de sesión). Si el servicio pide permisos, el visor no podrá descargarlo.</li>'
-          + '<li>Si el ZIP no contiene HTML pero sí PDF o DOCX, se abrirá en modo visor de documentos. Si hay HTML y falta <code>index.html</code>, tendrás que elegir el HTML inicial.</li>'
+          + '<li>Si el ZIP no contiene HTML, el visor abrirá un modo documentos (PDF/DOCX) o un modo carpeta para otros tipos de archivo. Si hay HTML y falta <code>index.html</code>, tendrás que elegir el HTML inicial.</li>'
           + '<li>Google Drive puede limitar la descarga directa de archivos grandes (aprox. 25 MB). Si falla, prueba con Dropbox, Nextcloud u otro servicio.</li>'
           + '</ul>'
           + '</section>'
@@ -433,6 +456,7 @@
         loadZip: 'No se pudo cargar el ZIP.',
         restricted: 'Este recurso ya no está disponible por las restricciones de fecha.',
         embedNotAllowed: 'La inserción en web no está permitida para este recurso.',
+        popupBlocked: 'El navegador bloqueó la ventana de previsualización. Permite ventanas emergentes para este sitio e inténtalo de nuevo.',
         noHtmlSelected: 'No se seleccionó ningún HTML.',
         htmlPickerOpen: 'No se pudo abrir el selector de HTML.',
         serviceWorkerUnavailable: 'Service worker no disponible.',
@@ -472,6 +496,33 @@
         failedDocx: 'No se pudo mostrar este DOCX.',
         downloadDocx: 'Descargar DOCX',
         missingDocxEngine: 'No se pudo cargar el visor DOCX.'
+      },
+      folderViewer: {
+        title: 'Modo carpeta',
+        subtitle: 'Explora carpetas y subcarpetas con iconos por tipo de archivo.',
+        searchPlaceholder: 'Buscar archivos...',
+        searchResults: 'Resultados de búsqueda',
+        selectAll: 'Seleccionar visibles (lista actual)',
+        clearSelection: 'Quitar selección',
+        openSelected: 'Abrir selección',
+        downloadAll: 'Descargar todo',
+        downloadSelected: 'Descargar selección',
+        downloadVisible: 'Descargar visibles (lista actual)',
+        noResults: 'No hay archivos para mostrar.',
+        selectedCount: '{count} seleccionados',
+        openFile: 'Abrir',
+        downloadFile: 'Descargar',
+        preparingFolder: 'Preparando carpeta...',
+        folderReady: 'Carpeta exportada.',
+        folderFailed: 'No se pudo exportar la carpeta.',
+        preparingZip: 'Preparando ZIP...',
+        zipReady: 'ZIP preparado.',
+        zipFailed: 'No se pudo crear el ZIP.',
+        contextOpen: 'Abrir',
+        contextDownload: 'Descargar',
+        contextDownloadVisible: 'Descargar visibles (lista actual)',
+        folder: 'Carpeta',
+        filesWord: 'archivos'
       },
       common: {
         close: 'Cerrar',
@@ -523,6 +574,11 @@
         summaryLiveEndOff: 'Sense desactivació automàtica',
         summaryWarningOn: 'Avís: {minutes} min abans',
         summaryWarningOff: 'Sense avís previ',
+        summaryNoRestrictions: 'Recurs sense restriccions de visibilitat.',
+        summaryAllowedActions: 'Accions del gestor de recursos: {actions}',
+        summaryNoActions: 'cap',
+        summaryBlockedActions: 'No es podrà: {actions}',
+        summaryNoBlockedActions: 'cap',
         actionsTitle: 'Accions disponibles durant l’accés',
         allowShare: 'Compartir',
         allowEmbed: 'Inserir en web',
@@ -560,8 +616,8 @@
             restrictHint: 'També pots aplicar una limitació d’accés per dates.'
           },
           main: {
-            title: 'Ja tinc un ZIP/ELPX al núvol amb enllaç',
-            note: 'Enganxa l’enllaç públic (ZIP/ELPX) i crea l’enllaç del visor. També admet ZIP amb PDF o DOCX.',
+            title: 'Ja tinc un ZIP al núvol amb enllaç',
+            note: 'Enganxa l’enllaç públic (ZIP/ELPX) i crea l’enllaç del visor.',
             secondaryHtml: 'Si uses .elpx d’eXeLearning, també el pots obrir aquí <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="Què és ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Un fitxer .elpx és un projecte d’eXeLearning que internament utilitza el format ZIP, cosa que permet al visor accedir al contingut i mostrar-lo correctament.</span></span>',
             elpxTooltip: 'Què és ELPX?',
             elpxTooltipHtml: 'Un fitxer .elpx és un projecte d’eXeLearning que internament utilitza el format ZIP, cosa que permet al visor accedir al contingut i mostrar-lo correctament.'
@@ -574,7 +630,7 @@
       main: {
         subtitle: "Si ja tens el teu recurs en format ZIP (o .elpx d’eXeLearning 3+) en un servei amb <strong>enllaç públic</strong> (Drive, Dropbox, etc.), enganxa aquí l'enllaç per generar l’enllaç del visor. El ZIP pot incloure HTML i/o documents PDF i DOCX.",
         form: {
-          title: 'Ja tinc un ZIP/ELPX al núvol amb enllaç',
+          title: 'Ja tinc un ZIP al núvol amb enllaç',
           step: 'Enganxa l’enllaç públic al ZIP (o .elpx) i prem “Crear enllaç”.',
           placeholder: "Enganxa aquí l'enllaç públic del ZIP o del .elpx (també vàlid si inclou PDF o DOCX)",
           submit: 'Crear enllaç'
@@ -682,7 +738,7 @@
         dismiss: 'Ara no'
       },
       zipper: {
-        title: 'Crear ZIP per al visor (web, PDF o DOCX)',
+        title: 'Crear ZIP per al visor',
         accordion: {
           filesTitle: 'Tens fitxers? Crea el ZIP'
         },
@@ -697,8 +753,7 @@
         },
         step1: {
           title: 'Afegeix els teus fitxers',
-          note: 'Arrossega la carpeta o selecciona els fitxers des del botó.',
-          detail: 'Pots arrossegar una carpeta o fitxers. També pots seleccionar una carpeta completa des del botó.'
+          note: 'Arrossega la carpeta o selecciona els fitxers des del botó.'
         },
         dropzone: {
           title: 'Arrossega aquí la carpeta o els fitxers',
@@ -719,8 +774,11 @@
         },
         step2: {
           title: 'Descarrega el ZIP',
-          note: 'Crea el ZIP i es descarregarà automàticament.',
-          detail: 'En crear el ZIP es descarregarà un fitxer que pots pujar a Drive, Dropbox, Nextcloud, etc.'
+          detail: 'En crear el ZIP es descarregarà un fitxer que pots pujar a Drive, Dropbox, Nextcloud, etc.',
+          forceFolderLabel: 'Forçar visor de carpetes',
+          forceFolderNote: 'Si actives aquesta opció, el ZIP s’obrirà en mode explorador de fitxers: veuràs el contingut com a fitxers organitzats en carpetes, fins i tot si inclou HTML o documents.',
+          forceFolderTooltip: 'Més informació',
+          forceFolderTooltipHtml: 'Si actives aquesta opció, el ZIP s’obrirà en mode explorador de fitxers: veuràs el contingut com a fitxers organitzats en carpetes, fins i tot si inclou HTML o documents.<br><br>Si no ho marques, el programa detectarà automàticament quin tipus de visor ha d’utilitzar.<br><br>Si no n’estàs segur, no ho marquis.'
         },
         zipName: {
           label: 'Nom del ZIP',
@@ -730,7 +788,8 @@
         resourceTitle: {
           label: 'Títol del recurs',
           placeholder: 'El meu recurs',
-          note: 'S\'utilitza quan el ZIP no inclou HTML (per exemple, ZIP només amb PDF o DOCX).'
+          toggleLabel: 'Posar un títol al recurs (títol actual: {title})',
+          currentEmpty: 'sense títol'
         },
         build: 'Crear i descarregar ZIP',
         html: {
@@ -752,11 +811,11 @@
           note: 'Puja el teu ZIP i el visor afegirà les restriccions. Després l’hauràs de pujar a Drive, Dropbox, etc.',
           lockedText: 'Per fer servir aquesta opció, primer activa la limitació de visibilitat del recurs.',
           lockedAction: 'Activar limitació',
-          lockedStatus: 'Activa la limitació de visibilitat per continuar.',
+          lockedStatus: '',
           pick: 'Seleccionar ZIP',
           apply: 'Aplicar restriccions i descarregar',
           status: {
-            ready: 'Selecciona un ZIP per afegir-hi les restriccions.',
+            ready: '',
             working: 'Aplicant restriccions...',
             done: 'ZIP llest amb restriccions.',
             failed: 'No s’ha pogut modificar el ZIP. Revisa el fitxer.'
@@ -765,7 +824,13 @@
         },
         help: {
           inline: 'Si ja has creat un fitxer ZIP i l’has compartit en un servei amb enllaç públic, ves a la secció: “Ja tinc un ZIP al núvol amb enllaç”.',
+          previewTitle: 'Previsualitza el recurs abans de pujar-lo (opcional)',
           nextStepText: 'El següent pas és pujar i compartir amb enllaç públic el fitxer ZIP o ELPX (també si conté PDF o DOCX); quan el tinguis, prem “Continuar”.',
+          previewAction: 'Previsualitzar',
+          previewApplyRestrictions: 'Aplicar restriccions en la previsualització',
+          previewApplyRestrictionsNote: 'Activa-ho per comprovar com s’obre i es tanca el recurs segons les dates configurades.',
+          previewApplyRestrictionsInfo: 'Més informació',
+          previewApplyRestrictionsInfoHtml: 'Fes-lo servir per comprovar com s’obre i es tanca el recurs segons les dates configurades.',
           goTab: 'Següent: “Ja tinc un ZIP al núvol amb enllaç”'
         }
       },
@@ -908,6 +973,7 @@
         loadZip: 'No s’ha pogut carregar el ZIP.',
         restricted: 'Aquest recurs ja no està disponible per les restriccions de data.',
         embedNotAllowed: 'La inserció en web no està permesa per a aquest recurs.',
+        popupBlocked: 'El navegador ha bloquejat la finestra de previsualització. Permet finestres emergents per a aquest lloc i torna-ho a provar.',
         noHtmlSelected: 'No s’ha seleccionat cap HTML.',
         htmlPickerOpen: 'No s’ha pogut obrir el selector d’HTML.',
         serviceWorkerUnavailable: 'Service worker no disponible.',
@@ -947,6 +1013,27 @@
         failedDocx: 'No s\'ha pogut mostrar aquest DOCX.',
         downloadDocx: 'Descarregar DOCX',
         missingDocxEngine: 'No s\'ha pogut carregar el visor DOCX.'
+      },
+      folderViewer: {
+        title: 'Mode carpeta',
+        subtitle: 'Explora carpetes i subcarpetes amb icones per tipus de fitxer.',
+        searchPlaceholder: 'Cerca fitxers...',
+        searchResults: 'Resultats de la cerca',
+        selectAll: 'Seleccionar visibles',
+        clearSelection: 'Netejar selecció',
+        openSelected: 'Obrir seleccionats',
+        downloadAll: 'Descarregar-ho tot',
+        downloadSelected: 'Descarregar selecció',
+        downloadVisible: 'Descarregar llista visible',
+        noResults: 'No hi ha fitxers per mostrar.',
+        selectedCount: '{count} seleccionats',
+        openFile: 'Obrir',
+        downloadFile: 'Descarregar',
+        contextOpen: 'Obrir',
+        contextDownload: 'Descarregar',
+        contextDownloadVisible: 'Descarregar llista visible',
+        folder: 'Carpeta',
+        filesWord: 'fitxers'
       },
       common: {
         close: 'Tancar',
@@ -998,6 +1085,11 @@
         summaryLiveEndOff: 'Sen desactivación automática',
         summaryWarningOn: 'Aviso: {minutes} min antes',
         summaryWarningOff: 'Sen aviso previo',
+        summaryNoRestrictions: 'Recurso sen restricións de visibilidade.',
+        summaryAllowedActions: 'Accións do xestor de recursos: {actions}',
+        summaryNoActions: 'ningunha',
+        summaryBlockedActions: 'Non se poderá: {actions}',
+        summaryNoBlockedActions: 'ningunha',
         actionsTitle: 'Accións dispoñibles durante o acceso',
         allowShare: 'Compartir',
         allowEmbed: 'Inserir nunha web',
@@ -1035,8 +1127,8 @@
             restrictHint: 'Tamén podes aplicar limitación de acceso por datas.'
           },
           main: {
-            title: 'Xa teño un ZIP/ELPX na nube con ligazón',
-            note: 'Pega a ligazón pública (ZIP/ELPX) e crea a ligazón do visor. Tamén admite ZIP con PDF ou DOCX.',
+            title: 'Xa teño un ZIP na nube con ligazón',
+            note: 'Pega a ligazón pública (ZIP/ELPX) e crea a ligazón do visor.',
             secondaryHtml: 'Se usas .elpx de eXeLearning, tamén o podes abrir aquí <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="Que é ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Un ficheiro .elpx é un proxecto de eXeLearning que internamente utiliza o formato ZIP, o que permite que o visor acceda ao seu contido e o mostre correctamente.</span></span>',
             elpxTooltip: 'Que é ELPX?',
             elpxTooltipHtml: 'Un ficheiro .elpx é un proxecto de eXeLearning que internamente utiliza o formato ZIP, o que permite que o visor acceda ao seu contido e o mostre correctamente.'
@@ -1049,7 +1141,7 @@
       main: {
         subtitle: 'Se xa tes o teu recurso en formato ZIP (ou .elpx de eXeLearning 3+) nun servizo con <strong>ligazón pública</strong> (Drive, Dropbox, etc.), pega aquí a ligazón para xerar a ligazón do visor. O ZIP pode incluír HTML e/ou documentos PDF e DOCX.',
         form: {
-          title: 'Xa teño un ZIP/ELPX na nube con ligazón',
+          title: 'Xa teño un ZIP na nube con ligazón',
           step: 'Pega a ligazón pública ao ZIP (ou .elpx) e preme “Crear ligazón”.',
           placeholder: 'Pega aquí a ligazón pública do ZIP ou do .elpx (tamén válida se inclúe PDF ou DOCX)',
           submit: 'Crear ligazón'
@@ -1157,7 +1249,7 @@
         dismiss: 'Agora non'
       },
       zipper: {
-        title: 'Crear ZIP para o visor (web, PDF ou DOCX)',
+        title: 'Crear ZIP para o visor',
         accordion: {
           filesTitle: 'Tes ficheiros? Crea o ZIP'
         },
@@ -1172,8 +1264,7 @@
         },
         step1: {
           title: 'Engade os teus ficheiros',
-          note: 'Arrastra o cartafol ou selecciona os ficheiros desde o botón.',
-          detail: 'Podes arrastrar un cartafol ou ficheiros. Tamén podes seleccionar un cartafol completo desde o botón.'
+          note: 'Arrastra o cartafol ou selecciona os ficheiros desde o botón.'
         },
         dropzone: {
           title: 'Arrastra aquí o cartafol ou os ficheiros',
@@ -1194,8 +1285,11 @@
         },
         step2: {
           title: 'Descarga o ZIP',
-          note: 'Crea o ZIP e descargarase automaticamente.',
-          detail: 'Ao crear o ZIP descargarase un ficheiro que podes subir a Drive, Dropbox, Nextcloud, etc.'
+          detail: 'Ao crear o ZIP descargarase un ficheiro que podes subir a Drive, Dropbox, Nextcloud, etc.',
+          forceFolderLabel: 'Forzar visor de cartafoles',
+          forceFolderNote: 'Se activas esta opción, o ZIP abrirase en modo explorador de ficheiros: verás o contido como ficheiros organizados en cartafoles, mesmo cando inclúa HTML ou documentos.',
+          forceFolderTooltip: 'Máis información',
+          forceFolderTooltipHtml: 'Se activas esta opción, o ZIP abrirase en modo explorador de ficheiros: verás o contido como ficheiros organizados en cartafoles, mesmo cando inclúa HTML ou documentos.<br><br>Se non o marcas, o programa detectará automaticamente o tipo de visor que empregará.<br><br>Se non estás seguro, non o marques.'
         },
         zipName: {
           label: 'Nome do ZIP',
@@ -1205,7 +1299,8 @@
         resourceTitle: {
           label: 'Título do recurso',
           placeholder: 'O meu recurso',
-          note: 'Úsase cando o ZIP non inclúe HTML (por exemplo, ZIP só con PDF ou DOCX).'
+          toggleLabel: 'Poñer un título ao recurso (título actual: {title})',
+          currentEmpty: 'sen título'
         },
         build: 'Crear e descargar ZIP',
         html: {
@@ -1227,11 +1322,11 @@
           note: 'Sube o teu ZIP e o visor engadirá as restricións. Despois terás que subilo a Drive, Dropbox, etc.',
           lockedText: 'Para usar esta opción, primeiro activa a limitación de visibilidade do recurso.',
           lockedAction: 'Activar limitación',
-          lockedStatus: 'Activa a limitación de visibilidade para continuar.',
+          lockedStatus: '',
           pick: 'Seleccionar ZIP',
           apply: 'Aplicar restricións e descargar',
           status: {
-            ready: 'Selecciona un ZIP para engadir as restricións.',
+            ready: '',
             working: 'Aplicando restricións...',
             done: 'ZIP listo con restricións.',
             failed: 'Non se puido modificar o ZIP. Revisa o ficheiro.'
@@ -1240,7 +1335,13 @@
         },
         help: {
           inline: 'Se xa creaches un arquivo ZIP e o compartiches nun servizo con ligazón pública, vai á sección: “Xa teño un ZIP na nube con ligazón”.',
+          previewTitle: 'Previsualiza o recurso antes de subilo (opcional)',
           nextStepText: 'O seguinte paso é subir e compartir cunha ligazón pública o arquivo ZIP ou ELPX (tamén se contén PDF ou DOCX); cando o teñas, preme en “Continuar”.',
+          previewAction: 'Previsualizar',
+          previewApplyRestrictions: 'Aplicar restricións na previsualización',
+          previewApplyRestrictionsNote: 'Actívao para comprobar como se abre e se pecha o recurso segundo as datas configuradas.',
+          previewApplyRestrictionsInfo: 'Máis información',
+          previewApplyRestrictionsInfoHtml: 'Úsao para comprobar como se abre e se pecha o recurso segundo as datas configuradas.',
           goTab: 'Seguinte: “Xa teño un ZIP na nube con ligazón”'
         }
       },
@@ -1383,6 +1484,7 @@
         loadZip: 'Non se puido cargar o ZIP.',
         restricted: 'Este recurso xa non está dispoñible polas restricións de data.',
         embedNotAllowed: 'A inserción en web non está permitida para este recurso.',
+        popupBlocked: 'O navegador bloqueou a xanela de previsualización. Permite as ventás emerxentes para este sitio e téntao de novo.',
         noHtmlSelected: 'Non se seleccionou ningún HTML.',
         htmlPickerOpen: 'Non se puido abrir o selector de HTML.',
         serviceWorkerUnavailable: 'Service worker non dispoñible.',
@@ -1422,6 +1524,27 @@
         failedDocx: 'Non se puido mostrar este DOCX.',
         downloadDocx: 'Descargar DOCX',
         missingDocxEngine: 'Non se puido cargar o visor DOCX.'
+      },
+      folderViewer: {
+        title: 'Modo cartafol',
+        subtitle: 'Explora cartafoles e subcartafoles con iconas por tipo de ficheiro.',
+        searchPlaceholder: 'Buscar ficheiros...',
+        searchResults: 'Resultados da busca',
+        selectAll: 'Seleccionar visibles',
+        clearSelection: 'Limpar selección',
+        openSelected: 'Abrir seleccionados',
+        downloadAll: 'Descargar todo',
+        downloadSelected: 'Descargar selección',
+        downloadVisible: 'Descargar lista visible',
+        noResults: 'Non hai ficheiros para amosar.',
+        selectedCount: '{count} seleccionados',
+        openFile: 'Abrir',
+        downloadFile: 'Descargar',
+        contextOpen: 'Abrir',
+        contextDownload: 'Descargar',
+        contextDownloadVisible: 'Descargar lista visible',
+        folder: 'Cartafol',
+        filesWord: 'ficheiros'
       },
       common: {
         close: 'Pechar',
@@ -1473,6 +1596,11 @@
         summaryLiveEndOff: 'Ez dago desaktibazio automatikorik',
         summaryWarningOn: 'Abisua: {minutes} min lehenago',
         summaryWarningOff: 'Ez dago aurretiazko abisurik',
+        summaryNoRestrictions: 'Baliabidea ikusgarritasun-murrizketarik gabe.',
+        summaryAllowedActions: 'Baliabideen kudeatzaileko ekintzak: {actions}',
+        summaryNoActions: 'bat ere ez',
+        summaryBlockedActions: 'Ezin izango da: {actions}',
+        summaryNoBlockedActions: 'bat ere ez',
         actionsTitle: 'Sarbidean erabilgarri dauden ekintzak',
         allowShare: 'Partekatu',
         allowEmbed: 'Web batean txertatu',
@@ -1510,8 +1638,8 @@
             restrictHint: 'Sarbidea datekin mugatzeko aukera ere baduzu.'
           },
           main: {
-            title: 'ZIP/ELPX bat hodeian daukat estekarekin',
-            note: 'Itsatsi esteka publikoa (ZIP/ELPX) eta sortu bisorearen esteka. PDF edo DOCX duen ZIPa ere onartzen da.',
+            title: 'ZIP bat hodeian daukat estekarekin',
+            note: 'Itsatsi esteka publikoa (ZIP/ELPX) eta sortu bisorearen esteka.',
             secondaryHtml: 'eXeLearning-eko .elpx erabiltzen baduzu, hemen ere ireki dezakezu <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="Zer da ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">.elpx fitxategia eXeLearning-eko proiektu bat da, eta barnean ZIP formatua erabiltzen du; horri esker, bisoreak edukira sartu eta behar bezala bistaratu dezake.</span></span>',
             elpxTooltip: 'Zer da ELPX?',
             elpxTooltipHtml: '.elpx fitxategia eXeLearning-eko proiektu bat da, eta barnean ZIP formatua erabiltzen du; horri esker, bisoreak edukira sartu eta behar bezala bistaratu dezake.'
@@ -1524,7 +1652,7 @@
       main: {
         subtitle: 'Zure baliabidea ZIP formatuan (edo eXeLearning 3+eko .elpx) baduzu eta <strong>esteka publikoa</strong> duen zerbitzu batean badago (Drive, Dropbox, etab.), itsatsi hemen esteka bisorearen esteka sortzeko. ZIPak HTML eta/edo PDF eta DOCX dokumentuak eduki ditzake.',
         form: {
-          title: 'ZIP/ELPX bat hodeian daukat estekarekin',
+          title: 'ZIP bat hodeian daukat estekarekin',
           step: 'Itsatsi ZIParen esteka publikoa (edo .elpx) eta sakatu “Esteka sortu”.',
           placeholder: 'Itsatsi hemen ZIParen edo .elpx fitxategiaren esteka publikoa (PDF edo DOCX badu ere balio du)',
           submit: 'Esteka sortu'
@@ -1632,7 +1760,7 @@
         dismiss: 'Orain ez'
       },
       zipper: {
-        title: 'Sortu ZIPa bisorerako (web, PDF edo DOCX)',
+        title: 'Sortu ZIPa bisorerako',
         accordion: {
           filesTitle: 'Fitxategiak dituzu? Sortu ZIPa'
         },
@@ -1647,8 +1775,7 @@
         },
         step1: {
           title: 'Gehitu zure fitxategiak',
-          note: 'Arrastatu karpeta edo hautatu fitxategiak botoitik.',
-          detail: 'Karpeta edo fitxategiak arrastatu ditzakezu. Botoitik karpeta osoa ere hauta dezakezu.'
+          note: 'Arrastatu karpeta edo hautatu fitxategiak botoitik.'
         },
         dropzone: {
           title: 'Arrastatu hona karpeta edo fitxategiak',
@@ -1669,8 +1796,11 @@
         },
         step2: {
           title: 'Deskargatu ZIPa',
-          note: 'Sortu ZIPa eta automatikoki deskargatuko da.',
-          detail: 'ZIPa sortzean, fitxategi bat deskargatuko da (Drive, Dropbox, Nextcloud, etab. igo dezakezu).'
+          detail: 'ZIPa sortzean, fitxategi bat deskargatuko da (Drive, Dropbox, Nextcloud, etab. igo dezakezu).',
+          forceFolderLabel: 'Karpeten bisorea behartu',
+          forceFolderNote: 'Aukera hau aktibatuz gero, ZIPa fitxategi-esploratzaile moduan irekiko da: edukia karpetetan antolatutako fitxategi gisa ikusiko duzu, HTML edo dokumentuak baditu ere.',
+          forceFolderTooltip: 'Informazio gehiago',
+          forceFolderTooltipHtml: 'Aukera hau aktibatuz gero, ZIPa fitxategi-esploratzaile moduan irekiko da: edukia karpetetan antolatutako fitxategi gisa ikusiko duzu, HTML edo dokumentuak baditu ere.<br><br>Ez baduzu markatzen, programak automatikoki hautemango du zein bisore mota erabili behar den.<br><br>Ziur ez bazaude, ez markatu.'
         },
         zipName: {
           label: 'ZIParen izena',
@@ -1680,7 +1810,8 @@
         resourceTitle: {
           label: 'Baliabidearen izenburua',
           placeholder: 'Nire baliabidea',
-          note: 'ZIPak HTMLrik ez duenean erabiltzen da (adibidez, PDF edo DOCX bakarrik duen ZIPa).'
+          toggleLabel: 'Jarri izenburua baliabideari (egungo izenburua: {title})',
+          currentEmpty: 'izenbururik gabe'
         },
         build: 'Sortu eta deskargatu ZIPa',
         html: {
@@ -1702,11 +1833,11 @@
           note: 'Igo zure ZIPa eta bisoreak murrizketak gehituko ditu. Ondoren Drive, Dropbox, etab. zerbitzuetara igo beharko duzu.',
           lockedText: 'Aukera hau erabiltzeko, lehenik aktibatu baliabidearen ikusgarritasun-muga.',
           lockedAction: 'Aktibatu muga',
-          lockedStatus: 'Aktibatu ikusgarritasun-muga jarraitzeko.',
+          lockedStatus: '',
           pick: 'ZIPa hautatu',
           apply: 'Murrizketak aplikatu eta deskargatu',
           status: {
-            ready: 'Hautatu ZIP bat murrizketak gehitzeko.',
+            ready: '',
             working: 'Murrizketak aplikatzen...',
             done: 'ZIPa prest murrizketekin.',
             failed: 'Ezin izan da ZIPa aldatu. Berrikusi fitxategia.'
@@ -1715,7 +1846,13 @@
         },
         help: {
           inline: 'ZIP fitxategi bat sortu eta esteka publikoarekin duen zerbitzu batean partekatu baduzu, joan atalera: “ZIP bat badaukat edo ELPX”.',
+          previewTitle: 'Aurreikusi baliabidea igo aurretik (aukerakoa)',
           nextStepText: 'Hurrengo urratsa ZIP edo ELPX fitxategia esteka publikoarekin igo eta partekatzea da (PDF edo DOCX badu ere); prest duzunean, sakatu “Jarraitu”.',
+          previewAction: 'Aurreikusi',
+          previewApplyRestrictions: 'Murrizketak aplikatu aurrebistan',
+          previewApplyRestrictionsNote: 'Aktibatu baliabidea nola irekitzen eta ixten den egiaztatzeko, konfiguratutako daten arabera.',
+          previewApplyRestrictionsInfo: 'Informazio gehiago',
+          previewApplyRestrictionsInfoHtml: 'Erabili baliabidea nola irekitzen eta ixten den egiaztatzeko, konfiguratutako daten arabera.',
           goTab: 'Hurrengoa: “ZIP bat badaukat edo ELPX”'
         }
       },
@@ -1858,6 +1995,7 @@
         loadZip: 'Ezin izan da ZIPa kargatu.',
         restricted: 'Baliabide hau ez dago eskuragarri data-murrizketengatik.',
         embedNotAllowed: 'Web-ean txertatzea ez dago baimenduta baliabide honetarako.',
+        popupBlocked: 'Nabigatzaileak aurrebistaren leihoa blokeatu du. Baimendu popup leihoak gune honetarako eta saiatu berriro.',
         noHtmlSelected: 'Ez da HTMLrik hautatu.',
         htmlPickerOpen: 'Ezin izan da HTML hautatzailea ireki.',
         serviceWorkerUnavailable: 'Service worker ez dago erabilgarri.',
@@ -1897,6 +2035,27 @@
         failedDocx: 'Ezin izan da DOCX hau bistaratu.',
         downloadDocx: 'DOCX deskargatu',
         missingDocxEngine: 'Ezin izan da DOCX bisorea kargatu.'
+      },
+      folderViewer: {
+        title: 'Karpeta modua',
+        subtitle: 'Arakatu karpetak eta azpikarpetak fitxategi motaren araberako ikonoekin.',
+        searchPlaceholder: 'Bilatu fitxategiak...',
+        searchResults: 'Bilaketaren emaitzak',
+        selectAll: 'Ikusgai daudenak hautatu',
+        clearSelection: 'Hautapena garbitu',
+        openSelected: 'Hautatutakoak ireki',
+        downloadAll: 'Deskargatu dena',
+        downloadSelected: 'Hautapena deskargatu',
+        downloadVisible: 'Ikusgai dagoen zerrenda deskargatu',
+        noResults: 'Ez dago erakusteko fitxategirik.',
+        selectedCount: '{count} hautatuta',
+        openFile: 'Ireki',
+        downloadFile: 'Deskargatu',
+        contextOpen: 'Ireki',
+        contextDownload: 'Deskargatu',
+        contextDownloadVisible: 'Ikusgai dagoen zerrenda deskargatu',
+        folder: 'Karpeta',
+        filesWord: 'fitxategi'
       },
       common: {
         close: 'Itxi',
@@ -1948,6 +2107,11 @@
         summaryLiveEndOff: 'No auto-disable',
         summaryWarningOn: 'Warning: {minutes} min before',
         summaryWarningOff: 'No prior warning',
+        summaryNoRestrictions: 'Resource without visibility restrictions.',
+        summaryAllowedActions: 'Resource manager actions: {actions}',
+        summaryNoActions: 'none',
+        summaryBlockedActions: 'Will not be allowed: {actions}',
+        summaryNoBlockedActions: 'none',
         actionsTitle: 'Actions available during access',
         allowShare: 'Share',
         allowEmbed: 'Embed',
@@ -1985,8 +2149,8 @@
             restrictHint: 'You can also apply date-based access limits.'
           },
           main: {
-            title: 'I already have a ZIP/ELPX in the cloud with link',
-            note: 'Paste the public link (ZIP/ELPX) and create the viewer link. ZIPs with PDF or DOCX are also supported.',
+            title: 'I already have a ZIP in the cloud with link',
+            note: 'Paste the public link (ZIP/ELPX) and create the viewer link.',
             secondaryHtml: 'If you use an eXeLearning .elpx, you can open it here too <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="What is ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">An .elpx file is an eXeLearning project that internally uses the ZIP format, which allows the viewer to access its content and display it correctly.</span></span>',
             elpxTooltip: 'What is ELPX?',
             elpxTooltipHtml: 'An .elpx file is an eXeLearning project that internally uses the ZIP format, which allows the viewer to access its content and display it correctly.'
@@ -1999,7 +2163,7 @@
       main: {
         subtitle: 'If your resource is already a ZIP (or an eXeLearning 3+ .elpx file) hosted on a service with a <strong>public link</strong> (Drive, Dropbox, etc.), paste the link here to generate the viewer link. The ZIP can include HTML and/or PDF and DOCX documents.',
         form: {
-          title: 'I already have a ZIP/ELPX in the cloud with link',
+          title: 'I already have a ZIP in the cloud with link',
           step: 'Paste the public ZIP link (or .elpx) and click “Create link”.',
           placeholder: 'Paste the public ZIP or .elpx link here (also valid if it includes PDF or DOCX)',
           submit: 'Create link'
@@ -2107,7 +2271,7 @@
         dismiss: 'Not now'
       },
       zipper: {
-        title: 'Create ZIP for the viewer (web, PDF, or DOCX)',
+        title: 'Create ZIP for the viewer',
         accordion: {
           filesTitle: 'Have files? Create the ZIP'
         },
@@ -2122,8 +2286,7 @@
         },
         step1: {
           title: 'Add your files',
-          note: 'Drag the folder or select files using the buttons.',
-          detail: 'You can drag a folder or files. You can also select a full folder from the button.'
+          note: 'Drag the folder or select files using the buttons.'
         },
         dropzone: {
           title: 'Drop the folder or files here',
@@ -2144,8 +2307,11 @@
         },
         step2: {
           title: 'Download the ZIP',
-          note: 'Create the ZIP and it will download automatically.',
-          detail: 'When you create the ZIP, a file will download that you can upload to Drive, Dropbox, Nextcloud, etc.'
+          detail: 'When you create the ZIP, a file will download that you can upload to Drive, Dropbox, Nextcloud, etc.',
+          forceFolderLabel: 'Force folder viewer',
+          forceFolderNote: 'If you enable this option, the ZIP will open in file explorer mode: you will see content as files organized in folders, even when it includes HTML or documents.',
+          forceFolderTooltip: 'More information',
+          forceFolderTooltipHtml: 'If you enable this option, the ZIP will open in file explorer mode: you will see content as files organized in folders, even when it includes HTML or documents.<br><br>If you do not enable it, the app will automatically detect which viewer type to use.<br><br>If you are not sure, leave it unchecked.'
         },
         zipName: {
           label: 'ZIP name',
@@ -2155,7 +2321,8 @@
         resourceTitle: {
           label: 'Resource title',
           placeholder: 'My resource',
-          note: 'Used when the ZIP does not include HTML (for example, ZIP with only PDF or DOCX).'
+          toggleLabel: 'Set a title for the resource (current title: {title})',
+          currentEmpty: 'no title'
         },
         build: 'Create and download ZIP',
         html: {
@@ -2177,11 +2344,11 @@
           note: 'Upload your ZIP and the viewer will add restrictions. Then upload it to Drive, Dropbox, etc.',
           lockedText: 'To use this option, first enable the resource visibility limit.',
           lockedAction: 'Enable limit',
-          lockedStatus: 'Enable the visibility limit to continue.',
+          lockedStatus: '',
           pick: 'Select ZIP',
           apply: 'Apply restrictions and download',
           status: {
-            ready: 'Select a ZIP to add restrictions.',
+            ready: '',
             working: 'Applying restrictions...',
             done: 'ZIP ready with restrictions.',
             failed: 'Could not modify the ZIP. Check the file.'
@@ -2191,7 +2358,13 @@
         },
         help: {
           inline: 'If you already created a ZIP file and shared it on a service with a public link, go to: “I already have a ZIP in the cloud with link”.',
+          previewTitle: 'Preview the resource before uploading (optional)',
           nextStepText: 'The next step is to upload and share the ZIP or ELPX file with a public link (also if it contains PDF or DOCX); once you have it, click “Continue”.',
+          previewAction: 'Preview',
+          previewApplyRestrictions: 'Apply restrictions in preview',
+          previewApplyRestrictionsNote: 'Enable it to check how the resource opens and closes based on the configured dates.',
+          previewApplyRestrictionsInfo: 'More information',
+          previewApplyRestrictionsInfoHtml: 'Use it to check how the resource opens and closes based on the configured dates.',
           goTab: 'Next: “I already have a ZIP in the cloud with link”'
         }
       },
@@ -2334,6 +2507,7 @@
         loadZip: 'Could not load the ZIP.',
         restricted: 'This resource is no longer available due to date restrictions.',
         embedNotAllowed: 'Embedding is not allowed for this resource.',
+        popupBlocked: 'The browser blocked the preview window. Allow pop-ups for this site and try again.',
         noHtmlSelected: 'No HTML selected.',
         htmlPickerOpen: 'Could not open the HTML selector.',
         serviceWorkerUnavailable: 'Service worker not available.',
@@ -2373,6 +2547,27 @@
         failedDocx: 'Could not display this DOCX.',
         downloadDocx: 'Download DOCX',
         missingDocxEngine: 'Could not load the DOCX viewer.'
+      },
+      folderViewer: {
+        title: 'Folder mode',
+        subtitle: 'Browse folders and subfolders with icons by file type.',
+        searchPlaceholder: 'Search files...',
+        searchResults: 'Search results',
+        selectAll: 'Select visible',
+        clearSelection: 'Clear selection',
+        openSelected: 'Open selected',
+        downloadAll: 'Download all',
+        downloadSelected: 'Download selection',
+        downloadVisible: 'Download visible list',
+        noResults: 'No files to show.',
+        selectedCount: '{count} selected',
+        openFile: 'Open',
+        downloadFile: 'Download',
+        contextOpen: 'Open',
+        contextDownload: 'Download',
+        contextDownloadVisible: 'Download visible list',
+        folder: 'Folder',
+        filesWord: 'files'
       },
       common: {
         close: 'Close',
@@ -2424,6 +2619,11 @@
         summaryLiveEndOff: 'Keine automatische Deaktivierung',
         summaryWarningOn: 'Warnung: {minutes} Min vorher',
         summaryWarningOff: 'Keine Vorwarnung',
+        summaryNoRestrictions: 'Ressource ohne Sichtbarkeitsbeschraenkungen.',
+        summaryAllowedActions: 'Aktionen des Ressourcenmanagers: {actions}',
+        summaryNoActions: 'keine',
+        summaryBlockedActions: 'Nicht erlaubt: {actions}',
+        summaryNoBlockedActions: 'keine',
         actionsTitle: 'Aktionen während des Zugriffs',
         allowShare: 'Teilen',
         allowEmbed: 'Einbetten',
@@ -2461,8 +2661,8 @@
             restrictHint: 'Du kannst den Zugriff auch zeitlich begrenzen.'
           },
           main: {
-            title: 'Ich habe bereits eine ZIP/ELPX-Datei in der Cloud mit Link',
-            note: 'Füge den öffentlichen Link (ZIP/ELPX) ein und erstelle den Viewer-Link. ZIP mit PDF oder DOCX wird ebenfalls unterstützt.',
+            title: 'Ich habe bereits eine ZIP-Datei in der Cloud mit Link',
+            note: 'Füge den öffentlichen Link (ZIP/ELPX) ein und erstelle den Viewer-Link.',
             secondaryHtml: 'Wenn du eine eXeLearning-.elpx nutzt, kannst du sie hier ebenfalls öffnen <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="Was ist ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Eine .elpx-Datei ist ein eXeLearning-Projekt, das intern das ZIP-Format verwendet. Dadurch kann der Viewer auf den Inhalt zugreifen und ihn korrekt anzeigen.</span></span>',
             elpxTooltip: 'Was ist ELPX?',
             elpxTooltipHtml: 'Eine .elpx-Datei ist ein eXeLearning-Projekt, das intern das ZIP-Format verwendet. Dadurch kann der Viewer auf den Inhalt zugreifen und ihn korrekt anzeigen.'
@@ -2475,7 +2675,7 @@
       main: {
         subtitle: 'Wenn deine Ressource bereits als ZIP (oder als eXeLearning-3+-.elpx-Datei) mit <strong>öffentlichem Link</strong> verfügbar ist (Drive, Dropbox usw.), füge den Link hier ein, um den Viewer-Link zu erzeugen. Das ZIP kann HTML und/oder PDF- und DOCX-Dokumente enthalten.',
         form: {
-          title: 'Ich habe bereits eine ZIP/ELPX-Datei in der Cloud mit Link',
+          title: 'Ich habe bereits eine ZIP-Datei in der Cloud mit Link',
           step: 'Füge den öffentlichen Link zur ZIP-Datei (oder .elpx) ein und klicke auf „Link erstellen“.',
           placeholder: 'Füge hier den öffentlichen ZIP- oder .elpx-Link ein (auch gültig, wenn PDF oder DOCX enthalten ist)',
           submit: 'Link erstellen'
@@ -2583,7 +2783,7 @@
         dismiss: 'Jetzt nicht'
       },
       zipper: {
-        title: 'ZIP für den Viewer erstellen (Web, PDF oder DOCX)',
+        title: 'ZIP für den Viewer erstellen',
         accordion: {
           filesTitle: 'Dateien vorhanden? ZIP erstellen'
         },
@@ -2598,8 +2798,7 @@
         },
         step1: {
           title: 'Dateien hinzufügen',
-          note: 'Ziehe den Ordner hierher oder wähle Dateien per Button.',
-          detail: 'Du kannst einen Ordner oder Dateien ziehen. Du kannst auch einen gesamten Ordner über den Button wählen.'
+          note: 'Ziehe den Ordner hierher oder wähle Dateien per Button.'
         },
         dropzone: {
           title: 'Ordner oder Dateien hier ablegen',
@@ -2620,8 +2819,11 @@
         },
         step2: {
           title: 'ZIP herunterladen',
-          note: 'Erstelle das ZIP, es wird automatisch heruntergeladen.',
-          detail: 'Beim Erstellen des ZIP wird eine Datei heruntergeladen, die du bei Drive, Dropbox, Nextcloud usw. hochladen kannst.'
+          detail: 'Beim Erstellen des ZIP wird eine Datei heruntergeladen, die du bei Drive, Dropbox, Nextcloud usw. hochladen kannst.',
+          forceFolderLabel: 'Ordneransicht erzwingen',
+          forceFolderNote: 'Wenn du diese Option aktivierst, wird das ZIP im Datei-Explorer-Modus geöffnet: Der Inhalt wird als in Ordnern organisierte Dateien angezeigt, auch wenn HTML oder Dokumente enthalten sind.',
+          forceFolderTooltip: 'Mehr Informationen',
+          forceFolderTooltipHtml: 'Wenn du diese Option aktivierst, wird das ZIP im Datei-Explorer-Modus geöffnet: Der Inhalt wird als in Ordnern organisierte Dateien angezeigt, auch wenn HTML oder Dokumente enthalten sind.<br><br>Wenn du es nicht aktivierst, erkennt das Programm automatisch, welcher Viewertyp verwendet werden soll.<br><br>Wenn du dir nicht sicher bist, aktiviere es nicht.'
         },
         zipName: {
           label: 'ZIP-Name',
@@ -2631,7 +2833,8 @@
         resourceTitle: {
           label: 'Titel der Ressource',
           placeholder: 'Meine Ressource',
-          note: 'Wird verwendet, wenn das ZIP kein HTML enthält (zum Beispiel ZIP nur mit PDF oder DOCX).'
+          toggleLabel: 'Titel fuer die Ressource festlegen (aktueller Titel: {title})',
+          currentEmpty: 'kein Titel'
         },
         build: 'ZIP erstellen und herunterladen',
         html: {
@@ -2653,11 +2856,11 @@
           note: 'Lade dein ZIP hoch und der Viewer fügt die Einschränkungen hinzu. Danach musst du es zu Drive, Dropbox usw. hochladen.',
           lockedText: 'Um diese Option zu nutzen, aktiviere zuerst die Sichtbarkeitsbegrenzung der Ressource.',
           lockedAction: 'Begrenzung aktivieren',
-          lockedStatus: 'Aktiviere die Sichtbarkeitsbegrenzung, um fortzufahren.',
+          lockedStatus: '',
           pick: 'ZIP auswählen',
           apply: 'Einschränkungen anwenden und herunterladen',
           status: {
-            ready: 'Wähle ein ZIP, um Einschränkungen hinzuzufügen.',
+            ready: '',
             working: 'Einschränkungen werden angewendet...',
             done: 'ZIP ist mit Einschränkungen bereit.',
             failed: 'ZIP konnte nicht geändert werden. Prüfe die Datei.'
@@ -2667,7 +2870,13 @@
         },
         help: {
           inline: 'Wenn du bereits eine ZIP-Datei erstellt und sie über einen Dienst mit öffentlichem Link geteilt hast, gehe zu: „Ich habe bereits eine ZIP-Datei in der Cloud mit Link“.',
+          previewTitle: 'Ressource vor dem Hochladen vorab ansehen (optional)',
           nextStepText: 'Der nächste Schritt ist, die ZIP- oder ELPX-Datei mit öffentlichem Link hochzuladen und zu teilen (auch wenn sie PDF oder DOCX enthält); sobald du sie hast, klicke auf „Weiter“.',
+          previewAction: 'Vorschau',
+          previewApplyRestrictions: 'Einschränkungen in der Vorschau anwenden',
+          previewApplyRestrictionsNote: 'Aktiviere dies, um zu prüfen, wie sich die Ressource gemäß den eingestellten Daten öffnet und schließt.',
+          previewApplyRestrictionsInfo: 'Mehr Informationen',
+          previewApplyRestrictionsInfoHtml: 'Damit kannst du prüfen, wie sich die Ressource gemäß den eingestellten Daten öffnet und schließt.',
           goTab: 'Weiter: „Ich habe bereits eine ZIP-Datei in der Cloud mit Link“'
         }
       },
@@ -2810,6 +3019,7 @@
         loadZip: 'ZIP konnte nicht geladen werden.',
         restricted: 'Diese Ressource ist aufgrund der Datumsbeschränkung nicht mehr verfügbar.',
         embedNotAllowed: 'Einbetten ist für diese Ressource nicht erlaubt.',
+        popupBlocked: 'Der Browser hat das Vorschaufenster blockiert. Erlaube Pop-ups für diese Website und versuche es erneut.',
         noHtmlSelected: 'Kein HTML ausgewählt.',
         htmlPickerOpen: 'HTML-Auswahl konnte nicht geöffnet werden.',
         serviceWorkerUnavailable: 'Service Worker nicht verfügbar.',
@@ -2849,6 +3059,27 @@
         failedDocx: 'Dieses DOCX konnte nicht angezeigt werden.',
         downloadDocx: 'DOCX herunterladen',
         missingDocxEngine: 'DOCX-Viewer konnte nicht geladen werden.'
+      },
+      folderViewer: {
+        title: 'Ordnermodus',
+        subtitle: 'Durchsuche Ordner und Unterordner mit Symbolen nach Dateityp.',
+        searchPlaceholder: 'Dateien suchen...',
+        searchResults: 'Suchergebnisse',
+        selectAll: 'Sichtbare auswählen',
+        clearSelection: 'Auswahl löschen',
+        openSelected: 'Auswahl öffnen',
+        downloadAll: 'Alles herunterladen',
+        downloadSelected: 'Auswahl herunterladen',
+        downloadVisible: 'Sichtbare Liste herunterladen',
+        noResults: 'Keine Dateien zum Anzeigen.',
+        selectedCount: '{count} ausgewählt',
+        openFile: 'Öffnen',
+        downloadFile: 'Herunterladen',
+        contextOpen: 'Öffnen',
+        contextDownload: 'Herunterladen',
+        contextDownloadVisible: 'Sichtbare Liste herunterladen',
+        folder: 'Ordner',
+        filesWord: 'Dateien'
       },
       common: {
         close: 'Schließen',
