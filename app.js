@@ -76,6 +76,7 @@
   var zipFlowRestrictAccordion = document.querySelector('[data-zip-flow="restrict"]');
   var zipFlowAccordions = [zipFlowHtmlAccordion, zipFlowFilesAccordion, zipFlowRestrictAccordion].filter(Boolean);
   var langSelect = document.querySelector('[data-lang-select]');
+  var themeSelect = document.querySelector('[data-theme-select]');
   var cleanupThresholdInput = document.querySelector('[data-cleanup-threshold]');
   var cleanupThresholdValue = document.querySelector('[data-cleanup-threshold-value]');
   var cleanupDaysInput = document.querySelector('[data-cleanup-days]');
@@ -307,7 +308,11 @@
 
 
   var LANG_KEY = 'visor-lang';
+  var THEME_KEY = 'visor-theme-mode';
+  var SITES_SYNC_KEY = 'visor-sites-sync';
   var currentLang = 'es';
+  var currentThemeMode = 'auto';
+  var themeMediaQuery = null;
   var CLEANUP_THRESHOLD_KEY = 'visor-cleanup-threshold';
   var CLEANUP_DAYS_KEY = 'visor-cleanup-days';
   var CLEANUP_THRESHOLD_DEFAULT = 70;
@@ -397,6 +402,72 @@
 
   function getInitialLang() {
     return getSavedLang() || normalizeLang(navigator.language || navigator.userLanguage || 'es');
+  }
+
+  function notifySitesChanged() {
+    try {
+      localStorage.setItem(SITES_SYNC_KEY, String(Date.now()));
+    } catch (err) {
+      // ignore cross-tab sync errors
+    }
+  }
+
+  function normalizeThemeMode(mode) {
+    var value = String(mode || '').toLowerCase();
+    if (value === 'light' || value === 'dark' || value === 'auto') {
+      return value;
+    }
+    return 'auto';
+  }
+
+  function getSavedThemeMode() {
+    try {
+      return normalizeThemeMode(localStorage.getItem(THEME_KEY));
+    } catch (err) {
+      return 'auto';
+    }
+  }
+
+  function getInitialThemeMode() {
+    var saved = getSavedThemeMode();
+    return saved || 'auto';
+  }
+
+  function getSystemTheme() {
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark';
+    }
+    return 'light';
+  }
+
+  function applyThemeMode(mode, options) {
+    currentThemeMode = normalizeThemeMode(mode);
+    var resolvedTheme = currentThemeMode === 'auto' ? getSystemTheme() : currentThemeMode;
+    document.documentElement.setAttribute('data-theme-mode', currentThemeMode);
+    document.documentElement.setAttribute('data-theme', resolvedTheme);
+    if (themeSelect) {
+      themeSelect.value = currentThemeMode;
+    }
+    if (!options || options.persist !== false) {
+      try {
+        localStorage.setItem(THEME_KEY, currentThemeMode);
+      } catch (err) {}
+    }
+  }
+
+  function bindSystemThemeListener() {
+    if (!window.matchMedia) return;
+    themeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    var handler = function () {
+      if (currentThemeMode === 'auto') {
+        applyThemeMode('auto', { persist: false });
+      }
+    };
+    if (themeMediaQuery.addEventListener) {
+      themeMediaQuery.addEventListener('change', handler);
+    } else if (themeMediaQuery.addListener) {
+      themeMediaQuery.addListener(handler);
+    }
   }
 
   function t(key, vars) {
@@ -2072,6 +2143,7 @@
         if (!site) return;
         site.title = value;
         return Storage.saveSite(site).then(function () {
+          notifySitesChanged();
           Manager.refreshManager();
         });
       }).finally(function () {
@@ -2542,6 +2614,7 @@
       site.remoteMeta = nextSignature;
       site.updateAvailable = nextUpdateAvailable;
       return Storage.saveSite(site).then(function () {
+        notifySitesChanged();
         if (changed && opts.showBanner) {
           showUpdateBanner(opts.zipUrl || site.url, opts.indexPath || site.indexPath || '');
         }
@@ -3588,6 +3661,7 @@
                   };
                   return Storage.saveSite(site).then(function () {
                     return Storage.saveFiles(files).then(function () {
+                      notifySitesChanged();
                       var siteUrl = buildSiteUrl(result.siteId, indexPath);
                       return controlPromise.then(function () {
                         currentRestrictions = restrictions || null;
@@ -4118,6 +4192,13 @@
       setLanguage(langSelect.value);
     });
   }
+  if (themeSelect) {
+    themeSelect.addEventListener('change', function () {
+      applyThemeMode(themeSelect.value);
+    });
+  }
+  bindSystemThemeListener();
+  applyThemeMode(getInitialThemeMode(), { persist: false });
   setLanguage(getInitialLang());
   updateServiceInfo();
   updateRestrictZipAccordionState();
@@ -4204,6 +4285,7 @@
       if (action === 'delete' && siteId) {
         button.classList.add('is-active');
         Storage.deleteSite(siteId).then(function () {
+          notifySitesChanged();
           Manager.refreshManager();
         }).finally(function () {
           button.classList.remove('is-active');
@@ -4212,9 +4294,14 @@
       }
       if (action === 'view' && siteId) {
         Storage.getSite(siteId).then(function (site) {
+          if (site && site.url) {
+            // Background check when opening from the eye icon.
+            checkForRemoteUpdate(site, { showBanner: false }).catch(function () {});
+          }
           if (site && Restrictions.isRestrictionActive(site.restrictions) && !Restrictions.isRestrictionAllowedNow(site.restrictions)) {
             if (Restrictions.isRestrictionExpired(site.restrictions)) {
               return Storage.deleteSite(siteId).then(function () {
+                notifySitesChanged();
                 Manager.refreshManager();
                 RestrictionUI.showRestrictionModal(site.restrictions);
               });
@@ -4332,6 +4419,7 @@
         var ids = sites.map(function (site) { return site.id; });
         return Storage.deleteSitesSequential(ids);
       }).then(function () {
+        notifySitesChanged();
         Manager.refreshManager();
       });
     });
@@ -4566,6 +4654,12 @@
 
   window.addEventListener('pageshow', function (event) {
     if (event.persisted && Manager && Manager.refreshManager) {
+      Manager.refreshManager();
+    }
+  });
+  window.addEventListener('storage', function (event) {
+    if (!event || event.key !== SITES_SYNC_KEY) return;
+    if (Manager && Manager.refreshManager) {
       Manager.refreshManager();
     }
   });

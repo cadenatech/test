@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;600;800&family=Spectral:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=18">
+  <link rel="stylesheet" href="styles.css?v=26">
 </head>
 <body>
 
@@ -47,6 +47,19 @@
               <option value="eu" data-i18n="lang.eu">Euskara</option>
               <option value="en" data-i18n="lang.en">English</option>
               <option value="de" data-i18n="lang.de">Deutsch</option>
+            </select>
+          </div>
+          <div class="lang-picker theme-picker" data-i18n-tooltip="header.themeHint">
+            <span class="lang-picker__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 3a9 9 0 1 0 9 9 7 7 0 1 1-9-9Z"></path>
+              </svg>
+            </span>
+            <label for="theme-select" class="sr-only" data-i18n="header.theme">Tema</label>
+            <select id="theme-select" class="lang-picker__select" data-theme-select data-i18n-aria-label="header.theme" aria-label="Tema">
+              <option value="auto" data-i18n="header.themeAuto">Automático</option>
+              <option value="light" data-i18n="header.themeLight">Claro</option>
+              <option value="dark" data-i18n="header.themeDark">Oscuro</option>
             </select>
           </div>
           <button class="help-pill" type="button" data-about-open data-i18n-aria-label="header.help">
@@ -609,7 +622,7 @@
     <footer class="site-footer">
       <a class="footer-link" href="https://bilateria.org" target="_blank" rel="noopener">(c) 2026 Juan Jose de Haro</a>
       <span class="footer-sep">·</span>
-    <span class="footer-link" data-app-version>v2.0.3</span>
+    <span class="footer-link" data-app-version>v2.1.0</span>
       <span class="footer-sep">·</span>
       <a class="footer-link" href="https://github.com/visor-webzip/visor-webzip.github.io" target="_blank" rel="noopener">
         <svg class="footer-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
@@ -636,7 +649,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/fflate@0.8.2/umd/index.js"></script>
   <script src="config.js"></script>
-			  <script src="i18n.js?v=18"></script>
+			  <script src="i18n.js?v=19"></script>
 	  <script src="restrictions.js?v=5"></script>
 	  <script src="ui.js?v=1"></script>
 	  <script src="downloads.js?v=1"></script>
@@ -647,6 +660,6 @@
 		  <script src="restriction-ui.js?v=13"></script>
 	  <script src="share.js?v=1"></script>
 	  <script src="nav.js?v=1"></script>
-			  <script src="app.js?v=65"></script>
+			  <script src="app.js?v=66"></script>
  </body>
  </html>

@@ -18,6 +18,11 @@
         settingsHint: 'Configura la disponibilidad del recurso',
         language: 'Idioma',
         languageHint: 'Cambiar idioma',
+        theme: 'Tema',
+        themeHint: 'Cambiar tema',
+        themeAuto: 'Automático',
+        themeLight: 'Claro',
+        themeDark: 'Oscuro',
         subtitle: 'Autopublicación de recursos educativos en web (HTML) o en PDF y/o DOCX desde tu almacenamiento en la nube.'
       },
       settings: {
@@ -464,6 +469,11 @@
         settingsHint: 'Configura la disponibilitat del recurs',
         language: 'Idioma',
         languageHint: 'Canviar idioma',
+        theme: 'Tema',
+        themeHint: 'Canviar tema',
+        themeAuto: 'Automàtic',
+        themeLight: 'Clar',
+        themeDark: 'Fosc',
         subtitle: 'Autopublicació de recursos educatius en web (HTML) o en PDF i/o DOCX des del teu emmagatzematge al núvol.'
       },
       settings: {
@@ -892,6 +902,11 @@
         settingsHint: 'Configura a dispoñibilidade do recurso',
         language: 'Idioma',
         languageHint: 'Cambiar idioma',
+        theme: 'Tema',
+        themeHint: 'Cambiar tema',
+        themeAuto: 'Automático',
+        themeLight: 'Claro',
+        themeDark: 'Escuro',
         subtitle: 'Autopublicación de recursos educativos en web (HTML) ou en PDF e/ou DOCX desde o teu almacenamento na nube.'
       },
       settings: {
@@ -1320,6 +1335,11 @@
         settingsHint: 'Ezarri baliabidearen erabilgarritasuna',
         language: 'Hizkuntza',
         languageHint: 'Hizkuntza aldatu',
+        theme: 'Gaia',
+        themeHint: 'Gaia aldatu',
+        themeAuto: 'Automatikoa',
+        themeLight: 'Argia',
+        themeDark: 'Iluna',
         subtitle: 'Webean (HTML) edo PDF eta/edo DOCX formatuan hezkuntza-baliabideak autoargitaratzea zure hodeiko biltegiratzetik.'
       },
       settings: {
@@ -1748,6 +1768,11 @@
         settingsHint: 'Set the resource availability',
         language: 'Language',
         languageHint: 'Change language',
+        theme: 'Theme',
+        themeHint: 'Change theme',
+        themeAuto: 'Auto',
+        themeLight: 'Light',
+        themeDark: 'Dark',
         subtitle: 'Self-publishing of educational resources in web (HTML) or in PDF and/or DOCX from your cloud storage.'
       },
       settings: {
@@ -2177,6 +2202,11 @@
         settingsHint: 'Verfügbarkeit des Materials einstellen',
         language: 'Sprache',
         languageHint: 'Sprache ändern',
+        theme: 'Design',
+        themeHint: 'Design ändern',
+        themeAuto: 'Automatisch',
+        themeLight: 'Hell',
+        themeDark: 'Dunkel',
         subtitle: 'Selbstveröffentlichung von Bildungsressourcen als Web (HTML) oder als PDF und/oder DOCX aus deinem Cloud-Speicher.'
       },
       settings: {
