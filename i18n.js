@@ -28,7 +28,7 @@
         restrictToggle: 'Limitar el acceso',
         startLabel: 'Inicio',
         endLabel: 'Fin',
-        neverExpires: 'Acceso sin fecha de fin',
+        neverExpires: 'Acceso con fecha de fin',
         enforceEndDuringView: 'Desactivar la visualización al llegar a la fecha de fin, incluso si está abierto',
         warningMinutesLabel: 'Avisar antes en minutos (0 para no avisar)',
         warningMessageLabel: 'Mensaje de aviso',
@@ -48,7 +48,7 @@
         summaryNoActions: 'ninguna',
         summaryBlockedActions: 'No se podrá: {actions}',
         summaryNoBlockedActions: 'ninguna',
-        actionsTitle: 'Acciones disponibles durante el acceso',
+        actionsTitle: 'Acciones disponibles mientras el recurso sea accesible',
         allowShare: 'Compartir',
         allowEmbed: 'Insertar en web',
         allowDownload: 'Descargar'
@@ -80,7 +80,7 @@
         back: 'Volver al inicio',
         choice: {
           zipper: {
-            title: 'Crea un ZIP con archivos web o carpeta compartida',
+            title: 'Crea un ZIP con tus recursos educativos',
             note: 'Crea un ZIP desde archivos web, PDF, DOCX y otros tipos, o desde código HTML.',
             restrictHint: 'Se crearán tres tipos de visor según el contenido: 1) visor de páginas web (como recursos generados con IA o proyectos de eXeLearning), 2) visor de documentos (PDF y DOCX) y 3) visor de carpetas (para visualizar cualquier tipo de archivos).'
           },
@@ -212,7 +212,7 @@
           summaryTitle: 'Acceso limitado por fechas'
         },
         accordion: {
-          filesTitle: '¿Tienes archivos? Crea el ZIP'
+          filesTitle: '¿Tienes archivos? Crea un ZIP'
         },
         subtitle: {
           item1: 'Para publicar tu recurso, guarda todos los archivos en una carpeta y comprímela en un archivo <strong>.zip</strong>. Puede contener páginas web y/o uno o varios <strong>PDF</strong>.',
@@ -474,7 +474,7 @@
         restrictToggle: 'Limitar l’accés',
         startLabel: 'Inici',
         endLabel: 'Fi',
-        neverExpires: 'Accés sense data de fi',
+        neverExpires: 'Accés amb data de fi',
         enforceEndDuringView: 'Desactiva la visualització en arribar a la data de fi, encara que estiga obert',
         warningMinutesLabel: 'Avisar abans en minuts (0 per no avisar)',
         warningMessageLabel: "Missatge d'avís",
@@ -494,7 +494,7 @@
         summaryNoActions: 'cap',
         summaryBlockedActions: 'No es podrà: {actions}',
         summaryNoBlockedActions: 'cap',
-        actionsTitle: 'Accions disponibles durant l’accés',
+        actionsTitle: 'Accions disponibles mentre el recurs sigui accessible',
         allowShare: 'Compartir',
         allowEmbed: 'Inserir en web',
         allowDownload: 'Descarregar'
@@ -902,7 +902,7 @@
         restrictToggle: 'Limitar o acceso',
         startLabel: 'Inicio',
         endLabel: 'Fin',
-        neverExpires: 'Acceso sen data de fin',
+        neverExpires: 'Acceso con data de fin',
         enforceEndDuringView: 'Desactivar a visualización ao chegar á data de fin, mesmo se está aberto',
         warningMinutesLabel: 'Avisar antes en minutos (0 para non avisar)',
         warningMessageLabel: 'Mensaxe de aviso',
@@ -922,7 +922,7 @@
         summaryNoActions: 'ningunha',
         summaryBlockedActions: 'Non se poderá: {actions}',
         summaryNoBlockedActions: 'ningunha',
-        actionsTitle: 'Accións dispoñibles durante o acceso',
+        actionsTitle: 'Accións dispoñibles mentres o recurso sexa accesible',
         allowShare: 'Compartir',
         allowEmbed: 'Inserir nunha web',
         allowDownload: 'Descargar'
@@ -1330,7 +1330,7 @@
         restrictToggle: 'Sarbidea mugatu',
         startLabel: 'Hasiera',
         endLabel: 'Amaiera',
-        neverExpires: 'Amaiera-datarik gabeko sarbidea',
+        neverExpires: 'Amaiera-datarekin sarbidea',
         enforceEndDuringView: 'Bistaratzea desaktibatu amaiera-datara iristean, irekita badago ere',
         warningMinutesLabel: 'Abisatu lehenago minutuetan (0 abisurik ez)',
         warningMessageLabel: 'Abisu mezua',
@@ -1350,7 +1350,7 @@
         summaryNoActions: 'bat ere ez',
         summaryBlockedActions: 'Ezin izango da: {actions}',
         summaryNoBlockedActions: 'bat ere ez',
-        actionsTitle: 'Sarbidean erabilgarri dauden ekintzak',
+        actionsTitle: 'Ekintzak baliabidea eskuragarri dagoen bitartean',
         allowShare: 'Partekatu',
         allowEmbed: 'Web batean txertatu',
         allowDownload: 'Deskargatu'
@@ -1758,7 +1758,7 @@
         restrictToggle: 'Limit access',
         startLabel: 'Start',
         endLabel: 'End',
-        neverExpires: 'Access with no end date',
+        neverExpires: 'Access with end date',
         enforceEndDuringView: 'Disable viewing when end date is reached, even if it is already open',
         warningMinutesLabel: 'Warn before in minutes (0 for no warning)',
         warningMessageLabel: 'Warning message',
@@ -1778,7 +1778,7 @@
         summaryNoActions: 'none',
         summaryBlockedActions: 'Will not be allowed: {actions}',
         summaryNoBlockedActions: 'none',
-        actionsTitle: 'Actions available during access',
+        actionsTitle: 'Actions available while the resource is accessible',
         allowShare: 'Share',
         allowEmbed: 'Embed',
         allowDownload: 'Download'
@@ -2187,7 +2187,7 @@
         restrictToggle: 'Zugriff begrenzen',
         startLabel: 'Start',
         endLabel: 'Ende',
-        neverExpires: 'Zugriff ohne Enddatum',
+        neverExpires: 'Zugriff mit Enddatum',
         enforceEndDuringView: 'Anzeige beim Erreichen des Enddatums deaktivieren, auch wenn bereits geöffnet',
         warningMinutesLabel: 'Vorwarnung in Minuten (0 fuer keine Warnung)',
         warningMessageLabel: 'Warnhinweis',
@@ -2207,7 +2207,7 @@
         summaryNoActions: 'keine',
         summaryBlockedActions: 'Nicht erlaubt: {actions}',
         summaryNoBlockedActions: 'keine',
-        actionsTitle: 'Aktionen während des Zugriffs',
+        actionsTitle: 'Aktionen, solange die Ressource zugänglich ist',
         allowShare: 'Teilen',
         allowEmbed: 'Einbetten',
         allowDownload: 'Herunterladen'

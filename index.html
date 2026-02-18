@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;600;800&family=Spectral:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=17">
+  <link rel="stylesheet" href="styles.css?v=18">
 </head>
 <body>
 
@@ -201,18 +201,8 @@
                 </svg>
               </button>
             </div>
-            <details class="html-zip-accordion" data-zip-flow="html">
-              <summary class="html-zip-accordion__summary" data-i18n="zipper.html.title">¿No tienes archivos? Pega el HTML</summary>
-              <div class="html-zip-card">
-                <div class="html-zip-card__header">
-                  <p class="step-note" data-i18n-html="zipper.html.note">Pega el HTML completo y el visor creará un ZIP con un <code>index.html</code> listo para descargar.</p>
-                </div>
-                <textarea class="html-zip-textarea" data-html-zip-input data-i18n-placeholder="zipper.html.placeholder" placeholder="&lt;!doctype html&gt;..."></textarea>
-                <p class="upload-status" data-html-zip-status data-i18n="zipper.html.status.ready" data-i18n-dynamic>Listo para crear el ZIP desde tu HTML.</p>
-              </div>
-            </details>
             <details class="html-zip-accordion" data-zip-flow="files">
-              <summary class="html-zip-accordion__summary" data-i18n="zipper.accordion.filesTitle">¿Tienes archivos? Crea el ZIP</summary>
+              <summary class="html-zip-accordion__summary" data-i18n="zipper.accordion.filesTitle">¿Tienes archivos? Crea un ZIP</summary>
               <div class="upload-grid">
                 <section class="upload-card">
                   <h3 data-i18n="zipper.step1.title">Añade tus archivos</h3>
@@ -229,6 +219,16 @@
                   </div>
                   <p class="upload-status" data-upload-status data-i18n="zipper.status.empty" data-i18n-dynamic>No hay archivos seleccionados.</p>
                 </section>
+              </div>
+            </details>
+            <details class="html-zip-accordion" data-zip-flow="html">
+              <summary class="html-zip-accordion__summary" data-i18n="zipper.html.title">¿No tienes archivos? Pega el HTML</summary>
+              <div class="html-zip-card">
+                <div class="html-zip-card__header">
+                  <p class="step-note" data-i18n-html="zipper.html.note">Pega el HTML completo y el visor creará un ZIP con un <code>index.html</code> listo para descargar.</p>
+                </div>
+                <textarea class="html-zip-textarea" data-html-zip-input data-i18n-placeholder="zipper.html.placeholder" placeholder="&lt;!doctype html&gt;..."></textarea>
+                <p class="upload-status" data-html-zip-status data-i18n="zipper.html.status.ready" data-i18n-dynamic>Listo para crear el ZIP desde tu HTML.</p>
               </div>
             </details>
             <details class="html-zip-accordion" data-restrict-accordion data-zip-flow="restrict">
@@ -249,6 +249,13 @@
             </details>
             <section class="html-zip-card zipper-force-card zipper-options-card">
               <h3 class="zipper-options-card__title">Opciones</h3>
+              <div class="zipper-option-row zipper-option-row--title">
+                <label class="settings-check zipper-option-title-toggle" for="resource-title-toggle-input">
+                  <input id="resource-title-toggle-input" type="checkbox" data-resource-title-toggle>
+                  <span class="zipper-option-row__title" data-resource-title-toggle-label>Poner un título al recurso (título actual: sin título)</span>
+                </label>
+                <input id="resource-title-input" class="zip-title-input zipper-option-row__input" type="text" data-resource-title data-i18n-placeholder="zipper.resourceTitle.placeholder" placeholder="Mi recurso" autocomplete="off" hidden>
+              </div>
               <div class="zipper-option-row zipper-option-row--availability">
                 <div class="zipper-option-row__main">
                   <label class="settings-check zipper-option-toggle" for="restrict-toggle-proxy">
@@ -272,13 +279,6 @@
                   </label>
                   <p class="zipper-force-folder__inline-note" data-force-folder-note data-i18n="zipper.step2.forceFolderNote" hidden>El recurso se abirá en modo explorador de archivos con el contenido como archivos organizados en carpetas</p>
                 </div>
-              </div>
-              <div class="zipper-option-row zipper-option-row--title">
-                <label class="settings-check zipper-option-title-toggle" for="resource-title-toggle-input">
-                  <input id="resource-title-toggle-input" type="checkbox" data-resource-title-toggle>
-                  <span class="zipper-option-row__title" data-resource-title-toggle-label>Poner un título al recurso (título actual: sin título)</span>
-                </label>
-                <input id="resource-title-input" class="zip-title-input zipper-option-row__input" type="text" data-resource-title data-i18n-placeholder="zipper.resourceTitle.placeholder" placeholder="Mi recurso" autocomplete="off" hidden>
               </div>
             </section>
             <section class="html-zip-card html-zip-card--download">
@@ -537,11 +537,11 @@
               <input type="datetime-local" data-restrict-end>
             </div>
             <div class="settings-end-options">
-              <label class="settings-check settings-check--dependent">
-                <input type="checkbox" data-restrict-no-end checked>
-                <span data-i18n="settings.neverExpires">No caducar nunca</span>
+              <label class="settings-check">
+                <input type="checkbox" data-restrict-no-end>
+                <span data-i18n="settings.neverExpires">Acceso con fecha de fin</span>
               </label>
-              <label class="settings-check settings-check--dependent" data-restrict-live-end-wrap hidden>
+              <label class="settings-check" data-restrict-live-end-wrap hidden>
                 <input type="checkbox" data-restrict-live-end>
                 <span data-i18n="settings.enforceEndDuringView">Desactivar la visualización al llegar a la fecha de fin, incluso si está abierto</span>
               </label>
@@ -559,23 +559,25 @@
             <p class="setting-help setting-help--period" data-i18n="settings.periodHint" data-restrict-period-hint>El recurso solo será visible dentro de este intervalo.</p>
           </div>
 
-          <div class="settings-panel__title settings-panel__title--sub" data-restrict-actions-title data-i18n="settings.actionsTitle" hidden>Acciones permitidas</div>
-          <div class="settings-grid settings-actions" data-restrict-actions hidden>
-            <div class="settings-actions__group settings-actions__group--share">
-              <label class="settings-check">
-                <input type="checkbox" data-restrict-allow-share checked>
-                <span data-i18n="settings.allowShare">Compartir</span>
-              </label>
-              <label class="settings-check">
-                <input type="checkbox" data-restrict-allow-embed checked>
-                <span data-i18n="settings.allowEmbed">Insertar en web</span>
-              </label>
-            </div>
-            <div class="settings-actions__group settings-actions__group--download">
-              <label class="settings-check">
-                <input type="checkbox" data-restrict-allow-download>
-                <span data-i18n="settings.allowDownload">Descargar</span>
-              </label>
+          <div class="settings-actions-panel" data-restrict-actions-panel hidden>
+            <div class="settings-panel__title settings-panel__title--sub" data-restrict-actions-title data-i18n="settings.actionsTitle" hidden>Acciones permitidas</div>
+            <div class="settings-grid settings-actions" data-restrict-actions hidden>
+              <div class="settings-actions__group settings-actions__group--share">
+                <label class="settings-check">
+                  <input type="checkbox" data-restrict-allow-share checked>
+                  <span data-i18n="settings.allowShare">Compartir</span>
+                </label>
+                <label class="settings-check">
+                  <input type="checkbox" data-restrict-allow-embed checked>
+                  <span data-i18n="settings.allowEmbed">Insertar en web</span>
+                </label>
+              </div>
+              <div class="settings-actions__group settings-actions__group--download">
+                <label class="settings-check">
+                  <input type="checkbox" data-restrict-allow-download>
+                  <span data-i18n="settings.allowDownload">Descargar</span>
+                </label>
+              </div>
             </div>
           </div>
 
@@ -607,7 +609,7 @@
     <footer class="site-footer">
       <a class="footer-link" href="https://bilateria.org" target="_blank" rel="noopener">(c) 2026 Juan Jose de Haro</a>
       <span class="footer-sep">·</span>
-    <span class="footer-link" data-app-version>v2.0.1</span>
+    <span class="footer-link" data-app-version>v2.0.2</span>
       <span class="footer-sep">·</span>
       <a class="footer-link" href="https://github.com/visor-webzip/visor-webzip.github.io" target="_blank" rel="noopener">
         <svg class="footer-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
@@ -634,7 +636,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/fflate@0.8.2/umd/index.js"></script>
   <script src="config.js"></script>
-			  <script src="i18n.js?v=15"></script>
+			  <script src="i18n.js?v=17"></script>
 	  <script src="restrictions.js?v=5"></script>
 	  <script src="ui.js?v=1"></script>
 	  <script src="downloads.js?v=1"></script>
@@ -645,6 +647,6 @@
 		  <script src="restriction-ui.js?v=13"></script>
 	  <script src="share.js?v=1"></script>
 	  <script src="nav.js?v=1"></script>
-			  <script src="app.js?v=63"></script>
+			  <script src="app.js?v=65"></script>
  </body>
  </html>

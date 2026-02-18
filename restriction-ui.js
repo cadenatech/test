@@ -114,6 +114,10 @@
       if (enabled) get('restrictionActions').removeAttribute('hidden');
       else get('restrictionActions').setAttribute('hidden', '');
     }
+    if (get('restrictionActionsPanel')) {
+      if (enabled) get('restrictionActionsPanel').removeAttribute('hidden');
+      else get('restrictionActionsPanel').setAttribute('hidden', '');
+    }
     var restrictTitle = document.querySelector('[data-restrict-actions-title]');
     if (restrictTitle) {
       if (enabled) restrictTitle.removeAttribute('hidden');
@@ -134,10 +138,12 @@
       get('restrictionAccordion').removeAttribute('hidden');
     }
     if (get('restrictionNoEnd') && get('restrictionEndInput')) {
-      get('restrictionEndInput').disabled = get('restrictionNoEnd').checked;
+      var hasEndDate = !!get('restrictionNoEnd').checked;
+      get('restrictionEndInput').disabled = !hasEndDate;
     }
     if (get('restrictionLiveEnd')) {
-      var liveEndDisabled = !enabled || (get('restrictionNoEnd') && get('restrictionNoEnd').checked);
+      var hasEndDate = !!(get('restrictionNoEnd') && get('restrictionNoEnd').checked);
+      var liveEndDisabled = !enabled || !hasEndDate;
       get('restrictionLiveEnd').disabled = !!liveEndDisabled;
       if (liveEndDisabled) {
         get('restrictionLiveEnd').checked = false;
@@ -157,11 +163,20 @@
           get('restrictionWarningWrap').setAttribute('hidden', '');
         }
       }
+      var warningMinutesValue = getWarningMinutesValue();
+      var warningEnabled = !liveEndDisabled && !!get('restrictionLiveEnd').checked && warningMinutesValue > 0;
       if (get('restrictionWarningMinutes')) {
         get('restrictionWarningMinutes').disabled = liveEndDisabled || !get('restrictionLiveEnd').checked;
       }
       if (get('restrictionWarningMessage')) {
-        get('restrictionWarningMessage').disabled = liveEndDisabled || !get('restrictionLiveEnd').checked;
+        get('restrictionWarningMessage').disabled = !warningEnabled;
+        var warningMessageField = get('restrictionWarningMessage').closest
+          ? get('restrictionWarningMessage').closest('.settings-field--compact')
+          : null;
+        if (warningMessageField) {
+          if (warningEnabled) warningMessageField.classList.remove('is-disabled');
+          else warningMessageField.classList.add('is-disabled');
+        }
       }
     }
     if (get('restrictionZipApply')) {
@@ -200,7 +215,7 @@
         + ':' + pad(now.getMinutes());
       get('restrictionStartInput').value = localValue;
     }
-    if (get('restrictionNoEnd') && get('restrictionNoEnd').checked) {
+    if (get('restrictionNoEnd') && !get('restrictionNoEnd').checked) {
       get('restrictionEndInput').value = '';
     }
     if (get('restrictionWarningMinutes')) {
@@ -221,7 +236,7 @@
     var startValue = normalizeInputDateTime(get('restrictionStartInput'));
     var endValue = normalizeInputDateTime(get('restrictionEndInput'), { endOfDay: true });
     var startAt = startValue ? new Date(startValue).toISOString() : new Date().toISOString();
-    var neverExpires = !!(get('restrictionNoEnd') && get('restrictionNoEnd').checked);
+    var neverExpires = !(get('restrictionNoEnd') && get('restrictionNoEnd').checked);
     var endAt = null;
     if (!neverExpires && endValue) {
       endAt = new Date(endValue).toISOString();
@@ -298,7 +313,7 @@
         items.push(openText);
       }
     }
-    if (get('restrictionNoEnd') && get('restrictionNoEnd').checked) {
+    if (get('restrictionNoEnd') && !get('restrictionNoEnd').checked) {
       items.push(t('restrictionModal.rangeNoEnd') || 'Sin fecha de fin');
     } else if (endValue) {
       var endText = Restrictions.formatRestrictionDate(endValue, currentLang) || endValue;

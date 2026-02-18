@@ -100,6 +100,7 @@
   var restrictionEditButton = document.querySelector('[data-restrict-edit-button]');
   var restrictionFields = document.querySelector('[data-restrict-fields]');
   var restrictionActions = document.querySelector('[data-restrict-actions]');
+  var restrictionActionsPanel = document.querySelector('[data-restrict-actions-panel]');
   var restrictionStartInput = document.querySelector('[data-restrict-start]');
   var restrictionEndInput = document.querySelector('[data-restrict-end]');
   var restrictionNoEnd = document.querySelector('[data-restrict-no-end]');
@@ -485,6 +486,7 @@
         restrictionToggle: restrictionToggle,
         restrictionFields: restrictionFields,
         restrictionActions: restrictionActions,
+        restrictionActionsPanel: restrictionActionsPanel,
         restrictionStartInput: restrictionStartInput,
         restrictionEndInput: restrictionEndInput,
         restrictionNoEnd: restrictionNoEnd,
@@ -716,6 +718,10 @@
       }
     }
     if (!resourceTitleToggleLabel) return;
+    if (resourceTitleToggleInput && resourceTitleToggleInput.checked) {
+      resourceTitleToggleLabel.textContent = t('zipper.resourceTitle.label') || 'Poner un título al recurso';
+      return;
+    }
     var currentTitle = normalizeResourceTitle(resourceTitleInput ? resourceTitleInput.value : '');
     if (!currentTitle) {
       currentTitle = t('zipper.resourceTitle.currentEmpty') || 'sin título';
@@ -3950,7 +3956,7 @@
   }
   if (restrictionNoEnd) {
     restrictionNoEnd.addEventListener('change', function () {
-      if (!restrictionNoEnd.checked && restrictionEndInput) {
+      if (restrictionNoEnd.checked && restrictionEndInput) {
         var endPlusFive = new Date(Date.now() + 5 * 60 * 1000);
         restrictionEndInput.value = formatLocalDateTime(endPlusFive);
       }
@@ -3965,7 +3971,12 @@
     });
   }
   if (restrictionWarningMinutes) {
+    restrictionWarningMinutes.addEventListener('input', function () {
+      RestrictionUI.applyRestrictionUiState();
+      RestrictionUI.updateRestrictionSummary();
+    });
     restrictionWarningMinutes.addEventListener('change', function () {
+      RestrictionUI.applyRestrictionUiState();
       RestrictionUI.updateRestrictionSummary();
     });
   }
@@ -3986,7 +3997,7 @@
     var isFirefoxBrowser = typeof navigator !== 'undefined' && /firefox/i.test(navigator.userAgent || '');
     var ensureFirefoxEndHasTime = function () {
       if (!isFirefoxBrowser) return;
-      if (restrictionNoEnd && restrictionNoEnd.checked) return;
+      if (restrictionNoEnd && !restrictionNoEnd.checked) return;
       var currentValue = restrictionEndInput.value ? String(restrictionEndInput.value).trim() : '';
       var normalizedCurrent = Restrictions.normalizeDateTimeValue(currentValue, { endOfDay: true });
       if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(normalizedCurrent)) {

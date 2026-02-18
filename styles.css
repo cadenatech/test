@@ -274,6 +274,10 @@ header {
   color: #748297;
 }
 
+.settings-field--compact.is-disabled .stat-label {
+  color: #9aa8bc;
+}
+
 .settings-field--compact input[type="number"],
 .settings-field--compact input[type="text"] {
   min-height: 34px;
@@ -284,6 +288,13 @@ header {
   color: var(--ink);
   font-size: 0.86rem;
   width: 100%;
+}
+
+.settings-field--compact input[type="text"]:disabled {
+  background: var(--surface-muted);
+  color: #8a97aa;
+  border-color: rgba(148, 163, 184, 0.45);
+  opacity: 0.8;
 }
 
 [data-restrict-warning-minutes] {
@@ -298,7 +309,7 @@ header {
 
 .setting-help--period {
   grid-column: 1 / -1;
-  margin: 14px 0 0;
+  margin: 8px 0 0;
   font-size: 0.84rem;
   line-height: 1.35;
   color: #7a8899;
@@ -308,7 +319,7 @@ header {
   font-size: 1rem;
   font-weight: 600;
   color: #243b53;
-  margin-top: 18px;
+  margin-top: 0;
   margin-bottom: 6px;
 }
 
@@ -320,15 +331,23 @@ header {
   gap: 8px;
 }
 
+.settings-actions-panel {
+  max-width: 640px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-muted);
+  padding: 10px 12px;
+  margin-top: 2px;
+}
+
 .settings-actions__group {
   display: grid;
   gap: 8px;
 }
 
 .settings-actions__group--download {
-  border-top: 1px solid var(--border);
-  padding-top: 10px;
-  margin-top: 2px;
+  padding-top: 0;
+  margin-top: 0;
 }
 
 .settings-actions .settings-check {
@@ -2040,7 +2059,22 @@ textarea:focus-visible {
 
 [data-main-settings-modal] .modal__content {
   display: grid;
-  gap: 18px;
+  gap: 10px;
+}
+
+[data-main-settings-modal] .modal__card {
+  width: min(860px, 100%);
+}
+
+[data-main-settings-modal] .settings-grid {
+  margin-bottom: 0;
+}
+
+[data-main-settings-modal] .settings-grid--dates,
+[data-main-settings-modal] .settings-actions,
+[data-main-settings-modal] .settings-actions-panel {
+  max-width: none;
+  width: 100%;
 }
 
 [data-main-settings-modal] .html-picker__actions {
