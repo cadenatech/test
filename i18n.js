@@ -97,7 +97,7 @@
         label: 'Secciones'
       },
       main: {
-        subtitle: 'Si ya tienes tu recurso en formato ZIP (o .elpx de eXeLearning 3+) en un servicio con <strong>enlace público</strong> (Drive, Dropbox, etc.), pega aquí el enlace para generar el enlace. El ZIP puede incluir HTML y/o documentos PDF y DOCX.',
+        subtitle: 'Si ya tienes tu recurso en formato ZIP (o .elpx de eXeLearning 3+) en un servicio con <strong>enlace público</strong> (Drive, Dropbox, etc.), pega aquí el enlace para generar el enlace.',
         form: {
           title: 'Ya tengo un ZIP en la nube con enlace',
           step: 'Pega el enlace público al ZIP (o .elpx) y pulsa “Crear enlace”.',
@@ -305,7 +305,7 @@
         help: {
           inline: 'Si ya has creado un archivo ZIP y lo has compartido en un servicio con enlace público, pasa a la sección: “Ya tengo un ZIP en la nube con enlace”.',
           previewTitle: 'Previsualiza el recurso antes de subirlo (opcional)',
-          nextStepText: 'El siguiente paso es subir y compartir con enlace público el archivo ZIP o ELPX (también si contiene PDF o DOCX), cuando lo tengas pulsa sobre Continuar.',
+          nextStepText: 'El siguiente paso es subir y compartir con enlace público el archivo ZIP o ELPX, también si contiene PDF o DOCX. Cuando lo tengas pulsa sobre Continuar.',
           previewAction: 'Previsualizar',
           previewApplyRestrictions: 'Aplicar restricciones en la previsualización',
           previewApplyRestrictionsNote: 'Actívalo para comprobar cómo se abre y se cierra el recurso según las fechas configuradas.',
@@ -543,7 +543,7 @@
         label: 'Seccions'
       },
       main: {
-        subtitle: "Si ja tens el teu recurs en format ZIP (o .elpx d’eXeLearning 3+) en un servei amb <strong>enllaç públic</strong> (Drive, Dropbox, etc.), enganxa aquí l'enllaç per generar l’enllaç del visor. El ZIP pot incloure HTML i/o documents PDF i DOCX.",
+        subtitle: "Si ja tens el teu recurs en format ZIP (o .elpx d’eXeLearning 3+) en un servei amb <strong>enllaç públic</strong> (Drive, Dropbox, etc.), enganxa aquí l'enllaç per generar l’enllaç del visor.",
         form: {
           title: 'Ja tinc un ZIP al núvol amb enllaç',
           step: 'Enganxa l’enllaç públic al ZIP (o .elpx) i prem “Crear enllaç”.',
@@ -740,7 +740,7 @@
         help: {
           inline: 'Si ja has creat un fitxer ZIP i l’has compartit en un servei amb enllaç públic, ves a la secció: “Ja tinc un ZIP al núvol amb enllaç”.',
           previewTitle: 'Previsualitza el recurs abans de pujar-lo (opcional)',
-          nextStepText: 'El següent pas és pujar i compartir amb enllaç públic el fitxer ZIP o ELPX (també si conté PDF o DOCX); quan el tinguis, prem “Continuar”.',
+          nextStepText: 'El següent pas és pujar i compartir amb enllaç públic el fitxer ZIP o ELPX, també si conté PDF o DOCX. Quan el tinguis, prem “Continuar”.',
           previewAction: 'Previsualitzar',
           previewApplyRestrictions: 'Aplicar restriccions en la previsualització',
           previewApplyRestrictionsNote: 'Activa-ho per comprovar com s’obre i es tanca el recurs segons les dates configurades.',
@@ -971,7 +971,7 @@
         label: 'Seccións'
       },
       main: {
-        subtitle: 'Se xa tes o teu recurso en formato ZIP (ou .elpx de eXeLearning 3+) nun servizo con <strong>ligazón pública</strong> (Drive, Dropbox, etc.), pega aquí a ligazón para xerar a ligazón do visor. O ZIP pode incluír HTML e/ou documentos PDF e DOCX.',
+        subtitle: 'Se xa tes o teu recurso en formato ZIP (ou .elpx de eXeLearning 3+) nun servizo con <strong>ligazón pública</strong> (Drive, Dropbox, etc.), pega aquí a ligazón para xerar a ligazón do visor.',
         form: {
           title: 'Xa teño un ZIP na nube con ligazón',
           step: 'Pega a ligazón pública ao ZIP (ou .elpx) e preme “Crear ligazón”.',
@@ -1168,7 +1168,7 @@
         help: {
           inline: 'Se xa creaches un arquivo ZIP e o compartiches nun servizo con ligazón pública, vai á sección: “Xa teño un ZIP na nube con ligazón”.',
           previewTitle: 'Previsualiza o recurso antes de subilo (opcional)',
-          nextStepText: 'O seguinte paso é subir e compartir cunha ligazón pública o arquivo ZIP ou ELPX (tamén se contén PDF ou DOCX); cando o teñas, preme en “Continuar”.',
+          nextStepText: 'O seguinte paso é subir e compartir cunha ligazón pública o arquivo ZIP ou ELPX, tamén se contén PDF ou DOCX. Cando o teñas, preme en “Continuar”.',
           previewAction: 'Previsualizar',
           previewApplyRestrictions: 'Aplicar restricións na previsualización',
           previewApplyRestrictionsNote: 'Actívao para comprobar como se abre e se pecha o recurso segundo as datas configuradas.',
@@ -1399,7 +1399,7 @@
         label: 'Atalak'
       },
       main: {
-        subtitle: 'Zure baliabidea ZIP formatuan (edo eXeLearning 3+eko .elpx) baduzu eta <strong>esteka publikoa</strong> duen zerbitzu batean badago (Drive, Dropbox, etab.), itsatsi hemen esteka bisorearen esteka sortzeko. ZIPak HTML eta/edo PDF eta DOCX dokumentuak eduki ditzake.',
+        subtitle: 'Zure baliabidea ZIP formatuan (edo eXeLearning 3+eko .elpx) baduzu eta <strong>esteka publikoa</strong> duen zerbitzu batean badago (Drive, Dropbox, etab.), itsatsi hemen esteka bisorearen esteka sortzeko.',
         form: {
           title: 'ZIP bat hodeian daukat estekarekin',
           step: 'Itsatsi ZIParen esteka publikoa (edo .elpx) eta sakatu “Esteka sortu”.',
@@ -1596,7 +1596,7 @@
         help: {
           inline: 'ZIP fitxategi bat sortu eta esteka publikoarekin duen zerbitzu batean partekatu baduzu, joan atalera: “ZIP bat badaukat edo ELPX”.',
           previewTitle: 'Aurreikusi baliabidea igo aurretik (aukerakoa)',
-          nextStepText: 'Hurrengo urratsa ZIP edo ELPX fitxategia esteka publikoarekin igo eta partekatzea da (PDF edo DOCX badu ere); prest duzunean, sakatu “Jarraitu”.',
+          nextStepText: 'Hurrengo urratsa ZIP edo ELPX fitxategia esteka publikoarekin igo eta partekatzea da, PDF edo DOCX badu ere. Prest duzunean, sakatu “Jarraitu”.',
           previewAction: 'Aurreikusi',
           previewApplyRestrictions: 'Murrizketak aplikatu aurrebistan',
           previewApplyRestrictionsNote: 'Aktibatu baliabidea nola irekitzen eta ixten den egiaztatzeko, konfiguratutako daten arabera.',
@@ -1827,7 +1827,7 @@
         label: 'Sections'
       },
       main: {
-        subtitle: 'If your resource is already a ZIP (or an eXeLearning 3+ .elpx file) hosted on a service with a <strong>public link</strong> (Drive, Dropbox, etc.), paste the link here to generate the viewer link. The ZIP can include HTML and/or PDF and DOCX documents.',
+        subtitle: 'If your resource is already a ZIP (or an eXeLearning 3+ .elpx file) hosted on a service with a <strong>public link</strong> (Drive, Dropbox, etc.), paste the link here to generate the viewer link.',
         form: {
           title: 'I already have a ZIP in the cloud with link',
           step: 'Paste the public ZIP link (or .elpx) and click “Create link”.',
@@ -2025,7 +2025,7 @@
         help: {
           inline: 'If you already created a ZIP file and shared it on a service with a public link, go to: “I already have a ZIP in the cloud with link”.',
           previewTitle: 'Preview the resource before uploading (optional)',
-          nextStepText: 'The next step is to upload and share the ZIP or ELPX file with a public link (also if it contains PDF or DOCX); once you have it, click “Continue”.',
+          nextStepText: 'The next step is to upload and share the ZIP or ELPX file with a public link, also if it contains PDF or DOCX. Once you have it, click “Continue”.',
           previewAction: 'Preview',
           previewApplyRestrictions: 'Apply restrictions in preview',
           previewApplyRestrictionsNote: 'Enable it to check how the resource opens and closes based on the configured dates.',
@@ -2256,7 +2256,7 @@
         label: 'Abschnitte'
       },
       main: {
-        subtitle: 'Wenn deine Ressource bereits als ZIP (oder als eXeLearning-3+-.elpx-Datei) mit <strong>öffentlichem Link</strong> verfügbar ist (Drive, Dropbox usw.), füge den Link hier ein, um den Viewer-Link zu erzeugen. Das ZIP kann HTML und/oder PDF- und DOCX-Dokumente enthalten.',
+        subtitle: 'Wenn deine Ressource bereits als ZIP (oder als eXeLearning-3+-.elpx-Datei) mit <strong>öffentlichem Link</strong> verfügbar ist (Drive, Dropbox usw.), füge den Link hier ein, um den Viewer-Link zu erzeugen.',
         form: {
           title: 'Ich habe bereits eine ZIP-Datei in der Cloud mit Link',
           step: 'Füge den öffentlichen Link zur ZIP-Datei (oder .elpx) ein und klicke auf „Link erstellen“.',
@@ -2454,7 +2454,7 @@
         help: {
           inline: 'Wenn du bereits eine ZIP-Datei erstellt und sie über einen Dienst mit öffentlichem Link geteilt hast, gehe zu: „Ich habe bereits eine ZIP-Datei in der Cloud mit Link“.',
           previewTitle: 'Ressource vor dem Hochladen vorab ansehen (optional)',
-          nextStepText: 'Der nächste Schritt ist, die ZIP- oder ELPX-Datei mit öffentlichem Link hochzuladen und zu teilen (auch wenn sie PDF oder DOCX enthält); sobald du sie hast, klicke auf „Weiter“.',
+          nextStepText: 'Der nächste Schritt ist, die ZIP- oder ELPX-Datei mit öffentlichem Link hochzuladen und zu teilen, auch wenn sie PDF oder DOCX enthält. Sobald du sie hast, klicke auf „Weiter“.',
           previewAction: 'Vorschau',
           previewApplyRestrictions: 'Einschränkungen in der Vorschau anwenden',
           previewApplyRestrictionsNote: 'Aktiviere dies, um zu prüfen, wie sich die Ressource gemäß den eingestellten Daten öffnet und schließt.',
