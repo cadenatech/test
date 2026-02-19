@@ -758,7 +758,7 @@
     }
     var firstDoc = list.find(function (item) {
       var lower = (item.path || '').toLowerCase();
-      return lower.endsWith('.pdf') || lower.endsWith('.docx') || lower.endsWith('.txt') || lower.endsWith('.md') || lower.endsWith('.csv');
+      return lower.endsWith('.pdf') || lower.endsWith('.docx') || lower.endsWith('.txt') || lower.endsWith('.md') || lower.endsWith('.csv') || lower.endsWith('.h5p');
     });
     if (firstDoc) {
       return deriveTitleFromPath(firstDoc.path);
@@ -1098,6 +1098,7 @@
       else if (/\.md$/.test(path)) label = 'MD';
       else if (/\.txt$/.test(path)) label = 'TXT';
       else if (/\.csv$/.test(path)) label = 'CSV';
+      else if (/\.h5p$/.test(path)) label = 'H5P';
       else if (/\.zip$/.test(path)) label = 'ZIP';
       else if (/\.elpx$/.test(path)) label = 'ELPX';
       else if (/\.(png|jpe?g|gif|webp|svg|bmp|ico)$/.test(path)) label = 'IMAGEN';
@@ -1110,9 +1111,10 @@
 
   function getSingleArchiveTypeLabel(path) {
     var lower = String(path || '').toLowerCase();
+    if (/\.h5p$/.test(lower)) return 'H5P';
     if (/\.elpx$/.test(lower)) return 'ELPX';
     if (/\.zip$/.test(lower)) return 'ZIP';
-    return 'ZIP/ELPX';
+    return 'ZIP/ELPX/H5P';
   }
 
   function buildUploadSelectionSummary(files, zipViewerInfo) {
@@ -1132,12 +1134,15 @@
 
     var singleSelected = list.length === 1 ? list[0] : null;
     var singlePath = singleSelected ? String(singleSelected.path || (singleSelected.file && singleSelected.file.name) || '') : '';
-    var singleIsZipLike = !!singlePath && /\.(zip|elpx)$/i.test(singlePath);
+    var singleIsZipLike = !!singlePath && /\.(zip|elpx|h5p)$/i.test(singlePath);
     var singleArchiveTypeLabel = getSingleArchiveTypeLabel(singlePath);
     var forceFolderViewer = !!(forceFolderViewerInput && forceFolderViewerInput.checked);
     var hasHtml = list.some(function (item) {
       var lower = String(item && item.path ? item.path : '').toLowerCase();
       return lower.endsWith('.html') || lower.endsWith('.htm');
+    });
+    var hasH5p = list.some(function (item) {
+      return isH5pPath(String(item && item.path ? item.path : ''));
     });
     var onlyDocuments = list.every(function (item) {
       var lower = String(item && item.path ? item.path : '').toLowerCase();
@@ -1174,7 +1179,7 @@
       actionText = String(actionText || '').replace(/ZIP\/ELPX/g, singleArchiveTypeLabel);
     }
     else if (forceFolderViewer) actionText = texts.actionForcedFolder;
-    else if (hasHtml) actionText = texts.actionWeb;
+    else if (hasHtml || hasH5p) actionText = texts.actionWeb;
     else if (onlyDocuments) actionText = texts.actionDocuments;
 
     var filesReady = texts.filesReady.replace('{count}', String(list.length));
@@ -1193,7 +1198,7 @@
     UI.setUploadStatus(buildUploadSelectionSummary(selectedFiles));
     var singleSelected = selectedFiles.length === 1 ? selectedFiles[0] : null;
     var singlePath = singleSelected ? String(singleSelected.path || (singleSelected.file && singleSelected.file.name) || '') : '';
-    var singleIsZipLike = !!singlePath && /\.(zip|elpx)$/i.test(singlePath);
+    var singleIsZipLike = !!singlePath && /\.(zip|elpx|h5p)$/i.test(singlePath);
     if (!singleSelected || !singleIsZipLike || !singleSelected.file) return;
     var texts = getUploadSummaryTexts();
     var archiveTypeLabel = getSingleArchiveTypeLabel(singlePath);
@@ -1263,8 +1268,18 @@
         var lower = String(entryPath || '').toLowerCase();
         return lower.endsWith('.html') || lower.endsWith('.htm');
       });
+      var hasH5pPackage = paths.some(function (entryPath) {
+        return isH5pPath(entryPath);
+      });
+      var hasH5pManifest = paths.some(function (entryPath) {
+        var normalized = normalizePath(entryPath || '').toLowerCase();
+        return normalized === 'h5p.json' || normalized === './h5p.json';
+      });
       if (hasHtml) {
         return { viewerType: 'html', isScorm12: isScorm12 };
+      }
+      if (hasH5pPackage || hasH5pManifest) {
+        return { viewerType: 'html', isScorm12: false };
       }
       var onlyDocuments = paths.every(function (entryPath) {
         return isPdfPath(entryPath)
@@ -1673,51 +1688,52 @@
             previewPreferredIndexPath = forceIndexPath;
           }
         }
-        var prepared = prepareIndexableZip(files, siteId, previewPreferredIndexPath, true, previewRestrictions);
-        var paths = prepared.files.map(function (file) { return file.path; });
-        return pickIndexPath(paths, prepared.preferredIndexPath || previewPreferredIndexPath || '').then(function (indexPath) {
-        var totalBytes = prepared.files.reduce(function (sum, file) { return sum + (file.size || 0); }, 0);
-        return ensureStorageCapacity(totalBytes).then(function (canProceed) {
-          if (!canProceed) throw new Error(t('error.noSpace'));
-          var previousPreview = currentPreviewSiteId;
-          if (previousPreview && previousPreview !== siteId) {
-            Storage.deleteSite(previousPreview).catch(function () {});
-          }
-          return extractTitleFromFiles(prepared.files, indexPath).then(function (foundTitle) {
-            var siteTitle = foundTitle || normalizeResourceTitle(titleHint) || deriveTitleFromPath(indexPath) || t('zipper.help.previewAction');
-            var site = {
-              id: siteId,
-              url: '',
-              indexPath: indexPath,
-              updatedAt: Date.now(),
-              fileCount: prepared.files.length,
-              totalBytes: totalBytes,
-              title: siteTitle,
-              restrictions: previewRestrictions,
-              remoteMeta: null,
-              updateAvailable: false,
-              updatedFromRemoteAt: null,
-              temporaryPreview: true
-            };
-            return Storage.deleteSite(siteId).catch(function () {}).then(function () {
-              return Storage.saveSite(site).then(function () {
-                return Storage.saveFiles(prepared.files).then(function () {
-                  currentPreviewSiteId = siteId;
-                  return buildSiteUrl(siteId, indexPath);
+        return prepareIndexableZip(files, siteId, previewPreferredIndexPath, true, previewRestrictions).then(function (prepared) {
+          var paths = prepared.files.map(function (file) { return file.path; });
+          return pickIndexPath(paths, prepared.preferredIndexPath || previewPreferredIndexPath || '').then(function (indexPath) {
+            var totalBytes = prepared.files.reduce(function (sum, file) { return sum + (file.size || 0); }, 0);
+            return ensureStorageCapacity(totalBytes).then(function (canProceed) {
+              if (!canProceed) throw new Error(t('error.noSpace'));
+              var previousPreview = currentPreviewSiteId;
+              if (previousPreview && previousPreview !== siteId) {
+                Storage.deleteSite(previousPreview).catch(function () {});
+              }
+              return extractTitleFromFiles(prepared.files, indexPath).then(function (foundTitle) {
+                var siteTitle = foundTitle || normalizeResourceTitle(titleHint) || deriveTitleFromPath(indexPath) || t('zipper.help.previewAction');
+                var site = {
+                  id: siteId,
+                  url: '',
+                  indexPath: indexPath,
+                  updatedAt: Date.now(),
+                  fileCount: prepared.files.length,
+                  totalBytes: totalBytes,
+                  title: siteTitle,
+                  restrictions: previewRestrictions,
+                  remoteMeta: null,
+                  updateAvailable: false,
+                  updatedFromRemoteAt: null,
+                  temporaryPreview: true
+                };
+                return Storage.deleteSite(siteId).catch(function () {}).then(function () {
+                  return Storage.saveSite(site).then(function () {
+                    return Storage.saveFiles(prepared.files).then(function () {
+                      currentPreviewSiteId = siteId;
+                      return buildSiteUrl(siteId, indexPath);
+                    });
+                  });
                 });
               });
             });
           });
         });
-      });
-      });
+        });
     });
   }
 
   function buildPreviewFromSelection() {
     var singleSelected = selectedFiles && selectedFiles.length === 1 ? selectedFiles[0] : null;
     var singlePath = singleSelected ? String(singleSelected.path || (singleSelected.file && singleSelected.file.name) || '') : '';
-    var singleIsZipLike = !!singlePath && /\.(zip|elpx)$/i.test(singlePath);
+    var singleIsZipLike = !!singlePath && /\.(zip|elpx|h5p)$/i.test(singlePath);
     if (singleSelected && singleIsZipLike && singleSelected.file) {
       if (!window.fflate || !window.fflate.unzipSync) {
         return Promise.reject(new Error(t('zipper.status.engineMissing')));
@@ -1932,7 +1948,8 @@
     var forceFolderViewer = !!(forceFolderViewerInput && forceFolderViewerInput.checked);
     var singleSelected = selectedFiles.length === 1 ? selectedFiles[0] : null;
     var singlePath = singleSelected ? String(singleSelected.path || (singleSelected.file && singleSelected.file.name) || '') : '';
-    var singleIsZipLike = !!singlePath && /\.(zip|elpx)$/i.test(singlePath);
+    var singleIsZipLike = !!singlePath && /\.(zip|elpx|h5p)$/i.test(singlePath);
+    var singleArchiveTypeLabel = getSingleArchiveTypeLabel(singlePath);
     if (singleSelected && singleIsZipLike && singleSelected.file) {
       var restrictionsForZipLike = RestrictionUI.buildRestrictionsPayload();
       if (restrictionsForZipLike || forceFolderViewer) {
@@ -1944,7 +1961,8 @@
         return;
       }
       var zipLikeTexts = getUploadSummaryTexts();
-      UI.setZipStatus(zipLikeTexts.zipLikeNoChanges || t('zipper.status.downloaded'));
+      var noChangesStatus = zipLikeTexts.zipLikeNoChanges || t('zipper.status.downloaded');
+      UI.setZipStatus(String(noChangesStatus || '').replace(/ZIP\/ELPX/g, singleArchiveTypeLabel));
       return;
     }
     UI.setZipStatus(t('zipper.status.creating'));
@@ -1954,7 +1972,10 @@
         var lower = (item.path || '').toLowerCase();
         return lower.endsWith('.html') || lower.endsWith('.htm');
       });
-      if (hasHtml) return 'html';
+      var hasH5p = selectedFiles.some(function (item) {
+        return isH5pPath(item && item.path ? item.path : '');
+      });
+      if (hasHtml || hasH5p) return 'html';
       var onlyDocuments = selectedFiles.every(function (item) {
         var lower = (item.path || '').toLowerCase();
         return lower.endsWith('.pdf') || lower.endsWith('.docx') || lower.endsWith('.txt') || lower.endsWith('.md') || lower.endsWith('.csv');
@@ -2137,7 +2158,9 @@
       var zipped = window.fflate.zipSync(entries);
       var blob = new Blob([zipped], { type: 'application/zip' });
       var name = file.name || 'site.zip';
-      if (/\.elpx$/i.test(name)) {
+      if (/\.h5p$/i.test(name)) {
+        name = name.replace(/\.h5p$/i, '-restricciones.h5p');
+      } else if (/\.elpx$/i.test(name)) {
         name = name.replace(/\.elpx$/i, '-restricciones.elpx');
       } else if (/\.zip$/i.test(name)) {
         name = name.replace(/\.zip$/i, '-restricciones.zip');
@@ -2264,6 +2287,7 @@
     if (lower.endsWith('.md')) return 'text/plain';
     if (lower.endsWith('.csv')) return 'text/csv';
     if (lower.endsWith('.pdf')) return 'application/pdf';
+    if (lower.endsWith('.zip') || lower.endsWith('.elpx') || lower.endsWith('.h5p')) return 'application/zip';
     if (lower.endsWith('.css')) return 'text/css';
     if (lower.endsWith('.js')) return 'text/javascript';
     if (lower.endsWith('.json')) return 'application/json';
@@ -3558,6 +3582,11 @@
     return lower.endsWith('.csv');
   }
 
+  function isH5pPath(path) {
+    var lower = (path || '').toLowerCase();
+    return lower.endsWith('.h5p');
+  }
+
   function encodePathForHref(path) {
     return (path || '').split('/').map(function (segment) {
       return encodeURIComponent(segment);
@@ -3982,7 +4011,9 @@
     return lower === '__vwz_meta.json'
       || lower === '__vwz_viewer.json'
       || lower.indexOf('__vwz_docs_index') === 0
-      || lower.indexOf('__vwz_folder_index') === 0;
+      || lower.indexOf('__vwz_folder_index') === 0
+      || lower.indexOf('__vwz_h5p_index') === 0
+      || lower.indexOf('__vwz_h5p/') === 0;
   }
 
   function mapFolderFileEntries(files) {
@@ -4107,7 +4138,7 @@
       + 'var archiveIcon="<svg viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\"><rect x=\\"3\\" y=\\"3\\" width=\\"18\\" height=\\"4\\" rx=\\"1\\"></rect><path d=\\"M5 7v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7\\"></path><path d=\\"M10 12h4\\"></path></svg>";'
       + 'var codeIcon="<svg viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\"><path d=\\"m16 18 6-6-6-6\\"></path><path d=\\"m8 6-6 6 6 6\\"></path></svg>";'
       + 'var elpxIcon=archiveIcon;'
-      + 'function iconKind(file){var name=(file&&file.path?file.path:"").toLowerCase();if(/\\.(png|jpe?g|gif|webp|svg|bmp|ico)$/i.test(name))return"image";if(/\\.(mp3|wav|ogg|m4a|flac|aac)$/i.test(name))return"audio";if(/\\.(mp4|webm|mov|avi|mkv)$/i.test(name))return"video";if(/\\.(zip|rar|7z|tar|gz|bz2)$/i.test(name))return"archive";if(/\\.(html?|css|js|mjs|json|xml|csv|md|txt)$/i.test(name))return"code";return"doc";}'
+      + 'function iconKind(file){var name=(file&&file.path?file.path:"").toLowerCase();if(/\\.(png|jpe?g|gif|webp|svg|bmp|ico)$/i.test(name))return"image";if(/\\.(mp3|wav|ogg|m4a|flac|aac)$/i.test(name))return"audio";if(/\\.(mp4|webm|mov|avi|mkv)$/i.test(name))return"video";if(/\\.(zip|elpx|h5p|rar|7z|tar|gz|bz2)$/i.test(name))return"archive";if(/\\.(html?|css|js|mjs|json|xml|csv|md|txt)$/i.test(name))return"code";return"doc";}'
       + 'function iconForKind(kind){if(kind==="image")return imageIcon;if(kind==="audio")return audioIcon;if(kind==="video")return videoIcon;if(kind==="archive")return archiveIcon;if(kind==="code")return codeIcon;return fileIcon;}'
       + 'function formatBytes(bytes){var size=Number(bytes)||0;if(!size)return"0 B";var units=["B","KB","MB","GB","TB"];var idx=0;var value=size;while(value>=1024&&idx<units.length-1){value/=1024;idx+=1;}var fixed=value>=10||idx===0?0:1;return value.toFixed(fixed)+" "+units[idx];}'
       + 'function formatDateTime(ts){var date=new Date(ts);if(isNaN(date.getTime()))return"";try{return date.toLocaleString();}catch(e){return date.toISOString();}}'
@@ -4125,8 +4156,8 @@
       + 'function getNodeByPath(root,path){if(!path)return root;var parts=String(path).split("/").filter(Boolean);var node=root;for(var i=0;i<parts.length;i+=1){if(!node.folders[parts[i]])return null;node=node.folders[parts[i]];}return node;}'
       + 'function isExpanded(path){if(!path)return true;if(!Object.prototype.hasOwnProperty.call(expandedFolders,path)){expandedFolders[path]=true;}return !!expandedFolders[path];}'
       + 'function collectFolderRows(node,depth,rows){var keys=Object.keys(node.folders||{}).sort(function(a,b){return a.localeCompare(b,undefined,{numeric:true,sensitivity:"base"});});var path=node.path||"";var expanded=isExpanded(path);rows.push({path:path,name:path?node.name:"/",count:flattenFileCount(node),depth:depth,hasChildren:keys.length>0,expanded:expanded});if(path&&!expanded)return;keys.forEach(function(key){collectFolderRows(node.folders[key],depth+1,rows);});}'
-      + 'function isArchivePath(path){return /\\.zip$/i.test(String(path||""));}'
-      + 'function mimeFromPath(path){var lower=String(path||"").toLowerCase();if(/\\.pdf$/i.test(lower))return"application/pdf";if(/\\.docx$/i.test(lower))return"application/vnd.openxmlformats-officedocument.wordprocessingml.document";if(/\\.(html?|svg|xml)$/i.test(lower))return"text/html";if(/\\.(txt|md|csv|json|js|css)$/i.test(lower))return"text/plain";if(/\\.(png)$/i.test(lower))return"image/png";if(/\\.(jpe?g)$/i.test(lower))return"image/jpeg";if(/\\.(gif)$/i.test(lower))return"image/gif";if(/\\.(webp)$/i.test(lower))return"image/webp";if(/\\.(mp3)$/i.test(lower))return"audio/mpeg";if(/\\.(wav)$/i.test(lower))return"audio/wav";if(/\\.(ogg)$/i.test(lower))return"audio/ogg";if(/\\.(mp4)$/i.test(lower))return"video/mp4";if(/\\.(webm)$/i.test(lower))return"video/webm";return"application/octet-stream";}'
+      + 'function isArchivePath(path){return /\\.(zip|elpx|h5p)$/i.test(String(path||""));}'
+      + 'function mimeFromPath(path){var lower=String(path||"").toLowerCase();if(/\\.pdf$/i.test(lower))return"application/pdf";if(/\\.docx$/i.test(lower))return"application/vnd.openxmlformats-officedocument.wordprocessingml.document";if(/\\.(zip|elpx|h5p)$/i.test(lower))return"application/zip";if(/\\.(html?|svg|xml)$/i.test(lower))return"text/html";if(/\\.(txt|md|csv|json|js|css)$/i.test(lower))return"text/plain";if(/\\.(png)$/i.test(lower))return"image/png";if(/\\.(jpe?g)$/i.test(lower))return"image/jpeg";if(/\\.(gif)$/i.test(lower))return"image/gif";if(/\\.(webp)$/i.test(lower))return"image/webp";if(/\\.(mp3)$/i.test(lower))return"audio/mpeg";if(/\\.(wav)$/i.test(lower))return"audio/wav";if(/\\.(ogg)$/i.test(lower))return"audio/ogg";if(/\\.(mp4)$/i.test(lower))return"video/mp4";if(/\\.(webm)$/i.test(lower))return"video/webm";return"application/octet-stream";}'
       + 'function buildArchiveExplorerHtml(entries,title){return "";}'
       + 'function openArchiveFile(file){if(!file||!file.href)return;triggerDownload(file);}'
       + 'function canOpen(file){var lower=String(file.path||"").toLowerCase();return /\\.(html?|pdf|txt|md|json|xml|csv|svg|png|jpe?g|gif|webp|mp3|wav|ogg|mp4|webm)$/i.test(lower);}'
@@ -4164,6 +4195,299 @@
       + 'loadRestrictions().then(function(){if(applyRestrictionState()){renderFolders();renderFiles();}});'
       + '})();</script>'
       + '</body></html>';
+  }
+
+  function getH5pViewerStrings() {
+    var lang = normalizeLang(currentLang);
+    var map = {
+      es: {
+        title: 'Contenidos H5P',
+        loading: 'Cargando H5P...',
+        failed: 'No se pudo mostrar este contenido H5P.',
+        missing: 'No se pudo cargar el motor H5P.',
+        download: 'Descargar H5P',
+        hideList: 'Ocultar lista',
+        showList: 'Mostrar lista'
+      },
+      ca: {
+        title: 'Continguts H5P',
+        loading: 'Carregant H5P...',
+        failed: 'No s\'ha pogut mostrar aquest contingut H5P.',
+        missing: 'No s\'ha pogut carregar el motor H5P.',
+        download: 'Descarregar H5P',
+        hideList: 'Amagar llista',
+        showList: 'Mostrar llista'
+      },
+      gl: {
+        title: 'Contidos H5P',
+        loading: 'Cargando H5P...',
+        failed: 'Non se puido mostrar este contido H5P.',
+        missing: 'Non se puido cargar o motor H5P.',
+        download: 'Descargar H5P',
+        hideList: 'Agochar lista',
+        showList: 'Amosar lista'
+      },
+      eu: {
+        title: 'H5P edukiak',
+        loading: 'H5P kargatzen...',
+        failed: 'Ezin izan da H5P eduki hau erakutsi.',
+        missing: 'Ezin izan da H5P motorra kargatu.',
+        download: 'H5P deskargatu',
+        hideList: 'Zerrenda ezkutatu',
+        showList: 'Zerrenda erakutsi'
+      },
+      en: {
+        title: 'H5P Content',
+        loading: 'Loading H5P...',
+        failed: 'Could not display this H5P content.',
+        missing: 'Could not load the H5P engine.',
+        download: 'Download H5P',
+        hideList: 'Hide list',
+        showList: 'Show list'
+      },
+      de: {
+        title: 'H5P-Inhalte',
+        loading: 'H5P wird geladen...',
+        failed: 'Dieser H5P-Inhalt konnte nicht angezeigt werden.',
+        missing: 'Die H5P-Engine konnte nicht geladen werden.',
+        download: 'H5P herunterladen',
+        hideList: 'Liste ausblenden',
+        showList: 'Liste anzeigen'
+      }
+    };
+    return map[lang] || map.es;
+  }
+
+  function buildH5pIndexHtml(packages, selectedSourcePath, allowDownload) {
+    var pageLang = normalizeLang(currentLang);
+    var strings = getH5pViewerStrings();
+    var packageList = (packages || []).map(function (item, index) {
+      var explicitId = normalizePath(item && item.id ? item.id : '');
+      var sourcePath = normalizePath(item && item.sourcePath ? item.sourcePath : '');
+      var rootPath = normalizePath(item && item.rootPath ? item.rootPath : '');
+      var fallbackTitle = deriveTitleFromPath(sourcePath || rootPath) || 'H5P';
+      return {
+        id: explicitId || sourcePath || rootPath || ('h5p-' + String(index + 1)),
+        sourcePath: sourcePath,
+        rootPath: rootPath,
+        title: normalizeResourceTitle(item && item.title ? item.title : '') || fallbackTitle
+      };
+    }).filter(function (item) {
+      return !!item.id && item.rootPath !== null && item.rootPath !== undefined;
+    });
+    var selectedPath = normalizePath(selectedSourcePath || (packageList[0] && packageList[0].id) || '');
+    var selected = packageList.find(function (item) { return item.id === selectedPath; }) || packageList[0] || null;
+    var selectedTitle = selected && selected.title ? selected.title : (strings.title || 'H5P');
+    var listItems = packageList.map(function (item) {
+      var selectedClass = item.id === (selected && selected.id) ? ' class="is-active"' : '';
+      return '<li><button type="button" data-h5p-link' + selectedClass
+        + ' data-h5p-id="' + escapeHtml(item.id) + '"'
+        + ' data-h5p-source="' + escapeHtml(item.sourcePath) + '"'
+        + ' data-h5p-root="' + escapeHtml(item.rootPath) + '"'
+        + ' data-h5p-title="' + escapeHtml(item.title || item.id) + '"'
+        + ' title="' + escapeHtml(item.title || item.id) + '">'
+        + '<span class="h5p-link__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="M8 13h8"></path><path d="M8 17h6"></path></svg></span>'
+        + '<span class="h5p-link__label">' + escapeHtml(item.title || item.id) + '</span>'
+        + '</button></li>';
+    }).join('');
+    var allowDownloadJs = allowDownload ? 'true' : 'false';
+    var stringsJson = JSON.stringify(strings || {});
+    var itemsJson = JSON.stringify(packageList || []);
+    return '<!doctype html>'
+      + '<html lang="' + escapeHtml(pageLang) + '"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">'
+      + '<title>' + escapeHtml(selectedTitle || 'H5P') + '</title>'
+      + '<style>'
+      + ':root{color-scheme:light;--surface:#fff;--surface-muted:#f3f5f8;--ink:#0f172a;--border:#e2e8f0;--accent:#2563eb;--accent-wash:#eff6ff;--shadow:0 10px 26px rgba(15,23,42,.06)}'
+      + '*{box-sizing:border-box}html,body{height:100%;margin:0}'
+      + 'body{font-family:"Libre Franklin","Segoe UI",sans-serif;background:#f6f8fc;color:var(--ink)}'
+      + '.layout{display:grid;grid-template-columns:minmax(230px,330px) 1fr;height:100%;gap:12px;padding:12px}'
+      + '.sidebar{display:flex;flex-direction:column;min-height:0;background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}'
+      + '.sidebar-toggle{width:36px;height:36px;margin:10px 10px 8px;appearance:none;border:1px solid #cbd5e1;background:var(--surface-muted);color:#334155;border-radius:10px;padding:0;cursor:pointer;display:inline-grid;place-items:center}'
+      + '.sidebar-toggle:hover{background:var(--accent-wash);color:var(--accent)}.sidebar-toggle svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}'
+      + '.sidebar-content{padding:0 10px 10px;overflow:auto}'
+      + '.sidebar h1{margin:0 0 10px;font-size:1rem;line-height:1.2}'
+      + '.sidebar ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}'
+      + '.sidebar button{display:flex;align-items:center;gap:8px;width:100%;text-align:left;padding:10px 12px;border-radius:12px;border:1px solid var(--border);background:var(--surface-muted);font:inherit;color:var(--ink);cursor:pointer;min-width:0;overflow:hidden}'
+      + '.h5p-link__label{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}'
+      + '.h5p-link__icon{display:inline-grid;place-items:center;flex:0 0 auto;width:18px;height:18px;border-radius:6px;background:#ecfdf5;border:1px solid #86efac;color:#0f766e}'
+      + '.h5p-link__icon svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}'
+      + '.sidebar button:hover{background:var(--accent-wash);border-color:#bfdbfe}'
+      + '.sidebar button.is-active{background:var(--accent-wash);border-color:#93c5fd;color:#1d4ed8;font-weight:700}'
+      + 'body.sidebar-collapsed .layout{grid-template-columns:56px 1fr}'
+      + 'body.sidebar-collapsed .sidebar-toggle{margin:10px auto 8px}'
+      + 'body.sidebar-collapsed .sidebar-content{display:none}'
+      + '.viewer{min-height:0;background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);overflow:auto;display:grid;grid-template-rows:auto 1fr;gap:0}'
+      + '.toolbar{display:flex;align-items:center;gap:10px;padding:10px;border-bottom:1px solid var(--border)}'
+      + '.badge{display:inline-flex;align-items:center;padding:4px 9px;border-radius:999px;border:1px solid #86efac;background:#ecfdf5;color:#0f766e;font-size:.74rem;font-weight:700;letter-spacing:.01em}'
+      + '.status{font-size:.95rem;color:#475569}'
+      + '.download{margin-left:auto;color:var(--accent);text-decoration:none;font-weight:600;display:inline-flex;align-items:center;gap:6px}'
+      + '.download[hidden]{display:none !important}'
+      + '.stage{padding:12px;min-height:0}'
+      + '.h5p-mount{min-height:420px}'
+      + '@media (max-width:900px){.layout{grid-template-columns:1fr;grid-template-rows:auto 1fr}body.sidebar-collapsed .layout{grid-template-columns:1fr;grid-template-rows:auto 1fr}}'
+      + '</style></head><body>'
+      + '<div class="layout"><aside class="sidebar"><button type="button" class="sidebar-toggle" data-sidebar-toggle aria-expanded="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M9 3v18"></path><path d="m16 9-3 3 3 3"></path></svg></button><div class="sidebar-content"><h1 data-viewer-title>' + escapeHtml(strings.title || 'H5P') + '</h1><ul>' + listItems + '</ul></div></aside>'
+      + '<main class="viewer"><section class="toolbar"><span class="badge">H5P</span><span class="status" data-h5p-status></span><a class="download" data-h5p-download hidden></a></section><section class="stage"><div class="h5p-mount" data-h5p-mount></div></section></main></div>'
+      + '<script src="https://cdn.jsdelivr.net/npm/h5p-standalone@3.8.0/dist/main.bundle.js"></script>'
+      + '<script>(function(){var strings=' + stringsJson + ';var items=' + itemsJson + ';var allowDownload=' + allowDownloadJs + ';var body=document.body;var toggle=document.querySelector("[data-sidebar-toggle]");var titleNode=document.querySelector("[data-viewer-title]");var statusNode=document.querySelector("[data-h5p-status]");var mountNode=document.querySelector("[data-h5p-mount]");var downloadNode=document.querySelector("[data-h5p-download]");var links=[].slice.call(document.querySelectorAll("[data-h5p-link]"));var iconOpen="<svg viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\"><rect x=\\"3\\" y=\\"3\\" width=\\"18\\" height=\\"18\\" rx=\\"2\\"></rect><path d=\\"M9 3v18\\"></path><path d=\\"m16 9-3 3 3 3\\"></path></svg>";var iconClosed="<svg viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\"><rect x=\\"3\\" y=\\"3\\" width=\\"18\\" height=\\"18\\" rx=\\"2\\"></rect><path d=\\"M9 3v18\\"></path><path d=\\"m13 9 3 3-3 3\\"></path></svg>";if(toggle){toggle.setAttribute("aria-label",strings.hideList||"Hide list");toggle.title=strings.hideList||"Hide list";}function enc(path){return String(path||"").split("/").map(function(seg){return encodeURIComponent(seg);}).join("/");}function applyTitle(text){var clean=String(text||"").replace(/\\s+/g," ").trim();if(!clean)return;if(titleNode)titleNode.textContent=clean;document.title=clean;}function markActive(id){links.forEach(function(link){link.classList.toggle("is-active",String(link.getAttribute("data-h5p-id")||"")===String(id||""));});}function syncToggle(){if(!toggle)return;var collapsed=body.classList.contains("sidebar-collapsed");toggle.innerHTML=collapsed?iconClosed:iconOpen;toggle.setAttribute("aria-expanded",collapsed?"false":"true");toggle.setAttribute("aria-label",collapsed?(strings.showList||"Show list"):(strings.hideList||"Hide list"));toggle.title=collapsed?(strings.showList||"Show list"):(strings.hideList||"Hide list");}function renderH5p(item){if(!item||!mountNode)return;markActive(item.id||"");applyTitle(item.title||strings.title||"H5P");if(statusNode)statusNode.textContent=strings.loading||"Loading H5P...";if(downloadNode){downloadNode.hidden=!(allowDownload&&item.sourcePath);downloadNode.textContent=strings.download||"Download H5P";downloadNode.href=item.sourcePath?enc(item.sourcePath):"";downloadNode.download="";downloadNode.setAttribute("aria-label",strings.download||"Download H5P");}mountNode.innerHTML="";if(!window.H5PStandalone||!window.H5PStandalone.H5P){if(statusNode)statusNode.textContent=strings.missing||"Could not load the H5P engine.";return;}var options={h5pJsonPath:enc(item.rootPath||"."),frameJs:"https://cdn.jsdelivr.net/npm/h5p-standalone@3.8.0/dist/frame.bundle.js",frameCss:"https://cdn.jsdelivr.net/npm/h5p-standalone@3.8.0/dist/styles/h5p.css",frame:true,fullScreen:true,export:!!allowDownload,downloadUrl:item.sourcePath?enc(item.sourcePath):""};Promise.resolve(new window.H5PStandalone.H5P(mountNode,options)).then(function(){if(statusNode)statusNode.textContent="";}).catch(function(){if(statusNode)statusNode.textContent=strings.failed||"Could not display this H5P content.";});}if(toggle){toggle.addEventListener("click",function(){body.classList.toggle("sidebar-collapsed");syncToggle();});syncToggle();}links.forEach(function(link){link.addEventListener("click",function(){var id=String(link.getAttribute("data-h5p-id")||"");var found=items.find(function(item){return String(item&&item.id||"")===id;});if(found){renderH5p(found);}});});var initial=items.find(function(item){return links.some(function(link){return link.classList.contains("is-active")&&String(link.getAttribute("data-h5p-id")||"")===String(item&&item.id||"");});})||items[0]||null;if(initial){renderH5p(initial);}else if(statusNode){statusNode.textContent=strings.failed||"Could not display this H5P content.";}})();</script>'
+      + '</body></html>';
+  }
+
+  function sanitizePathSegment(value) {
+    var cleaned = String(value || '')
+      .toLowerCase()
+      .replace(/[^a-z0-9_-]+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-+|-+$/g, '');
+    return cleaned || 'h5p';
+  }
+
+  function shortStableHash(value) {
+    var str = String(value || '');
+    var hash = 2166136261;
+    for (var i = 0; i < str.length; i += 1) {
+      hash ^= str.charCodeAt(i);
+      hash += (hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24);
+    }
+    return Math.abs(hash >>> 0).toString(36);
+  }
+
+  function buildH5pExtractRoot(sourcePath, usedRoots) {
+    var baseTitle = deriveTitleFromPath(sourcePath) || 'h5p';
+    var slug = sanitizePathSegment(baseTitle);
+    var hash = shortStableHash(normalizePath(sourcePath || ''));
+    var candidate = '__vwz_h5p/' + slug + '-' + hash;
+    var lower = candidate.toLowerCase();
+    var idx = 2;
+    while (usedRoots[lower]) {
+      candidate = '__vwz_h5p/' + slug + '-' + hash + '-' + idx;
+      lower = candidate.toLowerCase();
+      idx += 1;
+    }
+    usedRoots[lower] = true;
+    return candidate;
+  }
+
+  function expandH5pPackagesInFiles(files, siteId) {
+    var baseFiles = (files || []).slice();
+    var result = {
+      files: baseFiles.slice(),
+      packages: []
+    };
+    if (!baseFiles.length) return Promise.resolve(result);
+    if (!window.fflate || !window.fflate.unzipSync) return Promise.resolve(result);
+
+    var existingPaths = {};
+    var usedRoots = {};
+    result.files.forEach(function (file) {
+      var normalized = normalizePath(file && file.path ? file.path : '').toLowerCase();
+      if (!normalized) return;
+      existingPaths[normalized] = true;
+      if (normalized.indexOf('__vwz_h5p/') === 0) {
+        var rootParts = normalized.split('/').slice(0, 2);
+        if (rootParts.length === 2) {
+          usedRoots[rootParts.join('/')] = true;
+        }
+      }
+    });
+
+    var tasks = [];
+    baseFiles.forEach(function (file) {
+      var sourcePath = normalizePath(file && file.path ? file.path : '');
+      if (!sourcePath || !isH5pPath(sourcePath)) return;
+      if (!file.blob || !file.blob.arrayBuffer) return;
+      tasks.push(file.blob.arrayBuffer().then(function (buffer) {
+        var entries = window.fflate.unzipSync(new Uint8Array(buffer));
+        var paths = Object.keys(entries).filter(function (entryPath) {
+          return !!entryPath && !/\/$/.test(entryPath) && entryPath.indexOf('__MACOSX/') !== 0;
+        }).map(function (entryPath) {
+          return normalizePath(entryPath);
+        }).filter(function (path) {
+          return !!path;
+        });
+        var hasManifest = paths.some(function (path) { return String(path).toLowerCase() === 'h5p.json'; });
+        var hasContent = paths.some(function (path) { return String(path).toLowerCase() === 'content/content.json'; });
+        if (!hasManifest || !hasContent) return;
+
+        var rootPath = buildH5pExtractRoot(sourcePath, usedRoots);
+        result.packages.push({
+          sourcePath: sourcePath,
+          rootPath: rootPath,
+          title: deriveTitleFromPath(sourcePath) || sourcePath
+        });
+
+        Object.keys(entries).forEach(function (entryPath) {
+          if (!entryPath || /\/$/.test(entryPath)) return;
+          if (entryPath.indexOf('__MACOSX/') === 0) return;
+          var normalizedEntry = normalizePath(entryPath);
+          if (!normalizedEntry) return;
+          var targetPath = normalizePath(rootPath + '/' + normalizedEntry);
+          var targetLower = targetPath.toLowerCase();
+          if (existingPaths[targetLower]) return;
+          var data = entries[entryPath];
+          var type = guessMimeType(targetPath);
+          var blob = new Blob([data], { type: type });
+          result.files.push({
+            key: siteId + '::' + targetPath,
+            siteId: siteId,
+            path: targetPath,
+            blob: blob,
+            size: blob.size,
+            type: type
+          });
+          existingPaths[targetLower] = true;
+        });
+      }).catch(function () {
+        return null;
+      }));
+    });
+
+    if (!tasks.length) return Promise.resolve(result);
+    return Promise.all(tasks).then(function () {
+      return result;
+    }).catch(function () {
+      return result;
+    });
+  }
+
+  function detectEmbeddedH5pPackages(visibleEntries) {
+    var entries = visibleEntries || [];
+    if (!entries.length) return [];
+    var pathSet = {};
+    entries.forEach(function (entry) {
+      var normalized = normalizePath(entry && entry.path ? entry.path : '').toLowerCase();
+      if (normalized) pathSet[normalized] = true;
+    });
+    var packagesByRoot = {};
+    entries.forEach(function (entry) {
+      var normalizedPath = normalizePath(entry && entry.path ? entry.path : '');
+      if (!normalizedPath) return;
+      var lower = normalizedPath.toLowerCase();
+      if (!/(^|\/)h5p\.json$/.test(lower)) return;
+      var rootPath = '';
+      if (lower !== 'h5p.json') {
+        rootPath = normalizedPath.slice(0, normalizedPath.length - 9).replace(/\/$/, '');
+      }
+      var contentPath = (rootPath ? rootPath + '/' : '') + 'content/content.json';
+      if (!pathSet[contentPath.toLowerCase()]) return;
+      var id = rootPath || '__vwz_h5p_root';
+      if (packagesByRoot[id]) return;
+      var title = rootPath ? (deriveTitleFromPath(rootPath) || rootPath) : 'H5P';
+      packagesByRoot[id] = {
+        id: id,
+        sourcePath: '',
+        rootPath: rootPath,
+        title: title
+      };
+    });
+    return Object.keys(packagesByRoot).map(function (key) {
+      return packagesByRoot[key];
+    }).sort(function (a, b) {
+      return String(a.title || '').localeCompare(String(b.title || ''), undefined, {
+        numeric: true,
+        sensitivity: 'base'
+      });
+    });
   }
 
 
@@ -4206,48 +4530,119 @@
       });
     }
 
-    var htmlExists = files.some(function (file) {
-      var lower = (file.path || '').toLowerCase();
-      return lower.endsWith('.html') || lower.endsWith('.htm');
+    return expandH5pPackagesInFiles(files, siteId).then(function (expanded) {
+      var workingFiles = expanded && expanded.files ? expanded.files : (files || []);
+      var h5pPackages = expanded && expanded.packages ? expanded.packages : [];
+      var htmlExists = workingFiles.some(function (file) {
+        var lower = (file.path || '').toLowerCase();
+        return lower.endsWith('.html') || lower.endsWith('.htm');
+      });
+      if (htmlExists) {
+        return { files: workingFiles, preferredIndexPath: preferredIndexPath || '' };
+      }
+      var visibleEntries = mapFolderFileEntries(workingFiles);
+      if (!visibleEntries.length) {
+        return { files: workingFiles, preferredIndexPath: preferredIndexPath || '' };
+      }
+      var documentPaths = visibleEntries.map(function (entry) { return entry.path; }).filter(function (path) {
+        return isPdfPath(path) || isDocxPath(path) || isTxtPath(path) || isMarkdownPath(path) || isCsvPath(path);
+      });
+      documentPaths.sort(comparePdfPaths);
+      var h5pPaths = visibleEntries.map(function (entry) { return entry.path; }).filter(function (path) {
+        return isH5pPath(path);
+      }).sort(function (a, b) {
+        return String(a || '').localeCompare(String(b || ''), undefined, {
+          numeric: true,
+          sensitivity: 'base'
+        });
+      });
+      var packageBySource = {};
+      h5pPackages.forEach(function (item) {
+        var sourcePath = normalizePath(item && item.sourcePath ? item.sourcePath : '');
+        if (!sourcePath) return;
+        if (!packageBySource[sourcePath]) {
+          packageBySource[sourcePath] = item;
+        }
+      });
+      var resolvedH5pPackages = h5pPaths.map(function (path) {
+        var pkg = packageBySource[path];
+        if (!pkg) return null;
+        return {
+          sourcePath: normalizePath(pkg.sourcePath || path),
+          rootPath: normalizePath(pkg.rootPath || ''),
+          title: normalizeResourceTitle(pkg.title || deriveTitleFromPath(path)) || deriveTitleFromPath(path) || path
+        };
+      }).filter(function (item) {
+        return !!(item && item.sourcePath && item.rootPath);
+      });
+      var embeddedH5pPackages = detectEmbeddedH5pPackages(visibleEntries);
+      var allH5pPackages = resolvedH5pPackages.slice();
+      var packageIds = {};
+      allH5pPackages.forEach(function (item) {
+        packageIds[(item.sourcePath || item.rootPath || '').toLowerCase()] = true;
+      });
+      embeddedH5pPackages.forEach(function (item) {
+        var id = (item && (item.id || item.rootPath) ? String(item.id || item.rootPath) : '').toLowerCase();
+        if (!id || packageIds[id]) return;
+        allH5pPackages.push(item);
+        packageIds[id] = true;
+      });
+
+      var lowerPaths = workingFiles.map(function (file) { return (file.path || '').toLowerCase(); });
+      var onlyDocuments = documentPaths.length === visibleEntries.length;
+      var onlyH5pArchives = h5pPaths.length > 0
+        && h5pPaths.length === visibleEntries.length
+        && resolvedH5pPackages.length === h5pPaths.length;
+      var onlyEmbeddedH5p = !h5pPaths.length
+        && embeddedH5pPackages.length > 0
+        && !documentPaths.length;
+      var onlyH5p = onlyH5pArchives || onlyEmbeddedH5p;
+      var indexPrefix = onlyDocuments
+        ? '__vwz_docs_index'
+        : (onlyH5p ? '__vwz_h5p_index' : '__vwz_folder_index');
+      var indexPath = indexPrefix + '.html';
+      var suffix = 2;
+      while (lowerPaths.indexOf(indexPath.toLowerCase()) !== -1) {
+        indexPath = indexPrefix + '_' + suffix + '.html';
+        suffix += 1;
+      }
+      var html;
+      if (onlyDocuments) {
+        var preferredDoc = preferredIndexPath ? normalizePath(preferredIndexPath) : '';
+        var selectedDoc = documentPaths.find(function (path) { return path === preferredDoc; }) || documentPaths[0];
+        html = buildDocumentIndexHtml(documentPaths, selectedDoc, allowDownload);
+      } else if (onlyH5p) {
+        var preferredH5p = preferredIndexPath ? normalizePath(preferredIndexPath) : '';
+        var selectedH5p = allH5pPackages.find(function (item) {
+          return item.sourcePath === preferredH5p
+            || item.rootPath === preferredH5p
+            || item.id === preferredH5p;
+        }) || allH5pPackages[0];
+        var selectedH5pId = selectedH5p
+          ? (selectedH5p.sourcePath || selectedH5p.id || selectedH5p.rootPath || '')
+          : '';
+        html = buildH5pIndexHtml(
+          allH5pPackages,
+          selectedH5pId,
+          allowDownload
+        );
+      } else {
+        html = buildFolderIndexHtml(visibleEntries, allowDownload, restrictions);
+      }
+      var blob = new Blob([html], { type: 'text/html' });
+      var nextFiles = workingFiles.slice();
+      nextFiles.push({
+        key: siteId + '::' + indexPath,
+        siteId: siteId,
+        path: indexPath,
+        blob: blob,
+        size: blob.size,
+        type: 'text/html'
+      });
+      return { files: nextFiles, preferredIndexPath: indexPath };
+    }).catch(function () {
+      return { files: files || [], preferredIndexPath: preferredIndexPath || '' };
     });
-    if (htmlExists) {
-      return { files: files, preferredIndexPath: preferredIndexPath || '' };
-    }
-    var visibleEntries = mapFolderFileEntries(files);
-    var documentPaths = visibleEntries.map(function (entry) { return entry.path; }).filter(function (path) {
-      return isPdfPath(path) || isDocxPath(path) || isTxtPath(path) || isMarkdownPath(path) || isCsvPath(path);
-    });
-    documentPaths.sort(comparePdfPaths);
-    if (!visibleEntries.length) {
-      return { files: files, preferredIndexPath: preferredIndexPath || '' };
-    }
-    var lowerPaths = files.map(function (file) { return (file.path || '').toLowerCase(); });
-    var onlyDocuments = documentPaths.length === visibleEntries.length;
-    var indexPath = onlyDocuments ? '__vwz_docs_index.html' : '__vwz_folder_index.html';
-    var suffix = 2;
-    while (lowerPaths.indexOf(indexPath.toLowerCase()) !== -1) {
-      indexPath = (onlyDocuments ? '__vwz_docs_index_' : '__vwz_folder_index_') + suffix + '.html';
-      suffix += 1;
-    }
-    var html;
-    if (onlyDocuments) {
-      var preferred = preferredIndexPath ? normalizePath(preferredIndexPath) : '';
-      var selectedDoc = documentPaths.find(function (path) { return path === preferred; }) || documentPaths[0];
-      html = buildDocumentIndexHtml(documentPaths, selectedDoc, allowDownload);
-    } else {
-      html = buildFolderIndexHtml(visibleEntries, allowDownload, restrictions);
-    }
-    var blob = new Blob([html], { type: 'text/html' });
-    var nextFiles = files.slice();
-    nextFiles.push({
-      key: siteId + '::' + indexPath,
-      siteId: siteId,
-      path: indexPath,
-      blob: blob,
-      size: blob.size,
-      type: 'text/html'
-    });
-    return { files: nextFiles, preferredIndexPath: indexPath };
   }
 
   function pickIndexPath(paths, preferredIndexPath) {
@@ -4527,19 +4922,19 @@
             || (viewerPreferences && viewerPreferences.preferredIndexPath)
             || scormPreferredIndexPath
             || '';
-          var preparedDocs = prepareIndexableZip(files, result.siteId, preferredIndexHint, allowDownload, restrictions);
-          files = preparedDocs.files;
+          return prepareIndexableZip(files, result.siteId, preferredIndexHint, allowDownload, restrictions).then(function (preparedDocs) {
+            files = preparedDocs.files;
 
-          if (!files.length) {
-            throw new Error(t('error.zipNoWebFiles'));
-          }
-          if (autoOpen || showProgress) {
-            UI.stopProgress();
-            UI.setProgress(100);
-          }
+            if (!files.length) {
+              throw new Error(t('error.zipNoWebFiles'));
+            }
+            if (autoOpen || showProgress) {
+              UI.stopProgress();
+              UI.setProgress(100);
+            }
 
-          var paths = files.map(function (file) { return file.path; });
-          return pickIndexPath(paths, preparedDocs.preferredIndexPath || preferredIndexHint || '').then(function (indexPath) {
+            var paths = files.map(function (file) { return file.path; });
+            return pickIndexPath(paths, preparedDocs.preferredIndexPath || preferredIndexHint || '').then(function (indexPath) {
             currentIndexPath = indexPath || '';
             refreshShareLink(effectiveZipUrl, currentIndexPath);
             if (HtmlPicker.consumeWasLoading && HtmlPicker.consumeWasLoading()) {
@@ -4634,6 +5029,7 @@
                   });
                 });
               });
+            });
             });
           });
         });
