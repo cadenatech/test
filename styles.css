@@ -3349,6 +3349,10 @@ body[data-loading="true"] main {
   color: #c5d0df;
 }
 
+:root[data-theme="dark"] [data-publish-module="main"] form .step-note strong {
+  color: #e2e8f0;
+}
+
 :root[data-theme="dark"] [data-publish-module="main"] form [data-url] {
   background: #162741;
   border-color: #355179;
