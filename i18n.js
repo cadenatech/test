@@ -293,7 +293,7 @@
           }
         },
         restrict: {
-          title: '¿Quieres limitar el acceso a un ZIP ya creado?',
+          title: '¿Tienes un ZIP o ELPX ya creado y quieres añadirle restricciones de visibilidad? Súbelo aquí',
           note: 'Sube tu ZIP y el visor añadirá las restricciones. Después tendrás que subirlo a Drive, Dropbox, etc.',
           lockedText: 'Para usar esta opción, activa la limitación de visibilidad en “Opciones” (debajo de este bloque).',
           lockedAction: 'Activar limitación',
@@ -732,7 +732,7 @@
           }
         },
         restrict: {
-          title: 'Vols limitar l’accés a un ZIP ja creat?',
+          title: 'Tens un ZIP o ELPX ja creat i vols afegir-hi restriccions de visibilitat? Puja’l aquí',
           note: 'Puja el teu ZIP i el visor afegirà les restriccions. Després l’hauràs de pujar a Drive, Dropbox, etc.',
           lockedText: 'Per fer servir aquesta opció, primer activa la limitació de visibilitat del recurs.',
           lockedAction: 'Activar limitació',
@@ -1165,7 +1165,7 @@
           }
         },
         restrict: {
-          title: 'Queres limitar o acceso a un ZIP xa creado?',
+          title: 'Tes un ZIP ou ELPX xa creado e queres engadirlle restricións de visibilidade? Súbeo aquí',
           note: 'Sube o teu ZIP e o visor engadirá as restricións. Despois terás que subilo a Drive, Dropbox, etc.',
           lockedText: 'Para usar esta opción, primeiro activa a limitación de visibilidade do recurso.',
           lockedAction: 'Activar limitación',
@@ -1598,7 +1598,7 @@
           }
         },
         restrict: {
-          title: 'ZIP bat jada sortuta badago, sarbidea mugatu nahi?',
+          title: 'Jada sortutako ZIP edo ELPX bat duzu eta ikusgarritasun-murrizketak gehitu nahi dizkiozu? Igo hemen',
           note: 'Igo zure ZIPa eta bisoreak murrizketak gehituko ditu. Ondoren Drive, Dropbox, etab. zerbitzuetara igo beharko duzu.',
           lockedText: 'Aukera hau erabiltzeko, lehenik aktibatu baliabidearen ikusgarritasun-muga.',
           lockedAction: 'Aktibatu muga',
@@ -2031,7 +2031,7 @@
           }
         },
         restrict: {
-          title: 'Want to limit access to an existing ZIP?',
+          title: 'Do you already have a ZIP or ELPX and want to add visibility restrictions? Upload it here',
           note: 'Upload your ZIP and the viewer will add restrictions. Then upload it to Drive, Dropbox, etc.',
           lockedText: 'To use this option, first enable the resource visibility limit.',
           lockedAction: 'Enable limit',
@@ -2465,7 +2465,7 @@
           }
         },
         restrict: {
-          title: 'Zugriff auf ein vorhandenes ZIP begrenzen?',
+          title: 'Hast du bereits eine ZIP- oder ELPX-Datei und möchtest Sichtbarkeitsbeschränkungen hinzufügen? Lade sie hier hoch',
           note: 'Lade dein ZIP hoch und der Viewer fügt die Einschränkungen hinzu. Danach musst du es zu Drive, Dropbox usw. hochladen.',
           lockedText: 'Um diese Option zu nutzen, aktiviere zuerst die Sichtbarkeitsbegrenzung der Ressource.',
           lockedAction: 'Begrenzung aktivieren',
