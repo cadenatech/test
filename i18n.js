@@ -295,7 +295,7 @@
         restrict: {
           title: '¿Tienes un ZIP o ELPX ya creado y quieres añadirle restricciones de visibilidad? Súbelo aquí',
           note: 'Sube tu ZIP y el visor añadirá las restricciones. Después tendrás que subirlo a Drive, Dropbox, etc.',
-          lockedText: 'Para usar esta opción, activa la limitación de visibilidad en “Opciones” (debajo de este bloque).',
+          lockedText: 'Para usar esta opción, configura la disponibilidad el recurso en “Opciones” (debajo de este bloque).',
           lockedAction: 'Activar limitación',
           lockedStatus: '',
           pick: 'Seleccionar ZIP',
