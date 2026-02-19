@@ -23,7 +23,7 @@
         themeAuto: 'Automático',
         themeLight: 'Claro',
         themeDark: 'Oscuro',
-        subtitle: 'Genera un enlace web para compartir tu recurso (carpeta, archivos, HTML, ZIP, ELPX o H5P). Comparte el enlace y tu recurso podrá ser abierto directamente en cualquier navegador.'
+        subtitle: 'Genera un enlace web para compartir tu recurso (carpeta, archivos, HTML, ZIP, ELPX, H5P o SCORM 1.2). Comparte el enlace y tu recurso podrá ser abierto directamente en cualquier navegador.'
       },
       settings: {
         title: 'Ajustes de visibilidad',
@@ -119,7 +119,7 @@
         label: 'Secciones'
       },
       main: {
-        subtitle: 'Si ya tienes tu recurso en formato ZIP, ELPX o H5P en un servicio con <strong>enlace público</strong> (Drive, Dropbox, etc.), pega aquí el enlace para generar el enlace que usarás para compartir el recurso.',
+        subtitle: 'Si ya tienes tu recurso en formato ZIP, ELPX, H5P o SCORM 1.2 (en ZIP) en un servicio con <strong>enlace público</strong> (Drive, Dropbox, etc.), pega aquí el enlace para generar el enlace que usarás para compartir el recurso.',
         form: {
           title: 'Ya tengo un ZIP, ELPX o H5P en la nube con enlace',
           step: 'Pega el enlace público al ZIP (o .elpx/.h5p) y pulsa “Crear enlace”.',
@@ -504,7 +504,7 @@
         themeAuto: 'Automàtic',
         themeLight: 'Clar',
         themeDark: 'Fosc',
-        subtitle: 'Crea, previsualitza i comparteix recursos educatius des dels teus fitxers, carpetes, HTML o ZIP/ELPX/H5P.'
+        subtitle: 'Crea, previsualitza i comparteix recursos educatius des dels teus fitxers, carpetes, HTML o ZIP/ELPX/H5P/SCORM 1.2.'
       },
       settings: {
         title: 'Ajustos de visibilitat',
@@ -600,7 +600,7 @@
         label: 'Seccions'
       },
       main: {
-        subtitle: "Si ja tens el teu recurs en format ZIP, ELPX o H5P en un servei amb <strong>enllaç públic</strong> (Drive, Dropbox, etc.), enganxa aquí l'enllaç per generar l’enllaç del visor.",
+        subtitle: "Si ja tens el teu recurs en format ZIP, ELPX, H5P o SCORM 1.2 (en ZIP) en un servei amb <strong>enllaç públic</strong> (Drive, Dropbox, etc.), enganxa aquí l'enllaç per generar l’enllaç del visor.",
         form: {
           title: 'Ja tinc un ZIP, ELPX o H5P al núvol amb enllaç',
           step: 'Enganxa l’enllaç públic al ZIP (o .elpx/.h5p) i prem “Crear enllaç”.',
@@ -971,7 +971,7 @@
         themeAuto: 'Automático',
         themeLight: 'Claro',
         themeDark: 'Escuro',
-        subtitle: 'Crea, previsualiza e comparte recursos educativos desde os teus ficheiros, cartafoles, HTML ou ZIP/ELPX/H5P.'
+        subtitle: 'Crea, previsualiza e comparte recursos educativos desde os teus ficheiros, cartafoles, HTML ou ZIP/ELPX/H5P/SCORM 1.2.'
       },
       settings: {
         title: 'Axustes de visibilidade',
@@ -1067,7 +1067,7 @@
         label: 'Seccións'
       },
       main: {
-        subtitle: 'Se xa tes o teu recurso en formato ZIP, ELPX ou H5P nun servizo con <strong>ligazón pública</strong> (Drive, Dropbox, etc.), pega aquí a ligazón para xerar a ligazón do visor.',
+        subtitle: 'Se xa tes o teu recurso en formato ZIP, ELPX, H5P ou SCORM 1.2 (en ZIP) nun servizo con <strong>ligazón pública</strong> (Drive, Dropbox, etc.), pega aquí a ligazón para xerar a ligazón do visor.',
         form: {
           title: 'Xa teño un ZIP, ELPX ou H5P na nube con ligazón',
           step: 'Pega a ligazón pública ao ZIP (ou .elpx/.h5p) e preme “Crear ligazón”.',
@@ -1438,7 +1438,7 @@
         themeAuto: 'Automatikoa',
         themeLight: 'Argia',
         themeDark: 'Iluna',
-        subtitle: 'Sortu, aurrebistatu eta partekatu hezkuntza-baliabideak zure fitxategi, karpeta, HTML edo ZIP/ELPX/H5Petatik.'
+        subtitle: 'Sortu, aurrebistatu eta partekatu hezkuntza-baliabideak zure fitxategi, karpeta, HTML edo ZIP/ELPX/H5P/SCORM 1.2tik.'
       },
       settings: {
         title: 'Ikusgarritasun ezarpenak',
@@ -1534,7 +1534,7 @@
         label: 'Atalak'
       },
       main: {
-        subtitle: 'Zure baliabidea ZIP, ELPX edo H5P formatuan baduzu eta <strong>esteka publikoa</strong> duen zerbitzu batean badago (Drive, Dropbox, etab.), itsatsi hemen esteka bisorearen esteka sortzeko.',
+        subtitle: 'Zure baliabidea ZIP, ELPX, H5P edo SCORM 1.2 (ZIPean) formatuan baduzu eta <strong>esteka publikoa</strong> duen zerbitzu batean badago (Drive, Dropbox, etab.), itsatsi hemen esteka bisorearen esteka sortzeko.',
         form: {
           title: 'ZIP bat hodeian daukat estekarekin',
           step: 'Itsatsi ZIParen esteka publikoa (edo .elpx/.h5p) eta sakatu “Esteka sortu”.',
@@ -1905,7 +1905,7 @@
         themeAuto: 'Auto',
         themeLight: 'Light',
         themeDark: 'Dark',
-        subtitle: 'Create, preview, and share educational resources from your files, folders, HTML, or ZIP/ELPX/H5P.'
+        subtitle: 'Create, preview, and share educational resources from your files, folders, HTML, or ZIP/ELPX/H5P/SCORM 1.2.'
       },
       settings: {
         title: 'Visibility settings',
@@ -2001,7 +2001,7 @@
         label: 'Sections'
       },
       main: {
-        subtitle: 'If your resource is already in ZIP, ELPX, or H5P format and hosted on a service with a <strong>public link</strong> (Drive, Dropbox, etc.), paste the link here to generate the viewer link.',
+        subtitle: 'If your resource is already in ZIP, ELPX, H5P, or SCORM 1.2 (in ZIP) format and hosted on a service with a <strong>public link</strong> (Drive, Dropbox, etc.), paste the link here to generate the viewer link.',
         form: {
           title: 'I already have a ZIP, ELPX, or H5P in the cloud with link',
           step: 'Paste the public ZIP link (or .elpx/.h5p) and click “Create link”.',
@@ -2373,7 +2373,7 @@
         themeAuto: 'Automatisch',
         themeLight: 'Hell',
         themeDark: 'Dunkel',
-        subtitle: 'Erstelle, prüfe in der Vorschau und teile Bildungsressourcen aus deinen Dateien, Ordnern, HTML oder ZIP/ELPX/H5P.'
+        subtitle: 'Erstelle, prüfe in der Vorschau und teile Bildungsressourcen aus deinen Dateien, Ordnern, HTML oder ZIP/ELPX/H5P/SCORM 1.2.'
       },
       settings: {
         title: 'Sichtbarkeitseinstellungen',
@@ -2469,7 +2469,7 @@
         label: 'Abschnitte'
       },
       main: {
-        subtitle: 'Wenn deine Ressource bereits im ZIP-, ELPX- oder H5P-Format mit <strong>öffentlichem Link</strong> verfügbar ist (Drive, Dropbox usw.), füge den Link hier ein, um den Viewer-Link zu erzeugen.',
+        subtitle: 'Wenn deine Ressource bereits im ZIP-, ELPX-, H5P- oder SCORM-1.2-Format (in ZIP) mit <strong>öffentlichem Link</strong> verfügbar ist (Drive, Dropbox usw.), füge den Link hier ein, um den Viewer-Link zu erzeugen.',
         form: {
           title: 'Ich habe bereits eine ZIP-, ELPX- oder H5P-Datei in der Cloud mit Link',
           step: 'Füge den öffentlichen Link zur ZIP-Datei (oder .elpx/.h5p) ein und klicke auf „Link erstellen“.',
