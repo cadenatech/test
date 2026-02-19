@@ -23,7 +23,7 @@
         themeAuto: 'Automático',
         themeLight: 'Claro',
         themeDark: 'Oscuro',
-        subtitle: 'Autopublicación de recursos educativos en web (HTML) o en PDF y/o DOCX desde tu almacenamiento en la nube.'
+        subtitle: 'Crea, previsualiza y comparte recursos educativos desde tus archivos, carpetas, HTML o ZIP/ELPX.'
       },
       settings: {
         title: 'Ajustes de visibilidad',
@@ -76,7 +76,9 @@
         de: 'Deutsch'
       },
       tab: {
-        publish: 'Publicar',
+        home: 'Inicio',
+        downloadZip: 'Descargar ZIP',
+        shareLink: 'Crear enlace para compartir',
         manager: 'Gestor de recursos'
       },
       publish: {
@@ -90,11 +92,26 @@
             restrictHint: 'Se crearán tres tipos de visor según el contenido: 1) visor de páginas web (como recursos generados con IA o proyectos de eXeLearning), 2) visor de documentos (PDF y DOCX) y 3) visor de carpetas (para visualizar cualquier tipo de archivos).'
           },
           main: {
-            title: 'Ya tengo un ZIP en la nube con enlace',
+            title: 'Ya tengo un ZIP o ELPX en la nube',
             note: 'Pega el enlace público (ZIP/ELPX) y crea el enlace del visor.',
             secondaryHtml: 'Si usas .elpx de eXeLearning, también puedes abrirlo aquí <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="¿Qué es ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Un archivo .elpx es un proyecto de eXeLearning que internamente utiliza el formato ZIP, lo que permite que el visor acceda a su contenido y lo muestre correctamente.</span></span>',
             elpxTooltip: '¿Qué es ELPX?',
             elpxTooltipHtml: 'Un archivo .elpx es un proyecto de eXeLearning que internamente utiliza el formato ZIP, lo que permite que el visor acceda a su contenido y lo muestre correctamente.'
+          }
+        },
+        quick: {
+          intro: 'Para compartir tu recurso necesitas un ZIP o ELPX subido a la nube con enlace público. Si aún no lo tienes, aquí puedes generar el ZIP a partir de tu carpeta, archivos o HTML. Después súbelo a tu servicio en la nube y pega el enlace público en la sección inferior: Ya tengo un ZIP o ELPX en la nube.',
+          files: {
+            title: 'Sube tu recurso',
+            dropTitle: 'Arrastra aquí la carpeta o los archivos',
+            dropHint: 'Se abrirá directamente la opción para crear el ZIP.',
+            folder: 'Elegir carpeta',
+            files: 'Elegir archivos'
+          },
+          html: {
+            title: '¿Tienes código HTML? Pégalo aquí',
+            placeholder: '<!doctype html>...',
+            apply: 'Usar este HTML'
           }
         }
       },
@@ -102,9 +119,9 @@
         label: 'Secciones'
       },
       main: {
-        subtitle: 'Si ya tienes tu recurso en formato ZIP o .elpx en un servicio con <strong>enlace público</strong> (Drive, Dropbox, etc.), pega aquí el enlace para generar el enlace.',
+        subtitle: 'Si ya tienes tu recurso en formato ZIP o ELPX en un servicio con <strong>enlace público</strong> (Drive, Dropbox, etc.), pega aquí el enlace para generar el enlace que usarás para compartir el recurso.',
         form: {
-          title: 'Ya tengo un ZIP en la nube con enlace',
+          title: 'Ya tengo un ZIP o ELPX en la nube con enlace',
           step: 'Pega el enlace público al ZIP (o .elpx) y pulsa “Crear enlace”.',
           placeholder: 'Pega aquí el enlace público del ZIP o del .elpx (también válido si incluye PDF o DOCX)',
           submit: 'Crear enlace'
@@ -213,11 +230,20 @@
       },
       zipper: {
         title: 'Crear ZIP para el visor',
+        summary: {
+          title: 'Resumen del contenido cargado'
+        },
+        options: {
+          title: 'Opciones',
+          availabilityLabel: 'Configurar la disponibilidad del recurso',
+          availabilityEdit: 'Cambiar configuración',
+          availabilityInfo: 'Definir cuándo estará visible el recurso y qué acciones estarán disponibles en el gestor de recursos.'
+        },
         restrict: {
           summaryTitle: 'Acceso limitado por fechas'
         },
         accordion: {
-          filesTitle: '¿Tu recurso tiene uno o más archivos? Crea aquí un ZIP'
+          filesTitle: '¿Tu recurso tiene archivos o ya tienes un ZIP/ELPX? Súbelo aquí'
         },
         subtitle: {
           item1: 'Para publicar tu recurso, guarda todos los archivos en una carpeta y comprímela en un archivo <strong>.zip</strong>. Puede contener páginas web y/o uno o varios <strong>PDF</strong>.',
@@ -308,7 +334,7 @@
           }
         },
         help: {
-          inline: 'Si ya has creado un archivo ZIP y lo has compartido en un servicio con enlace público, pasa a la sección: “Ya tengo un ZIP en la nube con enlace”.',
+          inline: 'Si ya has creado un archivo ZIP o ELPX y lo has compartido en un servicio con enlace público, pasa a la sección: “Ya tengo un ZIP o ELPX en la nube con enlace”.',
           previewTitle: 'Previsualiza el recurso antes de descargarlo (opcional)',
           nextStepText: 'El siguiente paso es subir y compartir con enlace público el archivo ZIP o ELPX. Cuando lo tengas pulsa sobre Continuar.',
           previewAction: 'Previsualizar',
@@ -316,7 +342,7 @@
           previewApplyRestrictionsNote: 'Actívalo para comprobar cómo se abre y se cierra el recurso según las fechas configuradas.',
           previewApplyRestrictionsInfo: 'Más información',
           previewApplyRestrictionsInfoHtml: 'Úsalo para comprobar cómo se abre y se cierra el recurso según las fechas configuradas.',
-          goTab: 'Siguiente: “Ya tengo un ZIP en la nube con enlace”'
+          goTab: 'Siguiente: “Ya tengo un ZIP o ELPX en la nube con enlace”'
         }
       },
       html: {
@@ -355,7 +381,7 @@
           title: 'Qué no funciona o puede fallar',
           item1: 'Webs que necesitan servidor (formularios que guardan datos, bases de datos, PHP o similar).',
           item2: 'Enlaces externos que requieren iniciar sesión o permisos especiales.',
-          item3: 'ZIPs vacíos o sin HTML, PDF ni DOCX.'
+          item3: 'ZIPs vacíos, dañados o incompletos que no se pueden abrir correctamente.'
         },
         how: {
           title: 'Cómo funciona',
@@ -369,7 +395,7 @@
           title: 'Importante sobre Google Drive',
           note: 'Google Drive limita la descarga directa de archivos grandes (aprox. 25 MB). Si tu ZIP supera ese tamaño, puede fallar. Dropbox, Nextcloud y otros servicios suelen permitir archivos más grandes sin ese límite.'
         },
-        body: '<nav class="about-index" data-help-nav aria-label="Índice de ayuda"><p class="about-index__title">Índice</p><ul><li><a href="#help-objetivo">Objetivo</a></li><li><a href="#help-pasos">Cómo compartir en 3 pasos</a></li><li><a href="#help-opciones">Opciones para empezar</a></li><li><a href="#help-visor">Qué visor se crea</a></li><li><a href="#help-previo">Antes de compartir</a></li><li><a href="#help-limitacion">Limitación de visualización</a></li><li><a href="#help-gestor">Gestor de recursos</a></li><li><a href="#help-faq">FAQ: privacidad y datos</a></li></ul></nav><section aria-labelledby="help-objetivo"><h3 class="about-section-title" id="help-objetivo" tabindex="-1">Objetivo</h3><p>Comparte tus materiales con tu alumnado mediante un enlace, de forma sencilla y rápida.</p></section><section aria-labelledby="help-pasos"><h3 class="about-section-title" id="help-pasos" tabindex="-1">Cómo compartir en 3 pasos</h3><ol class="about-steps"><li>Prepara tu recurso en un archivo ZIP (si no lo tienes, el programa lo hará por ti).</li><li>Sube ese ZIP a tu nube (Drive, Dropbox, Nextcloud, etc.) y consigue enlace público.</li><li>Pega el enlace en el visor y pulsa <strong>Crear enlace</strong>.</li></ol><p>Listo: el programa te dará el enlace final, que es el que compartes con el alumnado.</p></section><section aria-labelledby="help-opciones"><h3 class="about-section-title" id="help-opciones" tabindex="-1">Opciones para empezar</h3><p><strong>A) Crear ZIP desde archivos</strong>. Si ya tienes el ZIP creado, pasa a la opción C.</p><ul><li>Si tienes los archivos en tu ordenador, usa esta opción.</li><li>Añade carpeta o archivos y pulsa <strong>Crear y descargar ZIP</strong>.</li><li>Después sube ese ZIP a tu nube y compártelo como en la opción C.</li></ul><p><strong>B) Pegar HTML</strong></p><ul><li>Si no tienes ZIP pero sí código HTML, pégalo y crea el ZIP automáticamente.</li></ul><p><strong>C) Ya tengo un ZIP/ELPX en la nube con enlace público</strong></p><ul><li>Pega el enlace público del ZIP o ELPX y crea el enlace del visor.</li></ul></section><section aria-labelledby="help-visor"><h3 class="about-section-title" id="help-visor" tabindex="-1">Qué visor se crea</h3><p>Según el contenido, el sistema abre automáticamente:</p><ul><li><strong>Visor web</strong> (páginas HTML): verás tu recurso como página web.</li><li><strong>Visor de documentos</strong> (PDF y DOCX): verás tus recursos como documentos.</li><li><strong>Visor de carpetas</strong>: verás cualquier tipo de archivo organizado por carpetas.</li></ul></section><section aria-labelledby="help-previo"><h3 class="about-section-title" id="help-previo" tabindex="-1">Antes de compartir</h3><ul><li>Usa <strong>Previsualizar</strong> para comprobar que todo se ve bien.</li><li>Verifica que el enlace de tu nube sea público.</li></ul><p><strong>Consejo práctico</strong>: si actualizas un recurso, reemplaza el archivo original en la nube por el nuevo y el programa detectará automáticamente el cambio.</p></section><section aria-labelledby="help-limitacion"><h3 class="about-section-title" id="help-limitacion" tabindex="-1">Limitación de visualización (opcional)</h3><p>Puedes decidir cuándo se puede abrir el recurso desde <strong>Opciones</strong>:</p><ul><li>Activa la configuración de disponibilidad.</li><li>Define fecha y hora de inicio.</li><li>Si quieres, añade fecha y hora de fin.</li><li>Configura qué acciones del gestor estarán permitidas durante el acceso (compartir, insertar en web, descargar).</li></ul><p>Útil para programar recursos por días, semanas o periodos de evaluación.</p></section><section aria-labelledby="help-gestor"><h3 class="about-section-title" id="help-gestor" tabindex="-1">Gestor de recursos</h3><p>En el Gestor verás los recursos que has creado y abierto en este navegador. Desde ahí puedes abrir, copiar enlace, insertar en web, actualizar y eliminar.</p></section><section aria-labelledby="help-faq"><h3 class="about-section-title" id="help-faq" tabindex="-1">FAQ: privacidad y datos</h3><ul><li><strong>¿Dónde se guardan los recursos?</strong> En el almacenamiento local del navegador de cada dispositivo.</li><li><strong>¿Se suben mis recursos a GitHub o al programa?</strong> No. Tú alojas el ZIP en tu nube. El visor solo lo descarga y lo abre en el navegador.</li><li><strong>¿Se envían datos a terceros?</strong> No. Solo se realiza la descarga del ZIP desde el enlace público que tú has indicado.</li><li><strong>¿Qué pasa si borro datos del navegador o cambio de dispositivo?</strong> Los recursos locales desaparecen en ese navegador/dispositivo.</li><li><strong>¿Quién puede ver el recurso?</strong> Quien tenga el enlace del visor y, además, acceso al enlace público del ZIP.</li><li><strong>¿Cómo actualizo un recurso?</strong> Sustituye el ZIP en la nube manteniendo el mismo enlace y usa <strong>Actualizar</strong> en el gestor.</li></ul></section>'
+        body: '<nav class="about-index" data-help-nav aria-label="Índice de ayuda"><p class="about-index__title">Índice</p><ul><li><a href="#help-objetivo">Objetivo</a></li><li><a href="#help-ruta">Ruta rápida para compartir</a></li><li><a href="#help-pestanas">Pestañas de trabajo</a></li><li><a href="#help-visor">Qué visor se crea automáticamente</a></li><li><a href="#help-opciones">Opciones antes de descargar</a></li><li><a href="#help-disponibilidad">Disponibilidad y acciones</a></li><li><a href="#help-gestor">Gestor de recursos</a></li><li><a href="#help-faq">FAQ: privacidad y datos</a></li></ul></nav><section aria-labelledby="help-objetivo"><h3 class="about-section-title" id="help-objetivo" tabindex="-1">Objetivo</h3><p>Compartir recursos con tu alumnado de forma sencilla: preparas el material, generas el enlace y lo distribuyes.</p></section><section aria-labelledby="help-ruta"><h3 class="about-section-title" id="help-ruta" tabindex="-1">Ruta rápida para compartir</h3><ol class="about-steps"><li>En <strong>Inicio</strong>, sube tu recurso (carpeta, archivos o ZIP/ELPX) o pega el código HTML.</li><li>Revisa el resumen y, si lo necesitas, ajusta <strong>Opciones</strong> (título, disponibilidad y forzar visor de carpetas).</li><li>En <strong>Descargar ZIP</strong>, crea el archivo final. Después súbelo a tu nube con enlace público y termina en <strong>Crear enlace para compartir</strong>.</li></ol><p>Si ya tienes el ZIP o ELPX en la nube con enlace público, puedes ir directamente a <strong>Crear enlace para compartir</strong>.</p></section><section aria-labelledby="help-pestanas"><h3 class="about-section-title" id="help-pestanas" tabindex="-1">Pestañas de trabajo</h3><ul><li><strong>Inicio</strong>: punto de entrada para subir recursos o pegar HTML.</li><li><strong>Descargar ZIP</strong>: previsualizas el resultado y descargas el ZIP/ELPX listo para publicar.</li><li><strong>Crear enlace para compartir</strong>: pegas el enlace público y generas el enlace final para el alumnado.</li><li><strong>Gestor de recursos</strong>: abres, copias, insertas, actualizas y eliminas recursos guardados en tu navegador.</li></ul></section><section aria-labelledby="help-visor"><h3 class="about-section-title" id="help-visor" tabindex="-1">Qué visor se crea automáticamente</h3><p>El programa detecta el contenido y elige el visor más adecuado:</p><ul><li><strong>Visor web</strong>: para recursos con páginas HTML.</li><li><strong>Visor de documentos</strong>: para PDF, DOCX, TXT, MD y CSV (incluye renderizado de fórmulas en Markdown).</li><li><strong>Visor de carpetas</strong>: para navegar por carpetas y archivos de cualquier tipo.</li></ul></section><section aria-labelledby="help-opciones"><h3 class="about-section-title" id="help-opciones" tabindex="-1">Opciones antes de descargar</h3><ul><li><strong>Poner un título al recurso</strong>: opcional, para personalizar cómo aparecerá.</li><li><strong>Configurar la disponibilidad del recurso</strong>: opcional, para decidir cuándo se puede abrir y qué acciones estarán permitidas.</li><li><strong>Forzar visor de carpetas</strong>: útil si quieres que siempre se vea como explorador de archivos.</li><li><strong>Previsualizar</strong>: abre una vista temporal local para comprobar el resultado antes de subirlo.</li></ul></section><section aria-labelledby="help-disponibilidad"><h3 class="about-section-title" id="help-disponibilidad" tabindex="-1">Disponibilidad y acciones</h3><p>En <strong>Opciones</strong> puedes activar la disponibilidad por fechas y definir inicio, fin opcional y acciones del gestor (compartir, insertar en web, descargar) mientras el recurso sea accesible.</p><p>Si cargas un ZIP o ELPX ya creado, también puedes añadir o cambiar estas restricciones y previsualizar el resultado antes de generar el enlace final.</p></section><section aria-labelledby="help-gestor"><h3 class="about-section-title" id="help-gestor" tabindex="-1">Gestor de recursos</h3><p>El gestor guarda los recursos en este navegador. Desde ahí puedes abrirlos, compartirlos, insertarlos en web, actualizarlos si cambia el archivo en la nube y eliminarlos cuando ya no los necesites.</p></section><section aria-labelledby="help-faq"><h3 class="about-section-title" id="help-faq" tabindex="-1">FAQ: privacidad y datos</h3><ul><li><strong>¿Dónde se guardan los recursos?</strong> En el almacenamiento local del navegador de cada dispositivo.</li><li><strong>¿Se suben mis recursos a GitHub o al programa?</strong> No. Tú alojas el ZIP/ELPX en tu nube. El visor solo lo descarga y lo abre en el navegador.</li><li><strong>¿Se envían datos a terceros?</strong> No. Solo se realiza la descarga del ZIP/ELPX desde el enlace público que tú has indicado.</li><li><strong>¿Qué pasa si borro datos del navegador o cambio de dispositivo?</strong> Los recursos locales desaparecen en ese navegador/dispositivo.</li><li><strong>¿Quién puede ver el recurso?</strong> Quien tenga el enlace del visor y, además, acceso al enlace público del archivo.</li><li><strong>¿Cómo actualizo un recurso?</strong> Sustituye el archivo en la nube manteniendo el mismo enlace y usa <strong>Actualizar</strong> en el gestor.</li></ul></section>'
       },
       error: {
         driveTooLarge: 'El archivo es demasiado grande y Google Drive limita las descargas. Intenta usando Nextcloud, Dropbox u otro servicio.',
@@ -474,7 +500,7 @@
         themeAuto: 'Automàtic',
         themeLight: 'Clar',
         themeDark: 'Fosc',
-        subtitle: 'Autopublicació de recursos educatius en web (HTML) o en PDF i/o DOCX des del teu emmagatzematge al núvol.'
+        subtitle: 'Crea, previsualitza i comparteix recursos educatius des dels teus fitxers, carpetes, HTML o ZIP/ELPX.'
       },
       settings: {
         title: 'Ajustos de visibilitat',
@@ -527,7 +553,9 @@
         de: 'Deutsch'
       },
       tab: {
-        publish: 'Publicar',
+        home: 'Inici',
+        downloadZip: 'Descarregar ZIP',
+        shareLink: 'Crear enllaç per compartir',
         manager: 'Gestor de recursos'
       },
       publish: {
@@ -546,6 +574,21 @@
             secondaryHtml: 'Si uses .elpx d’eXeLearning, també el pots obrir aquí <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="Què és ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Un fitxer .elpx és un projecte d’eXeLearning que internament utilitza el format ZIP, cosa que permet al visor accedir al contingut i mostrar-lo correctament.</span></span>',
             elpxTooltip: 'Què és ELPX?',
             elpxTooltipHtml: 'Un fitxer .elpx és un projecte d’eXeLearning que internament utilitza el format ZIP, cosa que permet al visor accedir al contingut i mostrar-lo correctament.'
+          }
+        },
+        quick: {
+          intro: 'Per compartir el teu recurs necessites un ZIP o ELPX al núvol amb enllaç públic. Si encara no el tens, aquí pots generar el ZIP a partir de la carpeta, fitxers o HTML. Després puja’l al teu servei al núvol i enganxa l’enllaç públic a la secció inferior: Ja tinc un ZIP o ELPX al núvol.',
+          files: {
+            title: 'Puja carpeta o fitxers',
+            dropTitle: 'Arrossega aquí la carpeta o els fitxers',
+            dropHint: 'S’obrirà directament l’opció per crear el ZIP.',
+            folder: 'Escollir carpeta',
+            files: 'Escollir fitxers'
+          },
+          html: {
+            title: 'Tens codi HTML? Enganxa’l aquí',
+            placeholder: '<!doctype html>...',
+            apply: 'Fer servir aquest HTML'
           }
         }
       },
@@ -664,8 +707,17 @@
       },
       zipper: {
         title: 'Crear ZIP per al visor',
+        summary: {
+          title: 'Resum del contingut carregat'
+        },
+        options: {
+          title: 'Opcions',
+          availabilityLabel: 'Configurar la disponibilitat del recurs',
+          availabilityEdit: 'Canviar configuració',
+          availabilityInfo: 'Definir quan el recurs serà visible i quines accions estaran disponibles al gestor de recursos.'
+        },
         accordion: {
-          filesTitle: 'El teu recurs té un o més fitxers? Crea aquí un ZIP'
+          filesTitle: 'El teu recurs té fitxers o ja tens un ZIP/ELPX? Puja\'l aquí'
         },
         subtitle: {
           item1: 'Per publicar el teu recurs, guarda tots els fitxers en una carpeta i comprimeix-la en un fitxer <strong>.zip</strong>. Pot contenir pàgines web i/o un o diversos <strong>PDF</strong>.',
@@ -692,6 +744,10 @@
           ready: 'A punt per crear el ZIP.',
           readyHint: 'Prepara el ZIP per obtenir el teu fitxer.',
           selectFirst: 'Selecciona fitxers o una carpeta primer.',
+          previewSelectFirst: 'Per previsualitzar, selecciona fitxers o enganxa HTML.',
+          previewPreparing: 'Preparant previsualització local...',
+          previewOpened: 'Previsualització oberta en una pestanya nova.',
+          previewFailed: 'No s’ha pogut obrir la previsualització.',
           engineMissing: 'No s’ha pogut carregar el motor ZIP.',
           creating: 'Creant ZIP...',
           downloaded: 'ZIP descarregat.',
@@ -794,7 +850,7 @@
           title: 'Què no funciona o pot fallar',
           item1: 'Webs que necessiten servidor (formularis que guarden dades, bases de dades, PHP o similar).',
           item2: 'Enllaços externs que requereixen iniciar sessió o permisos especials.',
-          item3: 'ZIPs que no contenen cap fitxer HTML.'
+          item3: 'ZIPs buits, danyats o incomplets que no es poden obrir correctament.'
         },
         how: {
           title: 'Com funciona',
@@ -808,7 +864,7 @@
           title: 'Important sobre Google Drive',
           note: 'Google Drive limita la descàrrega directa d’arxius grans (aprox. 25 MB). Si el teu ZIP supera aquesta mida, pot fallar. Dropbox, Nextcloud i altres serveis solen permetre fitxers més grans sense aquest límit.'
         },
-        body: '<nav class="about-index" data-help-nav aria-label="Índex d’ajuda"><p class="about-index__title">Índex</p><ul><li><a href="#help-objetiu">Objectiu</a></li><li><a href="#help-passos">Com compartir en 3 passos</a></li><li><a href="#help-opcions">Opcions per començar</a></li><li><a href="#help-visor">Quin visor es crea</a></li><li><a href="#help-previ">Abans de compartir</a></li><li><a href="#help-limitacio">Limitació de visualització</a></li><li><a href="#help-gestor">Gestor de recursos</a></li><li><a href="#help-faq">FAQ: privadesa i dades</a></li></ul></nav><section aria-labelledby="help-objetiu"><h3 class="about-section-title" id="help-objetiu" tabindex="-1">Objectiu</h3><p>Comparteix els teus materials amb l’alumnat mitjançant un enllaç, de manera simple i ràpida.</p></section><section aria-labelledby="help-passos"><h3 class="about-section-title" id="help-passos" tabindex="-1">Com compartir en 3 passos</h3><ol class="about-steps"><li>Prepara el recurs en un fitxer ZIP (si no el tens, el programa el crearà per tu).</li><li>Puja aquest ZIP al núvol (Drive, Dropbox, Nextcloud, etc.) i aconsegueix un enllaç públic.</li><li>Enganxa l’enllaç al visor i prem <strong>Crear enllaç</strong>.</li></ol><p>Fet: el programa et donarà l’enllaç final, que és el que comparteixes amb l’alumnat.</p></section><section aria-labelledby="help-opcions"><h3 class="about-section-title" id="help-opcions" tabindex="-1">Opcions per començar</h3><p><strong>A) Crear ZIP des de fitxers</strong>. Si ja tens el ZIP creat, passa a l’opció C.</p><ul><li>Si tens fitxers a l’ordinador, usa aquesta opció.</li><li>Afegeix carpeta o fitxers i prem <strong>Crear i descarregar ZIP</strong>.</li><li>Després puja aquest ZIP al núvol i comparteix-lo com a l’opció C.</li></ul><p><strong>B) Enganxar HTML</strong></p><ul><li>Si no tens ZIP però sí codi HTML, enganxa’l i crea el ZIP automàticament.</li></ul><p><strong>C) Ja tinc un ZIP/ELPX al núvol amb enllaç públic</strong></p><ul><li>Enganxa l’enllaç públic del ZIP o ELPX i crea l’enllaç del visor.</li></ul></section><section aria-labelledby="help-visor"><h3 class="about-section-title" id="help-visor" tabindex="-1">Quin visor es crea</h3><p>Segons el contingut, el sistema obre automàticament:</p><ul><li><strong>Visor web</strong> (pàgines HTML): veuràs el recurs com una pàgina web.</li><li><strong>Visor de documents</strong> (PDF i DOCX): veuràs els recursos com a documents.</li><li><strong>Visor de carpetes</strong>: veuràs qualsevol tipus de fitxer organitzat per carpetes.</li></ul></section><section aria-labelledby="help-previ"><h3 class="about-section-title" id="help-previ" tabindex="-1">Abans de compartir</h3><ul><li>Usa <strong>Previsualitzar</strong> per comprovar que tot es veu bé.</li><li>Verifica que l’enllaç del núvol sigui públic.</li></ul><p><strong>Consell pràctic</strong>: si actualitzes un recurs, reemplaça l’arxiu original al núvol pel nou i el programa detectarà automàticament el canvi.</p></section><section aria-labelledby="help-limitacio"><h3 class="about-section-title" id="help-limitacio" tabindex="-1">Limitació de visualització (opcional)</h3><p>Pots decidir quan es pot obrir el recurs des d’<strong>Opcions</strong>:</p><ul><li>Activa la configuració de disponibilitat.</li><li>Defineix data i hora d’inici.</li><li>Si vols, afegeix data i hora de fi.</li><li>Configura quines accions del gestor estaran permeses durant l’accés (compartir, inserir en web, descarregar).</li></ul><p>Útil per programar recursos per dies, setmanes o períodes d’avaluació.</p></section><section aria-labelledby="help-gestor"><h3 class="about-section-title" id="help-gestor" tabindex="-1">Gestor de recursos</h3><p>Al Gestor veuràs els recursos que has creat i obert en aquest navegador. Des d’aquí pots obrir, copiar enllaç, inserir en web, actualitzar i eliminar.</p></section><section aria-labelledby="help-faq"><h3 class="about-section-title" id="help-faq" tabindex="-1">FAQ: privadesa i dades</h3><ul><li><strong>On es guarden els recursos?</strong> A l’emmagatzematge local del navegador de cada dispositiu.</li><li><strong>Es pugen els meus recursos a GitHub o al programa?</strong> No. Tu allotges el ZIP al núvol. El visor només el descarrega i l’obre al navegador.</li><li><strong>S’envien dades a tercers?</strong> No. Només es fa la descàrrega del ZIP des de l’enllaç públic que has indicat.</li><li><strong>Què passa si esborro dades del navegador o canvio de dispositiu?</strong> Els recursos locals desapareixen en aquell navegador/dispositiu.</li><li><strong>Qui pot veure el recurs?</strong> Qui tingui l’enllaç del visor i, a més, accés a l’enllaç públic del ZIP.</li><li><strong>Com actualitzo un recurs?</strong> Substitueix el ZIP al núvol mantenint el mateix enllaç i usa <strong>Actualitzar</strong> al gestor.</li></ul></section>'
+        body: '<nav class="about-index" data-help-nav aria-label="Índex d’ajuda"><p class="about-index__title">Índex</p><ul><li><a href="#help-objetiu">Objectiu</a></li><li><a href="#help-ruta">Ruta ràpida per compartir</a></li><li><a href="#help-pestanyes">Pestanyes de treball</a></li><li><a href="#help-visor">Quin visor es crea automàticament</a></li><li><a href="#help-opcions">Opcions abans de descarregar</a></li><li><a href="#help-disponibilitat">Disponibilitat i accions</a></li><li><a href="#help-gestor">Gestor de recursos</a></li><li><a href="#help-faq">FAQ: privadesa i dades</a></li></ul></nav><section aria-labelledby="help-objetiu"><h3 class="about-section-title" id="help-objetiu" tabindex="-1">Objectiu</h3><p>Compartir recursos amb l’alumnat de manera senzilla: prepares el material, generes l’enllaç i el distribueixes.</p></section><section aria-labelledby="help-ruta"><h3 class="about-section-title" id="help-ruta" tabindex="-1">Ruta ràpida per compartir</h3><ol class="about-steps"><li>A <strong>Inici</strong>, puja el teu recurs (carpeta, fitxers o ZIP/ELPX) o enganxa el codi HTML.</li><li>Revisa el resum i, si cal, ajusta <strong>Opcions</strong> (títol, disponibilitat i forçar visor de carpetes).</li><li>A <strong>Descarregar ZIP</strong>, crea el fitxer final. Després puja’l al núvol amb enllaç públic i acaba a <strong>Crear enllaç per compartir</strong>.</li></ol><p>Si ja tens el ZIP o ELPX al núvol amb enllaç públic, pots anar directament a <strong>Crear enllaç per compartir</strong>.</p></section><section aria-labelledby="help-pestanyes"><h3 class="about-section-title" id="help-pestanyes" tabindex="-1">Pestanyes de treball</h3><ul><li><strong>Inici</strong>: punt d’entrada per pujar recursos o enganxar HTML.</li><li><strong>Descarregar ZIP</strong>: previsualitzes el resultat i descarregues el ZIP/ELPX llest per publicar.</li><li><strong>Crear enllaç per compartir</strong>: enganxes l’enllaç públic i generes l’enllaç final per a l’alumnat.</li><li><strong>Gestor de recursos</strong>: obres, copies, insereixes, actualitzes i elimines recursos desats al navegador.</li></ul></section><section aria-labelledby="help-visor"><h3 class="about-section-title" id="help-visor" tabindex="-1">Quin visor es crea automàticament</h3><p>El programa detecta el contingut i tria el visor més adequat:</p><ul><li><strong>Visor web</strong>: per a recursos amb pàgines HTML.</li><li><strong>Visor de documents</strong>: per a PDF, DOCX, TXT, MD i CSV (inclou renderització de fórmules a Markdown).</li><li><strong>Visor de carpetes</strong>: per navegar per carpetes i fitxers de qualsevol tipus.</li></ul></section><section aria-labelledby="help-opcions"><h3 class="about-section-title" id="help-opcions" tabindex="-1">Opcions abans de descarregar</h3><ul><li><strong>Posar un títol al recurs</strong>: opcional, per personalitzar com es mostrarà.</li><li><strong>Configurar la disponibilitat del recurs</strong>: opcional, per decidir quan es pot obrir i quines accions estaran permeses.</li><li><strong>Forçar visor de carpetes</strong>: útil si vols que sempre es mostri com a explorador de fitxers.</li><li><strong>Previsualitzar</strong>: obre una vista temporal local per comprovar el resultat abans de pujar-lo.</li></ul></section><section aria-labelledby="help-disponibilitat"><h3 class="about-section-title" id="help-disponibilitat" tabindex="-1">Disponibilitat i accions</h3><p>A <strong>Opcions</strong> pots activar la disponibilitat per dates i definir inici, fi opcional i accions del gestor (compartir, inserir en web, descarregar) mentre el recurs sigui accessible.</p><p>Si puges un ZIP o ELPX ja creat, també pots afegir o canviar aquestes restriccions i previsualitzar el resultat abans de generar l’enllaç final.</p></section><section aria-labelledby="help-gestor"><h3 class="about-section-title" id="help-gestor" tabindex="-1">Gestor de recursos</h3><p>El gestor guarda els recursos en aquest navegador. Des d’aquí els pots obrir, compartir, inserir en web, actualitzar si canvia el fitxer al núvol i eliminar quan ja no et calguin.</p></section><section aria-labelledby="help-faq"><h3 class="about-section-title" id="help-faq" tabindex="-1">FAQ: privadesa i dades</h3><ul><li><strong>On es guarden els recursos?</strong> A l’emmagatzematge local del navegador de cada dispositiu.</li><li><strong>Es pugen els meus recursos a GitHub o al programa?</strong> No. Tu allotges el ZIP/ELPX al núvol. El visor només el descarrega i l’obre al navegador.</li><li><strong>S’envien dades a tercers?</strong> No. Només es fa la descàrrega del ZIP/ELPX des de l’enllaç públic que has indicat.</li><li><strong>Què passa si esborro dades del navegador o canvio de dispositiu?</strong> Els recursos locals desapareixen en aquell navegador/dispositiu.</li><li><strong>Qui pot veure el recurs?</strong> Qui tingui l’enllaç del visor i, a més, accés a l’enllaç públic del fitxer.</li><li><strong>Com actualitzo un recurs?</strong> Substitueix el fitxer al núvol mantenint el mateix enllaç i usa <strong>Actualitzar</strong> al gestor.</li></ul></section>'
       },
       error: {
         driveTooLarge: 'El fitxer és massa gran i Google Drive limita les descàrregues. Prova amb Nextcloud, Dropbox o un altre servei.',
@@ -907,7 +963,7 @@
         themeAuto: 'Automático',
         themeLight: 'Claro',
         themeDark: 'Escuro',
-        subtitle: 'Autopublicación de recursos educativos en web (HTML) ou en PDF e/ou DOCX desde o teu almacenamento na nube.'
+        subtitle: 'Crea, previsualiza e comparte recursos educativos desde os teus ficheiros, cartafoles, HTML ou ZIP/ELPX.'
       },
       settings: {
         title: 'Axustes de visibilidade',
@@ -960,7 +1016,9 @@
         de: 'Deutsch'
       },
       tab: {
-        publish: 'Publicar',
+        home: 'Inicio',
+        downloadZip: 'Descargar ZIP',
+        shareLink: 'Crear ligazón para compartir',
         manager: 'Xestor de recursos'
       },
       publish: {
@@ -979,6 +1037,21 @@
             secondaryHtml: 'Se usas .elpx de eXeLearning, tamén o podes abrir aquí <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="Que é ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Un ficheiro .elpx é un proxecto de eXeLearning que internamente utiliza o formato ZIP, o que permite que o visor acceda ao seu contido e o mostre correctamente.</span></span>',
             elpxTooltip: 'Que é ELPX?',
             elpxTooltipHtml: 'Un ficheiro .elpx é un proxecto de eXeLearning que internamente utiliza o formato ZIP, o que permite que o visor acceda ao seu contido e o mostre correctamente.'
+          }
+        },
+        quick: {
+          intro: 'Para compartir o teu recurso necesitas un ZIP ou ELPX subido á nube con ligazón pública. Se aínda non o tes, aquí podes xerar o ZIP a partir do teu cartafol, ficheiros ou HTML. Despois súbeo ao teu servizo na nube e pega a ligazón pública na sección inferior: Xa teño un ZIP ou ELPX na nube.',
+          files: {
+            title: 'Sube cartafol ou ficheiros',
+            dropTitle: 'Arrastra aquí o cartafol ou os ficheiros',
+            dropHint: 'Abrirase directamente a opción para crear o ZIP.',
+            folder: 'Escoller cartafol',
+            files: 'Escoller ficheiros'
+          },
+          html: {
+            title: 'Tes código HTML? Pégao aquí',
+            placeholder: '<!doctype html>...',
+            apply: 'Usar este HTML'
           }
         }
       },
@@ -1097,8 +1170,17 @@
       },
       zipper: {
         title: 'Crear ZIP para o visor',
+        summary: {
+          title: 'Resumo do contido cargado'
+        },
+        options: {
+          title: 'Opcións',
+          availabilityLabel: 'Configurar a dispoñibilidade do recurso',
+          availabilityEdit: 'Cambiar configuración',
+          availabilityInfo: 'Definir cando estará visible o recurso e que accións estarán dispoñibles no xestor de recursos.'
+        },
         accordion: {
-          filesTitle: 'O teu recurso ten un ou máis ficheiros? Crea aquí un ZIP'
+          filesTitle: 'O teu recurso ten ficheiros ou xa tes un ZIP/ELPX? Súbeo aquí'
         },
         subtitle: {
           item1: 'Para publicar o teu recurso, garda todos os ficheiros nun cartafol e comprímeo nun ficheiro <strong>.zip</strong>. Pode conter páxinas web e/ou un ou varios <strong>PDF</strong>.',
@@ -1125,6 +1207,10 @@
           ready: 'Listo para crear o ZIP.',
           readyHint: 'Prepara o ZIP para obter o teu ficheiro.',
           selectFirst: 'Selecciona ficheiros ou un cartafol primeiro.',
+          previewSelectFirst: 'Para previsualizar, selecciona ficheiros ou pega HTML.',
+          previewPreparing: 'Preparando previsualización local...',
+          previewOpened: 'Previsualización aberta nunha nova lapela.',
+          previewFailed: 'Non se puido abrir a previsualización.',
           engineMissing: 'Non se puido cargar o motor ZIP.',
           creating: 'Creando ZIP...',
           downloaded: 'ZIP descargado.',
@@ -1227,7 +1313,7 @@
           title: 'Que non funciona ou pode fallar',
           item1: 'Webs que necesitan servidor (formularios que gardan datos, bases de datos, PHP ou similar).',
           item2: 'Ligazóns externas que requiren iniciar sesión ou permisos especiais.',
-          item3: 'ZIPs que non conteñen ningún ficheiro HTML.'
+          item3: 'ZIPs baleiros, danados ou incompletos que non se poden abrir correctamente.'
         },
         how: {
           title: 'Como funciona',
@@ -1241,7 +1327,7 @@
           title: 'Importante sobre Google Drive',
           note: 'Google Drive limita a descarga directa de ficheiros grandes (aprox. 25 MB). Se o teu ZIP supera ese tamaño, pode fallar. Dropbox, Nextcloud e outros servizos adoitan permitir ficheiros máis grandes sen ese límite.'
         },
-        body: '<nav class="about-index" data-help-nav aria-label="Índice de axuda"><p class="about-index__title">Índice</p><ul><li><a href="#help-obxectivo">Obxectivo</a></li><li><a href="#help-pasos">Como compartir en 3 pasos</a></li><li><a href="#help-opcions">Opcións para empezar</a></li><li><a href="#help-visor">Que visor se crea</a></li><li><a href="#help-previo">Antes de compartir</a></li><li><a href="#help-limitacion">Limitación de visualización</a></li><li><a href="#help-gestor">Xestor de recursos</a></li><li><a href="#help-faq">FAQ: privacidade e datos</a></li></ul></nav><section aria-labelledby="help-obxectivo"><h3 class="about-section-title" id="help-obxectivo" tabindex="-1">Obxectivo</h3><p>Comparte os teus materiais co alumnado mediante unha ligazón, de forma sinxela e rápida.</p></section><section aria-labelledby="help-pasos"><h3 class="about-section-title" id="help-pasos" tabindex="-1">Como compartir en 3 pasos</h3><ol class="about-steps"><li>Prepara o teu recurso nun arquivo ZIP (se non o tes, o programa farao por ti).</li><li>Sube ese ZIP á túa nube (Drive, Dropbox, Nextcloud, etc.) e consegue ligazón pública.</li><li>Pega a ligazón no visor e preme <strong>Crear ligazón</strong>.</li></ol><p>Listo: o programa darache a ligazón final, que é a que compartes co alumnado.</p></section><section aria-labelledby="help-opcions"><h3 class="about-section-title" id="help-opcions" tabindex="-1">Opcións para empezar</h3><p><strong>A) Crear ZIP desde ficheiros</strong>. Se xa tes o ZIP creado, pasa á opción C.</p><ul><li>Se tes os ficheiros no teu ordenador, usa esta opción.</li><li>Engade cartafol ou ficheiros e preme <strong>Crear e descargar ZIP</strong>.</li><li>Despois sobe ese ZIP á túa nube e compárteo como na opción C.</li></ul><p><strong>B) Pegar HTML</strong></p><ul><li>Se non tes ZIP pero si código HTML, pégao e crea o ZIP automaticamente.</li></ul><p><strong>C) Xa teño un ZIP/ELPX na nube con ligazón pública</strong></p><ul><li>Pega a ligazón pública do ZIP ou ELPX e crea a ligazón do visor.</li></ul></section><section aria-labelledby="help-visor"><h3 class="about-section-title" id="help-visor" tabindex="-1">Que visor se crea</h3><p>Segundo o contido, o sistema abre automaticamente:</p><ul><li><strong>Visor web</strong> (páxinas HTML): verás o recurso como páxina web.</li><li><strong>Visor de documentos</strong> (PDF e DOCX): verás os recursos como documentos.</li><li><strong>Visor de cartafoles</strong>: verás calquera tipo de ficheiro organizado por cartafoles.</li></ul></section><section aria-labelledby="help-previo"><h3 class="about-section-title" id="help-previo" tabindex="-1">Antes de compartir</h3><ul><li>Usa <strong>Previsualizar</strong> para comprobar que todo se ve ben.</li><li>Verifica que a ligazón da túa nube sexa pública.</li></ul><p><strong>Consello práctico</strong>: se actualizas un recurso, substitúe o arquivo orixinal na nube polo novo e o programa detectará automaticamente o cambio.</p></section><section aria-labelledby="help-limitacion"><h3 class="about-section-title" id="help-limitacion" tabindex="-1">Limitación de visualización (opcional)</h3><p>Podes decidir cando se pode abrir o recurso desde <strong>Opcións</strong>:</p><ul><li>Activa a configuración de dispoñibilidade.</li><li>Define data e hora de inicio.</li><li>Se queres, engade data e hora de fin.</li><li>Configura que accións do xestor estarán permitidas durante o acceso (compartir, inserir en web, descargar).</li></ul><p>Útil para programar recursos por días, semanas ou períodos de avaliación.</p></section><section aria-labelledby="help-gestor"><h3 class="about-section-title" id="help-gestor" tabindex="-1">Xestor de recursos</h3><p>No Xestor verás os recursos que creaches e abríches neste navegador. Desde aí podes abrir, copiar ligazón, inserir en web, actualizar e eliminar.</p></section><section aria-labelledby="help-faq"><h3 class="about-section-title" id="help-faq" tabindex="-1">FAQ: privacidade e datos</h3><ul><li><strong>Onde se gardan os recursos?</strong> No almacenamento local do navegador de cada dispositivo.</li><li><strong>Suben os meus recursos a GitHub ou ao programa?</strong> Non. Ti aloxas o ZIP na túa nube. O visor só o descarga e o abre no navegador.</li><li><strong>Envíanse datos a terceiros?</strong> Non. Só se realiza a descarga do ZIP desde a ligazón pública que indicaches.</li><li><strong>Que pasa se borro datos do navegador ou cambio de dispositivo?</strong> Os recursos locais desaparecen nese navegador/dispositivo.</li><li><strong>Quen pode ver o recurso?</strong> Quen teña a ligazón do visor e, ademais, acceso á ligazón pública do ZIP.</li><li><strong>Como actualizo un recurso?</strong> Substitúe o ZIP na nube mantendo a mesma ligazón e usa <strong>Actualizar</strong> no xestor.</li></ul></section>'
+        body: '<nav class="about-index" data-help-nav aria-label="Índice de axuda"><p class="about-index__title">Índice</p><ul><li><a href="#help-obxectivo">Obxectivo</a></li><li><a href="#help-ruta">Ruta rápida para compartir</a></li><li><a href="#help-pestanas">Pestanas de traballo</a></li><li><a href="#help-visor">Que visor se crea automaticamente</a></li><li><a href="#help-opcions">Opcións antes de descargar</a></li><li><a href="#help-disponibilidade">Disponibilidade e accións</a></li><li><a href="#help-gestor">Xestor de recursos</a></li><li><a href="#help-faq">FAQ: privacidade e datos</a></li></ul></nav><section aria-labelledby="help-obxectivo"><h3 class="about-section-title" id="help-obxectivo" tabindex="-1">Obxectivo</h3><p>Compartir recursos co alumnado de maneira sinxela: preparas o material, xeras a ligazón e distribúela.</p></section><section aria-labelledby="help-ruta"><h3 class="about-section-title" id="help-ruta" tabindex="-1">Ruta rápida para compartir</h3><ol class="about-steps"><li>En <strong>Inicio</strong>, sobe o teu recurso (cartafol, ficheiros ou ZIP/ELPX) ou pega o código HTML.</li><li>Revisa o resumo e, se o precisas, axusta <strong>Opcións</strong> (título, dispoñibilidade e forzar visor de cartafoles).</li><li>En <strong>Descargar ZIP</strong>, crea o arquivo final. Despois súbeo á nube con ligazón pública e remata en <strong>Crear ligazón para compartir</strong>.</li></ol><p>Se xa tes o ZIP ou ELPX na nube con ligazón pública, podes ir directamente a <strong>Crear ligazón para compartir</strong>.</p></section><section aria-labelledby="help-pestanas"><h3 class="about-section-title" id="help-pestanas" tabindex="-1">Pestanas de traballo</h3><ul><li><strong>Inicio</strong>: punto de entrada para subir recursos ou pegar HTML.</li><li><strong>Descargar ZIP</strong>: previsualizas o resultado e descargas o ZIP/ELPX listo para publicar.</li><li><strong>Crear ligazón para compartir</strong>: pegas a ligazón pública e xeras a ligazón final para o alumnado.</li><li><strong>Xestor de recursos</strong>: abres, copias, inseres, actualizas e eliminas recursos gardados no navegador.</li></ul></section><section aria-labelledby="help-visor"><h3 class="about-section-title" id="help-visor" tabindex="-1">Que visor se crea automaticamente</h3><p>O programa detecta o contido e escolle o visor máis axeitado:</p><ul><li><strong>Visor web</strong>: para recursos con páxinas HTML.</li><li><strong>Visor de documentos</strong>: para PDF, DOCX, TXT, MD e CSV (inclúe renderizado de fórmulas en Markdown).</li><li><strong>Visor de cartafoles</strong>: para navegar por cartafoles e ficheiros de calquera tipo.</li></ul></section><section aria-labelledby="help-opcions"><h3 class="about-section-title" id="help-opcions" tabindex="-1">Opcións antes de descargar</h3><ul><li><strong>Poñer un título ao recurso</strong>: opcional, para personalizar como se mostrará.</li><li><strong>Configurar a dispoñibilidade do recurso</strong>: opcional, para decidir cando se pode abrir e que accións estarán permitidas.</li><li><strong>Forzar visor de cartafoles</strong>: útil se queres que sempre se vexa como explorador de ficheiros.</li><li><strong>Previsualizar</strong>: abre unha vista temporal local para comprobar o resultado antes de subilo.</li></ul></section><section aria-labelledby="help-disponibilidade"><h3 class="about-section-title" id="help-disponibilidade" tabindex="-1">Disponibilidade e accións</h3><p>En <strong>Opcións</strong> podes activar a dispoñibilidade por datas e definir inicio, fin opcional e accións do xestor (compartir, inserir en web, descargar) mentres o recurso sexa accesible.</p><p>Se cargas un ZIP ou ELPX xa creado, tamén podes engadir ou cambiar estas restricións e previsualizar o resultado antes de xerar a ligazón final.</p></section><section aria-labelledby="help-gestor"><h3 class="about-section-title" id="help-gestor" tabindex="-1">Xestor de recursos</h3><p>O xestor garda os recursos neste navegador. Desde aí podes abrilos, compartilos, inserilos en web, actualizalos se cambia o arquivo na nube e eliminalos cando xa non os necesites.</p></section><section aria-labelledby="help-faq"><h3 class="about-section-title" id="help-faq" tabindex="-1">FAQ: privacidade e datos</h3><ul><li><strong>Onde se gardan os recursos?</strong> No almacenamento local do navegador de cada dispositivo.</li><li><strong>Suben os meus recursos a GitHub ou ao programa?</strong> Non. Ti aloxas o ZIP/ELPX na túa nube. O visor só o descarga e o abre no navegador.</li><li><strong>Envíanse datos a terceiros?</strong> Non. Só se realiza a descarga do ZIP/ELPX desde a ligazón pública que indicaches.</li><li><strong>Que pasa se borro datos do navegador ou cambio de dispositivo?</strong> Os recursos locais desaparecen nese navegador/dispositivo.</li><li><strong>Quen pode ver o recurso?</strong> Quen teña a ligazón do visor e, ademais, acceso á ligazón pública do arquivo.</li><li><strong>Como actualizo un recurso?</strong> Substitúe o arquivo na nube mantendo a mesma ligazón e usa <strong>Actualizar</strong> no xestor.</li></ul></section>'
       },
       error: {
         driveTooLarge: 'O ficheiro é demasiado grande e Google Drive limita as descargas. Proba con Nextcloud, Dropbox ou outro servizo.',
@@ -1340,7 +1426,7 @@
         themeAuto: 'Automatikoa',
         themeLight: 'Argia',
         themeDark: 'Iluna',
-        subtitle: 'Webean (HTML) edo PDF eta/edo DOCX formatuan hezkuntza-baliabideak autoargitaratzea zure hodeiko biltegiratzetik.'
+        subtitle: 'Sortu, aurrebistatu eta partekatu hezkuntza-baliabideak zure fitxategi, karpeta, HTML edo ZIP/ELPXetatik.'
       },
       settings: {
         title: 'Ikusgarritasun ezarpenak',
@@ -1393,7 +1479,9 @@
         de: 'Deutsch'
       },
       tab: {
-        publish: 'Argitaratu',
+        home: 'Hasiera',
+        downloadZip: 'ZIP deskargatu',
+        shareLink: 'Partekatzeko esteka sortu',
         manager: 'Baliabide kudeatzailea'
       },
       publish: {
@@ -1412,6 +1500,21 @@
             secondaryHtml: 'eXeLearning-eko .elpx erabiltzen baduzu, hemen ere ireki dezakezu <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="Zer da ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">.elpx fitxategia eXeLearning-eko proiektu bat da, eta barnean ZIP formatua erabiltzen du; horri esker, bisoreak edukira sartu eta behar bezala bistaratu dezake.</span></span>',
             elpxTooltip: 'Zer da ELPX?',
             elpxTooltipHtml: '.elpx fitxategia eXeLearning-eko proiektu bat da, eta barnean ZIP formatua erabiltzen du; horri esker, bisoreak edukira sartu eta behar bezala bistaratu dezake.'
+          }
+        },
+        quick: {
+          intro: 'Zure baliabidea partekatzeko ZIP edo ELPX fitxategi bat behar duzu hodeian, esteka publikoarekin. Oraindik ez baduzu, hemen ZIPa sor dezakezu karpetatik, fitxategietatik edo HTMLtik abiatuta. Gero igo ezazu zure hodeiko zerbitzura eta itsatsi esteka publikoa beheko atalean: ZIP edo ELPX bat hodeian daukat.',
+          files: {
+            title: 'Igo karpeta edo fitxategiak',
+            dropTitle: 'Arrastatu hona karpeta edo fitxategiak',
+            dropHint: 'ZIP sortzeko aukera zuzenean irekiko da.',
+            folder: 'Aukeratu karpeta',
+            files: 'Aukeratu fitxategiak'
+          },
+          html: {
+            title: 'HTML kodea duzu? Itsatsi hemen',
+            placeholder: '<!doctype html>...',
+            apply: 'Erabili HTML hau'
           }
         }
       },
@@ -1530,8 +1633,17 @@
       },
       zipper: {
         title: 'Sortu ZIPa bisorerako',
+        summary: {
+          title: 'Kargatutako edukiaren laburpena'
+        },
+        options: {
+          title: 'Aukerak',
+          availabilityLabel: 'Konfiguratu baliabidearen erabilgarritasuna',
+          availabilityEdit: 'Aldatu konfigurazioa',
+          availabilityInfo: 'Zehaztu noiz egongo den baliabidea ikusgai eta zein ekintza egongo diren erabilgarri baliabideen kudeatzailean.'
+        },
         accordion: {
-          filesTitle: 'Zure baliabideak fitxategi bat edo gehiago ditu? Sortu hemen ZIP bat'
+          filesTitle: 'Zure baliabideak fitxategiak ditu edo ZIP/ELPX bat baduzu? Igo hemen'
         },
         subtitle: {
           item1: 'Zure baliabidea argitaratzeko, gorde fitxategi guztiak karpeta batean eta konprimitu <strong>.zip</strong> fitxategi batean. Web-orriak eta/edo <strong>PDF</strong> bat edo gehiago izan ditzake.',
@@ -1558,6 +1670,10 @@
           ready: 'ZIPa sortzeko prest.',
           readyHint: 'Prestatu ZIPa zure fitxategia eskuratzeko.',
           selectFirst: 'Aukeratu fitxategiak edo karpeta bat lehenik.',
+          previewSelectFirst: 'Aurrebista egiteko, hautatu fitxategiak edo itsatsi HTMLa.',
+          previewPreparing: 'Tokiko aurrebista prestatzen...',
+          previewOpened: 'Aurrebista fitxa berri batean ireki da.',
+          previewFailed: 'Ezin izan da aurrebista ireki.',
           engineMissing: 'Ezin izan da ZIP motorra kargatu.',
           creating: 'ZIPa sortzen...',
           downloaded: 'ZIPa deskargatuta.',
@@ -1660,7 +1776,7 @@
           title: 'Zer ez dabil edo huts egin dezake',
           item1: 'Zerbitzaria behar duten webak (datuak gordetzen dituzten formularioak, datu-baseak, PHP edo antzekoa).',
           item2: 'Saioa hasteko edo baimen bereziak behar dituzten kanpo-estekak.',
-          item3: 'HTML fitxategirik ez duten ZIPak.'
+          item3: 'Behar bezala ireki ezin diren ZIP hutsak, hondatuak edo osatu gabeak.'
         },
         how: {
           title: 'Nola funtzionatzen du',
@@ -1674,7 +1790,7 @@
           title: 'Google Drive-ri buruzko oharra',
           note: 'Google Drivek fitxategi handien deskarga zuzena mugatzen du (gutxi gorabehera 25 MB). Zure ZIPak tamaina hori gainditzen badu, huts egin dezake. Dropbox, Nextcloud eta beste zerbitzu batzuek, normalean, handiagoak onartzen dituzte muga horik gabe.'
         },
-        body: '<nav class="about-index" data-help-nav aria-label="Laguntzaren aurkibidea"><p class="about-index__title">Aurkibidea</p><ul><li><a href="#help-helburua">Helburua</a></li><li><a href="#help-pausoak">Nola partekatu 3 pausotan</a></li><li><a href="#help-aukerak">Hasteko aukerak</a></li><li><a href="#help-ikuslea">Zein bisore sortzen da</a></li><li><a href="#help-aurretik">Partekatu aurretik</a></li><li><a href="#help-muga">Ikusgarritasun muga</a></li><li><a href="#help-kudeatzailea">Baliabideen kudeatzailea</a></li><li><a href="#help-faq">FAQ: pribatutasuna eta datuak</a></li></ul></nav><section aria-labelledby="help-helburua"><h3 class="about-section-title" id="help-helburua" tabindex="-1">Helburua</h3><p>Partekatu zure materialak ikasleekin esteka baten bidez, modu erraz eta azkarrean.</p></section><section aria-labelledby="help-pausoak"><h3 class="about-section-title" id="help-pausoak" tabindex="-1">Nola partekatu 3 pausotan</h3><ol class="about-steps"><li>Prestatu zure baliabidea ZIP fitxategi batean (ez baduzu, programak sortuko du).</li><li>Igo ZIP hori zure hodeira (Drive, Dropbox, Nextcloud, etab.) eta lortu esteka publikoa.</li><li>Itsatsi esteka bisorean eta sakatu <strong>Esteka sortu</strong>.</li></ol><p>Prest: programak azken esteka emango dizu, eta hori partekatuko duzu ikasleekin.</p></section><section aria-labelledby="help-aukerak"><h3 class="about-section-title" id="help-aukerak" tabindex="-1">Hasteko aukerak</h3><p><strong>A) ZIPa fitxategietatik sortu</strong>. ZIPa eginda baduzu, joan C aukerara.</p><ul><li>Zure ordenagailuan fitxategiak badituzu, erabili aukera hau.</li><li>Gehitu karpeta edo fitxategiak eta sakatu <strong>Sortu eta deskargatu ZIPa</strong>.</li><li>Ondoren igo ZIPa hodeira eta partekatu C aukeran bezala.</li></ul><p><strong>B) HTMLa itsatsi</strong></p><ul><li>ZIPik ez baduzu baina HTML kodea baduzu, itsatsi eta ZIPa automatikoki sortu.</li></ul><p><strong>C) Dagoeneko ZIP/ELPX bat dut hodeian esteka publikoarekin</strong></p><ul><li>Itsatsi ZIP edo ELPX esteka publikoa eta sortu bisorearen esteka.</li></ul></section><section aria-labelledby="help-ikuslea"><h3 class="about-section-title" id="help-ikuslea" tabindex="-1">Zein bisore sortzen da</h3><p>Edukien arabera, sistemak automatikoki irekitzen du:</p><ul><li><strong>Web bisorea</strong> (HTML orriak): baliabidea web orri gisa ikusiko duzu.</li><li><strong>Dokumentu bisorea</strong> (PDF eta DOCX): baliabideak dokumentu gisa ikusiko dituzu.</li><li><strong>Karpeta bisorea</strong>: edozein fitxategi mota ikusiko duzu karpetatan antolatuta.</li></ul></section><section aria-labelledby="help-aurretik"><h3 class="about-section-title" id="help-aurretik" tabindex="-1">Partekatu aurretik</h3><ul><li>Erabili <strong>Aurrebista</strong> dena ondo ikusten dela egiaztatzeko.</li><li>Egiaztatu zure hodeiko esteka publikoa dela.</li></ul><p><strong>Aholku praktikoa</strong>: baliabidea eguneratzen baduzu, ordezkatu hodeiko jatorrizko fitxategia berriarekin, eta programak aldaketa automatikoki detektatuko du.</p></section><section aria-labelledby="help-muga"><h3 class="about-section-title" id="help-muga" tabindex="-1">Ikusgarritasun muga (aukerazkoa)</h3><p><strong>Aukerak</strong> atalean baliabidea noiz ireki daitekeen erabaki dezakezu:</p><ul><li>Aktibatu erabilgarritasun konfigurazioa.</li><li>Zehaztu hasiera data eta ordua.</li><li>Nahi baduzu, gehitu amaiera data eta ordua.</li><li>Sarbidean zehar kudeatzaileko zein ekintza baimenduko diren konfiguratu (partekatu, webean txertatu, deskargatu).</li></ul><p>Erabilgarria da baliabideak egunez, astez edo ebaluazio-aldiaren arabera programatzeko.</p></section><section aria-labelledby="help-kudeatzailea"><h3 class="about-section-title" id="help-kudeatzailea" tabindex="-1">Baliabideen kudeatzailea</h3><p>Kudeatzailean nabigatzaile honetan sortu eta ireki dituzun baliabideak ikusiko dituzu. Handik ireki, esteka kopiatu, webean txertatu, eguneratu eta ezabatu dezakezu.</p></section><section aria-labelledby="help-faq"><h3 class="about-section-title" id="help-faq" tabindex="-1">FAQ: pribatutasuna eta datuak</h3><ul><li><strong>Non gordetzen dira baliabideak?</strong> Gailu bakoitzeko nabigatzailearen biltegiratze lokalean.</li><li><strong>Nire baliabideak GitHubera edo programara igotzen dira?</strong> Ez. Zuk ostatatzen duzu ZIPa zure hodeian. Bisoreak deskargatu eta nabigatzailean irekitzen du soilik.</li><li><strong>Datuak hirugarrenei bidaltzen zaizkie?</strong> Ez. Zuk adierazitako esteka publikotik ZIPa deskargatzea baino ez da egiten.</li><li><strong>Zer gertatzen da nabigatzaileko datuak ezabatzen baditut edo gailua aldatzen badut?</strong> Baliabide lokalak desagertu egiten dira nabigatzaile/gailu horretan.</li><li><strong>Nork ikus dezake baliabidea?</strong> Bisorearen esteka duenak eta, gainera, ZIParen esteka publikorako sarbidea duenak.</li><li><strong>Nola eguneratzen da baliabide bat?</strong> Ordezkatu ZIPa hodeian esteka bera mantenduta, eta erabili <strong>Eguneratu</strong> kudeatzailean.</li></ul></section>'
+        body: '<nav class="about-index" data-help-nav aria-label="Laguntzaren aurkibidea"><p class="about-index__title">Aurkibidea</p><ul><li><a href="#help-helburua">Helburua</a></li><li><a href="#help-ibilbidea">Partekatzeko ibilbide azkarra</a></li><li><a href="#help-fitxak">Laneko fitxak</a></li><li><a href="#help-ikuslea">Zein bisore sortzen den automatikoki</a></li><li><a href="#help-aukerak">Deskargatu aurreko aukerak</a></li><li><a href="#help-eskuragarritasuna">Eskuragarritasuna eta ekintzak</a></li><li><a href="#help-kudeatzailea">Baliabideen kudeatzailea</a></li><li><a href="#help-faq">FAQ: pribatutasuna eta datuak</a></li></ul></nav><section aria-labelledby="help-helburua"><h3 class="about-section-title" id="help-helburua" tabindex="-1">Helburua</h3><p>Ikasleekin baliabideak modu errazean partekatzea: materiala prestatu, esteka sortu eta zabaldu.</p></section><section aria-labelledby="help-ibilbidea"><h3 class="about-section-title" id="help-ibilbidea" tabindex="-1">Partekatzeko ibilbide azkarra</h3><ol class="about-steps"><li><strong>Hasiera</strong> fitxan, igo zure baliabidea (karpeta, fitxategiak edo ZIP/ELPX) edo itsatsi HTML kodea.</li><li>Laburpena berrikusi eta, behar baduzu, doitu <strong>Aukerak</strong> (izenburua, eskuragarritasuna eta karpeta-bisorea behartzea).</li><li><strong>ZIP deskargatu</strong> fitxan, sortu azken fitxategia. Gero igo hodeira esteka publikoarekin eta amaitu <strong>Partekatzeko esteka sortu</strong> fitxan.</li></ol><p>ZIP edo ELPX fitxategia jada hodeian baduzu esteka publikoarekin, zuzenean joan zaitezke <strong>Partekatzeko esteka sortu</strong> fitxara.</p></section><section aria-labelledby="help-fitxak"><h3 class="about-section-title" id="help-fitxak" tabindex="-1">Laneko fitxak</h3><ul><li><strong>Hasiera</strong>: baliabideak igotzeko edo HTML itsasteko sarrera nagusia.</li><li><strong>ZIP deskargatu</strong>: emaitza aurrebistatu eta argitaratzeko prest dagoen ZIP/ELPX deskargatu.</li><li><strong>Partekatzeko esteka sortu</strong>: esteka publikoa itsatsi eta ikasleentzat azken esteka sortu.</li><li><strong>Baliabideen kudeatzailea</strong>: nabigatzailean gordetako baliabideak ireki, kopiatu, txertatu, eguneratu eta ezabatu.</li></ul></section><section aria-labelledby="help-ikuslea"><h3 class="about-section-title" id="help-ikuslea" tabindex="-1">Zein bisore sortzen den automatikoki</h3><p>Programak edukia detektatzen du eta bisore egokiena aukeratzen du:</p><ul><li><strong>Web bisorea</strong>: HTML orriak dituzten baliabideentzat.</li><li><strong>Dokumentu bisorea</strong>: PDF, DOCX, TXT, MD eta CSV fitxategientzat (Markdown-eko formulak ere errendatzen ditu).</li><li><strong>Karpeta bisorea</strong>: edozein motatako fitxategi eta karpetak arakatzeko.</li></ul></section><section aria-labelledby="help-aukerak"><h3 class="about-section-title" id="help-aukerak" tabindex="-1">Deskargatu aurreko aukerak</h3><ul><li><strong>Izenburua jarri baliabideari</strong>: aukerazkoa, baliabidea nola agertuko den pertsonalizatzeko.</li><li><strong>Baliabidearen eskuragarritasuna konfiguratu</strong>: aukerazkoa, noiz ireki daitekeen eta zer ekintza baimenduko diren erabakitzeko.</li><li><strong>Karpeta-bisorea behartu</strong>: baliabidea beti fitxategi-esploratzaile moduan ikusi nahi baduzu.</li><li><strong>Aurrebista</strong>: tokiko aldi baterako ikuspegia irekitzen du, igo aurretik emaitza egiaztatzeko.</li></ul></section><section aria-labelledby="help-eskuragarritasuna"><h3 class="about-section-title" id="help-eskuragarritasuna" tabindex="-1">Eskuragarritasuna eta ekintzak</h3><p><strong>Aukerak</strong> atalean, dataren araberako eskuragarritasuna aktiba dezakezu: hasiera, aukerako amaiera eta baliabidea eskuragarri dagoen bitartean kudeatzaileko ekintzak (partekatu, webean txertatu, deskargatu).</p><p>Dagoeneko sortutako ZIP edo ELPX bat kargatzen baduzu, murrizketa horiek ere gehitu edo aldatu ditzakezu, eta emaitza aurrebistan ikusi azken esteka sortu aurretik.</p></section><section aria-labelledby="help-kudeatzailea"><h3 class="about-section-title" id="help-kudeatzailea" tabindex="-1">Baliabideen kudeatzailea</h3><p>Kudeatzaileak baliabideak nabigatzaile honetan gordetzen ditu. Hortik ireki, partekatu, webean txertatu, hodeiko fitxategia aldatzen denean eguneratu eta behar ez dituzunean ezabatu ditzakezu.</p></section><section aria-labelledby="help-faq"><h3 class="about-section-title" id="help-faq" tabindex="-1">FAQ: pribatutasuna eta datuak</h3><ul><li><strong>Non gordetzen dira baliabideak?</strong> Gailu bakoitzeko nabigatzailearen biltegiratze lokalean.</li><li><strong>Nire baliabideak GitHubera edo programara igotzen dira?</strong> Ez. Zuk ZIP/ELPX fitxategia zure hodeian ostatatzen duzu. Bisoreak deskargatu eta nabigatzailean irekitzen du soilik.</li><li><strong>Datuak hirugarrenei bidaltzen zaizkie?</strong> Ez. Zuk adierazitako esteka publikotik ZIP/ELPX fitxategia deskargatzea baino ez da egiten.</li><li><strong>Zer gertatzen da nabigatzaileko datuak ezabatzen baditut edo gailua aldatzen badut?</strong> Baliabide lokalak desagertu egiten dira nabigatzaile/gailu horretan.</li><li><strong>Nork ikus dezake baliabidea?</strong> Bisorearen esteka duenak eta fitxategiaren esteka publikorako sarbidea duenak.</li><li><strong>Nola eguneratzen da baliabide bat?</strong> Ordezkatu fitxategia hodeian esteka bera mantenduta, eta erabili <strong>Eguneratu</strong> kudeatzailean.</li></ul></section>'
       },
       error: {
         driveTooLarge: 'Fitxategia handiegia da eta Google Drivek deskargak mugatzen ditu. Saiatu Nextcloud, Dropbox edo beste zerbitzu batekin.',
@@ -1773,7 +1889,7 @@
         themeAuto: 'Auto',
         themeLight: 'Light',
         themeDark: 'Dark',
-        subtitle: 'Self-publishing of educational resources in web (HTML) or in PDF and/or DOCX from your cloud storage.'
+        subtitle: 'Create, preview, and share educational resources from your files, folders, HTML, or ZIP/ELPX.'
       },
       settings: {
         title: 'Visibility settings',
@@ -1826,7 +1942,9 @@
         de: 'Deutsch'
       },
       tab: {
-        publish: 'Publish',
+        home: 'Home',
+        downloadZip: 'Download ZIP',
+        shareLink: 'Create share link',
         manager: 'Resource manager'
       },
       publish: {
@@ -1845,6 +1963,21 @@
             secondaryHtml: 'If you use an eXeLearning .elpx, you can open it here too <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="What is ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">An .elpx file is an eXeLearning project that internally uses the ZIP format, which allows the viewer to access its content and display it correctly.</span></span>',
             elpxTooltip: 'What is ELPX?',
             elpxTooltipHtml: 'An .elpx file is an eXeLearning project that internally uses the ZIP format, which allows the viewer to access its content and display it correctly.'
+          }
+        },
+        quick: {
+          intro: 'To share your resource, you need a ZIP or ELPX file uploaded to cloud storage with a public link. If you do not have it yet, you can generate the ZIP here from your folder, files, or HTML. Then upload it to your cloud service and paste the public link in the lower section: I already have a ZIP or ELPX in the cloud.',
+          files: {
+            title: 'Upload folder or files',
+            dropTitle: 'Drag the folder or files here',
+            dropHint: 'The ZIP creation option will open directly.',
+            folder: 'Choose folder',
+            files: 'Choose files'
+          },
+          html: {
+            title: 'Have HTML code? Paste it here',
+            placeholder: '<!doctype html>...',
+            apply: 'Use this HTML'
           }
         }
       },
@@ -1963,8 +2096,17 @@
       },
       zipper: {
         title: 'Create ZIP for the viewer',
+        summary: {
+          title: 'Summary of loaded content'
+        },
+        options: {
+          title: 'Options',
+          availabilityLabel: 'Configure resource availability',
+          availabilityEdit: 'Change settings',
+          availabilityInfo: 'Define when the resource will be visible and which actions will be available in the resource manager.'
+        },
         accordion: {
-          filesTitle: 'Does your resource have one or more files? Create a ZIP here'
+          filesTitle: 'Does your resource have files or a ready ZIP/ELPX? Upload it here'
         },
         subtitle: {
           item1: 'To publish your resource, put all files in a folder and compress it into a <strong>.zip</strong> file. It can contain web pages and/or one or more <strong>PDF</strong> files.',
@@ -1991,6 +2133,10 @@
           ready: 'Ready to create the ZIP.',
           readyHint: 'Prepare the ZIP to get your file.',
           selectFirst: 'Select files or a folder first.',
+          previewSelectFirst: 'To preview, select files or paste HTML.',
+          previewPreparing: 'Preparing local preview...',
+          previewOpened: 'Preview opened in a new tab.',
+          previewFailed: 'Could not open preview.',
           engineMissing: 'ZIP engine could not be loaded.',
           creating: 'Creating ZIP...',
           downloaded: 'ZIP downloaded.',
@@ -2094,7 +2240,7 @@
           title: 'What does not work or may fail',
           item1: 'Webs that require a server (forms that save data, databases, PHP, etc.).',
           item2: 'External links that require login or special permissions.',
-          item3: 'ZIPs that do not contain any HTML file.'
+          item3: 'Empty, damaged, or incomplete ZIPs that cannot be opened properly.'
         },
         how: {
           title: 'How it works',
@@ -2108,7 +2254,7 @@
           title: 'Important about Google Drive',
           note: 'Google Drive limits direct downloads of large files (approx. 25 MB). If your ZIP exceeds that size, it may fail. Dropbox, Nextcloud and other services usually allow larger files without that limit.'
         },
-        body: '<nav class="about-index" data-help-nav aria-label="Help index"><p class="about-index__title">Index</p><ul><li><a href="#help-goal">Goal</a></li><li><a href="#help-steps">How to share in 3 steps</a></li><li><a href="#help-options">Ways to start</a></li><li><a href="#help-viewer">Which viewer is created</a></li><li><a href="#help-before">Before sharing</a></li><li><a href="#help-visibility">Visibility limits</a></li><li><a href="#help-manager">Resource manager</a></li><li><a href="#help-faq">FAQ: privacy and data</a></li></ul></nav><section aria-labelledby="help-goal"><h3 class="about-section-title" id="help-goal" tabindex="-1">Goal</h3><p>Share your teaching materials with students through a link, quickly and simply.</p></section><section aria-labelledby="help-steps"><h3 class="about-section-title" id="help-steps" tabindex="-1">How to share in 3 steps</h3><ol class="about-steps"><li>Prepare your resource as a ZIP file (if you do not have one, the app creates it for you).</li><li>Upload that ZIP to your cloud storage (Drive, Dropbox, Nextcloud, etc.) and get a public link.</li><li>Paste the link in the viewer and click <strong>Create link</strong>.</li></ol><p>Done: the app gives you the final link, and that is the one you share with students.</p></section><section aria-labelledby="help-options"><h3 class="about-section-title" id="help-options" tabindex="-1">Ways to start</h3><p><strong>A) Create ZIP from files</strong>. If you already have a ZIP, go to option C.</p><ul><li>If your files are on your computer, use this option.</li><li>Add a folder or files and click <strong>Create and download ZIP</strong>.</li><li>Then upload that ZIP to your cloud and share it as in option C.</li></ul><p><strong>B) Paste HTML</strong></p><ul><li>If you do not have a ZIP but you have HTML code, paste it and create the ZIP automatically.</li></ul><p><strong>C) I already have a ZIP/ELPX in the cloud with a public link</strong></p><ul><li>Paste the public ZIP or ELPX link and create the viewer link.</li></ul></section><section aria-labelledby="help-viewer"><h3 class="about-section-title" id="help-viewer" tabindex="-1">Which viewer is created</h3><p>Depending on the content, the system opens automatically:</p><ul><li><strong>Web viewer</strong> (HTML pages): your resource opens as a website.</li><li><strong>Document viewer</strong> (PDF and DOCX): your resources open as documents.</li><li><strong>Folder viewer</strong>: any file type appears organized in folders.</li></ul></section><section aria-labelledby="help-before"><h3 class="about-section-title" id="help-before" tabindex="-1">Before sharing</h3><ul><li>Use <strong>Preview</strong> to check that everything opens correctly.</li><li>Verify that your cloud link is public.</li></ul><p><strong>Practical tip</strong>: if you update a resource, replace the original cloud file with the new one and the app will detect the change automatically.</p></section><section aria-labelledby="help-visibility"><h3 class="about-section-title" id="help-visibility" tabindex="-1">Visibility limits (optional)</h3><p>You can choose when a resource can be opened from <strong>Options</strong>:</p><ul><li>Enable availability configuration.</li><li>Set start date and time.</li><li>If needed, add end date and time.</li><li>Set which manager actions are allowed during access (share, embed, download).</li></ul><p>Useful for scheduling resources by day, week, or assessment period.</p></section><section aria-labelledby="help-manager"><h3 class="about-section-title" id="help-manager" tabindex="-1">Resource manager</h3><p>In the Manager you will see resources created and opened in this browser. From there you can open, copy link, embed, update, and delete.</p></section><section aria-labelledby="help-faq"><h3 class="about-section-title" id="help-faq" tabindex="-1">FAQ: privacy and data</h3><ul><li><strong>Where are resources stored?</strong> In each device browser local storage.</li><li><strong>Are my resources uploaded to GitHub or this app?</strong> No. You host the ZIP in your cloud storage. The viewer only downloads and opens it in the browser.</li><li><strong>Is data sent to third parties?</strong> No. Only the ZIP download from the public link you provided.</li><li><strong>What happens if I clear browser data or switch device?</strong> Local resources disappear in that browser/device.</li><li><strong>Who can view the resource?</strong> Anyone with the viewer link and access to the public ZIP link.</li><li><strong>How do I update a resource?</strong> Replace the ZIP in the cloud keeping the same link and use <strong>Update</strong> in the manager.</li></ul></section>'
+        body: '<nav class="about-index" data-help-nav aria-label="Help index"><p class="about-index__title">Index</p><ul><li><a href="#help-goal">Goal</a></li><li><a href="#help-route">Quick sharing route</a></li><li><a href="#help-tabs">Work tabs</a></li><li><a href="#help-viewer">Which viewer is created automatically</a></li><li><a href="#help-options">Options before download</a></li><li><a href="#help-availability">Availability and actions</a></li><li><a href="#help-manager">Resource manager</a></li><li><a href="#help-faq">FAQ: privacy and data</a></li></ul></nav><section aria-labelledby="help-goal"><h3 class="about-section-title" id="help-goal" tabindex="-1">Goal</h3><p>Share resources with your students in a simple way: prepare the material, generate the link, and distribute it.</p></section><section aria-labelledby="help-route"><h3 class="about-section-title" id="help-route" tabindex="-1">Quick sharing route</h3><ol class="about-steps"><li>In <strong>Home</strong>, upload your resource (folder, files, or ZIP/ELPX) or paste the HTML code.</li><li>Review the summary and, if needed, adjust <strong>Options</strong> (title, availability, and force folder viewer).</li><li>In <strong>Download ZIP</strong>, create the final file. Then upload it to your cloud with a public link and finish in <strong>Create share link</strong>.</li></ol><p>If you already have the ZIP or ELPX in the cloud with a public link, you can go directly to <strong>Create share link</strong>.</p></section><section aria-labelledby="help-tabs"><h3 class="about-section-title" id="help-tabs" tabindex="-1">Work tabs</h3><ul><li><strong>Home</strong>: entry point to upload resources or paste HTML.</li><li><strong>Download ZIP</strong>: preview the result and download the ZIP/ELPX ready to publish.</li><li><strong>Create share link</strong>: paste the public link and generate the final link for students.</li><li><strong>Resource manager</strong>: open, copy, embed, update, and delete resources saved in this browser.</li></ul></section><section aria-labelledby="help-viewer"><h3 class="about-section-title" id="help-viewer" tabindex="-1">Which viewer is created automatically</h3><p>The app detects the content and chooses the most suitable viewer:</p><ul><li><strong>Web viewer</strong>: for resources with HTML pages.</li><li><strong>Document viewer</strong>: for PDF, DOCX, TXT, MD, and CSV files (including formula rendering in Markdown).</li><li><strong>Folder viewer</strong>: to browse folders and files of any type.</li></ul></section><section aria-labelledby="help-options"><h3 class="about-section-title" id="help-options" tabindex="-1">Options before download</h3><ul><li><strong>Set a title for the resource</strong>: optional, to customize how it appears.</li><li><strong>Configure resource availability</strong>: optional, to decide when it can be opened and which actions are allowed.</li><li><strong>Force folder viewer</strong>: useful if you want it always shown as a file explorer.</li><li><strong>Preview</strong>: opens a temporary local view to check the result before upload.</li></ul></section><section aria-labelledby="help-availability"><h3 class="about-section-title" id="help-availability" tabindex="-1">Availability and actions</h3><p>In <strong>Options</strong> you can enable date-based availability and set start, optional end, and manager actions (share, embed, download) while the resource is accessible.</p><p>If you load an existing ZIP or ELPX, you can also add or change these restrictions and preview the result before generating the final link.</p></section><section aria-labelledby="help-manager"><h3 class="about-section-title" id="help-manager" tabindex="-1">Resource manager</h3><p>The manager stores resources in this browser. From there you can open them, share them, embed them, update them when the cloud file changes, and delete them when no longer needed.</p></section><section aria-labelledby="help-faq"><h3 class="about-section-title" id="help-faq" tabindex="-1">FAQ: privacy and data</h3><ul><li><strong>Where are resources stored?</strong> In each device browser local storage.</li><li><strong>Are my resources uploaded to GitHub or this app?</strong> No. You host the ZIP/ELPX in your cloud storage. The viewer only downloads and opens it in the browser.</li><li><strong>Is data sent to third parties?</strong> No. Only the ZIP/ELPX download from the public link you provided.</li><li><strong>What happens if I clear browser data or switch device?</strong> Local resources disappear in that browser/device.</li><li><strong>Who can view the resource?</strong> Anyone with the viewer link and access to the public file link.</li><li><strong>How do I update a resource?</strong> Replace the file in the cloud keeping the same link and use <strong>Update</strong> in the manager.</li></ul></section>'
       },
       error: {
         driveTooLarge: 'The file is too large and Google Drive limits downloads. Try Nextcloud, Dropbox, or another service.',
@@ -2207,7 +2353,7 @@
         themeAuto: 'Automatisch',
         themeLight: 'Hell',
         themeDark: 'Dunkel',
-        subtitle: 'Selbstveröffentlichung von Bildungsressourcen als Web (HTML) oder als PDF und/oder DOCX aus deinem Cloud-Speicher.'
+        subtitle: 'Erstelle, prüfe in der Vorschau und teile Bildungsressourcen aus deinen Dateien, Ordnern, HTML oder ZIP/ELPX.'
       },
       settings: {
         title: 'Sichtbarkeitseinstellungen',
@@ -2260,7 +2406,9 @@
         de: 'Deutsch'
       },
       tab: {
-        publish: 'Veröffentlichen',
+        home: 'Start',
+        downloadZip: 'ZIP herunterladen',
+        shareLink: 'Freigabelink erstellen',
         manager: 'Ressourcenverwaltung'
       },
       publish: {
@@ -2279,6 +2427,21 @@
             secondaryHtml: 'Wenn du eine eXeLearning-.elpx nutzt, kannst du sie hier ebenfalls öffnen <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="Was ist ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Eine .elpx-Datei ist ein eXeLearning-Projekt, das intern das ZIP-Format verwendet. Dadurch kann der Viewer auf den Inhalt zugreifen und ihn korrekt anzeigen.</span></span>',
             elpxTooltip: 'Was ist ELPX?',
             elpxTooltipHtml: 'Eine .elpx-Datei ist ein eXeLearning-Projekt, das intern das ZIP-Format verwendet. Dadurch kann der Viewer auf den Inhalt zugreifen und ihn korrekt anzeigen.'
+          }
+        },
+        quick: {
+          intro: 'Um deine Ressource zu teilen, brauchst du eine ZIP- oder ELPX-Datei in deiner Cloud mit öffentlichem Link. Wenn du sie noch nicht hast, kannst du hier eine ZIP aus Ordner, Dateien oder HTML erzeugen. Lade sie danach in deinen Cloud-Dienst hoch und füge den öffentlichen Link im unteren Bereich ein: Ich habe bereits eine ZIP- oder ELPX-Datei in der Cloud.',
+          files: {
+            title: 'Ordner oder Dateien hochladen',
+            dropTitle: 'Ordner oder Dateien hierher ziehen',
+            dropHint: 'Die ZIP-Erstellung wird direkt geöffnet.',
+            folder: 'Ordner wählen',
+            files: 'Dateien wählen'
+          },
+          html: {
+            title: 'HTML-Code vorhanden? Hier einfügen',
+            placeholder: '<!doctype html>...',
+            apply: 'Dieses HTML verwenden'
           }
         }
       },
@@ -2397,8 +2560,17 @@
       },
       zipper: {
         title: 'ZIP für den Viewer erstellen',
+        summary: {
+          title: 'Zusammenfassung des geladenen Inhalts'
+        },
+        options: {
+          title: 'Optionen',
+          availabilityLabel: 'Verfügbarkeit der Ressource konfigurieren',
+          availabilityEdit: 'Konfiguration ändern',
+          availabilityInfo: 'Lege fest, wann die Ressource sichtbar ist und welche Aktionen im Ressourcenmanager verfügbar sind.'
+        },
         accordion: {
-          filesTitle: 'Hat deine Ressource eine oder mehrere Dateien? Erstelle hier eine ZIP-Datei'
+          filesTitle: 'Hat deine Ressource Dateien oder bereits eine ZIP/ELPX? Lade sie hier hoch'
         },
         subtitle: {
           item1: 'Um deine Ressource zu veröffentlichen, lege alle Dateien in einen Ordner und komprimiere ihn zu einer <strong>.zip</strong>-Datei. Sie kann Webseiten und/oder eine oder mehrere <strong>PDF</strong>-Dateien enthalten.',
@@ -2425,6 +2597,10 @@
           ready: 'Bereit zum Erstellen des ZIP.',
           readyHint: 'Bereite das ZIP vor, um deine Datei zu erhalten.',
           selectFirst: 'Wähle zuerst Dateien oder einen Ordner aus.',
+          previewSelectFirst: 'Für die Vorschau wähle Dateien aus oder füge HTML ein.',
+          previewPreparing: 'Lokale Vorschau wird vorbereitet...',
+          previewOpened: 'Vorschau in einem neuen Tab geöffnet.',
+          previewFailed: 'Vorschau konnte nicht geöffnet werden.',
           engineMissing: 'ZIP-Engine konnte nicht geladen werden.',
           creating: 'ZIP wird erstellt...',
           downloaded: 'ZIP heruntergeladen.',
@@ -2528,7 +2704,7 @@
           title: 'Was nicht funktioniert oder scheitern kann',
           item1: 'Webseiten, die einen Server benötigen (Formulare, die Daten speichern, Datenbanken, PHP usw.).',
           item2: 'Externe Links, die Anmeldung oder besondere Berechtigungen erfordern.',
-          item3: 'ZIPs ohne HTML-Datei.'
+          item3: 'Leere, beschädigte oder unvollständige ZIPs, die nicht korrekt geöffnet werden können.'
         },
         how: {
           title: 'So funktioniert es',
@@ -2542,7 +2718,7 @@
           title: 'Wichtig zu Google Drive',
           note: 'Google Drive begrenzt direkte Downloads großer Dateien (ca. 25 MB). Wenn dein ZIP größer ist, kann es fehlschlagen. Dropbox, Nextcloud und andere Dienste erlauben meist größere Dateien ohne dieses Limit.'
         },
-        body: '<nav class="about-index" data-help-nav aria-label="Hilfe-Inhalt"><p class="about-index__title">Inhalt</p><ul><li><a href="#help-ziel">Ziel</a></li><li><a href="#help-schritte">Teilen in 3 Schritten</a></li><li><a href="#help-start">So startest du</a></li><li><a href="#help-viewer">Welcher Viewer erstellt wird</a></li><li><a href="#help-vorher">Vor dem Teilen</a></li><li><a href="#help-sichtbarkeit">Sichtbarkeitsbegrenzung</a></li><li><a href="#help-manager">Ressourcenverwaltung</a></li><li><a href="#help-faq">FAQ: Datenschutz und Daten</a></li></ul></nav><section aria-labelledby="help-ziel"><h3 class="about-section-title" id="help-ziel" tabindex="-1">Ziel</h3><p>Teile deine Materialien mit Lernenden per Link, einfach und schnell.</p></section><section aria-labelledby="help-schritte"><h3 class="about-section-title" id="help-schritte" tabindex="-1">Teilen in 3 Schritten</h3><ol class="about-steps"><li>Bereite deine Ressource als ZIP-Datei vor (wenn du keine hast, erstellt das Programm sie für dich).</li><li>Lade diese ZIP in deine Cloud hoch (Drive, Dropbox, Nextcloud usw.) und erhalte einen öffentlichen Link.</li><li>Füge den Link im Viewer ein und klicke auf <strong>Link erstellen</strong>.</li></ol><p>Fertig: Das Programm gibt dir den finalen Link, und genau diesen teilst du mit den Lernenden.</p></section><section aria-labelledby="help-start"><h3 class="about-section-title" id="help-start" tabindex="-1">So startest du</h3><p><strong>A) ZIP aus Dateien erstellen</strong>. Wenn du bereits eine ZIP hast, gehe zu Option C.</p><ul><li>Wenn sich die Dateien auf deinem Computer befinden, nutze diese Option.</li><li>Ordner oder Dateien hinzufügen und auf <strong>ZIP erstellen und herunterladen</strong> klicken.</li><li>Danach die ZIP in die Cloud hochladen und wie in Option C teilen.</li></ul><p><strong>B) HTML einfügen</strong></p><ul><li>Wenn du keine ZIP hast, aber HTML-Code, füge ihn ein und erstelle die ZIP automatisch.</li></ul><p><strong>C) Ich habe bereits eine ZIP/ELPX in der Cloud mit öffentlichem Link</strong></p><ul><li>Öffentlichen ZIP- oder ELPX-Link einfügen und den Viewer-Link erstellen.</li></ul></section><section aria-labelledby="help-viewer"><h3 class="about-section-title" id="help-viewer" tabindex="-1">Welcher Viewer erstellt wird</h3><p>Je nach Inhalt öffnet das System automatisch:</p><ul><li><strong>Web-Viewer</strong> (HTML-Seiten): die Ressource wird als Webseite angezeigt.</li><li><strong>Dokumenten-Viewer</strong> (PDF und DOCX): die Ressourcen werden als Dokumente angezeigt.</li><li><strong>Ordner-Viewer</strong>: jeder Dateityp wird in Ordnern organisiert angezeigt.</li></ul></section><section aria-labelledby="help-vorher"><h3 class="about-section-title" id="help-vorher" tabindex="-1">Vor dem Teilen</h3><ul><li>Nutze <strong>Vorschau</strong>, um zu prüfen, ob alles korrekt angezeigt wird.</li><li>Prüfe, ob dein Cloud-Link öffentlich ist.</li></ul><p><strong>Praktischer Tipp</strong>: Wenn du eine Ressource aktualisierst, ersetze die Originaldatei in der Cloud durch die neue Datei. Das Programm erkennt die Änderung automatisch.</p></section><section aria-labelledby="help-sichtbarkeit"><h3 class="about-section-title" id="help-sichtbarkeit" tabindex="-1">Sichtbarkeitsbegrenzung (optional)</h3><p>In <strong>Optionen</strong> kannst du festlegen, wann eine Ressource geöffnet werden darf:</p><ul><li>Aktiviere die Verfügbarkeitskonfiguration.</li><li>Lege Startdatum und Startzeit fest.</li><li>Optional Enddatum und Endzeit ergänzen.</li><li>Lege fest, welche Aktionen im Manager während des Zugriffs erlaubt sind (teilen, einbetten, herunterladen).</li></ul><p>Nützlich, um Ressourcen nach Tagen, Wochen oder Bewertungszeiträumen zu planen.</p></section><section aria-labelledby="help-manager"><h3 class="about-section-title" id="help-manager" tabindex="-1">Ressourcenverwaltung</h3><p>In der Verwaltung siehst du Ressourcen, die in diesem Browser erstellt und geöffnet wurden. Von dort kannst du öffnen, Link kopieren, einbetten, aktualisieren und löschen.</p></section><section aria-labelledby="help-faq"><h3 class="about-section-title" id="help-faq" tabindex="-1">FAQ: Datenschutz und Daten</h3><ul><li><strong>Wo werden Ressourcen gespeichert?</strong> Im lokalen Browser-Speicher jedes Geräts.</li><li><strong>Werden meine Ressourcen auf GitHub oder in dieses Programm hochgeladen?</strong> Nein. Du hostest die ZIP in deiner Cloud. Der Viewer lädt sie nur herunter und öffnet sie im Browser.</li><li><strong>Werden Daten an Dritte gesendet?</strong> Nein. Nur der ZIP-Download über den von dir angegebenen öffentlichen Link.</li><li><strong>Was passiert, wenn ich Browserdaten lösche oder das Gerät wechsle?</strong> Lokale Ressourcen verschwinden in diesem Browser/Gerät.</li><li><strong>Wer kann die Ressource sehen?</strong> Wer den Viewer-Link und Zugriff auf den öffentlichen ZIP-Link hat.</li><li><strong>Wie aktualisiere ich eine Ressource?</strong> ZIP in der Cloud bei gleichem Link ersetzen und im Manager <strong>Aktualisieren</strong> verwenden.</li></ul></section>'
+        body: '<nav class="about-index" data-help-nav aria-label="Hilfe-Inhalt"><p class="about-index__title">Inhalt</p><ul><li><a href="#help-ziel">Ziel</a></li><li><a href="#help-ablauf">Schneller Ablauf zum Teilen</a></li><li><a href="#help-tabs">Arbeits-Tabs</a></li><li><a href="#help-viewer">Welcher Viewer automatisch erstellt wird</a></li><li><a href="#help-optionen">Optionen vor dem Download</a></li><li><a href="#help-verfuegbarkeit">Verfügbarkeit und Aktionen</a></li><li><a href="#help-manager">Ressourcenverwaltung</a></li><li><a href="#help-faq">FAQ: Datenschutz und Daten</a></li></ul></nav><section aria-labelledby="help-ziel"><h3 class="about-section-title" id="help-ziel" tabindex="-1">Ziel</h3><p>Ressourcen einfach mit Lernenden teilen: Material vorbereiten, Link erzeugen und verteilen.</p></section><section aria-labelledby="help-ablauf"><h3 class="about-section-title" id="help-ablauf" tabindex="-1">Schneller Ablauf zum Teilen</h3><ol class="about-steps"><li>Im Tab <strong>Start</strong> lädst du deine Ressource hoch (Ordner, Dateien oder ZIP/ELPX) oder fügst HTML-Code ein.</li><li>Prüfe die Zusammenfassung und passe bei Bedarf <strong>Optionen</strong> an (Titel, Verfügbarkeit, Ordner-Viewer erzwingen).</li><li>Im Tab <strong>ZIP herunterladen</strong> erstellst du die finale Datei. Danach lädst du sie mit öffentlichem Link in deine Cloud hoch und schließt im Tab <strong>Link zum Teilen erstellen</strong> ab.</li></ol><p>Wenn dein ZIP oder ELPX bereits mit öffentlichem Link in der Cloud liegt, kannst du direkt zu <strong>Link zum Teilen erstellen</strong> gehen.</p></section><section aria-labelledby="help-tabs"><h3 class="about-section-title" id="help-tabs" tabindex="-1">Arbeits-Tabs</h3><ul><li><strong>Start</strong>: Einstieg zum Hochladen von Ressourcen oder Einfügen von HTML.</li><li><strong>ZIP herunterladen</strong>: Ergebnis in der Vorschau prüfen und ein veröffentlichungsfertiges ZIP/ELPX herunterladen.</li><li><strong>Link zum Teilen erstellen</strong>: öffentlichen Link einfügen und den finalen Link für Lernende erzeugen.</li><li><strong>Ressourcenverwaltung</strong>: im Browser gespeicherte Ressourcen öffnen, kopieren, einbetten, aktualisieren und löschen.</li></ul></section><section aria-labelledby="help-viewer"><h3 class="about-section-title" id="help-viewer" tabindex="-1">Welcher Viewer automatisch erstellt wird</h3><p>Das Programm erkennt den Inhalt und wählt den passenden Viewer:</p><ul><li><strong>Web-Viewer</strong>: für Ressourcen mit HTML-Seiten.</li><li><strong>Dokumenten-Viewer</strong>: für PDF, DOCX, TXT, MD und CSV (inklusive Formel-Darstellung in Markdown).</li><li><strong>Ordner-Viewer</strong>: zum Durchsuchen von Ordnern und Dateien aller Typen.</li></ul></section><section aria-labelledby="help-optionen"><h3 class="about-section-title" id="help-optionen" tabindex="-1">Optionen vor dem Download</h3><ul><li><strong>Titel für die Ressource setzen</strong>: optional, um die Anzeige anzupassen.</li><li><strong>Ressourcenverfügbarkeit konfigurieren</strong>: optional, um festzulegen, wann sie geöffnet werden kann und welche Aktionen erlaubt sind.</li><li><strong>Ordner-Viewer erzwingen</strong>: sinnvoll, wenn die Ressource immer als Datei-Explorer gezeigt werden soll.</li><li><strong>Vorschau</strong>: öffnet eine temporäre lokale Ansicht, um das Ergebnis vor dem Hochladen zu prüfen.</li></ul></section><section aria-labelledby="help-verfuegbarkeit"><h3 class="about-section-title" id="help-verfuegbarkeit" tabindex="-1">Verfügbarkeit und Aktionen</h3><p>Unter <strong>Optionen</strong> kannst du Datumsverfügbarkeit aktivieren und Start, optionales Ende sowie Manager-Aktionen (teilen, einbetten, herunterladen) festlegen, solange die Ressource zugänglich ist.</p><p>Wenn du ein bereits erstelltes ZIP oder ELPX lädst, kannst du diese Einschränkungen ebenfalls hinzufügen oder ändern und das Ergebnis vor dem finalen Link in der Vorschau prüfen.</p></section><section aria-labelledby="help-manager"><h3 class="about-section-title" id="help-manager" tabindex="-1">Ressourcenverwaltung</h3><p>Die Verwaltung speichert Ressourcen in diesem Browser. Von dort kannst du sie öffnen, teilen, einbetten, bei Änderungen in der Cloud aktualisieren und bei Bedarf löschen.</p></section><section aria-labelledby="help-faq"><h3 class="about-section-title" id="help-faq" tabindex="-1">FAQ: Datenschutz und Daten</h3><ul><li><strong>Wo werden Ressourcen gespeichert?</strong> Im lokalen Browser-Speicher jedes Geräts.</li><li><strong>Werden meine Ressourcen auf GitHub oder in dieses Programm hochgeladen?</strong> Nein. Du hostest die ZIP/ELPX-Datei in deiner Cloud. Der Viewer lädt sie nur herunter und öffnet sie im Browser.</li><li><strong>Werden Daten an Dritte gesendet?</strong> Nein. Es erfolgt nur der Download der ZIP/ELPX-Datei über den von dir angegebenen öffentlichen Link.</li><li><strong>Was passiert, wenn ich Browserdaten lösche oder das Gerät wechsle?</strong> Lokale Ressourcen verschwinden in diesem Browser/Gerät.</li><li><strong>Wer kann die Ressource sehen?</strong> Wer den Viewer-Link und Zugriff auf den öffentlichen Dateilink hat.</li><li><strong>Wie aktualisiere ich eine Ressource?</strong> Ersetze die Datei in der Cloud bei gleichem Link und nutze <strong>Aktualisieren</strong> in der Verwaltung.</li></ul></section>'
       },
       error: {
         driveTooLarge: 'Die Datei ist zu groß und Google Drive begrenzt Downloads. Versuche es mit Nextcloud, Dropbox oder einem anderen Dienst.',

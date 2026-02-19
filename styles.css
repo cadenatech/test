@@ -70,6 +70,23 @@
   color: #b6c2d4;
 }
 
+:root[data-theme="dark"] .publish-quick-card {
+  background: rgba(17, 27, 47, 0.72);
+  border-color: #334866;
+}
+
+:root[data-theme="dark"] .publish-quick-card__title {
+  color: #dbe7fb;
+}
+
+:root[data-theme="dark"] .dropzone--quick {
+  background: #111b2f;
+}
+
+:root[data-theme="dark"] .zipper-selection-card__title {
+  color: #dbe7fb;
+}
+
 :root[data-theme="dark"] .html-zip-accordion__summary {
   background: #1b2a46;
   border-bottom-color: #2f4467;
@@ -1113,6 +1130,15 @@ textarea:focus-visible {
   margin-top: 12px;
 }
 
+.publish-choice-main {
+  margin-top: 14px;
+}
+
+.publish-choice-main .publish-choice-card {
+  width: 100%;
+  min-height: 0;
+}
+
 .publish-choice-card {
   border-radius: 18px;
   border: 1px solid var(--border);
@@ -1197,6 +1223,66 @@ textarea:focus-visible {
   position: absolute;
   top: 14px;
   right: 14px;
+}
+
+.publish-quick-actions {
+  margin-top: 8px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.publish-quick-intro {
+  margin: 4px 0 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--accent-wash);
+  color: var(--ink-muted);
+  line-height: 1.45;
+}
+
+.publish-quick-card {
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--surface-muted);
+  padding: 14px;
+  display: grid;
+  gap: 10px;
+  align-content: start;
+}
+
+.publish-quick-card__title {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.25;
+  color: #1e293b;
+}
+
+.dropzone--quick {
+  min-height: 250px;
+  padding: 22px;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.dropzone--quick .dropzone__title {
+  font-size: 0.95rem;
+}
+
+.dropzone--quick .dropzone__hint {
+  margin-bottom: 10px;
+}
+
+.publish-quick-html {
+  min-height: 120px;
+}
+
+.publish-quick-html__actions {
+  display: flex;
+  justify-content: flex-start;
 }
 
 .card-lock {
@@ -1402,6 +1488,22 @@ textarea:focus-visible {
   background: var(--surface-muted);
   display: grid;
   gap: 12px;
+}
+
+.zipper-selection-card {
+  margin-top: 8px;
+  padding: 16px;
+  gap: 8px;
+}
+
+.zipper-selection-card__title {
+  margin: 0;
+  font-size: 1rem;
+  color: #1e293b;
+}
+
+.upload-status--summary {
+  margin-top: 0;
 }
 
 .html-zip-card__header {
@@ -3196,6 +3298,14 @@ body[data-loading="true"] main {
 
   .publish-choice-grid {
     grid-template-columns: 1fr;
+  }
+
+  .publish-quick-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .dropzone--quick {
+    min-height: 210px;
   }
 
   .manager-settings {

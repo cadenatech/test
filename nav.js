@@ -12,8 +12,16 @@
     return navCtx && key in navCtx ? navCtx[key] : null;
   }
 
+  function resolvePanelName(name) {
+    if (name === 'home' || name === 'zipper' || name === 'main') {
+      return 'publish';
+    }
+    return name;
+  }
+
   function setActiveTab(name) {
     document.body.setAttribute('data-active-tab', name);
+    var panelName = resolvePanelName(name);
     if (get('tabButtons')) {
       get('tabButtons').forEach(function (button) {
         var isActive = button.getAttribute('data-tab') === name;
@@ -25,7 +33,7 @@
     }
     if (get('tabPanels')) {
       get('tabPanels').forEach(function (panel) {
-        var isActive = panel.getAttribute('data-tab-panel') === name;
+        var isActive = panel.getAttribute('data-tab-panel') === panelName;
         panel.classList.toggle('is-active', isActive);
         if (isActive) {
           panel.removeAttribute('hidden');

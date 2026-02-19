@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;600;800&family=Spectral:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=28">
+  <link rel="stylesheet" href="styles.css?v=29">
 </head>
 <body>
 
@@ -73,16 +73,38 @@
     <div class="tabs-shell">
       <div class="tabs" role="tablist" aria-label="Secciones" data-i18n-aria-label="tabs.label">
         <button
-          id="tab-publish"
+          id="tab-home"
           class="tab-button is-active"
           type="button"
           role="tab"
           aria-selected="true"
           aria-controls="panel-publish"
           tabindex="0"
-          data-tab="publish"
-          data-i18n="tab.publish"
-        >Publicar</button>
+          data-tab="home"
+          data-i18n="tab.home"
+        >Inicio</button>
+        <button
+          id="tab-zipper"
+          class="tab-button"
+          type="button"
+          role="tab"
+          aria-selected="false"
+          aria-controls="panel-publish"
+          tabindex="-1"
+          data-tab="zipper"
+          data-i18n="tab.downloadZip"
+        >Descargar ZIP</button>
+        <button
+          id="tab-main"
+          class="tab-button"
+          type="button"
+          role="tab"
+          aria-selected="false"
+          aria-controls="panel-publish"
+          tabindex="-1"
+          data-tab="main"
+          data-i18n="tab.shareLink"
+        >Crear enlace para compartir</button>
         <button
           id="tab-manager"
           class="tab-button"
@@ -100,30 +122,35 @@
         id="panel-publish"
         class="tab-panel is-active"
         role="tabpanel"
-        aria-labelledby="tab-publish"
+        aria-labelledby="tab-home tab-zipper tab-main"
         tabindex="0"
         data-tab-panel="publish"
       >
       <div class="publish">
         <div class="manager-card" data-publish-choice>
-          <div class="manager-header">
-            <div>
-              <h2 class="publish-flow-title" data-i18n="publish.title">Publicar un recurso</h2>
-              <p class="manager-subtitle publish-flow-subtitle" data-i18n="publish.subtitle">Elige cómo quieres empezar.</p>
-            </div>
-          </div>
-          <div class="publish-choice-grid">
-            <button class="publish-choice-card" type="button" data-publish-start="zipper">
-              <span class="publish-choice-card__icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
-                  <path d="M12 5v14m-7-7h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-              </span>
-              <div class="publish-choice-card__title">
-                <span data-i18n="publish.choice.zipper.title">Crea un ZIP con archivos web, PDF o DOCX</span>
+          <p class="publish-quick-intro" data-i18n="publish.quick.intro">Para compartir tu recurso necesitas un ZIP o ELPX subido a la nube con enlace público. Si aún no lo tienes, aquí puedes generar el ZIP a partir de tu carpeta, archivos o HTML. Después súbelo a tu servicio en la nube y pega el enlace público en la sección inferior: Ya tengo un ZIP o ELPX en la nube.</p>
+          <section class="publish-quick-actions" aria-label="Acciones rápidas">
+            <div class="publish-quick-card">
+              <h3 class="publish-quick-card__title" data-i18n="publish.quick.files.title">Sube tu recurso</h3>
+              <div class="dropzone dropzone--quick" data-quick-dropzone>
+                <div class="dropzone__title" data-i18n="publish.quick.files.dropTitle">Arrastra aquí la carpeta o los archivos</div>
+                <div class="dropzone__actions">
+                  <button class="ghost-button" type="button" data-quick-folder-button data-i18n="publish.quick.files.folder">Elegir carpeta</button>
+                  <button class="ghost-button" type="button" data-quick-file-button data-i18n="publish.quick.files.files">Elegir archivos</button>
+                  <input type="file" data-quick-folder-input webkitdirectory multiple hidden>
+                  <input type="file" data-quick-file-input multiple hidden>
+                </div>
               </div>
-              <span class="publish-choice-card__note" data-i18n="publish.choice.zipper.note">Crea un ZIP desde archivos web, PDF y DOCX o desde código HTML.</span>
-            </button>
+            </div>
+            <div class="publish-quick-card">
+              <h3 class="publish-quick-card__title" data-i18n="publish.quick.html.title">¿Tienes código HTML? Pégalo aquí</h3>
+              <textarea class="html-zip-textarea publish-quick-html" data-quick-html-input data-i18n-placeholder="publish.quick.html.placeholder" placeholder="&lt;!doctype html&gt;..."></textarea>
+              <div class="publish-quick-html__actions">
+                <button class="ghost-button" type="button" data-quick-html-apply data-i18n="publish.quick.html.apply">Usar este HTML</button>
+              </div>
+            </div>
+          </section>
+          <div class="publish-choice-main">
             <button class="publish-choice-card" type="button" data-publish-start="main">
               <span class="publish-choice-card__icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
@@ -132,10 +159,9 @@
                 </svg>
               </span>
               <div class="publish-choice-card__title">
-                <span data-i18n="publish.choice.main.title">Ya tengo un ZIP en la nube con enlace</span>
+                <span data-i18n="publish.choice.main.title">Ya tengo un ZIP o ELPX en la nube</span>
               </div>
               <span class="publish-choice-card__note" data-i18n="publish.choice.main.note">Pega el enlace público (ZIP/ELPX) y crea el enlace del visor.</span>
-              <span class="publish-choice-card__note publish-choice-card__note--secondary" data-i18n-html="publish.choice.main.secondaryHtml">Si usas .elpx de eXeLearning, también puedes abrirlo aquí <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="¿Qué es ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Un archivo .elpx es un proyecto de eXeLearning que internamente utiliza el formato ZIP, lo que permite que el visor acceda a su contenido y lo muestre correctamente.</span></span></span>
             </button>
           </div>
 
@@ -143,8 +169,8 @@
 
 	        <div class="publish-module" data-publish-module="main" id="ya-tengo-zip-elpx" hidden>
 	          <form data-form>
-	            <span class="field-title field-title--module" data-i18n="main.form.title">Ya tengo un ZIP en la nube con enlace</span>
-	            <p class="step-note" data-i18n-html="main.subtitle">Si ya tienes tu recurso en formato ZIP o .elpx en un servicio con <strong>enlace público</strong> (Drive, Dropbox, etc.), pega aquí el enlace para generar el enlace.</p>
+	            <span class="field-title field-title--module" data-i18n="main.form.title">Ya tengo un ZIP o ELPX en la nube con enlace</span>
+	            <p class="step-note" data-i18n-html="main.subtitle">Si ya tienes tu recurso en formato ZIP o ELPX en un servicio con <strong>enlace público</strong> (Drive, Dropbox, etc.), pega aquí el enlace para generar el enlace que usarás para compartir el recurso.</p>
 	            <input data-url type="url" placeholder="Pega aquí el enlace público del ZIP o del .elpx (también válido si incluye PDF)" data-i18n-placeholder="main.form.placeholder" required>
             <button type="submit" data-create-link data-i18n="main.form.submit">Crear enlace</button>
           </form>
@@ -202,9 +228,9 @@
 
 	        <div class="publish-module" data-publish-module="zipper" hidden>
 	          <div class="manager-card">
-	            <div class="manager-header">
-	              <div>
-	                <h2 data-i18n="zipper.title">Crear ZIP para el visor</h2>
+            <div class="manager-header">
+              <div>
+                <h2 data-i18n="zipper.title">Crear ZIP para el visor</h2>
               </div>
               <button class="card-lock" type="button" data-lock-indicator data-main-settings-open data-i18n-aria-label="header.settings" data-i18n-tooltip="header.settingsHint">
                 <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -213,53 +239,14 @@
                 </svg>
               </button>
             </div>
-            <details class="html-zip-accordion" data-zip-flow="files">
-              <summary class="html-zip-accordion__summary" data-i18n="zipper.accordion.filesTitle">¿Tu recurso tiene uno o más archivos? Crea aquí un ZIP</summary>
-              <div class="upload-grid">
-                <section class="upload-card">
-                  <h3 data-i18n="zipper.step1.title">Añade tus archivos</h3>
-                  <div class="dropzone" data-dropzone>
-                    <div class="dropzone__title" data-i18n="zipper.dropzone.title">Arrastra aquí la carpeta o los archivos</div>
-                    <div class="dropzone__hint" data-i18n="zipper.dropzone.hint">Se respetan las carpetas internas.</div>
-                    <div class="dropzone__actions">
-                      <button class="ghost-button" type="button" data-folder-button data-i18n="zipper.dropzone.folder">Elegir carpeta</button>
-                      <button class="ghost-button" type="button" data-file-button data-i18n="zipper.dropzone.files">Elegir archivos</button>
-                      <input type="file" data-folder-input webkitdirectory multiple hidden>
-                      <input type="file" data-file-input multiple hidden>
-                    </div>
-                  </div>
-                  <p class="upload-status" data-upload-status data-i18n="zipper.status.empty" data-i18n-dynamic>No hay archivos seleccionados.</p>
-                </section>
-              </div>
-            </details>
-            <details class="html-zip-accordion" data-zip-flow="html">
-              <summary class="html-zip-accordion__summary" data-i18n="zipper.html.title">¿No tienes archivos pero tienes el código HTML? Pégalo aquí</summary>
-              <div class="html-zip-card">
-                <div class="html-zip-card__header">
-                  <p class="step-note" data-i18n-html="zipper.html.note">Pega el HTML completo y el visor creará un ZIP con un <code>index.html</code> listo para descargar.</p>
-                </div>
-                <textarea class="html-zip-textarea" data-html-zip-input data-i18n-placeholder="zipper.html.placeholder" placeholder="&lt;!doctype html&gt;..."></textarea>
-                <p class="upload-status" data-html-zip-status data-i18n="zipper.html.status.ready" data-i18n-dynamic>Listo para crear el ZIP desde tu HTML.</p>
-              </div>
-            </details>
-            <details class="html-zip-accordion" data-restrict-accordion data-zip-flow="restrict">
-              <summary class="html-zip-accordion__summary" data-i18n="zipper.restrict.title">¿Tienes un ZIP o ELPX ya creado y quieres añadirle restricciones de visibilidad? Súbelo aquí</summary>
-              <div class="html-zip-card">
-                <div class="html-zip-card__header">
-                  <p class="step-note" data-i18n="zipper.restrict.note">Sube tu ZIP y el visor añadirá las restricciones. Después tendrás que subirlo a Drive, Dropbox, etc.</p>
-                  <div class="inline-callout" data-restrict-zip-lock hidden>
-                    <p class="inline-callout__text" data-i18n="zipper.restrict.lockedText">Para usar esta opción, configura la disponibilidad el recurso en “Opciones” (debajo de este bloque).</p>
-                  </div>
-                </div>
-                <div class="upload-actions">
-                  <button class="ghost-button" type="button" data-restrict-zip-pick data-i18n="zipper.restrict.pick">Seleccionar ZIP</button>
-                  <input type="file" accept=".zip,.elpx,application/zip" data-restrict-zip-input hidden>
-                </div>
-                <p class="upload-status" data-restrict-zip-status data-i18n="zipper.restrict.status.ready" data-i18n-dynamic></p>
-              </div>
-            </details>
+            <section class="html-zip-card zipper-selection-card">
+              <h3 class="zipper-selection-card__title" data-i18n="zipper.summary.title">Resumen del contenido cargado</h3>
+              <p class="upload-status upload-status--summary" data-upload-status data-i18n="zipper.status.empty" data-i18n-dynamic>No hay archivos seleccionados.</p>
+              <textarea class="html-zip-textarea" data-html-zip-input data-i18n-placeholder="zipper.html.placeholder" placeholder="&lt;!doctype html&gt;..." hidden></textarea>
+              <p class="upload-status" data-html-zip-status data-i18n="zipper.html.status.ready" data-i18n-dynamic hidden>Listo para crear el ZIP desde tu HTML.</p>
+            </section>
             <section class="html-zip-card zipper-force-card zipper-options-card">
-              <h3 class="zipper-options-card__title">Opciones</h3>
+              <h3 class="zipper-options-card__title" data-i18n="zipper.options.title">Opciones</h3>
               <div class="zipper-option-row zipper-option-row--title">
                 <label class="settings-check zipper-option-title-toggle" for="resource-title-toggle-input">
                   <input id="resource-title-toggle-input" type="checkbox" data-resource-title-toggle>
@@ -271,15 +258,15 @@
                 <div class="zipper-option-row__main">
                   <label class="settings-check zipper-option-toggle" for="restrict-toggle-proxy">
                     <input id="restrict-toggle-proxy" type="checkbox" data-restrict-toggle-proxy>
-                    <span class="zipper-option-row__title">Configurar la disponibilidad del recurso</span>
+                    <span class="zipper-option-row__title" data-i18n="zipper.options.availabilityLabel">Configurar la disponibilidad del recurso</span>
                   </label>
                   <div class="zipper-restrict-summary" data-restrict-summary hidden>
                     <span class="zipper-restrict-summary__label" data-restrict-summary-label data-i18n="zipper.restrict.summaryTitle">Acceso limitado por fechas</span>
                     <div class="zipper-restrict-summary__items" data-restrict-summary-items></div>
                   </div>
-                  <button class="ghost-button ghost-button--small zipper-restrict-edit-btn" type="button" data-main-settings-open data-restrict-edit-button hidden>Cambiar configuración</button>
+                  <button class="ghost-button ghost-button--small zipper-restrict-edit-btn" type="button" data-main-settings-open data-restrict-edit-button data-i18n="zipper.options.availabilityEdit" hidden>Cambiar configuración</button>
                 </div>
-                <span class="info-dot" aria-label="Más información">?<span class="info-dot__tooltip" role="tooltip">Definir cuándo estará visible el recurso y qué acciones estarán disponibles en el gestor de recursos.</span></span>
+                <span class="info-dot" data-i18n-aria-label="zipper.help.previewApplyRestrictionsInfo" aria-label="Más información">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="zipper.options.availabilityInfo">Definir cuándo estará visible el recurso y qué acciones estarán disponibles en el gestor de recursos.</span></span>
               </div>
               <div class="zipper-option-row zipper-option-row--force">
                 <div class="zipper-force-folder-wrap">
@@ -620,7 +607,7 @@
     <footer class="site-footer">
       <a class="footer-link" href="https://bilateria.org" target="_blank" rel="noopener">(c) 2026 Juan Jose de Haro</a>
       <span class="footer-sep">·</span>
-    <span class="footer-link" data-app-version>v2.1.1</span>
+    <span class="footer-link" data-app-version>v3.0.0</span>
       <span class="footer-sep">·</span>
       <a class="footer-link" href="https://github.com/visor-webzip/visor-webzip.github.io" target="_blank" rel="noopener">
         <svg class="footer-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
@@ -657,7 +644,7 @@
 		  <script src="manager.js?v=3"></script>
 		  <script src="restriction-ui.js?v=13"></script>
 	  <script src="share.js?v=1"></script>
-	  <script src="nav.js?v=1"></script>
-			  <script src="app.js?v=66"></script>
+	  <script src="nav.js?v=2"></script>
+			  <script src="app.js?v=67"></script>
  </body>
  </html>
