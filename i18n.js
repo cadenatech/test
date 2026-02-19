@@ -217,7 +217,7 @@
           summaryTitle: 'Acceso limitado por fechas'
         },
         accordion: {
-          filesTitle: '¿Tienes archivos? Crea un ZIP'
+          filesTitle: '¿Tu recurso tiene uno o más archivos? Crea aquí un ZIP'
         },
         subtitle: {
           item1: 'Para publicar tu recurso, guarda todos los archivos en una carpeta y comprímela en un archivo <strong>.zip</strong>. Puede contener páginas web y/o uno o varios <strong>PDF</strong>.',
@@ -665,7 +665,7 @@
       zipper: {
         title: 'Crear ZIP per al visor',
         accordion: {
-          filesTitle: 'Tens fitxers? Crea el ZIP'
+          filesTitle: 'El teu recurs té un o més fitxers? Crea aquí un ZIP'
         },
         subtitle: {
           item1: 'Per publicar el teu recurs, guarda tots els fitxers en una carpeta i comprimeix-la en un fitxer <strong>.zip</strong>. Pot contenir pàgines web i/o un o diversos <strong>PDF</strong>.',
@@ -1098,7 +1098,7 @@
       zipper: {
         title: 'Crear ZIP para o visor',
         accordion: {
-          filesTitle: 'Tes ficheiros? Crea o ZIP'
+          filesTitle: 'O teu recurso ten un ou máis ficheiros? Crea aquí un ZIP'
         },
         subtitle: {
           item1: 'Para publicar o teu recurso, garda todos os ficheiros nun cartafol e comprímeo nun ficheiro <strong>.zip</strong>. Pode conter páxinas web e/ou un ou varios <strong>PDF</strong>.',
@@ -1531,7 +1531,7 @@
       zipper: {
         title: 'Sortu ZIPa bisorerako',
         accordion: {
-          filesTitle: 'Fitxategiak dituzu? Sortu ZIPa'
+          filesTitle: 'Zure baliabideak fitxategi bat edo gehiago ditu? Sortu hemen ZIP bat'
         },
         subtitle: {
           item1: 'Zure baliabidea argitaratzeko, gorde fitxategi guztiak karpeta batean eta konprimitu <strong>.zip</strong> fitxategi batean. Web-orriak eta/edo <strong>PDF</strong> bat edo gehiago izan ditzake.',
@@ -1964,7 +1964,7 @@
       zipper: {
         title: 'Create ZIP for the viewer',
         accordion: {
-          filesTitle: 'Have files? Create the ZIP'
+          filesTitle: 'Does your resource have one or more files? Create a ZIP here'
         },
         subtitle: {
           item1: 'To publish your resource, put all files in a folder and compress it into a <strong>.zip</strong> file. It can contain web pages and/or one or more <strong>PDF</strong> files.',
@@ -2398,7 +2398,7 @@
       zipper: {
         title: 'ZIP für den Viewer erstellen',
         accordion: {
-          filesTitle: 'Dateien vorhanden? ZIP erstellen'
+          filesTitle: 'Hat deine Ressource eine oder mehrere Dateien? Erstelle hier eine ZIP-Datei'
         },
         subtitle: {
           item1: 'Um deine Ressource zu veröffentlichen, lege alle Dateien in einen Ordner und komprimiere ihn zu einer <strong>.zip</strong>-Datei. Sie kann Webseiten und/oder eine oder mehrere <strong>PDF</strong>-Dateien enthalten.',
