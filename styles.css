@@ -1537,6 +1537,7 @@ textarea:focus-visible {
 
 .upload-status--summary {
   margin-top: 0;
+  white-space: pre-line;
 }
 
 .html-zip-card__header {

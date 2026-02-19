@@ -987,6 +987,7 @@
         actionLabel: 'Acción:',
         actionZipLike: 'ZIP/ELPX detectado: puedes previsualizarlo y, si quieres, aplicar restricciones de visualización.',
         actionZipLikeWithType: 'ZIP/ELPX detectado ({viewer}): puedes previsualizarlo y, si quieres, aplicar restricciones de visualización.',
+        actionZipLikeWithTypeScorm12: 'SCORM 1.2 detectado ({viewer}): puedes previsualizarlo y, si quieres, aplicar restricciones de visualización.',
         analyzingZip: 'Analizando ZIP/ELPX...',
         viewerWeb: 'visor web',
         viewerDocuments: 'visor de documentos',
@@ -1003,6 +1004,7 @@
         actionLabel: 'Acció:',
         actionZipLike: 'S\'ha detectat ZIP/ELPX: el pots previsualitzar i, si vols, aplicar restriccions de visualització.',
         actionZipLikeWithType: 'S\'ha detectat ZIP/ELPX ({viewer}): el pots previsualitzar i, si vols, aplicar restriccions de visualització.',
+        actionZipLikeWithTypeScorm12: 'SCORM 1.2 detectat ({viewer}): el pots previsualitzar i, si vols, aplicar restriccions de visualització.',
         analyzingZip: 'Analitzant ZIP/ELPX...',
         viewerWeb: 'visor web',
         viewerDocuments: 'visor de documents',
@@ -1019,6 +1021,7 @@
         actionLabel: 'Acción:',
         actionZipLike: 'Detectouse ZIP/ELPX: podes previsualizalo e, se queres, aplicar restricións de visualización.',
         actionZipLikeWithType: 'Detectouse ZIP/ELPX ({viewer}): podes previsualizalo e, se queres, aplicar restricións de visualización.',
+        actionZipLikeWithTypeScorm12: 'Detectouse SCORM 1.2 ({viewer}): podes previsualizalo e, se queres, aplicar restricións de visualización.',
         analyzingZip: 'Analizando ZIP/ELPX...',
         viewerWeb: 'visor web',
         viewerDocuments: 'visor de documentos',
@@ -1035,6 +1038,7 @@
         actionLabel: 'Ekintza:',
         actionZipLike: 'ZIP/ELPX detektatu da: aurrebista ikus dezakezu eta, nahi baduzu, bistaratze-murrizketak aplikatu.',
         actionZipLikeWithType: 'ZIP/ELPX detektatu da ({viewer}): aurrebista ikus dezakezu eta, nahi baduzu, bistaratze-murrizketak aplikatu.',
+        actionZipLikeWithTypeScorm12: 'SCORM 1.2 detektatu da ({viewer}): aurrebista ikus dezakezu eta, nahi baduzu, bistaratze-murrizketak aplikatu.',
         analyzingZip: 'ZIP/ELPX aztertzen...',
         viewerWeb: 'web bistaratzailea',
         viewerDocuments: 'dokumentu bistaratzailea',
@@ -1051,6 +1055,7 @@
         actionLabel: 'Action:',
         actionZipLike: 'ZIP/ELPX detected: you can preview it and, if you want, apply visibility restrictions.',
         actionZipLikeWithType: 'ZIP/ELPX detected ({viewer}): you can preview it and, if you want, apply visibility restrictions.',
+        actionZipLikeWithTypeScorm12: 'SCORM 1.2 detected ({viewer}): you can preview it and, if you want, apply visibility restrictions.',
         analyzingZip: 'Analyzing ZIP/ELPX...',
         viewerWeb: 'web viewer',
         viewerDocuments: 'document viewer',
@@ -1067,6 +1072,7 @@
         actionLabel: 'Aktion:',
         actionZipLike: 'ZIP/ELPX erkannt: Du kannst eine Vorschau öffnen und bei Bedarf Sichtbarkeitsbeschränkungen anwenden.',
         actionZipLikeWithType: 'ZIP/ELPX erkannt ({viewer}): Du kannst eine Vorschau öffnen und bei Bedarf Sichtbarkeitsbeschränkungen anwenden.',
+        actionZipLikeWithTypeScorm12: 'SCORM 1.2 erkannt ({viewer}): Du kannst eine Vorschau öffnen und bei Bedarf Sichtbarkeitsbeschränkungen anwenden.',
         analyzingZip: 'ZIP/ELPX wird analysiert...',
         viewerWeb: 'Web-Viewer',
         viewerDocuments: 'Dokumenten-Viewer',
@@ -1092,7 +1098,8 @@
       else if (/\.md$/.test(path)) label = 'MD';
       else if (/\.txt$/.test(path)) label = 'TXT';
       else if (/\.csv$/.test(path)) label = 'CSV';
-      else if (/\.(zip|elpx)$/.test(path)) label = 'ZIP/ELPX';
+      else if (/\.zip$/.test(path)) label = 'ZIP';
+      else if (/\.elpx$/.test(path)) label = 'ELPX';
       else if (/\.(png|jpe?g|gif|webp|svg|bmp|ico)$/.test(path)) label = 'IMAGEN';
       else if (/\.(mp3|wav|ogg|m4a|flac|aac)$/.test(path)) label = 'AUDIO';
       else if (/\.(mp4|webm|mov|avi|mkv)$/.test(path)) label = 'VIDEO';
@@ -1101,7 +1108,14 @@
     return counts;
   }
 
-  function buildUploadSelectionSummary(files, zipViewerType) {
+  function getSingleArchiveTypeLabel(path) {
+    var lower = String(path || '').toLowerCase();
+    if (/\.elpx$/.test(lower)) return 'ELPX';
+    if (/\.zip$/.test(lower)) return 'ZIP';
+    return 'ZIP/ELPX';
+  }
+
+  function buildUploadSelectionSummary(files, zipViewerInfo) {
     var list = files || [];
     if (!list.length) return t('zipper.status.empty');
     var texts = getUploadSummaryTexts();
@@ -1119,6 +1133,7 @@
     var singleSelected = list.length === 1 ? list[0] : null;
     var singlePath = singleSelected ? String(singleSelected.path || (singleSelected.file && singleSelected.file.name) || '') : '';
     var singleIsZipLike = !!singlePath && /\.(zip|elpx)$/i.test(singlePath);
+    var singleArchiveTypeLabel = getSingleArchiveTypeLabel(singlePath);
     var forceFolderViewer = !!(forceFolderViewerInput && forceFolderViewerInput.checked);
     var hasHtml = list.some(function (item) {
       var lower = String(item && item.path ? item.path : '').toLowerCase();
@@ -1133,23 +1148,39 @@
         || lower.endsWith('.csv');
     });
 
+    var parsedZipViewerType = '';
+    var parsedZipIsScorm12 = false;
+    if (zipViewerInfo && typeof zipViewerInfo === 'object') {
+      parsedZipViewerType = String(zipViewerInfo.viewerType || '');
+      parsedZipIsScorm12 = !!zipViewerInfo.isScorm12;
+    } else if (typeof zipViewerInfo === 'string') {
+      parsedZipViewerType = zipViewerInfo;
+    }
+
     var actionText = texts.actionFolders;
     if (singleIsZipLike) {
-      if (zipViewerType && texts.actionZipLikeWithType) {
-        var viewerLabel = zipViewerType === 'html'
+      if (parsedZipViewerType && texts.actionZipLikeWithType) {
+        var viewerLabel = parsedZipViewerType === 'html'
           ? texts.viewerWeb
-          : (zipViewerType === 'documents' ? texts.viewerDocuments : texts.viewerFiles);
-        actionText = texts.actionZipLikeWithType.replace('{viewer}', viewerLabel);
+          : (parsedZipViewerType === 'documents' ? texts.viewerDocuments : texts.viewerFiles);
+        if (parsedZipIsScorm12 && texts.actionZipLikeWithTypeScorm12) {
+          actionText = texts.actionZipLikeWithTypeScorm12.replace('{viewer}', viewerLabel);
+        } else {
+          actionText = texts.actionZipLikeWithType.replace('{viewer}', viewerLabel);
+        }
       } else {
         actionText = texts.actionZipLike;
       }
+      actionText = String(actionText || '').replace(/ZIP\/ELPX/g, singleArchiveTypeLabel);
     }
     else if (forceFolderViewer) actionText = texts.actionForcedFolder;
     else if (hasHtml) actionText = texts.actionWeb;
     else if (onlyDocuments) actionText = texts.actionDocuments;
 
     var filesReady = texts.filesReady.replace('{count}', String(list.length));
-    return filesReady + ' ' + texts.typesDetected + ' ' + typeSummary + '. ' + texts.actionLabel + ' ' + actionText;
+    return filesReady
+      + ' ' + texts.typesDetected + ' ' + typeSummary + '.'
+      + '\n' + texts.actionLabel + ' ' + actionText;
   }
 
   function refreshUploadSelectionSummary() {
@@ -1165,14 +1196,16 @@
     var singleIsZipLike = !!singlePath && /\.(zip|elpx)$/i.test(singlePath);
     if (!singleSelected || !singleIsZipLike || !singleSelected.file) return;
     var texts = getUploadSummaryTexts();
-    UI.setUploadStatus(buildUploadSelectionSummary(selectedFiles) + ' ' + (texts.analyzingZip || ''));
-    detectZipLikeViewerType(singleSelected.file).then(function (viewerType) {
+    var archiveTypeLabel = getSingleArchiveTypeLabel(singlePath);
+    var analyzingText = String(texts.analyzingZip || '').replace(/ZIP\/ELPX/g, archiveTypeLabel);
+    UI.setUploadStatus(buildUploadSelectionSummary(selectedFiles) + '\n' + analyzingText);
+    detectZipLikeViewerType(singleSelected.file).then(function (viewerInfo) {
       if (requestId !== uploadSummaryRequestId) return;
       if (!selectedFiles || selectedFiles.length !== 1) return;
       var currentSingle = selectedFiles[0];
       var currentPath = String(currentSingle.path || (currentSingle.file && currentSingle.file.name) || '');
       if (currentPath !== singlePath) return;
-      UI.setUploadStatus(buildUploadSelectionSummary(selectedFiles, viewerType));
+      UI.setUploadStatus(buildUploadSelectionSummary(selectedFiles, viewerInfo));
     }).catch(function () {
       if (requestId !== uploadSummaryRequestId) return;
       UI.setUploadStatus(buildUploadSelectionSummary(selectedFiles));
@@ -1199,6 +1232,14 @@
     }
     return file.arrayBuffer().then(function (buffer) {
       var entries = window.fflate.unzipSync(new Uint8Array(buffer));
+      var allPaths = Object.keys(entries).filter(function (entryPath) {
+        return !!entryPath && !/\/$/.test(entryPath) && entryPath.indexOf('__MACOSX/') !== 0;
+      }).map(function (entryPath) {
+        return normalizePath(entryPath);
+      }).filter(function (path) {
+        return !!path;
+      });
+      var isScorm12 = !!findScormManifestPath(allPaths);
       var hasForcedFolderViewer = false;
       if (entries['__vwz_viewer.json']) {
         try {
@@ -1208,7 +1249,9 @@
           hasForcedFolderViewer = false;
         }
       }
-      if (hasForcedFolderViewer) return 'files';
+      if (hasForcedFolderViewer) {
+        return { viewerType: 'files', isScorm12: isScorm12 };
+      }
       var paths = Object.keys(entries).filter(function (entryPath) {
         if (!entryPath || /\/$/.test(entryPath)) return false;
         if (entryPath.indexOf('__MACOSX/') === 0) return false;
@@ -1220,7 +1263,9 @@
         var lower = String(entryPath || '').toLowerCase();
         return lower.endsWith('.html') || lower.endsWith('.htm');
       });
-      if (hasHtml) return 'html';
+      if (hasHtml) {
+        return { viewerType: 'html', isScorm12: isScorm12 };
+      }
       var onlyDocuments = paths.every(function (entryPath) {
         return isPdfPath(entryPath)
           || isDocxPath(entryPath)
@@ -1228,7 +1273,10 @@
           || isMarkdownPath(entryPath)
           || isCsvPath(entryPath);
       });
-      return onlyDocuments ? 'documents' : 'files';
+      return {
+        viewerType: onlyDocuments ? 'documents' : 'files',
+        isScorm12: isScorm12
+      };
     }).catch(function () {
       return null;
     });
@@ -1563,32 +1611,71 @@
         });
       }
       var previewPreferredIndexPath = preferredIndexPath || '';
-      if (opts.forceFolderViewer) {
-        var visibleEntries = mapFolderFileEntries(files);
-        if (visibleEntries.length) {
-          var forceIndexPath = '__vwz_folder_index.html';
-          var lowerPaths = files.map(function (file) { return (file.path || '').toLowerCase(); });
-          var suffix = 2;
-          while (lowerPaths.indexOf(forceIndexPath.toLowerCase()) !== -1) {
-            forceIndexPath = '__vwz_folder_index_' + suffix + '.html';
-            suffix += 1;
-          }
-          var html = buildFolderIndexHtml(visibleEntries, true, previewRestrictions);
-          var blob = new Blob([html], { type: 'text/html' });
-          files.push({
-            key: siteId + '::' + forceIndexPath,
-            siteId: siteId,
-            path: forceIndexPath,
-            blob: blob,
-            size: blob.size,
-            type: 'text/html'
-          });
-          previewPreferredIndexPath = forceIndexPath;
-        }
+      var preferredPromise = Promise.resolve({
+        launchPath: previewPreferredIndexPath || '',
+        scormInfo: null
+      });
+      if (!previewPreferredIndexPath && !opts.forceFolderViewer) {
+        preferredPromise = detectScormInfoFromStoredFiles(files).then(function (scormInfo) {
+          return {
+            launchPath: scormInfo && scormInfo.launchPath ? scormInfo.launchPath : '',
+            scormInfo: scormInfo || null
+          };
+        });
       }
-      var prepared = prepareIndexableZip(files, siteId, previewPreferredIndexPath, true, previewRestrictions);
-      var paths = prepared.files.map(function (file) { return file.path; });
-      return pickIndexPath(paths, prepared.preferredIndexPath || previewPreferredIndexPath || '').then(function (indexPath) {
+      return preferredPromise.then(function (detectedData) {
+        var detectedPreferred = detectedData && detectedData.launchPath ? detectedData.launchPath : '';
+        var detectedScormInfo = detectedData && detectedData.scormInfo ? detectedData.scormInfo : null;
+        if (!previewPreferredIndexPath && detectedPreferred) {
+          previewPreferredIndexPath = detectedPreferred;
+        }
+        if (!opts.forceFolderViewer && detectedScormInfo && detectedScormInfo.items && detectedScormInfo.items.length > 1) {
+          var hasClassicLauncher = files.some(function (file) {
+            return isClassicScormLauncherPath(file && file.path ? file.path : '');
+          });
+          if (!hasClassicLauncher) {
+            var uniqueScormPath = pickUniqueHtmlPath('__vwz_scorm_index.html', files.map(function (file) {
+              return file && file.path ? file.path : '';
+            }));
+            var scormHtml = buildScormIndexHtml(detectedScormInfo, previewTitle);
+            var scormBlob = new Blob([scormHtml], { type: 'text/html' });
+            files.push({
+              key: siteId + '::' + uniqueScormPath,
+              siteId: siteId,
+              path: uniqueScormPath,
+              blob: scormBlob,
+              size: scormBlob.size,
+              type: 'text/html'
+            });
+            previewPreferredIndexPath = uniqueScormPath;
+          }
+        }
+        if (opts.forceFolderViewer) {
+          var visibleEntries = mapFolderFileEntries(files);
+          if (visibleEntries.length) {
+            var forceIndexPath = '__vwz_folder_index.html';
+            var lowerPaths = files.map(function (file) { return (file.path || '').toLowerCase(); });
+            var suffix = 2;
+            while (lowerPaths.indexOf(forceIndexPath.toLowerCase()) !== -1) {
+              forceIndexPath = '__vwz_folder_index_' + suffix + '.html';
+              suffix += 1;
+            }
+            var html = buildFolderIndexHtml(visibleEntries, true, previewRestrictions);
+            var blob = new Blob([html], { type: 'text/html' });
+            files.push({
+              key: siteId + '::' + forceIndexPath,
+              siteId: siteId,
+              path: forceIndexPath,
+              blob: blob,
+              size: blob.size,
+              type: 'text/html'
+            });
+            previewPreferredIndexPath = forceIndexPath;
+          }
+        }
+        var prepared = prepareIndexableZip(files, siteId, previewPreferredIndexPath, true, previewRestrictions);
+        var paths = prepared.files.map(function (file) { return file.path; });
+        return pickIndexPath(paths, prepared.preferredIndexPath || previewPreferredIndexPath || '').then(function (indexPath) {
         var totalBytes = prepared.files.reduce(function (sum, file) { return sum + (file.size || 0); }, 0);
         return ensureStorageCapacity(totalBytes).then(function (canProceed) {
           if (!canProceed) throw new Error(t('error.noSpace'));
@@ -1622,6 +1709,7 @@
             });
           });
         });
+      });
       });
     });
   }
@@ -3003,6 +3091,15 @@
 
   function findIndexPath(paths) {
     var lower = paths.map(function (path) { return path.toLowerCase(); });
+    var normalizedPaths = paths.map(function (path) { return normalizePath(path || ''); });
+    if (findScormManifestPath(normalizedPaths)) {
+      var scormIdx = lower.findIndex(function (p) {
+        return /(^|\/)index_lms\.html?$/.test(p)
+          || /(^|\/)indexapi\.html?$/.test(p)
+          || /(^|\/)index_scorm\.html?$/.test(p);
+      });
+      if (scormIdx !== -1) return paths[scormIdx];
+    }
     var idx = lower.findIndex(function (p) {
       return p === 'index.html' || p.endsWith('/index.html');
     });
@@ -3014,6 +3111,426 @@
     var htmlIndex = lower.findIndex(function (p) { return p.endsWith('.html') || p.endsWith('.htm'); });
     if (htmlIndex !== -1) return paths[htmlIndex];
     return paths[0] || '';
+  }
+
+  function findScormManifestPath(paths) {
+    var normalized = (paths || []).map(function (path) {
+      return normalizePath(path || '');
+    }).filter(function (path) {
+      return !!path;
+    });
+    var matches = normalized.filter(function (path) {
+      var lower = path.toLowerCase();
+      return lower === 'imsmanifest.xml' || lower.endsWith('/imsmanifest.xml');
+    });
+    if (!matches.length) return '';
+    matches.sort(function (a, b) {
+      var aRoot = a.toLowerCase() === 'imsmanifest.xml' ? 0 : 1;
+      var bRoot = b.toLowerCase() === 'imsmanifest.xml' ? 0 : 1;
+      if (aRoot !== bRoot) return aRoot - bRoot;
+      var aDepth = a.split('/').length;
+      var bDepth = b.split('/').length;
+      if (aDepth !== bDepth) return aDepth - bDepth;
+      return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+    });
+    return matches[0];
+  }
+
+  function normalizeScormHref(href) {
+    var value = String(href || '').trim();
+    if (!value) return '';
+    if (/^[a-z][a-z0-9+.-]*:/i.test(value) || value.indexOf('//') === 0) {
+      return '';
+    }
+    return value.replace(/\\/g, '/').replace(/[#?].*$/, '').trim();
+  }
+
+  function resolveRelativePath(baseDir, relativePath) {
+    var clean = normalizeScormHref(relativePath);
+    if (!clean) return '';
+    var stack = [];
+    var startsAtRoot = clean.charAt(0) === '/';
+    if (!startsAtRoot) {
+      String(baseDir || '').split('/').forEach(function (part) {
+        if (!part || part === '.') return;
+        if (part === '..') {
+          if (stack.length) stack.pop();
+          return;
+        }
+        stack.push(part);
+      });
+    }
+    clean.split('/').forEach(function (part) {
+      if (!part || part === '.') return;
+      if (part === '..') {
+        if (stack.length) stack.pop();
+        return;
+      }
+      stack.push(part);
+    });
+    return normalizePath(stack.join('/'));
+  }
+
+  function xmlNodeMatchesName(node, expectedName) {
+    var raw = String((node && (node.localName || node.nodeName)) || '').toLowerCase();
+    if (!raw) return false;
+    if (raw === expectedName) return true;
+    var tail = raw.split(':').pop();
+    return tail === expectedName;
+  }
+
+  function getXmlElementsByName(root, expectedName) {
+    if (!root || !root.getElementsByTagName) return [];
+    var nodes = root.getElementsByTagName('*');
+    var out = [];
+    for (var i = 0; i < nodes.length; i += 1) {
+      var node = nodes[i];
+      if (xmlNodeMatchesName(node, expectedName)) {
+        out.push(node);
+      }
+    }
+    return out;
+  }
+
+  function getXmlAttributeValue(node, expectedName) {
+    if (!node || !node.attributes) return '';
+    var direct = node.getAttribute && node.getAttribute(expectedName);
+    if (direct) return String(direct);
+    var expected = String(expectedName || '').toLowerCase();
+    for (var i = 0; i < node.attributes.length; i += 1) {
+      var attr = node.attributes[i];
+      var raw = String((attr && attr.name) || '').toLowerCase();
+      if (!raw) continue;
+      if (raw === expected || raw.split(':').pop() === expected) {
+        return String((attr && attr.value) || '');
+      }
+    }
+    return '';
+  }
+
+  function getScormResourceLaunchHref(resourceNode, resolveLaunchPath) {
+    if (!resourceNode || !resolveLaunchPath) return '';
+    var directHref = resolveLaunchPath(getXmlAttributeValue(resourceNode, 'href'));
+    if (directHref) return directHref;
+    var fileNodes = getXmlElementsByName(resourceNode, 'file');
+    for (var i = 0; i < fileNodes.length; i += 1) {
+      var fileHref = resolveLaunchPath(getXmlAttributeValue(fileNodes[i], 'href'));
+      if (fileHref) return fileHref;
+    }
+    return '';
+  }
+
+  function getFirstScormItemResourceId(orgNode) {
+    if (!orgNode) return '';
+    var queue = [];
+    var startNodes = orgNode.children && orgNode.children.length ? orgNode.children : orgNode.childNodes;
+    Array.prototype.forEach.call(startNodes || [], function (node) {
+      if (node && node.nodeType === 1) {
+        queue.push(node);
+      }
+    });
+    while (queue.length) {
+      var current = queue.shift();
+      if (xmlNodeMatchesName(current, 'item')) {
+        var ref = current.getAttribute && current.getAttribute('identifierref');
+        if (ref) return ref;
+      }
+      var children = current.children && current.children.length ? current.children : current.childNodes;
+      Array.prototype.forEach.call(children || [], function (child) {
+        if (child && child.nodeType === 1) {
+          queue.push(child);
+        }
+      });
+    }
+    return '';
+  }
+
+  function getFirstXmlChildByName(node, expectedName) {
+    if (!node) return null;
+    var children = node.children && node.children.length ? node.children : node.childNodes;
+    for (var i = 0; i < (children || []).length; i += 1) {
+      var child = children[i];
+      if (child && child.nodeType === 1 && xmlNodeMatchesName(child, expectedName)) {
+        return child;
+      }
+    }
+    return null;
+  }
+
+  function extractScormItemTitle(itemNode) {
+    var titleNode = getFirstXmlChildByName(itemNode, 'title');
+    if (!titleNode) return '';
+    return String(titleNode.textContent || '').replace(/\s+/g, ' ').trim();
+  }
+
+  function isClassicScormLauncherPath(path) {
+    var lower = String(path || '').toLowerCase();
+    return /(^|\/)index_lms\.html?$/.test(lower)
+      || /(^|\/)indexapi\.html?$/.test(lower)
+      || /(^|\/)index_scorm\.html?$/.test(lower);
+  }
+
+  function parseScormManifestInfo(manifestText, manifestPath, paths) {
+    if (!manifestText || !manifestPath || !paths || !paths.length) return null;
+    if (!window.DOMParser) return null;
+    var parser = new window.DOMParser();
+    var xmlDoc;
+    try {
+      xmlDoc = parser.parseFromString(manifestText, 'application/xml');
+    } catch (e) {
+      return null;
+    }
+    if (!xmlDoc || !xmlDoc.documentElement || xmlDoc.getElementsByTagName('parsererror').length) {
+      return null;
+    }
+
+    var htmlLookup = {};
+    (paths || []).forEach(function (path) {
+      var normalized = normalizePath(path || '');
+      if (!normalized) return;
+      var lower = normalized.toLowerCase();
+      if (!lower.endsWith('.html') && !lower.endsWith('.htm')) return;
+      if (!htmlLookup[lower]) {
+        htmlLookup[lower] = normalized;
+      }
+    });
+
+    var manifestDir = '';
+    var slashIdx = manifestPath.lastIndexOf('/');
+    if (slashIdx !== -1) {
+      manifestDir = manifestPath.slice(0, slashIdx + 1);
+    }
+    var manifestDirLower = manifestDir.toLowerCase();
+
+    function resolveLaunchPath(href) {
+      var attempts = [href];
+      try {
+        attempts.push(decodeURIComponent(String(href || '')));
+      } catch (e) {
+        // Ignore malformed escape sequences.
+      }
+      for (var i = 0; i < attempts.length; i += 1) {
+        var resolved = resolveRelativePath(manifestDir, attempts[i]);
+        if (!resolved) continue;
+        var lower = resolved.toLowerCase();
+        if (!lower.endsWith('.html') && !lower.endsWith('.htm')) continue;
+        if (htmlLookup[lower]) {
+          return htmlLookup[lower];
+        }
+      }
+      return '';
+    }
+
+    function choosePreferredPath(candidates) {
+      if (!candidates || !candidates.length) return '';
+      var seen = {};
+      var list = candidates.filter(function (value) {
+        var path = String(value || '');
+        if (!path || seen[path]) return false;
+        seen[path] = true;
+        return true;
+      });
+      if (!list.length) return '';
+      list.sort(function (a, b) {
+        var aLower = a.toLowerCase();
+        var bLower = b.toLowerCase();
+        var aInManifestDir = !!manifestDirLower && aLower.indexOf(manifestDirLower) === 0;
+        var bInManifestDir = !!manifestDirLower && bLower.indexOf(manifestDirLower) === 0;
+        if (aInManifestDir !== bInManifestDir) return aInManifestDir ? -1 : 1;
+        var aDepth = a.split('/').length;
+        var bDepth = b.split('/').length;
+        if (aDepth !== bDepth) return aDepth - bDepth;
+        return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+      });
+      return list[0];
+    }
+
+    var resourceNodes = getXmlElementsByName(xmlDoc, 'resource');
+    var resourcesById = {};
+    var scoResourcesById = {};
+    var resourceFallbacks = [];
+    var scoFallbacks = [];
+    resourceNodes.forEach(function (node) {
+      if (!node) return;
+      var identifier = String(getXmlAttributeValue(node, 'identifier') || '').trim();
+      var href = getScormResourceLaunchHref(node, resolveLaunchPath);
+      var scormType = String(getXmlAttributeValue(node, 'scormtype') || '').toLowerCase();
+      if (identifier && href) {
+        resourcesById[identifier] = href;
+        if (scormType === 'sco') {
+          scoResourcesById[identifier] = href;
+        }
+      }
+      if (href) {
+        resourceFallbacks.push(href);
+        if (scormType === 'sco') {
+          scoFallbacks.push(href);
+        }
+      }
+    });
+
+    var organizationsNode = getXmlElementsByName(xmlDoc, 'organizations')[0] || null;
+    var preferredResourceId = '';
+    var items = [];
+    if (organizationsNode) {
+      var defaultOrgId = String(getXmlAttributeValue(organizationsNode, 'default') || '').trim();
+      var organizationNodes = getXmlElementsByName(organizationsNode, 'organization');
+      var defaultOrg = null;
+      if (defaultOrgId) {
+        defaultOrg = organizationNodes.find(function (org) {
+          return String(getXmlAttributeValue(org, 'identifier') || '').trim() === defaultOrgId;
+        }) || null;
+      }
+      if (defaultOrg) {
+        preferredResourceId = getFirstScormItemResourceId(defaultOrg);
+      }
+      if (!preferredResourceId) {
+        for (var i = 0; i < organizationNodes.length; i += 1) {
+          preferredResourceId = getFirstScormItemResourceId(organizationNodes[i]);
+          if (preferredResourceId) break;
+        }
+      }
+
+      function collectItemNodes(parentNode, depth) {
+        var children = parentNode && (parentNode.children && parentNode.children.length ? parentNode.children : parentNode.childNodes);
+        Array.prototype.forEach.call(children || [], function (child) {
+          if (!child || child.nodeType !== 1 || !xmlNodeMatchesName(child, 'item')) return;
+          var ref = String(getXmlAttributeValue(child, 'identifierref') || '').trim();
+          var href = (ref && (resourcesById[ref] || scoResourcesById[ref])) || '';
+          var title = extractScormItemTitle(child) || deriveTitleFromPath(href) || href;
+          if (href) {
+            items.push({
+              title: title,
+              path: href,
+              depth: depth
+            });
+          }
+          collectItemNodes(child, depth + 1);
+        });
+      }
+
+      if (defaultOrg) {
+        collectItemNodes(defaultOrg, 0);
+      } else {
+        organizationNodes.forEach(function (org) {
+          collectItemNodes(org, 0);
+        });
+      }
+    }
+
+    var launchPath = '';
+    if (preferredResourceId && resourcesById[preferredResourceId]) {
+      launchPath = resourcesById[preferredResourceId];
+    } else if (preferredResourceId && scoResourcesById[preferredResourceId]) {
+      launchPath = scoResourcesById[preferredResourceId];
+    } else {
+      var commonScormLaunches = Object.keys(htmlLookup).filter(function (lowerPath) {
+        return isClassicScormLauncherPath(lowerPath);
+      }).map(function (lowerPath) {
+        return htmlLookup[lowerPath];
+      });
+      launchPath = choosePreferredPath(commonScormLaunches)
+        || choosePreferredPath(scoFallbacks)
+        || choosePreferredPath(resourceFallbacks)
+        || '';
+    }
+
+    if (!items.length) {
+      var fallbackItems = choosePreferredPath(scoFallbacks) ? scoFallbacks : resourceFallbacks;
+      items = (fallbackItems || []).map(function (path) {
+        return {
+          title: deriveTitleFromPath(path) || path,
+          path: path,
+          depth: 0
+        };
+      });
+    }
+
+    var metadataNode = getXmlElementsByName(xmlDoc, 'metadata')[0] || null;
+    var schemaversionNode = getFirstXmlChildByName(metadataNode, 'schemaversion');
+    var schemaversion = String((schemaversionNode && schemaversionNode.textContent) || '').trim();
+    var isScorm12 = !schemaversion || /^1\.2(?:\.|$)/.test(schemaversion);
+    var titleNode = getFirstXmlChildByName(xmlDoc.documentElement, 'organizations');
+    var manifestTitle = '';
+    if (titleNode) {
+      var defaultTitleNode = getXmlElementsByName(titleNode, 'title')[0] || null;
+      manifestTitle = String((defaultTitleNode && defaultTitleNode.textContent) || '').replace(/\s+/g, ' ').trim();
+    }
+
+    return {
+      launchPath: launchPath,
+      items: items,
+      isScorm12: isScorm12,
+      title: manifestTitle
+    };
+  }
+
+  function detectScormLaunchPathFromManifest(manifestText, manifestPath, paths) {
+    var info = parseScormManifestInfo(manifestText, manifestPath, paths);
+    return info && info.launchPath ? info.launchPath : '';
+  }
+
+  function detectScormInfoFromZipEntries(entries) {
+    if (!entries || typeof entries !== 'object') return null;
+    var normalizedToOriginal = {};
+    var paths = [];
+    Object.keys(entries).forEach(function (entryPath) {
+      if (!entryPath || /\/$/.test(entryPath) || entryPath.indexOf('__MACOSX/') === 0) return;
+      var normalized = normalizePath(entryPath);
+      if (!normalized) return;
+      paths.push(normalized);
+      if (!normalizedToOriginal[normalized]) {
+        normalizedToOriginal[normalized] = entryPath;
+      }
+    });
+    var manifestPath = findScormManifestPath(paths);
+    if (!manifestPath) return null;
+    var manifestEntryPath = normalizedToOriginal[manifestPath];
+    if (!manifestEntryPath || !entries[manifestEntryPath]) return null;
+    var raw = entries[manifestEntryPath];
+    var bytes = raw instanceof Uint8Array ? raw : new Uint8Array(raw);
+    var manifestText = decodeUtf8(bytes);
+    return parseScormManifestInfo(manifestText, manifestPath, paths);
+  }
+
+  function detectScormLaunchPathFromZipEntries(entries) {
+    var info = detectScormInfoFromZipEntries(entries);
+    return info && info.launchPath ? info.launchPath : '';
+  }
+
+  function detectScormInfoFromStoredFiles(files) {
+    if (!files || !files.length) return Promise.resolve(null);
+    var pathMap = {};
+    var paths = [];
+    files.forEach(function (file) {
+      var normalized = normalizePath((file && file.path) || '');
+      if (!normalized) return;
+      paths.push(normalized);
+      if (!pathMap[normalized]) {
+        pathMap[normalized] = file;
+      }
+    });
+    var manifestPath = findScormManifestPath(paths);
+    if (!manifestPath) return Promise.resolve(null);
+    var manifestFile = pathMap[manifestPath];
+    if (!manifestFile || !manifestFile.blob || !manifestFile.blob.arrayBuffer) {
+      return Promise.resolve(null);
+    }
+    return manifestFile.blob.arrayBuffer().then(function (buffer) {
+      var bytes = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
+      var manifestText = decodeUtf8(bytes);
+      return parseScormManifestInfo(manifestText, manifestPath, paths);
+    }).catch(function () {
+      return null;
+    });
+  }
+
+  function detectScormLaunchPathFromStoredFiles(files) {
+    return detectScormInfoFromStoredFiles(files).then(function (info) {
+      return info && info.launchPath ? info.launchPath : '';
+    }).catch(function () {
+      return '';
+    });
   }
 
   function isPdfPath(path) {
@@ -3054,6 +3571,83 @@
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#39;');
+  }
+
+  function buildScormIndexHtml(scormInfo, fallbackTitle) {
+    var info = scormInfo || {};
+    var items = (info.items || []).filter(function (item) {
+      return item && item.path;
+    }).map(function (item) {
+      return {
+        title: normalizeResourceTitle(item.title || deriveTitleFromPath(item.path) || item.path),
+        path: normalizePath(item.path),
+        depth: Math.max(0, Number(item.depth) || 0)
+      };
+    });
+    var launchPath = normalizePath(info.launchPath || (items[0] && items[0].path) || '');
+    var pageLang = normalizeLang(currentLang);
+    var title = normalizeResourceTitle(info.title || fallbackTitle || deriveTitleFromPath(launchPath) || 'SCORM 1.2');
+    var encodedItems = JSON.stringify(items);
+    var encodedLaunch = JSON.stringify(launchPath);
+    var encodedTitle = JSON.stringify(title);
+    return '<!doctype html>'
+      + '<html lang="' + escapeHtml(pageLang) + '"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">'
+      + '<title>' + escapeHtml(title) + '</title>'
+      + '<style>'
+      + ':root{color-scheme:light;--bg:#f4f7fb;--surface:#fff;--ink:#0f172a;--muted:#475569;--line:#d9e2f0;--accent:#2563eb;--accent-bg:#eff6ff}'
+      + '*{box-sizing:border-box}html,body{height:100%;margin:0;background:var(--bg);color:var(--ink);font-family:"Libre Franklin","Segoe UI",Arial,sans-serif}'
+      + '.shell{height:100%;display:grid;grid-template-columns:320px 1fr;gap:0}'
+      + '.sidebar{background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:0}'
+      + '.head{padding:14px 16px;border-bottom:1px solid var(--line)}'
+      + '.head h1{margin:0;font-size:1.02rem;line-height:1.3;color:var(--ink)}'
+      + '.list{margin:0;padding:10px;list-style:none;overflow:auto;min-height:0}'
+      + '.item{display:block;width:100%;text-align:left;padding:9px 10px;border-radius:10px;border:1px solid transparent;background:transparent;color:var(--ink);font-size:.92rem;line-height:1.25;cursor:pointer}'
+      + '.item:hover{background:#f8fafc;border-color:#d8e2f0}'
+      + '.item.is-active{background:var(--accent-bg);border-color:#bcd0f8;color:#1d4ed8;font-weight:700}'
+      + '.viewer{position:relative;min-width:0;min-height:0}'
+      + 'iframe{width:100%;height:100%;border:0;background:#fff}'
+      + '.empty{padding:20px;color:var(--muted)}'
+      + '@media (max-width:980px){.shell{grid-template-columns:1fr;grid-template-rows:42vh 1fr}.sidebar{border-right:0;border-bottom:1px solid var(--line)}}'
+      + '</style></head><body>'
+      + '<div class="shell">'
+      + '<aside class="sidebar"><div class="head"><h1>' + escapeHtml(title) + '</h1></div><ul class="list" data-scorm-list></ul></aside>'
+      + '<main class="viewer"><iframe title="' + escapeHtml(title) + '" data-scorm-frame></iframe><div class="empty" data-scorm-empty hidden>No hay páginas SCORM para mostrar.</div></main>'
+      + '</div>'
+      + '<script>(function(){'
+      + 'var items=' + encodedItems + ';var initial=' + encodedLaunch + ';var pageTitle=' + encodedTitle + ';'
+      + 'var list=document.querySelector("[data-scorm-list]");var frame=document.querySelector("[data-scorm-frame]");var empty=document.querySelector("[data-scorm-empty]");'
+      + 'document.title=pageTitle||document.title;'
+      + 'function enc(path){return String(path||"").split("/").map(function(seg){return encodeURIComponent(seg);}).join("/");}'
+      + 'function norm(path){return String(path||"").replace(/\\\\/g,"/").replace(/^\\.\\//,"").replace(/^\\/+/, "").replace(/[?#].*$/,"");}'
+      + 'function setActive(path){var target=norm(path);var buttons=list?list.querySelectorAll("button[data-path]"):[];Array.prototype.forEach.call(buttons,function(btn){btn.classList.toggle("is-active",norm(btn.getAttribute("data-path"))===target);});}'
+      + 'function openPath(path,push){var clean=norm(path);if(!clean||!frame)return;frame.src=enc(clean);setActive(clean);if(push){try{history.replaceState(null,"","#"+encodeURIComponent(clean));}catch(e){}}}'
+      + 'function buildList(){if(!list)return;list.innerHTML="";if(!items||!items.length){if(empty)empty.hidden=false;return;}if(empty)empty.hidden=true;items.forEach(function(item,idx){if(!item||!item.path)return;var li=document.createElement("li");var btn=document.createElement("button");btn.type="button";btn.className="item";btn.setAttribute("data-path",item.path);btn.style.paddingLeft=(10+Math.max(0,Number(item.depth)||0)*16)+"px";var title=String(item.title||item.path);btn.textContent=title;btn.addEventListener("click",function(){openPath(item.path,true);});li.appendChild(btn);list.appendChild(li);});}'
+      + 'buildList();'
+      + 'var fromHash="";if(location.hash&&location.hash.length>1){try{fromHash=decodeURIComponent(location.hash.slice(1));}catch(e){fromHash=location.hash.slice(1);} }'
+      + 'var first=(items&&items[0]&&items[0].path)||"";var target=norm(fromHash)||norm(initial)||norm(first);'
+      + 'if(target){openPath(target,false);}else if(empty){empty.hidden=false;}'
+      + 'if(frame){frame.addEventListener("load",function(){try{var p=frame.contentWindow&&frame.contentWindow.location&&frame.contentWindow.location.pathname||"";p=decodeURIComponent(p.split("/").pop()||"");if(p){setActive(p);}}catch(e){}});}'
+      + 'window.addEventListener("hashchange",function(){var next=\"\";if(location.hash&&location.hash.length>1){try{next=decodeURIComponent(location.hash.slice(1));}catch(e){next=location.hash.slice(1);}}if(next){openPath(next,false);}});'
+      + '})();</script>'
+      + '</body></html>';
+  }
+
+  function pickUniqueHtmlPath(basePath, existingPaths) {
+    var desired = normalizePath(basePath || '__vwz_scorm_index.html') || '__vwz_scorm_index.html';
+    var existing = {};
+    (existingPaths || []).forEach(function (path) {
+      var normalized = normalizePath(path || '').toLowerCase();
+      if (normalized) existing[normalized] = true;
+    });
+    if (!existing[desired.toLowerCase()]) return desired;
+    var dotIdx = desired.lastIndexOf('.');
+    var stem = dotIdx === -1 ? desired : desired.slice(0, dotIdx);
+    var ext = dotIdx === -1 ? '' : desired.slice(dotIdx);
+    var idx = 2;
+    while (existing[(stem + '_' + idx + ext).toLowerCase()]) {
+      idx += 1;
+    }
+    return stem + '_' + idx + ext;
   }
 
   function getDocumentViewerStrings() {
@@ -3863,6 +4457,26 @@
           var entries = window.fflate.unzipSync(bytes);
           var restrictions = Restrictions.extractRestrictions(entries, decodeUtf8);
           var viewerPreferences = extractViewerPreferences(entries);
+          var scormInfo = null;
+          var scormPreferredIndexPath = '';
+          if (!opts.preferredIndexPath && !(viewerPreferences && viewerPreferences.preferredIndexPath)) {
+            scormInfo = detectScormInfoFromZipEntries(entries);
+            if (scormInfo && scormInfo.launchPath) {
+              scormPreferredIndexPath = scormInfo.launchPath;
+            }
+            if (scormInfo && scormInfo.items && scormInfo.items.length > 1
+              && !(viewerPreferences && viewerPreferences.forceFolderViewer)) {
+              var hasClassicScormLauncher = Object.keys(entries).some(function (entryPath) {
+                if (!entryPath || /\/$/.test(entryPath) || entryPath.indexOf('__MACOSX/') === 0) return false;
+                return isClassicScormLauncherPath(entryPath);
+              });
+              if (!hasClassicScormLauncher) {
+                var wrapperPath = pickUniqueHtmlPath('__vwz_scorm_index.html', Object.keys(entries));
+                entries[wrapperPath] = encodeUtf8(buildScormIndexHtml(scormInfo, deriveTitleFromPath(scormPreferredIndexPath)));
+                scormPreferredIndexPath = wrapperPath;
+              }
+            }
+          }
           var blockedNow = Restrictions.isRestrictionActive(restrictions) && !Restrictions.isRestrictionAllowedNow(restrictions);
           if (blockedNow && Restrictions.isRestrictionExpired(restrictions)) {
             if (opts.allowInactive) {
@@ -3909,7 +4523,10 @@
           });
 
           var allowDownload = isDownloadAllowedByRestrictions(restrictions);
-          var preferredIndexHint = opts.preferredIndexPath || (viewerPreferences && viewerPreferences.preferredIndexPath) || '';
+          var preferredIndexHint = opts.preferredIndexPath
+            || (viewerPreferences && viewerPreferences.preferredIndexPath)
+            || scormPreferredIndexPath
+            || '';
           var preparedDocs = prepareIndexableZip(files, result.siteId, preferredIndexHint, allowDownload, restrictions);
           files = preparedDocs.files;
 
