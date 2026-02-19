@@ -111,7 +111,7 @@
         },
         output: {
           title: 'Enlace para compartir',
-          step: 'Copia el enlace para compartir, copia el código para insertar el recurso en otra web o abre la vista previa.',
+          step: '',
           placeholder: 'Aquí se mostrará el enlace',
           copy: 'Copiar enlace',
           qr: 'QR',
@@ -279,7 +279,7 @@
         },
         build: 'Crear y descargar ZIP',
         html: {
-          title: '¿No tienes archivos? Pega el HTML',
+          title: '¿No tienes archivos pero tienes el código HTML? Pégalo aquí',
           note: 'Pega el HTML completo y el visor creará un ZIP con un <code>index.html</code> listo para descargar.',
           placeholder: '<!doctype html>...',
           build: 'Crear ZIP desde HTML',
@@ -562,7 +562,7 @@
         },
         output: {
           title: 'Enllaç per compartir',
-          step: 'Copia l’enllaç o obre la vista prèvia.',
+          step: '',
           placeholder: 'Enllaç per compartir',
           copy: 'Copiar enllaç',
           qr: 'QR',
@@ -718,7 +718,7 @@
         },
         build: 'Crear i descarregar ZIP',
         html: {
-          title: 'No tens fitxers? Enganxa l’HTML',
+          title: 'No tens fitxers però tens el codi HTML? Enganxa’l aquí',
           note: 'Enganxa l’HTML complet i el visor crearà un ZIP amb un <code>index.html</code> llest per descarregar.',
           placeholder: '<!doctype html>...',
           build: 'Crear ZIP des d’HTML',
@@ -995,7 +995,7 @@
         },
         output: {
           title: 'Ligazón para compartir',
-          step: 'Copia a ligazón ou abre a vista previa.',
+          step: '',
           placeholder: 'Ligazón para compartir',
           copy: 'Copiar ligazón',
           qr: 'QR',
@@ -1151,7 +1151,7 @@
         },
         build: 'Crear e descargar ZIP',
         html: {
-          title: 'Non tes ficheiros? Pega o HTML',
+          title: 'Non tes ficheiros pero tes o código HTML? Pégao aquí',
           note: 'Pega o HTML completo e o visor creará un ZIP cun <code>index.html</code> listo para descargar.',
           placeholder: '<!doctype html>...',
           build: 'Crear ZIP desde HTML',
@@ -1428,7 +1428,7 @@
         },
         output: {
           title: 'Partekatze esteka',
-          step: 'Kopiatu esteka edo ireki aurrebista.',
+          step: '',
           placeholder: 'Partekatze esteka',
           copy: 'Esteka kopiatu',
           qr: 'QR',
@@ -1584,7 +1584,7 @@
         },
         build: 'Sortu eta deskargatu ZIPa',
         html: {
-          title: 'Ez duzu fitxategirik? Itsatsi HTMLa',
+          title: 'Ez duzu fitxategirik baina HTML kodea baduzu? Itsatsi hemen',
           note: 'Itsatsi HTML osoa eta bisoreak ZIP bat sortuko du, deskargatzeko prest dagoen <code>index.html</code> batekin.',
           placeholder: '<!doctype html>...',
           build: 'HTMLtik ZIPa sortu',
@@ -1861,7 +1861,7 @@
         },
         output: {
           title: 'Shareable link',
-          step: 'Copy the link or open the preview.',
+          step: '',
           placeholder: 'Shareable link',
           copy: 'Copy link',
           qr: 'QR',
@@ -2017,7 +2017,7 @@
         },
         build: 'Create and download ZIP',
         html: {
-          title: 'No files? Paste the HTML',
+          title: 'No files but you have the HTML code? Paste it here',
           note: 'Paste the full HTML and the viewer will create a ZIP with an <code>index.html</code> ready to download.',
           placeholder: '<!doctype html>...',
           build: 'Create ZIP from HTML',
@@ -2295,7 +2295,7 @@
         },
         output: {
           title: 'Link zum Teilen',
-          step: 'Kopiere den Link oder öffne die Vorschau.',
+          step: '',
           placeholder: 'Link zum Teilen',
           copy: 'Link kopieren',
           qr: 'QR',
@@ -2451,7 +2451,7 @@
         },
         build: 'ZIP erstellen und herunterladen',
         html: {
-          title: 'Keine Dateien? HTML einfügen',
+          title: 'Keine Dateien, aber HTML-Code? Hier einfügen',
           note: 'Füge das vollständige HTML ein und der Viewer erstellt ein ZIP mit einer <code>index.html</code>, das sofort heruntergeladen werden kann.',
           placeholder: '<!doctype html>...',
           build: 'ZIP aus HTML erstellen',
