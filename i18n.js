@@ -23,7 +23,7 @@
         themeAuto: 'Automático',
         themeLight: 'Claro',
         themeDark: 'Oscuro',
-        subtitle: 'Crea, previsualiza y comparte recursos educativos desde tus archivos, carpetas, HTML o ZIP/ELPX.'
+        subtitle: 'Genera un enlace web para compartir tu recurso (carpeta, archivos, HTML, ZIP o ELPX). Comparte el enlace y tu recurso podrá ser abierto directamente en cualquier navegador.'
       },
       settings: {
         title: 'Ajustes de visibilidad',
@@ -100,7 +100,7 @@
           }
         },
         quick: {
-          intro: 'Para compartir tu recurso necesitas un ZIP o ELPX subido a la nube con enlace público. Si aún no lo tienes, aquí puedes generar el ZIP a partir de tu carpeta, archivos o HTML. Después súbelo a tu servicio en la nube y pega el enlace público en la sección inferior: Ya tengo un ZIP o ELPX en la nube.',
+          intro: 'Para compartir tu recurso necesitas un ZIP o ELPX subido a la nube con enlace público. Si aún no lo tienes, aquí puedes generar el ZIP. Después súbelo a tu servicio en la nube y pega el enlace público en la sección inferior: Ya tengo un ZIP o ELPX en la nube.',
           files: {
             title: 'Sube tu recurso',
             dropTitle: 'Arrastra aquí la carpeta o los archivos',
