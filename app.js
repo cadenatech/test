@@ -64,6 +64,7 @@
   var quickHtmlInput = document.querySelector('[data-quick-html-input]');
   var quickHtmlApplyButton = document.querySelector('[data-quick-html-apply]');
   var uploadStatus = document.querySelector('[data-upload-status]');
+  var zipDownloadTitleNode = document.querySelector('[data-zip-download-title]');
   var buildZipButton = document.querySelector('[data-build-zip]');
   var forceFolderViewerInput = document.querySelector('[data-force-folder-viewer]');
   var forceFolderNoteNode = document.querySelector('[data-force-folder-note]');
@@ -184,6 +185,7 @@
   var restrictionZipFile = null;
   var currentPreviewSiteId = '';
   var uploadSummaryRequestId = 0;
+  var lastSingleZipLikeInfo = { path: '', isScorm12: false };
   var preferredZipBuildFlow = 'files';
   var Restrictions = window.Restrictions || {};
   if (!Restrictions.normalizeDateTimeValue) {
@@ -959,10 +961,16 @@
 
   function formatUserError(err, zipUrl) {
     var message = (err && err.message) ? err.message : '';
+    if (/invalid distance|incorrect data check|incorrect header check|end of data|unexpected eof|inflate|zip corrupt|corrupto/i.test(message)) {
+      return t('error.corruptZip');
+    }
     if (/no devolvio un ZIP|recibio HTML|devolvio HTML/i.test(message)) {
       // Only show the Drive-specific hint for Drive URLs.
       if (isGoogleDriveUrl(zipUrl)) {
-        return t('error.driveTooLarge');
+        if (/demasiado grande|too large|supera el limite/i.test(message)) {
+          return t('error.driveTooLarge');
+        }
+        return message;
       }
     }
     return message || t('error.loadZip');
@@ -1117,6 +1125,31 @@
     return 'ZIP/ELPX/H5P';
   }
 
+  function setSingleZipLikeInfo(path, info) {
+    lastSingleZipLikeInfo = {
+      path: String(path || ''),
+      isScorm12: !!(info && info.isScorm12)
+    };
+  }
+
+  function getArchiveLabelForCurrentBuild(mode) {
+    var resolvedMode = mode || resolveZipBuildMode();
+    var flow = String(resolvedMode || '').split('-')[0];
+    if (flow !== 'files') return 'ZIP';
+    var singleSelected = selectedFiles && selectedFiles.length === 1 ? selectedFiles[0] : null;
+    var singlePath = singleSelected ? String(singleSelected.path || (singleSelected.file && singleSelected.file.name) || '') : '';
+    if (!singlePath) return 'ZIP';
+    if (/\.h5p$/i.test(singlePath)) return 'H5P';
+    if (/\.elpx$/i.test(singlePath)) return 'ELPX';
+    if (/\.zip$/i.test(singlePath)) {
+      if (lastSingleZipLikeInfo.path === singlePath && lastSingleZipLikeInfo.isScorm12) {
+        return 'SCORM 1.2 (ZIP)';
+      }
+      return 'ZIP';
+    }
+    return 'ZIP';
+  }
+
   function buildUploadSelectionSummary(files, zipViewerInfo) {
     var list = files || [];
     if (!list.length) return t('zipper.status.empty');
@@ -1184,7 +1217,7 @@
 
     var filesReady = texts.filesReady.replace('{count}', String(list.length));
     return filesReady
-      + ' ' + texts.typesDetected + ' ' + typeSummary + '.'
+      + '\n' + texts.typesDetected + ' ' + typeSummary + '.'
       + '\n' + texts.actionLabel + ' ' + actionText;
   }
 
@@ -1192,14 +1225,21 @@
     uploadSummaryRequestId += 1;
     var requestId = uploadSummaryRequestId;
     if (!selectedFiles || !selectedFiles.length) {
+      setSingleZipLikeInfo('', null);
       UI.setUploadStatus(t('zipper.status.empty'));
+      updateBuildZipButtonLabel();
       return;
     }
     UI.setUploadStatus(buildUploadSelectionSummary(selectedFiles));
     var singleSelected = selectedFiles.length === 1 ? selectedFiles[0] : null;
     var singlePath = singleSelected ? String(singleSelected.path || (singleSelected.file && singleSelected.file.name) || '') : '';
     var singleIsZipLike = !!singlePath && /\.(zip|elpx|h5p)$/i.test(singlePath);
-    if (!singleSelected || !singleIsZipLike || !singleSelected.file) return;
+    if (!singleSelected || !singleIsZipLike || !singleSelected.file) {
+      setSingleZipLikeInfo('', null);
+      updateBuildZipButtonLabel();
+      return;
+    }
+    setSingleZipLikeInfo(singlePath, null);
     var texts = getUploadSummaryTexts();
     var archiveTypeLabel = getSingleArchiveTypeLabel(singlePath);
     var analyzingText = String(texts.analyzingZip || '').replace(/ZIP\/ELPX/g, archiveTypeLabel);
@@ -1210,10 +1250,14 @@
       var currentSingle = selectedFiles[0];
       var currentPath = String(currentSingle.path || (currentSingle.file && currentSingle.file.name) || '');
       if (currentPath !== singlePath) return;
+      setSingleZipLikeInfo(singlePath, viewerInfo);
       UI.setUploadStatus(buildUploadSelectionSummary(selectedFiles, viewerInfo));
+      updateBuildZipButtonLabel();
     }).catch(function () {
       if (requestId !== uploadSummaryRequestId) return;
+      setSingleZipLikeInfo(singlePath, null);
       UI.setUploadStatus(buildUploadSelectionSummary(selectedFiles));
+      updateBuildZipButtonLabel();
     });
   }
 
@@ -1909,12 +1953,20 @@
   }
 
   function updateBuildZipButtonLabel() {
-    if (!buildZipButton) return;
     var mode = resolveZipBuildMode();
     var flow = String(mode || '').split('-')[0];
-    var key = 'zipper.build';
-    if (flow === 'html') key = 'zipper.html.build';
-    buildZipButton.textContent = t(key);
+    var archiveLabel = getArchiveLabelForCurrentBuild(mode);
+    if (zipDownloadTitleNode) {
+      zipDownloadTitleNode.textContent = t('zipper.step2.titleDynamic', { type: archiveLabel })
+        || t('zipper.step2.title');
+    }
+    if (!buildZipButton) return;
+    if (flow === 'html') {
+      buildZipButton.textContent = t('zipper.html.build');
+      return;
+    }
+    buildZipButton.textContent = t('zipper.buildDynamic', { type: archiveLabel })
+      || t('zipper.build');
   }
 
   function buildZipFromActiveFlow() {
@@ -1952,11 +2004,13 @@
     var singleArchiveTypeLabel = getSingleArchiveTypeLabel(singlePath);
     if (singleSelected && singleIsZipLike && singleSelected.file) {
       var restrictionsForZipLike = RestrictionUI.buildRestrictionsPayload();
-      if (restrictionsForZipLike || forceFolderViewer) {
+      var titleForZipLike = normalizeResourceTitle(resourceTitle || '');
+      if (restrictionsForZipLike || forceFolderViewer || titleForZipLike) {
         applyRestrictionsToZipFile(singleSelected.file, {
           useMainStatus: true,
           forceFolderViewer: forceFolderViewer,
-          explicitRestrictions: restrictionsForZipLike
+          explicitRestrictions: restrictionsForZipLike,
+          explicitResourceTitle: titleForZipLike
         });
         return;
       }
@@ -2132,7 +2186,13 @@
     var restrictions = (typeof opts.explicitRestrictions === 'undefined')
       ? RestrictionUI.buildRestrictionsPayload()
       : opts.explicitRestrictions;
-    if (!restrictions && !opts.forceFolderViewer) {
+    var explicitTitle = '';
+    if (typeof opts.explicitResourceTitle === 'string') {
+      explicitTitle = normalizeResourceTitle(opts.explicitResourceTitle);
+    } else {
+      explicitTitle = getActiveResourceTitleValue();
+    }
+    if (!restrictions && !opts.forceFolderViewer && !explicitTitle) {
       if (restrictionZipStatus) {
         restrictionZipStatus.textContent = t('zipper.restrict.status.failed');
       }
@@ -2152,8 +2212,11 @@
       if (restrictions) {
         entries['restrictions.json'] = encodeUtf8(JSON.stringify(restrictions, null, 2));
       }
+      if (explicitTitle) {
+        entries['__vwz_meta.json'] = encodeUtf8(JSON.stringify({ title: explicitTitle }, null, 2));
+      }
       if (opts.forceFolderViewer) {
-        injectForcedFolderViewer(entries, restrictions, getActiveResourceTitleValue());
+        injectForcedFolderViewer(entries, restrictions, explicitTitle);
       }
       var zipped = window.fflate.zipSync(entries);
       var blob = new Blob([zipped], { type: 'application/zip' });
@@ -2168,11 +2231,17 @@
         name += '-restricciones.zip';
       }
       downloadZipBlob(blob, name);
+      var doneArchiveType = getSingleArchiveTypeLabel(file && file.name ? file.name : name);
+      if (doneArchiveType === 'ZIP/ELPX/H5P') doneArchiveType = 'ZIP';
+      var doneStatusKey = (restrictions || opts.forceFolderViewer)
+        ? 'zipper.restrict.status.done'
+        : 'zipper.restrict.status.saved';
+      var doneStatusText = t(doneStatusKey, { type: doneArchiveType });
       if (restrictionZipStatus) {
-        restrictionZipStatus.textContent = t('zipper.restrict.status.done');
+        restrictionZipStatus.textContent = doneStatusText;
       }
       if (opts.useMainStatus) {
-        UI.setZipStatus(t('zipper.restrict.status.done'), { highlight: true });
+        UI.setZipStatus(doneStatusText, { highlight: true });
       }
     }).catch(function () {
       if (restrictionZipStatus) {
@@ -4278,6 +4347,7 @@
     var selectedPath = normalizePath(selectedSourcePath || (packageList[0] && packageList[0].id) || '');
     var selected = packageList.find(function (item) { return item.id === selectedPath; }) || packageList[0] || null;
     var selectedTitle = selected && selected.title ? selected.title : (strings.title || 'H5P');
+    var hasMultiplePackages = packageList.length > 1;
     var listItems = packageList.map(function (item) {
       var selectedClass = item.id === (selected && selected.id) ? ' class="is-active"' : '';
       return '<li><button type="button" data-h5p-link' + selectedClass
@@ -4293,6 +4363,10 @@
     var allowDownloadJs = allowDownload ? 'true' : 'false';
     var stringsJson = JSON.stringify(strings || {});
     var itemsJson = JSON.stringify(packageList || []);
+    var bodyClass = hasMultiplePackages ? '' : ' class="h5p-single"';
+    var sidebarHtml = hasMultiplePackages
+      ? '<aside class="sidebar"><button type="button" class="sidebar-toggle" data-sidebar-toggle aria-expanded="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M9 3v18"></path><path d="m16 9-3 3 3 3"></path></svg></button><div class="sidebar-content"><h1 data-viewer-title>' + escapeHtml(strings.title || 'H5P') + '</h1><ul>' + listItems + '</ul></div></aside>'
+      : '';
     return '<!doctype html>'
       + '<html lang="' + escapeHtml(pageLang) + '"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">'
       + '<title>' + escapeHtml(selectedTitle || 'H5P') + '</title>'
@@ -4316,6 +4390,8 @@
       + 'body.sidebar-collapsed .layout{grid-template-columns:56px 1fr}'
       + 'body.sidebar-collapsed .sidebar-toggle{margin:10px auto 8px}'
       + 'body.sidebar-collapsed .sidebar-content{display:none}'
+      + '.h5p-single .layout{grid-template-columns:1fr}'
+      + '.h5p-single .sidebar{display:none}'
       + '.viewer{min-height:0;background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);overflow:auto;display:grid;grid-template-rows:auto 1fr;gap:0}'
       + '.toolbar{display:flex;align-items:center;gap:10px;padding:10px;border-bottom:1px solid var(--border)}'
       + '.badge{display:inline-flex;align-items:center;padding:4px 9px;border-radius:999px;border:1px solid #86efac;background:#ecfdf5;color:#0f766e;font-size:.74rem;font-weight:700;letter-spacing:.01em}'
@@ -4325,8 +4401,8 @@
       + '.stage{padding:12px;min-height:0}'
       + '.h5p-mount{min-height:420px}'
       + '@media (max-width:900px){.layout{grid-template-columns:1fr;grid-template-rows:auto 1fr}body.sidebar-collapsed .layout{grid-template-columns:1fr;grid-template-rows:auto 1fr}}'
-      + '</style></head><body>'
-      + '<div class="layout"><aside class="sidebar"><button type="button" class="sidebar-toggle" data-sidebar-toggle aria-expanded="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M9 3v18"></path><path d="m16 9-3 3 3 3"></path></svg></button><div class="sidebar-content"><h1 data-viewer-title>' + escapeHtml(strings.title || 'H5P') + '</h1><ul>' + listItems + '</ul></div></aside>'
+      + '</style></head><body' + bodyClass + '>'
+      + '<div class="layout">' + sidebarHtml
       + '<main class="viewer"><section class="toolbar"><span class="badge">H5P</span><span class="status" data-h5p-status></span><a class="download" data-h5p-download hidden></a></section><section class="stage"><div class="h5p-mount" data-h5p-mount></div></section></main></div>'
       + '<script src="https://cdn.jsdelivr.net/npm/h5p-standalone@3.8.0/dist/main.bundle.js"></script>'
       + '<script>(function(){var strings=' + stringsJson + ';var items=' + itemsJson + ';var allowDownload=' + allowDownloadJs + ';var body=document.body;var toggle=document.querySelector("[data-sidebar-toggle]");var titleNode=document.querySelector("[data-viewer-title]");var statusNode=document.querySelector("[data-h5p-status]");var mountNode=document.querySelector("[data-h5p-mount]");var downloadNode=document.querySelector("[data-h5p-download]");var links=[].slice.call(document.querySelectorAll("[data-h5p-link]"));var iconOpen="<svg viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\"><rect x=\\"3\\" y=\\"3\\" width=\\"18\\" height=\\"18\\" rx=\\"2\\"></rect><path d=\\"M9 3v18\\"></path><path d=\\"m16 9-3 3 3 3\\"></path></svg>";var iconClosed="<svg viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\"><rect x=\\"3\\" y=\\"3\\" width=\\"18\\" height=\\"18\\" rx=\\"2\\"></rect><path d=\\"M9 3v18\\"></path><path d=\\"m13 9 3 3-3 3\\"></path></svg>";if(toggle){toggle.setAttribute("aria-label",strings.hideList||"Hide list");toggle.title=strings.hideList||"Hide list";}function enc(path){return String(path||"").split("/").map(function(seg){return encodeURIComponent(seg);}).join("/");}function applyTitle(text){var clean=String(text||"").replace(/\\s+/g," ").trim();if(!clean)return;if(titleNode)titleNode.textContent=clean;document.title=clean;}function markActive(id){links.forEach(function(link){link.classList.toggle("is-active",String(link.getAttribute("data-h5p-id")||"")===String(id||""));});}function syncToggle(){if(!toggle)return;var collapsed=body.classList.contains("sidebar-collapsed");toggle.innerHTML=collapsed?iconClosed:iconOpen;toggle.setAttribute("aria-expanded",collapsed?"false":"true");toggle.setAttribute("aria-label",collapsed?(strings.showList||"Show list"):(strings.hideList||"Hide list"));toggle.title=collapsed?(strings.showList||"Show list"):(strings.hideList||"Hide list");}function renderH5p(item){if(!item||!mountNode)return;markActive(item.id||"");applyTitle(item.title||strings.title||"H5P");if(statusNode)statusNode.textContent=strings.loading||"Loading H5P...";if(downloadNode){downloadNode.hidden=!(allowDownload&&item.sourcePath);downloadNode.textContent=strings.download||"Download H5P";downloadNode.href=item.sourcePath?enc(item.sourcePath):"";downloadNode.download="";downloadNode.setAttribute("aria-label",strings.download||"Download H5P");}mountNode.innerHTML="";if(!window.H5PStandalone||!window.H5PStandalone.H5P){if(statusNode)statusNode.textContent=strings.missing||"Could not load the H5P engine.";return;}var options={h5pJsonPath:enc(item.rootPath||"."),frameJs:"https://cdn.jsdelivr.net/npm/h5p-standalone@3.8.0/dist/frame.bundle.js",frameCss:"https://cdn.jsdelivr.net/npm/h5p-standalone@3.8.0/dist/styles/h5p.css",frame:true,fullScreen:true,export:!!allowDownload,downloadUrl:item.sourcePath?enc(item.sourcePath):""};Promise.resolve(new window.H5PStandalone.H5P(mountNode,options)).then(function(){if(statusNode)statusNode.textContent="";}).catch(function(){if(statusNode)statusNode.textContent=strings.failed||"Could not display this H5P content.";});}if(toggle){toggle.addEventListener("click",function(){body.classList.toggle("sidebar-collapsed");syncToggle();});syncToggle();}links.forEach(function(link){link.addEventListener("click",function(){var id=String(link.getAttribute("data-h5p-id")||"");var found=items.find(function(item){return String(item&&item.id||"")===id;});if(found){renderH5p(found);}});});var initial=items.find(function(item){return links.some(function(link){return link.classList.contains("is-active")&&String(link.getAttribute("data-h5p-id")||"")===String(item&&item.id||"");});})||items[0]||null;if(initial){renderH5p(initial);}else if(statusNode){statusNode.textContent=strings.failed||"Could not display this H5P content.";}})();</script>'
@@ -4593,9 +4669,18 @@
       var onlyH5pArchives = h5pPaths.length > 0
         && h5pPaths.length === visibleEntries.length
         && resolvedH5pPackages.length === h5pPaths.length;
-      var onlyEmbeddedH5p = !h5pPaths.length
-        && embeddedH5pPackages.length > 0
-        && !documentPaths.length;
+      var onlyEmbeddedH5p = false;
+      if (!h5pPaths.length && embeddedH5pPackages.length > 0) {
+        onlyEmbeddedH5p = visibleEntries.every(function (entry) {
+          var entryPath = normalizePath(entry && entry.path ? entry.path : '');
+          if (!entryPath) return false;
+          return embeddedH5pPackages.some(function (pkg) {
+            var rootPath = normalizePath(pkg && pkg.rootPath ? pkg.rootPath : '');
+            if (!rootPath) return true;
+            return entryPath === rootPath || entryPath.indexOf(rootPath + '/') === 0;
+          });
+        });
+      }
       var onlyH5p = onlyH5pArchives || onlyEmbeddedH5p;
       var indexPrefix = onlyDocuments
         ? '__vwz_docs_index'

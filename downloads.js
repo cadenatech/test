@@ -330,10 +330,55 @@
     return !!GAS_WEBAPP_URL;
   }
 
+  function isGoogleDriveUrl(url) {
+    if (!url) return false;
+    try {
+      var host = (new URL(url)).hostname || '';
+      host = host.toLowerCase();
+      if (host === 'drive.google.com' || host.endsWith('.drive.google.com')) return true;
+    } catch (e) {
+      // ignore
+    }
+    return /drive\.google\.com/i.test(url);
+  }
+
+  function fetchZipBundleViaGas(zipUrl) {
+    var endpoint = GAS_WEBAPP_URL + '?url=' + encodeURIComponent(zipUrl) + '&bundle=1&ts=' + Date.now();
+    return fetch(endpoint, { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) {
+          throw new Error('HTTP ' + res.status);
+        }
+        return res.json();
+      })
+      .then(function (data) {
+        if (data && data.error) {
+          throw new Error(data.error);
+        }
+        var bytes = base64ToBytes(data && data.base64 ? data.base64 : '');
+        return {
+          name: (data && data.name) ? data.name : (deriveFilenameFromUrl(zipUrl) || 'site.zip'),
+          size: (data && data.size) ? data.size : bytes.length,
+          bytes: bytes
+        };
+      });
+  }
+
   function fetchZipBundle(zipUrl) {
     return fetchZipBundleDirect(zipUrl).catch(function (err) {
       if (!hasGas()) {
         throw err;
+      }
+      if (isGoogleDriveUrl(zipUrl)) {
+        return fetchZipBundleMeta(zipUrl).then(function (meta) {
+          var name = (meta && meta.name) ? String(meta.name).toLowerCase() : '';
+          if (/\.h5p$/i.test(name)) {
+            return fetchZipBundleViaGas(zipUrl);
+          }
+          return fetchZipBundleChunked(zipUrl);
+        }).catch(function () {
+          return fetchZipBundleChunked(zipUrl);
+        });
       }
       return fetchZipBundleChunked(zipUrl);
     });

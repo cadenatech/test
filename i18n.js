@@ -286,7 +286,8 @@
         },
         step2: {
           title: 'Descarga el ZIP',
-          detail: 'Al crear el ZIP se descargará un archivo que puedes subir a Drive, Dropbox, Nextcloud, etc.',
+          titleDynamic: 'Descarga el {type}',
+          detail: 'Se descargará un archivo que puedes subir a Drive, Dropbox, Nextcloud, etc.',
           forceFolderLabel: 'Forzar visor de carpetas',
           forceFolderNote: 'El recurso se abirá en modo explorador de archivos con el contenido como archivos organizados en carpetas',
           forceFolderTooltip: 'Más información',
@@ -304,6 +305,7 @@
           currentEmpty: 'sin título'
         },
         build: 'Crear y descargar ZIP',
+        buildDynamic: 'Crear y descargar {type}',
         html: {
           title: '¿No tienes archivos pero tienes el código HTML? Pégalo aquí',
           note: 'Pega el HTML completo y el visor creará un ZIP con un <code>index.html</code> listo para descargar.',
@@ -329,7 +331,8 @@
           status: {
             ready: '',
             working: 'Aplicando restricciones...',
-            done: 'ZIP listo con restricciones.',
+            done: '{type} listo con restricciones.',
+            saved: '{type} guardado.',
             failed: 'No se pudo modificar el ZIP. Revisa el archivo.'
           }
         },
@@ -400,6 +403,7 @@
       error: {
         driveTooLarge: 'El archivo es demasiado grande y Google Drive limita las descargas. Intenta usando Nextcloud, Dropbox u otro servicio.',
         loadZip: 'No se pudo cargar el ZIP.',
+        corruptZip: 'El archivo ZIP/ELPX/H5P está dañado o incompleto.',
         restricted: 'Este recurso ya no está disponible por las restricciones de fecha.',
         embedNotAllowed: 'La inserción en web no está permitida para este recurso.',
         popupBlocked: 'El navegador bloqueó la ventana de previsualización. Permite ventanas emergentes para este sitio e inténtalo de nuevo.',
@@ -755,7 +759,8 @@
         },
         step2: {
           title: 'Descarrega el ZIP',
-          detail: 'En crear el ZIP es descarregarà un fitxer que pots pujar a Drive, Dropbox, Nextcloud, etc.',
+          titleDynamic: 'Descarrega el {type}',
+          detail: 'Es descarregarà un fitxer que pots pujar a Drive, Dropbox, Nextcloud, etc.',
           forceFolderLabel: 'Forçar visor de carpetes',
           forceFolderNote: 'Si actives aquesta opció, el ZIP s’obrirà en mode explorador de fitxers: veuràs el contingut com a fitxers organitzats en carpetes, fins i tot si inclou HTML o documents.',
           forceFolderTooltip: 'Més informació',
@@ -773,6 +778,7 @@
           currentEmpty: 'sense títol'
         },
         build: 'Crear i descarregar ZIP',
+        buildDynamic: 'Crear i descarregar {type}',
         html: {
           title: 'No tens fitxers però tens el codi HTML? Enganxa’l aquí',
           note: 'Enganxa l’HTML complet i el visor crearà un ZIP amb un <code>index.html</code> llest per descarregar.',
@@ -798,7 +804,8 @@
           status: {
             ready: '',
             working: 'Aplicant restriccions...',
-            done: 'ZIP llest amb restriccions.',
+            done: '{type} llest amb restriccions.',
+            saved: '{type} desat.',
             failed: 'No s’ha pogut modificar el ZIP. Revisa el fitxer.'
           },
           summaryTitle: 'Accés limitat per dates'
@@ -869,6 +876,7 @@
       error: {
         driveTooLarge: 'El fitxer és massa gran i Google Drive limita les descàrregues. Prova amb Nextcloud, Dropbox o un altre servei.',
         loadZip: 'No s’ha pogut carregar el ZIP.',
+        corruptZip: 'El fitxer ZIP/ELPX/H5P està malmès o incomplet.',
         restricted: 'Aquest recurs ja no està disponible per les restriccions de data.',
         embedNotAllowed: 'La inserció en web no està permesa per a aquest recurs.',
         popupBlocked: 'El navegador ha bloquejat la finestra de previsualització. Permet finestres emergents per a aquest lloc i torna-ho a provar.',
@@ -1218,7 +1226,8 @@
         },
         step2: {
           title: 'Descarga o ZIP',
-          detail: 'Ao crear o ZIP descargarase un ficheiro que podes subir a Drive, Dropbox, Nextcloud, etc.',
+          titleDynamic: 'Descarga o {type}',
+          detail: 'Descargarase un ficheiro que podes subir a Drive, Dropbox, Nextcloud, etc.',
           forceFolderLabel: 'Forzar visor de cartafoles',
           forceFolderNote: 'Se activas esta opción, o ZIP abrirase en modo explorador de ficheiros: verás o contido como ficheiros organizados en cartafoles, mesmo cando inclúa HTML ou documentos.',
           forceFolderTooltip: 'Máis información',
@@ -1236,6 +1245,7 @@
           currentEmpty: 'sen título'
         },
         build: 'Crear e descargar ZIP',
+        buildDynamic: 'Crear e descargar {type}',
         html: {
           title: 'Non tes ficheiros pero tes o código HTML? Pégao aquí',
           note: 'Pega o HTML completo e o visor creará un ZIP cun <code>index.html</code> listo para descargar.',
@@ -1261,7 +1271,8 @@
           status: {
             ready: '',
             working: 'Aplicando restricións...',
-            done: 'ZIP listo con restricións.',
+            done: '{type} listo con restricións.',
+            saved: '{type} gardado.',
             failed: 'Non se puido modificar o ZIP. Revisa o ficheiro.'
           },
           summaryTitle: 'Acceso limitado por datas'
@@ -1332,6 +1343,7 @@
       error: {
         driveTooLarge: 'O ficheiro é demasiado grande e Google Drive limita as descargas. Proba con Nextcloud, Dropbox ou outro servizo.',
         loadZip: 'Non se puido cargar o ZIP.',
+        corruptZip: 'O ficheiro ZIP/ELPX/H5P está danado ou incompleto.',
         restricted: 'Este recurso xa non está dispoñible polas restricións de data.',
         embedNotAllowed: 'A inserción en web non está permitida para este recurso.',
         popupBlocked: 'O navegador bloqueou a xanela de previsualización. Permite as ventás emerxentes para este sitio e téntao de novo.',
@@ -1681,7 +1693,8 @@
         },
         step2: {
           title: 'Deskargatu ZIPa',
-          detail: 'ZIPa sortzean, fitxategi bat deskargatuko da (Drive, Dropbox, Nextcloud, etab. igo dezakezu).',
+          titleDynamic: 'Deskargatu {type}',
+          detail: 'Fitxategi bat deskargatuko da (Drive, Dropbox, Nextcloud, etab. igo dezakezu).',
           forceFolderLabel: 'Karpeten bisorea behartu',
           forceFolderNote: 'Aukera hau aktibatuz gero, ZIPa fitxategi-esploratzaile moduan irekiko da: edukia karpetetan antolatutako fitxategi gisa ikusiko duzu, HTML edo dokumentuak baditu ere.',
           forceFolderTooltip: 'Informazio gehiago',
@@ -1699,6 +1712,7 @@
           currentEmpty: 'izenbururik gabe'
         },
         build: 'Sortu eta deskargatu ZIPa',
+        buildDynamic: 'Sortu eta deskargatu {type}',
         html: {
           title: 'Ez duzu fitxategirik baina HTML kodea baduzu? Itsatsi hemen',
           note: 'Itsatsi HTML osoa eta bisoreak ZIP bat sortuko du, deskargatzeko prest dagoen <code>index.html</code> batekin.',
@@ -1724,7 +1738,8 @@
           status: {
             ready: '',
             working: 'Murrizketak aplikatzen...',
-            done: 'ZIPa prest murrizketekin.',
+            done: '{type} prest murrizketekin.',
+            saved: '{type} gordeta.',
             failed: 'Ezin izan da ZIPa aldatu. Berrikusi fitxategia.'
           },
           summaryTitle: 'Sarbide mugatua daten arabera'
@@ -1795,6 +1810,7 @@
       error: {
         driveTooLarge: 'Fitxategia handiegia da eta Google Drivek deskargak mugatzen ditu. Saiatu Nextcloud, Dropbox edo beste zerbitzu batekin.',
         loadZip: 'Ezin izan da ZIPa kargatu.',
+        corruptZip: 'ZIP/ELPX/H5P fitxategia hondatuta edo osatu gabe dago.',
         restricted: 'Baliabide hau ez dago eskuragarri data-murrizketengatik.',
         embedNotAllowed: 'Web-ean txertatzea ez dago baimenduta baliabide honetarako.',
         popupBlocked: 'Nabigatzaileak aurrebistaren leihoa blokeatu du. Baimendu popup leihoak gune honetarako eta saiatu berriro.',
@@ -2144,7 +2160,8 @@
         },
         step2: {
           title: 'Download the ZIP',
-          detail: 'When you create the ZIP, a file will download that you can upload to Drive, Dropbox, Nextcloud, etc.',
+          titleDynamic: 'Download the {type}',
+          detail: 'A file will download that you can upload to Drive, Dropbox, Nextcloud, etc.',
           forceFolderLabel: 'Force folder viewer',
           forceFolderNote: 'If you enable this option, the ZIP will open in file explorer mode: you will see content as files organized in folders, even when it includes HTML or documents.',
           forceFolderTooltip: 'More information',
@@ -2162,6 +2179,7 @@
           currentEmpty: 'no title'
         },
         build: 'Create and download ZIP',
+        buildDynamic: 'Create and download {type}',
         html: {
           title: 'No files but you have the HTML code? Paste it here',
           note: 'Paste the full HTML and the viewer will create a ZIP with an <code>index.html</code> ready to download.',
@@ -2187,7 +2205,8 @@
           status: {
             ready: '',
             working: 'Applying restrictions...',
-            done: 'ZIP ready with restrictions.',
+            done: '{type} ready with restrictions.',
+            saved: '{type} saved.',
             failed: 'Could not modify the ZIP. Check the file.'
           },
           
@@ -2259,6 +2278,7 @@
       error: {
         driveTooLarge: 'The file is too large and Google Drive limits downloads. Try Nextcloud, Dropbox, or another service.',
         loadZip: 'Could not load the ZIP.',
+        corruptZip: 'The ZIP/ELPX/H5P file is corrupted or incomplete.',
         restricted: 'This resource is no longer available due to date restrictions.',
         embedNotAllowed: 'Embedding is not allowed for this resource.',
         popupBlocked: 'The browser blocked the preview window. Allow pop-ups for this site and try again.',
@@ -2608,7 +2628,8 @@
         },
         step2: {
           title: 'ZIP herunterladen',
-          detail: 'Beim Erstellen des ZIP wird eine Datei heruntergeladen, die du bei Drive, Dropbox, Nextcloud usw. hochladen kannst.',
+          titleDynamic: '{type} herunterladen',
+          detail: 'Es wird eine Datei heruntergeladen, die du bei Drive, Dropbox, Nextcloud usw. hochladen kannst.',
           forceFolderLabel: 'Ordneransicht erzwingen',
           forceFolderNote: 'Wenn du diese Option aktivierst, wird das ZIP im Datei-Explorer-Modus geöffnet: Der Inhalt wird als in Ordnern organisierte Dateien angezeigt, auch wenn HTML oder Dokumente enthalten sind.',
           forceFolderTooltip: 'Mehr Informationen',
@@ -2626,6 +2647,7 @@
           currentEmpty: 'kein Titel'
         },
         build: 'ZIP erstellen und herunterladen',
+        buildDynamic: '{type} erstellen und herunterladen',
         html: {
           title: 'Keine Dateien, aber HTML-Code? Hier einfügen',
           note: 'Füge das vollständige HTML ein und der Viewer erstellt ein ZIP mit einer <code>index.html</code>, das sofort heruntergeladen werden kann.',
@@ -2651,7 +2673,8 @@
           status: {
             ready: '',
             working: 'Einschränkungen werden angewendet...',
-            done: 'ZIP ist mit Einschränkungen bereit.',
+            done: '{type} ist mit Einschränkungen bereit.',
+            saved: '{type} gespeichert.',
             failed: 'ZIP konnte nicht geändert werden. Prüfe die Datei.'
           },
           
@@ -2723,6 +2746,7 @@
       error: {
         driveTooLarge: 'Die Datei ist zu groß und Google Drive begrenzt Downloads. Versuche es mit Nextcloud, Dropbox oder einem anderen Dienst.',
         loadZip: 'ZIP konnte nicht geladen werden.',
+        corruptZip: 'Die ZIP-/ELPX-/H5P-Datei ist beschädigt oder unvollständig.',
         restricted: 'Diese Ressource ist aufgrund der Datumsbeschränkung nicht mehr verfügbar.',
         embedNotAllowed: 'Einbetten ist für diese Ressource nicht erlaubt.',
         popupBlocked: 'Der Browser hat das Vorschaufenster blockiert. Erlaube Pop-ups für diese Website und versuche es erneut.',

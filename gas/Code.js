@@ -192,13 +192,14 @@ function buildBundleChunk_(rawUrl, e) {
   if (wantsBundleMeta_(e)) {
     return fetchRemoteMeta_(url);
   }
-  if (extractDriveId_(url)) {
-    throw new Error('La descarga por trozos no esta disponible para enlaces de Drive en este backend.');
-  }
 
   var part = parsePositiveInt_(e.parameter.part, 0);
   var chunkSize = parsePositiveInt_(e.parameter.chunkSize, DEFAULT_CHUNK_BYTES);
   chunkSize = clamp_(chunkSize, 64 * 1024, MAX_CHUNK_BYTES);
+  var driveId = extractDriveId_(url);
+  if (driveId) {
+    return buildDriveBundleChunk_(driveId, part, chunkSize);
+  }
   var start = part * chunkSize;
   var end = start + chunkSize - 1;
 
@@ -222,6 +223,42 @@ function buildBundleChunk_(rawUrl, e) {
     name: resp.name || 'site.zip',
     totalSize: resp.totalSize || null,
     acceptRanges: !!resp.acceptRanges,
+    part: part,
+    chunkSize: chunkSize,
+    start: start,
+    end: start + bytes.length - 1,
+    size: bytes.length,
+    base64: Utilities.base64Encode(bytes)
+  };
+}
+
+function buildDriveBundleChunk_(driveId, part, chunkSize) {
+  var blob = fetchDriveBlobById_(driveId) || fetchDriveZip_(driveId);
+  var allBytes = blob.getBytes();
+  if (!allBytes || !allBytes.length) {
+    throw new Error('No se recibieron datos del archivo de Drive.');
+  }
+  var totalSize = allBytes.length;
+  var start = part * chunkSize;
+  if (start >= totalSize) {
+    return {
+      name: blob.getName() || 'site.zip',
+      totalSize: totalSize,
+      acceptRanges: false,
+      part: part,
+      chunkSize: chunkSize,
+      start: start,
+      end: start - 1,
+      size: 0,
+      base64: ''
+    };
+  }
+  var endExclusive = Math.min(totalSize, start + chunkSize);
+  var bytes = allBytes.slice(start, endExclusive);
+  return {
+    name: blob.getName() || 'site.zip',
+    totalSize: totalSize,
+    acceptRanges: false,
     part: part,
     chunkSize: chunkSize,
     start: start,
@@ -402,7 +439,7 @@ function extractDriveId_(url) {
   if (match && match[1]) {
     return match[1];
   }
-  match = url.match(/drive\.google\.com\/uc\?id=([a-zA-Z0-9_-]+)/);
+  match = url.match(/drive\.google\.com\/uc\?(?:[^#]*[?&])?id=([a-zA-Z0-9_-]+)/);
   if (match && match[1]) {
     return match[1];
   }
@@ -412,6 +449,8 @@ function extractDriveId_(url) {
 function fetchZipBlob_(url) {
   var driveId = extractDriveId_(url);
   if (driveId) {
+    var driveBlob = fetchDriveBlobById_(driveId);
+    if (driveBlob) return driveBlob;
     return fetchDriveZip_(driveId);
   }
 
@@ -421,6 +460,18 @@ function fetchZipBlob_(url) {
     throw new Error('Respuesta HTTP ' + code);
   }
   return response.getBlob();
+}
+
+function fetchDriveBlobById_(driveId) {
+  try {
+    var driveFile = DriveApp.getFileById(driveId);
+    if (!driveFile) return null;
+    var blob = driveFile.getBlob();
+    if (!blob) return null;
+    return blob.setName(driveFile.getName() || blob.getName() || 'site.zip');
+  } catch (err) {
+    return null;
+  }
 }
 
 function fetchDriveZip_(driveId) {
@@ -440,7 +491,25 @@ function fetchDriveZip_(driveId) {
   var html = blob.getDataAsString('UTF-8');
   var downloadUrl = extractDriveDownloadUrl_(html);
   if (downloadUrl) {
-    return fetchDriveWithCookies_(downloadUrl, cookies);
+    var directResp = fetchDriveWithCookies_(downloadUrl, cookies);
+    if (directResp.getResponseCode() >= 400) {
+      throw new Error('No se pudo descargar el ZIP desde Drive (HTTP ' + directResp.getResponseCode() + ').');
+    }
+    var directBlob = directResp.getBlob();
+    if (!looksLikeHtml_(directBlob)) {
+      return directBlob;
+    }
+  }
+  var formDownloadUrl = extractDriveFormDownloadUrl_(html);
+  if (formDownloadUrl) {
+    var formResp = fetchDriveWithCookies_(formDownloadUrl, cookies);
+    if (formResp.getResponseCode() >= 400) {
+      throw new Error('No se pudo descargar el ZIP desde Drive (HTTP ' + formResp.getResponseCode() + ').');
+    }
+    var formBlob = formResp.getBlob();
+    if (!looksLikeHtml_(formBlob)) {
+      return formBlob;
+    }
   }
   var match = html.match(/confirm=([0-9A-Za-z_-]+)&amp;id=/) || html.match(/confirm=([0-9A-Za-z_-]+)&id=/);
   if (!match) {
@@ -468,6 +537,38 @@ function fetchDriveZip_(driveId) {
     throw new Error('Drive devolvio HTML incluso tras la confirmacion. Revisa permisos o el enlace.');
   }
   return confirmBlob;
+}
+
+function extractDriveFormDownloadUrl_(html) {
+  if (!html) return '';
+  var formMatch = html.match(/<form[^>]*id=["']download-form["'][^>]*action=["']([^"']+)["'][^>]*>/i)
+    || html.match(/<form[^>]*action=["']([^"']*\/download[^"']*)["'][^>]*>/i);
+  if (!formMatch || !formMatch[1]) return '';
+  var action = String(formMatch[1]).replace(/&amp;/g, '&').trim();
+  if (!action) return '';
+  if (!/^https?:\/\//i.test(action)) {
+    if (action.charAt(0) !== '/') action = '/' + action;
+    action = 'https://drive.google.com' + action;
+  }
+
+  var params = {};
+  html.replace(/<input[^>]*type=["']hidden["'][^>]*>/gi, function (tag) {
+    var nameMatch = tag.match(/\bname=["']([^"']+)["']/i);
+    if (!nameMatch || !nameMatch[1]) return tag;
+    var valueMatch = tag.match(/\bvalue=["']([^"']*)["']/i);
+    var key = nameMatch[1];
+    var value = valueMatch && valueMatch[1] ? valueMatch[1] : '';
+    params[key] = value.replace(/&amp;/g, '&');
+    return tag;
+  });
+
+  var keys = Object.keys(params);
+  if (!keys.length) return '';
+  var query = keys.map(function (key) {
+    return encodeURIComponent(key) + '=' + encodeURIComponent(params[key]);
+  }).join('&');
+  if (!query) return '';
+  return action + (action.indexOf('?') === -1 ? '?' : '&') + query;
 }
 
 function fetchDriveWithCookies_(url, cookies) {
@@ -746,15 +847,19 @@ function clamp_(value, min, max) {
 function fetchRemoteMeta_(url) {
   var driveId = extractDriveId_(url);
   if (driveId) {
-    var driveFile = DriveApp.getFileById(driveId);
-    var driveUpdated = driveFile.getLastUpdated();
-    return {
-      name: driveFile.getName() || 'site.zip',
-      size: driveFile.getSize() || null,
-      acceptRanges: false,
-      etag: '',
-      lastModified: driveUpdated ? driveUpdated.toISOString() : ''
-    };
+    try {
+      var driveFile = DriveApp.getFileById(driveId);
+      var driveUpdated = driveFile.getLastUpdated();
+      return {
+        name: driveFile.getName() || 'site.zip',
+        size: driveFile.getSize() || null,
+        acceptRanges: false,
+        etag: '',
+        lastModified: driveUpdated ? driveUpdated.toISOString() : ''
+      };
+    } catch (errDriveMeta) {
+      // Fallback to HTTP metadata probe below.
+    }
   }
   // Apps Script UrlFetchApp does not support HEAD reliably. Use a range probe instead.
   // We read a small prefix to build a lightweight content signature.
