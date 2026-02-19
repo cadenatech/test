@@ -1987,25 +1987,23 @@ textarea:focus-visible {
 
 [data-publish-module="zipper"] [data-zip-flow="files"] .upload-card {
   display: grid;
-  grid-template-columns: minmax(230px, 0.9fr) minmax(320px, 1.1fr);
-  column-gap: 26px;
-  row-gap: 8px;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: 10px;
   align-items: start;
 }
 
-[data-publish-module="zipper"] [data-zip-flow="files"] .upload-card h3,
-[data-publish-module="zipper"] [data-zip-flow="files"] .upload-card > .step-note {
+[data-publish-module="zipper"] [data-zip-flow="files"] .upload-card h3 {
   margin-top: 0;
   margin-bottom: 0;
 }
 
 [data-publish-module="zipper"] [data-zip-flow="files"] .upload-card [data-dropzone] {
-  grid-column: 2;
-  grid-row: 1 / span 2;
+  grid-column: auto;
+  grid-row: auto;
 }
 
 [data-publish-module="zipper"] [data-zip-flow="files"] .upload-card [data-upload-status] {
-  grid-column: 2;
+  grid-column: auto;
   margin-top: 6px;
 }
 
