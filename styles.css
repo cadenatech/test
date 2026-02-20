@@ -87,17 +87,6 @@
   color: #dbe7fb;
 }
 
-:root[data-theme="dark"] .html-zip-accordion__summary {
-  background: #1b2a46;
-  border-bottom-color: #2f4467;
-  color: #dbe7fb;
-}
-
-:root[data-theme="dark"] .html-zip-accordion__summary:hover,
-:root[data-theme="dark"] .html-zip-accordion__summary:focus-visible {
-  color: #93c5fd;
-}
-
 :root[data-theme="dark"] [data-publish-module="zipper"] .html-zip-card--download,
 :root[data-theme="dark"] [data-publish-module="zipper"] .zipper-force-card,
 :root[data-theme="dark"] [data-publish-module="zipper"] .next-step:not(.next-step--preview) {
@@ -1507,77 +1496,6 @@ textarea:focus-visible {
   margin-top: 16px;
 }
 
-.html-zip-accordion {
-  margin: 8px 0 10px;
-  border-radius: 18px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  overflow: hidden;
-}
-
-.html-zip-accordion__summary {
-  cursor: pointer;
-  list-style: none;
-  padding: 14px 18px;
-  font-weight: 600;
-  color: var(--ink);
-  background: #e5eefb;
-  border-bottom: 1px solid #d1deef;
-}
-
-.html-zip-accordion__summary:hover,
-.html-zip-accordion__summary:focus-visible {
-  color: var(--accent);
-}
-
-.html-zip-accordion__summary:focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.25);
-  outline-offset: 2px;
-  border-radius: 12px;
-}
-
-.html-zip-accordion__summary::-webkit-details-marker {
-  display: none;
-}
-
-.html-zip-accordion__summary::after {
-  content: '▾';
-  float: right;
-  color: var(--ink-muted);
-  transition: transform 0.2s ease;
-}
-
-.html-zip-accordion[open] .html-zip-accordion__summary::after {
-  transform: rotate(180deg);
-}
-
-.html-zip-accordion .html-zip-card {
-  border: none;
-  border-top: 1px solid var(--border);
-  border-radius: 0;
-  padding: 18px;
-  background: transparent;
-}
-
-.html-zip-accordion .upload-help {
-  border-top: 1px solid var(--border);
-  padding: 18px;
-  background: transparent;
-  border-radius: 0;
-}
-
-.html-zip-accordion .upload-grid {
-  border-top: 1px solid var(--border);
-  border-radius: 0;
-  margin-top: 0;
-  overflow: visible;
-}
-
-.html-zip-accordion .upload-grid .upload-card {
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-}
-
 .upload-card {
   border: none;
   border-radius: 18px;
@@ -2099,27 +2017,6 @@ textarea:focus-visible {
   color: #66758a;
 }
 
-[data-publish-module="zipper"] .html-zip-accordion {
-  margin: 0;
-  border-radius: 16px;
-}
-
-[data-publish-module="zipper"] .html-zip-accordion__summary {
-  min-height: 58px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 1rem;
-  font-weight: 600;
-  line-height: 1.25;
-}
-
-[data-publish-module="zipper"] .html-zip-accordion__summary::after {
-  float: none;
-  margin-left: 14px;
-  flex: 0 0 auto;
-}
-
 [data-publish-module="zipper"] .next-step {
   margin-top: 24px;
   padding: 16px 18px;
@@ -2178,41 +2075,6 @@ textarea:focus-visible {
 
 [data-publish-module="zipper"] .html-zip-card [data-html-zip-input] + .upload-actions {
   margin-top: 10px;
-}
-
-[data-publish-module="zipper"] .html-zip-accordion .upload-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
-}
-
-[data-publish-module="zipper"] .html-zip-accordion .upload-grid .upload-card {
-  min-height: 100%;
-}
-
-[data-publish-module="zipper"] [data-zip-flow="files"] .upload-grid {
-  grid-template-columns: minmax(0, 1fr);
-}
-
-[data-publish-module="zipper"] [data-zip-flow="files"] .upload-card {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  row-gap: 10px;
-  align-items: start;
-}
-
-[data-publish-module="zipper"] [data-zip-flow="files"] .upload-card h3 {
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-[data-publish-module="zipper"] [data-zip-flow="files"] .upload-card [data-dropzone] {
-  grid-column: auto;
-  grid-row: auto;
-}
-
-[data-publish-module="zipper"] [data-zip-flow="files"] .upload-card [data-upload-status] {
-  grid-column: auto;
-  margin-top: 6px;
 }
 
 [data-publish-module="zipper"] .inline-callout {
@@ -3442,29 +3304,9 @@ body[data-loading="true"][data-loading-mode="overlay"] .loading-screen {
     border-left: none;
   }
 
-  [data-publish-module="zipper"] .html-zip-accordion__summary {
-    min-height: 54px;
-    font-size: 0.98rem;
-  }
-
-  [data-publish-module="zipper"] .html-zip-accordion .upload-grid {
-    grid-template-columns: 1fr;
-  }
-
   [data-publish-module="zipper"] .zip-download-layout {
     grid-template-columns: 1fr;
     gap: 12px;
-  }
-
-  [data-publish-module="zipper"] [data-zip-flow="files"] .upload-card {
-    grid-template-columns: 1fr;
-    row-gap: 10px;
-  }
-
-  [data-publish-module="zipper"] [data-zip-flow="files"] .upload-card [data-dropzone],
-  [data-publish-module="zipper"] [data-zip-flow="files"] .upload-card [data-upload-status] {
-    grid-column: auto;
-    grid-row: auto;
   }
 
   .manager-item {

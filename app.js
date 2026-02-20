@@ -81,9 +81,6 @@
   var htmlZipInput = document.querySelector('[data-html-zip-input]');
   var htmlZipBuildButton = document.querySelector('[data-html-zip-build]');
   var htmlZipStatus = document.querySelector('[data-html-zip-status]');
-  var zipFlowHtmlAccordion = document.querySelector('[data-zip-flow="html"]');
-  var zipFlowFilesAccordion = document.querySelector('[data-zip-flow="files"]');
-  var zipFlowAccordions = [zipFlowHtmlAccordion, zipFlowFilesAccordion].filter(Boolean);
   var langSelect = document.querySelector('[data-lang-select]');
   var themeSelect = document.querySelector('[data-theme-select]');
   var cleanupThresholdInput = document.querySelector('[data-cleanup-threshold]');
@@ -5442,20 +5439,6 @@
   if (buildZipButton) {
     buildZipButton.addEventListener('click', function () {
       buildZipFromActiveFlow();
-    });
-  }
-  if (zipFlowAccordions.length) {
-    zipFlowAccordions.forEach(function (accordion) {
-      accordion.addEventListener('toggle', function () {
-        if (accordion.open) {
-          zipFlowAccordions.forEach(function (other) {
-            if (other !== accordion) {
-              other.open = false;
-            }
-          });
-        }
-        updateBuildZipButtonLabel();
-      });
     });
   }
 
