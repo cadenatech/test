@@ -13,7 +13,7 @@
   }
 
   function resolvePanelName(name) {
-    if (name === 'home' || name === 'zipper' || name === 'main') {
+    if (name === 'home' || name === 'zipper') {
       return 'publish';
     }
     return name;
@@ -49,7 +49,17 @@
 
   function setPublishModule(name) {
     if (!get('publishChoice') || !get('publishModules') || !get('publishModules').length) return;
-    var activeName = name || '';
+    var requestedName = name || '';
+    var activeName = '';
+    var found = false;
+    get('publishModules').forEach(function (moduleEl) {
+      if (moduleEl.getAttribute('data-publish-module') === requestedName) {
+        found = true;
+      }
+    });
+    if (found) {
+      activeName = requestedName;
+    }
     if (get('setActivePublishModule')) {
       get('setActivePublishModule')(activeName);
     }

@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;600;800&family=Spectral:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=29">
+  <link rel="stylesheet" href="styles.css?v=30">
 </head>
 <body>
 
@@ -93,18 +93,7 @@
           tabindex="-1"
           data-tab="zipper"
           data-i18n="tab.downloadZip"
-        >Descargar ZIP</button>
-        <button
-          id="tab-main"
-          class="tab-button"
-          type="button"
-          role="tab"
-          aria-selected="false"
-          aria-controls="panel-publish"
-          tabindex="-1"
-          data-tab="main"
-          data-i18n="tab.shareLink"
-        >Crear enlace para compartir</button>
+        >Opciones y descargas</button>
         <button
           id="tab-manager"
           class="tab-button"
@@ -122,7 +111,7 @@
         id="panel-publish"
         class="tab-panel is-active"
         role="tabpanel"
-        aria-labelledby="tab-home tab-zipper tab-main"
+        aria-labelledby="tab-home tab-zipper"
         tabindex="0"
         data-tab-panel="publish"
       >
@@ -151,7 +140,7 @@
             </div>
           </section>
           <div class="publish-choice-main">
-            <button class="publish-choice-card" type="button" data-publish-start="main">
+            <section class="publish-choice-card publish-choice-card--link" id="ya-tengo-zip-elpx" aria-labelledby="main-link-title">
               <span class="publish-choice-card__icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
                   <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
@@ -159,72 +148,68 @@
                 </svg>
               </span>
               <div class="publish-choice-card__title">
-                <span data-i18n="publish.choice.main.title">Ya tengo un ZIP o ELPX en la nube</span>
+                <span id="main-link-title" data-i18n="publish.choice.main.title">Ya tengo un ZIP, ELPX o H5P en la nube</span>
               </div>
-              <span class="publish-choice-card__note" data-i18n="publish.choice.main.note">Pega el enlace público (ZIP/ELPX) y crea el enlace del visor.</span>
-            </button>
+              <span class="publish-choice-card__note" data-i18n="publish.choice.main.note">Pega el enlace público (ZIP/ELPX/H5P) y crea el enlace del visor.</span>
+              <form class="publish-link-form" data-form>
+                <input data-url type="url" placeholder="Pega aquí el enlace público del ZIP o del .elpx/.h5p (también válido si incluye PDF o DOCX)" data-i18n-placeholder="main.form.placeholder" required>
+                <button type="submit" data-create-link data-i18n="main.form.submit">Crear enlace</button>
+              </form>
+              <p class="publish-link-feedback" data-create-link-feedback aria-live="polite" hidden></p>
+              <div class="output-row publish-link-result" data-home-share-result hidden>
+                <div class="output-group" data-step-three>
+                  <span class="field-title" data-i18n="main.output.title">Enlace para compartir</span>
+                  <p class="step-note" data-i18n="main.output.step">Comparte este enlace para que otros puedan ver tu recurso.</p>
+                  <div class="share-restrict-summary" data-share-restrict-summary hidden>
+                    <div class="share-restrict-summary__items" data-share-restrict-items></div>
+                  </div>
+                  <section class="output" data-output data-i18n="main.output.placeholder" data-i18n-dynamic>Aquí se mostrará el enlace</section>
+                </div>
+                <div class="actions actions--icons">
+                  <button class="icon-button icon-button--lg" type="button" data-copy disabled data-i18n-aria-label="main.output.copy" data-i18n-tooltip="main.output.copyTooltip">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="18" cy="5" r="3"></circle>
+                      <circle cx="6" cy="12" r="3"></circle>
+                      <circle cx="18" cy="19" r="3"></circle>
+                      <path d="M8.6 10.7l6.8-3.4"></path>
+                      <path d="M8.6 13.3l6.8 3.4"></path>
+                    </svg>
+                  </button>
+                  <button class="icon-button icon-button--lg icon-button--wrap" type="button" data-qr disabled data-i18n-aria-label="main.output.qr" data-i18n-tooltip="main.output.qrTooltip">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect width="5" height="5" x="3" y="3" rx="1"></rect>
+                      <rect width="5" height="5" x="16" y="3" rx="1"></rect>
+                      <rect width="5" height="5" x="3" y="16" rx="1"></rect>
+                      <path d="M21 16h-3a2 2 0 0 0-2 2v3"></path>
+                      <path d="M21 21v.01"></path>
+                      <path d="M12 7v3a2 2 0 0 1-2 2H7"></path>
+                      <path d="M3 12h.01"></path>
+                      <path d="M12 3h.01"></path>
+                      <path d="M12 16v.01"></path>
+                      <path d="M16 12h1"></path>
+                      <path d="M21 12v.01"></path>
+                      <path d="M12 21v-1"></path>
+                    </svg>
+                  </button>
+                  <button class="icon-button icon-button--lg icon-button--wrap" type="button" data-embed disabled data-i18n-aria-label="main.output.embed" data-i18n-tooltip="main.output.embedTooltip">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M16 18l6-6-6-6"></path>
+                      <path d="M8 6l-6 6 6 6"></path>
+                      <path d="M14 4l-4 16"></path>
+                    </svg>
+                  </button>
+                  <a class="icon-button icon-button--lg" data-open href="#" target="_blank" rel="noopener" aria-disabled="true" data-i18n-aria-label="main.output.open" data-i18n-tooltip="main.output.openTooltip">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M1.5 12s3.5-7 10.5-7 10.5 7 10.5 7-3.5 7-10.5 7-10.5-7-10.5-7z"></path>
+                      <circle cx="12" cy="12" r="3.5"></circle>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </section>
           </div>
 
         </div>
-
-	        <div class="publish-module" data-publish-module="main" id="ya-tengo-zip-elpx" hidden>
-	          <form data-form>
-	            <span class="field-title field-title--module" data-i18n="main.form.title">Ya tengo un ZIP o ELPX en la nube con enlace</span>
-	            <p class="step-note" data-i18n-html="main.subtitle">Si ya tienes tu recurso en formato ZIP o ELPX en un servicio con <strong>enlace público</strong> (Drive, Dropbox, etc.), pega aquí el enlace para generar el enlace que usarás para compartir el recurso.</p>
-	            <input data-url type="url" placeholder="Pega aquí el enlace público del ZIP o del .elpx (también válido si incluye PDF)" data-i18n-placeholder="main.form.placeholder" required>
-            <button type="submit" data-create-link data-i18n="main.form.submit">Crear enlace</button>
-          </form>
-
-	          <div class="output-row">
-	            <div class="output-group" data-step-three>
-	              <span class="field-title" data-i18n="main.output.title">Enlace para compartir</span>
-	              <div class="share-restrict-summary" data-share-restrict-summary hidden>
-	                <div class="share-restrict-summary__items" data-share-restrict-items></div>
-	              </div>
-	              <section class="output" data-output data-i18n="main.output.placeholder" data-i18n-dynamic>Aquí se mostrará el enlace</section>
-	            </div>
-		            <div class="actions actions--icons">
-			              <button class="icon-button icon-button--lg" type="button" data-copy disabled data-i18n-aria-label="main.output.copy" data-i18n-tooltip="main.output.copyTooltip">
-			                <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-			                  <circle cx="18" cy="5" r="3"></circle>
-			                  <circle cx="6" cy="12" r="3"></circle>
-			                  <circle cx="18" cy="19" r="3"></circle>
-			                  <path d="M8.6 10.7l6.8-3.4"></path>
-			                  <path d="M8.6 13.3l6.8 3.4"></path>
-			                </svg>
-			              </button>
-		              <button class="icon-button icon-button--lg icon-button--wrap" type="button" data-qr disabled data-i18n-aria-label="main.output.qr" data-i18n-tooltip="main.output.qrTooltip">
-		                <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-		                  <rect width="5" height="5" x="3" y="3" rx="1"></rect>
-		                  <rect width="5" height="5" x="16" y="3" rx="1"></rect>
-		                  <rect width="5" height="5" x="3" y="16" rx="1"></rect>
-		                  <path d="M21 16h-3a2 2 0 0 0-2 2v3"></path>
-		                  <path d="M21 21v.01"></path>
-		                  <path d="M12 7v3a2 2 0 0 1-2 2H7"></path>
-		                  <path d="M3 12h.01"></path>
-		                  <path d="M12 3h.01"></path>
-		                  <path d="M12 16v.01"></path>
-		                  <path d="M16 12h1"></path>
-		                  <path d="M21 12v.01"></path>
-		                  <path d="M12 21v-1"></path>
-		                </svg>
-		              </button>
-		              <button class="icon-button icon-button--lg icon-button--wrap" type="button" data-embed disabled data-i18n-aria-label="main.output.embed" data-i18n-tooltip="main.output.embedTooltip">
-		                <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-		                  <path d="M16 18l6-6-6-6"></path>
-		                  <path d="M8 6l-6 6 6 6"></path>
-		                  <path d="M14 4l-4 16"></path>
-		                </svg>
-		              </button>
-		              <a class="icon-button icon-button--lg" data-open href="#" target="_blank" rel="noopener" aria-disabled="true" data-i18n-aria-label="main.output.open" data-i18n-tooltip="main.output.openTooltip">
-		                <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-		                  <path d="M1.5 12s3.5-7 10.5-7 10.5 7 10.5 7-3.5 7-10.5 7-10.5-7-10.5-7z"></path>
-		                  <circle cx="12" cy="12" r="3.5"></circle>
-		                </svg>
-		              </a>
-            </div>
-          </div>
-		        </div>
 
 	        <div class="publish-module" data-publish-module="zipper" hidden>
 	          <div class="manager-card">
@@ -305,10 +290,10 @@
             </section>
             <div class="next-step">
               <div class="next-step__text">
-                <p data-i18n="zipper.help.nextStepText">El siguiente paso es subir y compartir con enlace público el archivo ZIP o ELPX. Cuando lo tengas pulsa sobre Continuar.</p>
+                <p data-i18n="zipper.help.nextStepText">El siguiente paso es subir tu archivo a la nube con enlace público. Después, en Inicio, en la sección “Ya tengo un ZIP, ELPX o H5P en la nube”, pega ese enlace y crea el enlace para compartir.</p>
               </div>
-              <a class="next-step__btn" href="#ya-tengo-zip-elpx" data-go-publish="main">
-                Continuar <span aria-hidden="true">→</span>
+              <a class="next-step__btn" href="#ya-tengo-zip-elpx" data-go-tab="home" data-i18n="zipper.help.goTab">
+                Ir a Inicio para pegar el enlace público
               </a>
             </div>
           </div>
@@ -607,7 +592,7 @@
     <footer class="site-footer">
       <a class="footer-link" href="https://bilateria.org" target="_blank" rel="noopener">(c) 2026 Juan Jose de Haro</a>
       <span class="footer-sep">·</span>
-    <span class="footer-link" data-app-version>v3.1.1</span>
+    <span class="footer-link" data-app-version>v3.2.0</span>
       <span class="footer-sep">·</span>
       <a class="footer-link" href="https://github.com/visor-webzip/visor-webzip.github.io" target="_blank" rel="noopener">
         <svg class="footer-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
@@ -634,17 +619,17 @@
 
   <script src="https://cdn.jsdelivr.net/npm/fflate@0.8.2/umd/index.js"></script>
   <script src="config.js"></script>
-			  <script src="i18n.js?v=27"></script>
+			  <script src="i18n.js?v=28"></script>
 	  <script src="restrictions.js?v=5"></script>
-	  <script src="ui.js?v=1"></script>
+	  <script src="ui.js?v=2"></script>
 	  <script src="downloads.js?v=2"></script>
 	  <script src="zipper.js?v=1"></script>
 	  <script src="html-picker.js?v=1"></script>
 	  <script src="storage.js?v=1"></script>
 		  <script src="manager.js?v=3"></script>
 		  <script src="restriction-ui.js?v=13"></script>
-	  <script src="share.js?v=1"></script>
-	  <script src="nav.js?v=2"></script>
-			  <script src="app.js?v=69"></script>
+	  <script src="share.js?v=2"></script>
+	  <script src="nav.js?v=3"></script>
+			  <script src="app.js?v=70"></script>
  </body>
  </html>

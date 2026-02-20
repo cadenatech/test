@@ -32,34 +32,50 @@
 
   function setShareLink(link) {
     setValue('currentShareLink', link || '');
+    var hasLink = !!getValue('currentShareLink');
+    if (get('shareResultPanel')) {
+      if (hasLink) {
+        var panel = get('shareResultPanel');
+        panel.removeAttribute('hidden');
+        // Ensure the generated link section is always visible after creation.
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            try {
+              panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } catch (e) {}
+          });
+        });
+      } else {
+        get('shareResultPanel').setAttribute('hidden', '');
+      }
+    }
     if (get('output')) {
       get('output').textContent = getValue('currentShareLink') || t('main.output.placeholder');
     }
     if (get('copyButton')) {
       // In the "share" step, the author must always be able to copy the generated link.
       // Restrictions are enforced when opening the link, not when distributing it.
-      get('copyButton').disabled = !getValue('currentShareLink');
+      get('copyButton').disabled = !hasLink;
     }
     if (get('embedButton')) {
       // Same rationale as copy: embedding can be restricted at runtime, but the snippet should be obtainable.
-      get('embedButton').disabled = !getValue('currentShareLink');
+      get('embedButton').disabled = !hasLink;
     }
     if (get('qrButton')) {
-      get('qrButton').disabled = !getValue('currentShareLink');
+      get('qrButton').disabled = !hasLink;
     }
     if (get('openLink')) {
       get('openLink').href = getValue('currentShareLink') || '#';
-      get('openLink').setAttribute('aria-disabled', getValue('currentShareLink') ? 'false' : 'true');
-      if (getValue('currentShareLink')) {
+      get('openLink').setAttribute('aria-disabled', hasLink ? 'false' : 'true');
+      if (hasLink) {
         get('openLink').removeAttribute('tabindex');
       } else {
         get('openLink').setAttribute('tabindex', '-1');
       }
     }
-    if (getValue('currentShareLink') && get('stepThree') && !getValue('isEmbedMode')) {
-      get('stepThree').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (hasLink && get('stepThree') && !getValue('isEmbedMode')) {
       get('stepThree').setAttribute('tabindex', '-1');
-      get('stepThree').focus({ preventScroll: true });
+      get('stepThree').focus();
     }
   }
 

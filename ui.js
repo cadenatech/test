@@ -16,7 +16,9 @@
     return state.loadingActive;
   }
 
-  function setLoading(active) {
+  function setLoading(active, options) {
+    var opts = options || {};
+    var mode = opts.mode === 'overlay' ? 'overlay' : 'block';
     state.loadingActive = !!active;
     if (els.loadingScreen) {
       if (active) {
@@ -26,6 +28,11 @@
       }
     }
     document.body.setAttribute('data-loading', active ? 'true' : 'false');
+    if (active) {
+      document.body.setAttribute('data-loading-mode', mode);
+    } else {
+      document.body.removeAttribute('data-loading-mode');
+    }
     if (!active) {
       stopProgress();
     }

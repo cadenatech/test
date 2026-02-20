@@ -3,6 +3,7 @@
   var input = document.querySelector('[data-url]');
   var output = document.querySelector('[data-output]');
   var createLinkButton = document.querySelector('[data-create-link]');
+  var createLinkFeedback = document.querySelector('[data-create-link-feedback]');
   var copyButton = document.querySelector('[data-copy]');
   var qrButton = document.querySelector('[data-qr]');
   var embedButton = document.querySelector('[data-embed]');
@@ -13,6 +14,7 @@
   var updateActionButton = document.querySelector('[data-update-action]');
   var updateDismissButton = document.querySelector('[data-update-dismiss]');
   var stepThree = document.querySelector('[data-step-three]');
+  var homeShareResult = document.querySelector('[data-home-share-result]');
   var loadingScreen = document.querySelector('[data-loading]');
   var loadingMessage = document.querySelector('[data-loading-message]');
   var loadingBar = document.querySelector('[data-loading-bar]');
@@ -41,10 +43,10 @@
   var reactCopyButton = document.querySelector('[data-react-copy]');
   var reactCloseButtons = document.querySelectorAll('[data-react-close]');
   var tabButtons = document.querySelectorAll('[data-tab]');
+  var tabZipperButton = document.querySelector('[data-tab="zipper"]');
   var tabPanels = document.querySelectorAll('[data-tab-panel]');
   var publishChoice = document.querySelector('[data-publish-choice]');
   var publishModules = document.querySelectorAll('[data-publish-module]');
-  var publishStartButtons = document.querySelectorAll('[data-publish-start]');
   var managerList = document.querySelector('[data-manager-list]');
   var storageUsed = document.querySelector('[data-storage-used]');
   var storageUsedPercent = document.querySelector('[data-storage-used-percent]');
@@ -541,6 +543,7 @@
         embedButton: embedButton,
         openLink: openLink,
         stepThree: stepThree,
+        shareResultPanel: homeShareResult,
         currentShareLink: function (value) {
           if (arguments.length) {
             currentShareLink = value;
@@ -708,6 +711,18 @@
         node.setAttribute('data-tooltip', value);
       }
     });
+  }
+
+  function setCreateLinkFeedback(message) {
+    if (!createLinkFeedback) return;
+    var text = String(message || '').trim();
+    if (!text) {
+      createLinkFeedback.textContent = '';
+      createLinkFeedback.setAttribute('hidden', '');
+      return;
+    }
+    createLinkFeedback.textContent = text;
+    createLinkFeedback.removeAttribute('hidden');
   }
 
   function refreshFooterVersion() {
@@ -1275,6 +1290,26 @@
     UI.setUploadStatus(t('zipper.status.empty'));
   }
 
+  function hasLoadedZipperContent() {
+    var filesReady = !!(selectedFiles && selectedFiles.length);
+    var htmlReady = !!(htmlZipInput && htmlZipInput.value && htmlZipInput.value.trim());
+    return filesReady || htmlReady;
+  }
+
+  function syncZipperTabVisibility() {
+    if (!tabZipperButton) return;
+    var shouldShow = hasLoadedZipperContent();
+    if (shouldShow) {
+      tabZipperButton.removeAttribute('hidden');
+    } else {
+      tabZipperButton.setAttribute('hidden', '');
+      if (document.body.getAttribute('data-active-tab') === 'zipper') {
+        Nav.setActiveTab('home');
+        Nav.setPublishModule('');
+      }
+    }
+  }
+
   function detectZipLikeViewerType(file) {
     if (!file || !window.fflate || !window.fflate.unzipSync) {
       return Promise.resolve(null);
@@ -1357,6 +1392,7 @@
       }
       syncResourceTitleToggleState();
       updateBuildZipButtonLabel();
+      syncZipperTabVisibility();
       return;
     }
     preferredZipBuildFlow = 'files';
@@ -1370,6 +1406,7 @@
     refreshUploadSelectionSummary();
     UI.setZipStatus('');
     updateBuildZipButtonLabel();
+    syncZipperTabVisibility();
   }
 
 
@@ -1460,8 +1497,8 @@
   function applyQuickHtmlToZipper() {
     if (!quickHtmlInput || !htmlZipInput) return;
     var htmlText = String(quickHtmlInput.value || '');
-    focusZipperFlow('html');
     if (!htmlText.trim()) return;
+    focusZipperFlow('html');
     htmlZipInput.value = htmlText;
     dispatchInputEvent(htmlZipInput);
     quickHtmlInput.value = '';
@@ -4760,6 +4797,11 @@
     var fromManager = !!opts.fromManager;
     var autoOpen = !!opts.autoOpen && !fromManager;
     var showProgress = opts.showProgress !== false;
+    var loadingMode = opts.loadingMode === 'overlay' ? 'overlay' : 'block';
+    var surfaceCreateLinkError = !!opts.surfaceCreateLinkError;
+    var setScopedLoading = function (active) {
+      UI.setLoading(active, { mode: loadingMode });
+    };
     var normalizedZipUrl = normalizeZipUrl(zipUrl);
     var shouldUseNormalized = false;
     if (normalizedZipUrl.indexOf('/s/') !== -1 || normalizedZipUrl.indexOf('nextcloud') !== -1) {
@@ -4785,14 +4827,18 @@
       input.value = normalizedZipUrl;
     }
     if (autoOpen) {
-      UI.setLoading(true);
+      setScopedLoading(true);
       UI.setProgress(5);
       UI.setLoadingMessage(t('status.preparing'));
     }
     if (!GAS_WEBAPP_URL) {
-      UI.setStatus(t('error.configMissing'));
+      var configError = t('error.configMissing');
+      UI.setStatus(configError);
+      if (surfaceCreateLinkError) {
+        setCreateLinkFeedback(configError);
+      }
       if (showProgress && !autoOpen) {
-        UI.setLoading(false);
+        setScopedLoading(false);
       }
       return Promise.resolve();
     }
@@ -4842,7 +4888,7 @@
               if (opts.allowInactive) {
                 UI.setStatus(t('status.restrictedReady'));
                 if (showProgress && !autoOpen) {
-                  UI.setLoading(false);
+                  setScopedLoading(false);
                 }
                 currentRestrictions = result.site ? result.site.restrictions || null : null;
                 RestrictionUI.applyRestrictionsToActions(currentRestrictions);
@@ -4858,7 +4904,7 @@
             if (opts.allowInactive) {
               UI.setStatus(t('status.restrictedReady'));
               if (showProgress && !autoOpen) {
-                UI.setLoading(false);
+                setScopedLoading(false);
               }
               currentRestrictions = result.site ? result.site.restrictions || null : null;
               RestrictionUI.applyRestrictionsToActions(currentRestrictions);
@@ -4897,7 +4943,7 @@
               });
             }
             if (showProgress && !autoOpen) {
-              UI.setLoading(false);
+              setScopedLoading(false);
             }
             currentRestrictions = result.site ? result.site.restrictions || null : null;
             RestrictionUI.applyRestrictionsToActions(currentRestrictions);
@@ -4907,7 +4953,7 @@
 
         UI.setStatus(t('status.downloadingZip'));
         if (showProgress && !autoOpen) {
-          UI.setLoading(true);
+          setScopedLoading(true);
           UI.setLoadingMessage(t('status.connecting') + '...');
           UI.startProgress(2);
           UI.setLoadingEtaVisible(false);
@@ -4963,7 +5009,7 @@
               UI.setStatus(t('status.restrictedReady'));
               if (autoOpen || showProgress) {
                 UI.stopProgress();
-                UI.setLoading(false);
+                setScopedLoading(false);
               }
               currentRestrictions = restrictions || null;
               RestrictionUI.applyRestrictionsToActions(currentRestrictions);
@@ -5020,12 +5066,12 @@
 
             var paths = files.map(function (file) { return file.path; });
             return pickIndexPath(paths, preparedDocs.preferredIndexPath || preferredIndexHint || '').then(function (indexPath) {
-            currentIndexPath = indexPath || '';
-            refreshShareLink(effectiveZipUrl, currentIndexPath);
-            if (HtmlPicker.consumeWasLoading && HtmlPicker.consumeWasLoading()) {
-              UI.setLoading(true);
-              UI.setLoadingMessage(t('status.saving'));
-            }
+              currentIndexPath = indexPath || '';
+              refreshShareLink(effectiveZipUrl, currentIndexPath);
+              if (HtmlPicker.consumeWasLoading && HtmlPicker.consumeWasLoading()) {
+                setScopedLoading(true);
+                UI.setLoadingMessage(t('status.saving'));
+              }
             UI.setStatus(t('status.saving'));
             if (autoOpen || showProgress) {
               UI.stopProgress();
@@ -5089,7 +5135,7 @@
                           RestrictionUI.showRestrictionModal(restrictions);
                           if (showProgress || autoOpen) {
                             UI.stopProgress();
-                            UI.setLoading(false);
+                            setScopedLoading(false);
                           }
                           if (loadingMessage) {
                             loadingMessage.textContent = t('loading.message');
@@ -5105,7 +5151,7 @@
                         if (showProgress && !autoOpen) {
                           UI.setProgress(100);
                           UI.stopProgress();
-                          UI.setLoading(false);
+                          setScopedLoading(false);
                         }
                         Manager.refreshManager();
                         return { siteId: result.siteId, siteUrl: siteUrl };
@@ -5121,6 +5167,9 @@
       })
       .then(function () {
         UI.setStatus(currentShareLink);
+        if (surfaceCreateLinkError) {
+          setCreateLinkFeedback('');
+        }
       })
       .catch(function (err) {
         var message = formatUserError(err, effectiveZipUrl);
@@ -5137,12 +5186,15 @@
         if (!err || !err.skipStatus) {
           UI.setStatus(message);
         }
+        if (surfaceCreateLinkError) {
+          setCreateLinkFeedback(message);
+        }
         if (autoOpen) {
-          UI.setLoading(false);
+          setScopedLoading(false);
         }
         if (showProgress && !autoOpen) {
           UI.stopProgress();
-          UI.setLoading(false);
+          setScopedLoading(false);
         }
       });
   }
@@ -5459,6 +5511,7 @@
       }
       refreshPrimaryUploadSummary();
       updateBuildZipButtonLabel();
+      syncZipperTabVisibility();
     });
   }
 
@@ -5661,8 +5714,11 @@
     if (!zipUrl) {
       return;
     }
+    setCreateLinkFeedback('');
+    Nav.setActiveTab('home');
+    Nav.setPublishModule('');
     ignoreRestrictionsForShare = true;
-    loadZip(zipUrl, { force: true, allowInactive: true })
+    loadZip(zipUrl, { force: true, allowInactive: true, loadingMode: 'overlay', surfaceCreateLinkError: true })
       .finally(function () {
         ignoreRestrictionsForShare = false;
       });
@@ -5670,7 +5726,7 @@
   if (form) {
     form.addEventListener('submit', handleCreateLink);
   }
-  if (createLinkButton) {
+  if (!form && createLinkButton) {
     createLinkButton.addEventListener('click', handleCreateLink);
   }
 
@@ -5695,38 +5751,23 @@
   setLanguage(getInitialLang());
   updateServiceInfo();
   updateRestrictZipAccordionState();
+  syncZipperTabVisibility();
   var goTabButtons = document.querySelectorAll('[data-go-tab]');
   if (goTabButtons.length) {
     goTabButtons.forEach(function (button) {
       button.addEventListener('click', function () {
         var target = button.getAttribute('data-go-tab');
+        if (target === 'zipper' && tabZipperButton && tabZipperButton.hasAttribute('hidden')) {
+          return;
+        }
         if (target) {
-          if (target === 'home' || target === 'main' || target === 'zipper') {
+          if (target === 'home' || target === 'zipper') {
             Nav.setActiveTab(target);
             Nav.setPublishModule(target === 'home' ? '' : target);
           } else {
             Nav.setActiveTab(target);
           }
         }
-      });
-    });
-  }
-  if (publishStartButtons.length) {
-    publishStartButtons.forEach(function (button) {
-      button.addEventListener('click', function () {
-        var target = button.getAttribute('data-publish-start');
-        Nav.setActiveTab(target);
-        Nav.setPublishModule(target);
-      });
-    });
-  }
-  var goPublishButtons = document.querySelectorAll('[data-go-publish]');
-  if (goPublishButtons.length) {
-    goPublishButtons.forEach(function (button) {
-      button.addEventListener('click', function () {
-        var target = button.getAttribute('data-go-publish');
-        Nav.setActiveTab(target);
-        Nav.setPublishModule(target);
       });
     });
   }
@@ -5737,7 +5778,12 @@
         Nav.setPublishModule('');
         return;
       }
-      if (tabName === 'zipper' || tabName === 'main') {
+      if (tabName === 'zipper') {
+        if (tabZipperButton && tabZipperButton.hasAttribute('hidden')) {
+          Nav.setActiveTab('home');
+          Nav.setPublishModule('');
+          return;
+        }
         Nav.setActiveTab(tabName);
         Nav.setPublishModule(tabName);
         return;
@@ -5754,15 +5800,18 @@
         var key = event.key;
         if (key !== 'ArrowLeft' && key !== 'ArrowRight' && key !== 'Home' && key !== 'End') return;
         event.preventDefault();
-        if (!tabButtonList.length) return;
-        var currentIndex = tabButtonList.indexOf(button);
+        var visibleTabButtons = tabButtonList.filter(function (node) {
+          return !node.hasAttribute('hidden');
+        });
+        if (!visibleTabButtons.length) return;
+        var currentIndex = visibleTabButtons.indexOf(button);
         if (currentIndex < 0) currentIndex = 0;
         var nextIndex = currentIndex;
         if (key === 'Home') nextIndex = 0;
-        if (key === 'End') nextIndex = tabButtonList.length - 1;
-        if (key === 'ArrowLeft') nextIndex = (currentIndex - 1 + tabButtonList.length) % tabButtonList.length;
-        if (key === 'ArrowRight') nextIndex = (currentIndex + 1) % tabButtonList.length;
-        var nextButton = tabButtonList[nextIndex];
+        if (key === 'End') nextIndex = visibleTabButtons.length - 1;
+        if (key === 'ArrowLeft') nextIndex = (currentIndex - 1 + visibleTabButtons.length) % visibleTabButtons.length;
+        if (key === 'ArrowRight') nextIndex = (currentIndex + 1) % visibleTabButtons.length;
+        var nextButton = visibleTabButtons[nextIndex];
         if (!nextButton) return;
         var tab = nextButton.getAttribute('data-tab');
         openTab(tab);
@@ -6127,8 +6176,8 @@
       loadZip(resolvedUrl, { force: force, autoOpen: false, embed: true, embedId: embedIdParam, preferredIndexPath: entryParam });
     } else {
       setEmbedMode(false, '');
-      Nav.setActiveTab('main');
-      Nav.setPublishModule('main');
+      Nav.setActiveTab('home');
+      Nav.setPublishModule('');
       loadZip(resolvedUrl, { force: force, autoOpen: autoOpen, preferredIndexPath: entryParam });
     }
   }
