@@ -4308,6 +4308,7 @@
         loading: 'Cargando H5P...',
         failed: 'No se pudo mostrar este contenido H5P.',
         missing: 'No se pudo cargar el motor H5P.',
+        missingLibraries: 'Este archivo H5P no incluye las librerías necesarias. Exporta el H5P como paquete completo.',
         download: 'Descargar H5P',
         hideList: 'Ocultar lista',
         showList: 'Mostrar lista'
@@ -4317,6 +4318,7 @@
         loading: 'Carregant H5P...',
         failed: 'No s\'ha pogut mostrar aquest contingut H5P.',
         missing: 'No s\'ha pogut carregar el motor H5P.',
+        missingLibraries: 'Aquest fitxer H5P no inclou les llibreries necessàries. Exporta l\'H5P com a paquet complet.',
         download: 'Descarregar H5P',
         hideList: 'Amagar llista',
         showList: 'Mostrar llista'
@@ -4326,6 +4328,7 @@
         loading: 'Cargando H5P...',
         failed: 'Non se puido mostrar este contido H5P.',
         missing: 'Non se puido cargar o motor H5P.',
+        missingLibraries: 'Este ficheiro H5P non inclúe as librarías necesarias. Exporta o H5P como paquete completo.',
         download: 'Descargar H5P',
         hideList: 'Agochar lista',
         showList: 'Amosar lista'
@@ -4335,6 +4338,7 @@
         loading: 'H5P kargatzen...',
         failed: 'Ezin izan da H5P eduki hau erakutsi.',
         missing: 'Ezin izan da H5P motorra kargatu.',
+        missingLibraries: 'H5P fitxategi honek ez ditu beharrezko liburutegiak. Esportatu H5P pakete oso gisa.',
         download: 'H5P deskargatu',
         hideList: 'Zerrenda ezkutatu',
         showList: 'Zerrenda erakutsi'
@@ -4344,6 +4348,7 @@
         loading: 'Loading H5P...',
         failed: 'Could not display this H5P content.',
         missing: 'Could not load the H5P engine.',
+        missingLibraries: 'This H5P file does not include required libraries. Export the H5P as a full package.',
         download: 'Download H5P',
         hideList: 'Hide list',
         showList: 'Show list'
@@ -4353,6 +4358,7 @@
         loading: 'H5P wird geladen...',
         failed: 'Dieser H5P-Inhalt konnte nicht angezeigt werden.',
         missing: 'Die H5P-Engine konnte nicht geladen werden.',
+        missingLibraries: 'Diese H5P-Datei enthält nicht die erforderlichen Bibliotheken. Exportiere das H5P als vollständiges Paket.',
         download: 'H5P herunterladen',
         hideList: 'Liste ausblenden',
         showList: 'Liste anzeigen'
@@ -4373,7 +4379,8 @@
         id: explicitId || sourcePath || rootPath || ('h5p-' + String(index + 1)),
         sourcePath: sourcePath,
         rootPath: rootPath,
-        title: normalizeResourceTitle(item && item.title ? item.title : '') || fallbackTitle
+        title: normalizeResourceTitle(item && item.title ? item.title : '') || fallbackTitle,
+        missingLibraries: !!(item && item.missingLibraries)
       };
     }).filter(function (item) {
       return !!item.id && item.rootPath !== null && item.rootPath !== undefined;
@@ -4426,20 +4433,21 @@
       + 'body.sidebar-collapsed .sidebar-content{display:none}'
       + '.h5p-single .layout{grid-template-columns:1fr}'
       + '.h5p-single .sidebar{display:none}'
-      + '.viewer{min-height:0;background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);overflow:auto;display:grid;grid-template-rows:auto 1fr;gap:0}'
+      + '.viewer{min-height:0;background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);overflow:visible;display:block}'
       + '.toolbar{display:flex;align-items:center;gap:10px;padding:10px;border-bottom:1px solid var(--border)}'
       + '.badge{display:inline-flex;align-items:center;padding:4px 9px;border-radius:999px;border:1px solid #86efac;background:#ecfdf5;color:#0f766e;font-size:.74rem;font-weight:700;letter-spacing:.01em}'
       + '.status{font-size:.95rem;color:#475569}'
       + '.download{margin-left:auto;color:var(--accent);text-decoration:none;font-weight:600;display:inline-flex;align-items:center;gap:6px}'
       + '.download[hidden]{display:none !important}'
-      + '.stage{padding:12px;min-height:0}'
-      + '.h5p-mount{min-height:420px}'
+      + '.stage{padding:14px;min-height:0;display:flex;justify-content:center;align-items:flex-start}'
+      + '.h5p-mount{width:min(100%,980px);min-height:220px}'
+      + '.h5p-mount iframe,.h5p-mount .h5p-iframe-wrapper,.h5p-mount .h5p-container{max-width:100%}'
       + '@media (max-width:900px){.layout{grid-template-columns:1fr;grid-template-rows:auto 1fr}body.sidebar-collapsed .layout{grid-template-columns:1fr;grid-template-rows:auto 1fr}}'
       + '</style></head><body' + bodyClass + '>'
       + '<div class="layout">' + sidebarHtml
       + '<main class="viewer"><section class="toolbar"><span class="badge">H5P</span><span class="status" data-h5p-status></span><a class="download" data-h5p-download hidden></a></section><section class="stage"><div class="h5p-mount" data-h5p-mount></div></section></main></div>'
       + '<script src="https://cdn.jsdelivr.net/npm/h5p-standalone@3.8.0/dist/main.bundle.js"></script>'
-      + '<script>(function(){var strings=' + stringsJson + ';var items=' + itemsJson + ';var allowDownload=' + allowDownloadJs + ';var body=document.body;var toggle=document.querySelector("[data-sidebar-toggle]");var titleNode=document.querySelector("[data-viewer-title]");var statusNode=document.querySelector("[data-h5p-status]");var mountNode=document.querySelector("[data-h5p-mount]");var downloadNode=document.querySelector("[data-h5p-download]");var links=[].slice.call(document.querySelectorAll("[data-h5p-link]"));var iconOpen="<svg viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\"><rect x=\\"3\\" y=\\"3\\" width=\\"18\\" height=\\"18\\" rx=\\"2\\"></rect><path d=\\"M9 3v18\\"></path><path d=\\"m16 9-3 3 3 3\\"></path></svg>";var iconClosed="<svg viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\"><rect x=\\"3\\" y=\\"3\\" width=\\"18\\" height=\\"18\\" rx=\\"2\\"></rect><path d=\\"M9 3v18\\"></path><path d=\\"m13 9 3 3-3 3\\"></path></svg>";if(toggle){toggle.setAttribute("aria-label",strings.hideList||"Hide list");toggle.title=strings.hideList||"Hide list";}function enc(path){return String(path||"").split("/").map(function(seg){return encodeURIComponent(seg);}).join("/");}function applyTitle(text){var clean=String(text||"").replace(/\\s+/g," ").trim();if(!clean)return;if(titleNode)titleNode.textContent=clean;document.title=clean;}function markActive(id){links.forEach(function(link){link.classList.toggle("is-active",String(link.getAttribute("data-h5p-id")||"")===String(id||""));});}function syncToggle(){if(!toggle)return;var collapsed=body.classList.contains("sidebar-collapsed");toggle.innerHTML=collapsed?iconClosed:iconOpen;toggle.setAttribute("aria-expanded",collapsed?"false":"true");toggle.setAttribute("aria-label",collapsed?(strings.showList||"Show list"):(strings.hideList||"Hide list"));toggle.title=collapsed?(strings.showList||"Show list"):(strings.hideList||"Hide list");}function renderH5p(item){if(!item||!mountNode)return;markActive(item.id||"");applyTitle(item.title||strings.title||"H5P");if(statusNode)statusNode.textContent=strings.loading||"Loading H5P...";if(downloadNode){downloadNode.hidden=!(allowDownload&&item.sourcePath);downloadNode.textContent=strings.download||"Download H5P";downloadNode.href=item.sourcePath?enc(item.sourcePath):"";downloadNode.download="";downloadNode.setAttribute("aria-label",strings.download||"Download H5P");}mountNode.innerHTML="";if(!window.H5PStandalone||!window.H5PStandalone.H5P){if(statusNode)statusNode.textContent=strings.missing||"Could not load the H5P engine.";return;}var options={h5pJsonPath:enc(item.rootPath||"."),frameJs:"https://cdn.jsdelivr.net/npm/h5p-standalone@3.8.0/dist/frame.bundle.js",frameCss:"https://cdn.jsdelivr.net/npm/h5p-standalone@3.8.0/dist/styles/h5p.css",frame:true,fullScreen:true,export:!!allowDownload,downloadUrl:item.sourcePath?enc(item.sourcePath):""};Promise.resolve(new window.H5PStandalone.H5P(mountNode,options)).then(function(){if(statusNode)statusNode.textContent="";}).catch(function(){if(statusNode)statusNode.textContent=strings.failed||"Could not display this H5P content.";});}if(toggle){toggle.addEventListener("click",function(){body.classList.toggle("sidebar-collapsed");syncToggle();});syncToggle();}links.forEach(function(link){link.addEventListener("click",function(){var id=String(link.getAttribute("data-h5p-id")||"");var found=items.find(function(item){return String(item&&item.id||"")===id;});if(found){renderH5p(found);}});});var initial=items.find(function(item){return links.some(function(link){return link.classList.contains("is-active")&&String(link.getAttribute("data-h5p-id")||"")===String(item&&item.id||"");});})||items[0]||null;if(initial){renderH5p(initial);}else if(statusNode){statusNode.textContent=strings.failed||"Could not display this H5P content.";}})();</script>'
+      + '<script>(function(){var strings=' + stringsJson + ';var items=' + itemsJson + ';var allowDownload=' + allowDownloadJs + ';var body=document.body;var toggle=document.querySelector("[data-sidebar-toggle]");var titleNode=document.querySelector("[data-viewer-title]");var statusNode=document.querySelector("[data-h5p-status]");var mountNode=document.querySelector("[data-h5p-mount]");var downloadNode=document.querySelector("[data-h5p-download]");var links=[].slice.call(document.querySelectorAll("[data-h5p-link]"));var iconOpen="<svg viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\"><rect x=\\"3\\" y=\\"3\\" width=\\"18\\" height=\\"18\\" rx=\\"2\\"></rect><path d=\\"M9 3v18\\"></path><path d=\\"m16 9-3 3 3 3\\"></path></svg>";var iconClosed="<svg viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\"><rect x=\\"3\\" y=\\"3\\" width=\\"18\\" height=\\"18\\" rx=\\"2\\"></rect><path d=\\"M9 3v18\\"></path><path d=\\"m13 9 3 3-3 3\\"></path></svg>";if(toggle){toggle.setAttribute("aria-label",strings.hideList||"Hide list");toggle.title=strings.hideList||"Hide list";}function enc(path){return String(path||"").split("/").map(function(seg){return encodeURIComponent(seg);}).join("/");}function applyTitle(text){var clean=String(text||"").replace(/\\s+/g," ").trim();if(!clean)return;if(titleNode)titleNode.textContent=clean;document.title=clean;}function markActive(id){links.forEach(function(link){link.classList.toggle("is-active",String(link.getAttribute("data-h5p-id")||"")===String(id||""));});}function syncToggle(){if(!toggle)return;var collapsed=body.classList.contains("sidebar-collapsed");toggle.innerHTML=collapsed?iconClosed:iconOpen;toggle.setAttribute("aria-expanded",collapsed?"false":"true");toggle.setAttribute("aria-label",collapsed?(strings.showList||"Show list"):(strings.hideList||"Hide list"));toggle.title=collapsed?(strings.showList||"Show list"):(strings.hideList||"Hide list");}function fitMountHeight(){if(!mountNode)return;var probe=mountNode.querySelector(".h5p-iframe-wrapper,.h5p-container,iframe,.h5p-content");if(!probe)return;var h=Math.ceil(Math.max(probe.scrollHeight||0,probe.offsetHeight||0,probe.getBoundingClientRect?probe.getBoundingClientRect().height:0));if(h&&h>0){mountNode.style.minHeight=Math.max(180,h)+"px";}}function renderH5p(item){if(!item||!mountNode)return;markActive(item.id||"");applyTitle(item.title||strings.title||"H5P");if(statusNode)statusNode.textContent=strings.loading||"Loading H5P...";if(downloadNode){downloadNode.hidden=!(allowDownload&&item.sourcePath);downloadNode.textContent=strings.download||"Download H5P";downloadNode.href=item.sourcePath?enc(item.sourcePath):"";downloadNode.download="";downloadNode.setAttribute("aria-label",strings.download||"Download H5P");}mountNode.innerHTML="";mountNode.style.minHeight="220px";if(item.missingLibraries){if(statusNode)statusNode.textContent=strings.missingLibraries||"This H5P file does not include required libraries.";return;}if(!window.H5PStandalone||!window.H5PStandalone.H5P){if(statusNode)statusNode.textContent=strings.missing||"Could not load the H5P engine.";return;}var options={h5pJsonPath:enc(item.rootPath||"."),frameJs:"https://cdn.jsdelivr.net/npm/h5p-standalone@3.8.0/dist/frame.bundle.js",frameCss:"https://cdn.jsdelivr.net/npm/h5p-standalone@3.8.0/dist/styles/h5p.css",frame:true,fullScreen:true,export:!!allowDownload,downloadUrl:item.sourcePath?enc(item.sourcePath):""};Promise.resolve(new window.H5PStandalone.H5P(mountNode,options)).then(function(){if(statusNode)statusNode.textContent="";fitMountHeight();setTimeout(fitMountHeight,120);setTimeout(fitMountHeight,500);setTimeout(fitMountHeight,1200);if(window.ResizeObserver){try{var ro=new ResizeObserver(function(){fitMountHeight();});ro.observe(mountNode);}catch(e){}}}).catch(function(){if(statusNode)statusNode.textContent=strings.failed||"Could not display this H5P content.";});}if(toggle){toggle.addEventListener("click",function(){body.classList.toggle("sidebar-collapsed");syncToggle();});syncToggle();}links.forEach(function(link){link.addEventListener("click",function(){var id=String(link.getAttribute("data-h5p-id")||"");var found=items.find(function(item){return String(item&&item.id||"")===id;});if(found){renderH5p(found);}});});var initial=items.find(function(item){return links.some(function(link){return link.classList.contains("is-active")&&String(link.getAttribute("data-h5p-id")||"")===String(item&&item.id||"");});})||items[0]||null;if(initial){renderH5p(initial);}else if(statusNode){statusNode.textContent=strings.failed||"Could not display this H5P content.";}})();</script>'
       + '</body></html>';
   }
 
@@ -4478,6 +4486,38 @@
     return candidate;
   }
 
+  var h5pLibraryBundleCache = {};
+  var H5P_CONTENT_TYPE_API_BASE = 'https://api.h5p.org/v1/content-types/';
+
+  function fetchH5pLibraryBundle(mainLibrary) {
+    var libraryName = String(mainLibrary || '').trim();
+    if (!libraryName) return Promise.resolve(null);
+    if (h5pLibraryBundleCache[libraryName]) {
+      return h5pLibraryBundleCache[libraryName];
+    }
+    var endpoint = H5P_CONTENT_TYPE_API_BASE + encodeURIComponent(libraryName);
+    h5pLibraryBundleCache[libraryName] = fetch(endpoint, {
+      method: 'GET',
+      mode: 'cors',
+      credentials: 'omit',
+      cache: 'force-cache'
+    })
+      .then(function (response) {
+        if (!response || !response.ok) {
+          throw new Error('HTTP ' + (response ? response.status : '0'));
+        }
+        return response.arrayBuffer();
+      })
+      .then(function (buffer) {
+        if (!window.fflate || !window.fflate.unzipSync) return null;
+        return window.fflate.unzipSync(new Uint8Array(buffer));
+      })
+      .catch(function () {
+        return null;
+      });
+    return h5pLibraryBundleCache[libraryName];
+  }
+
   function expandH5pPackagesInFiles(files, siteId) {
     var baseFiles = (files || []).slice();
     var result = {
@@ -4489,10 +4529,16 @@
 
     var existingPaths = {};
     var usedRoots = {};
-    result.files.forEach(function (file) {
+    var baseFilesByPath = {};
+    var fileIndexByPath = {};
+    result.files.forEach(function (file, index) {
       var normalized = normalizePath(file && file.path ? file.path : '').toLowerCase();
       if (!normalized) return;
       existingPaths[normalized] = true;
+      if (!baseFilesByPath[normalized]) {
+        baseFilesByPath[normalized] = file;
+      }
+      fileIndexByPath[normalized] = index;
       if (normalized.indexOf('__vwz_h5p/') === 0) {
         var rootParts = normalized.split('/').slice(0, 2);
         if (rootParts.length === 2) {
@@ -4500,6 +4546,67 @@
         }
       }
     });
+
+    function upsertVirtualFile(targetPath, data, forceReplace) {
+      var normalizedPath = normalizePath(targetPath || '');
+      if (!normalizedPath) return false;
+      var targetLower = normalizedPath.toLowerCase();
+      var existingIndex = fileIndexByPath[targetLower];
+      if (existingIndex != null && !forceReplace) return false;
+      var type = guessMimeType(normalizedPath);
+      var blob = new Blob([data], { type: type });
+      var record = {
+        key: siteId + '::' + normalizedPath,
+        siteId: siteId,
+        path: normalizedPath,
+        blob: blob,
+        size: blob.size,
+        type: type
+      };
+      if (existingIndex != null && forceReplace) {
+        result.files[existingIndex] = record;
+      } else {
+        result.files.push(record);
+        fileIndexByPath[targetLower] = result.files.length - 1;
+      }
+      existingPaths[targetLower] = true;
+      return true;
+    }
+
+    function appendEntriesToRoot(entryMap, rootPath, options) {
+      options = options || {};
+      var added = 0;
+      Object.keys(entryMap || {}).forEach(function (entryPath) {
+        if (!entryPath || /\/$/.test(entryPath)) return;
+        if (entryPath.indexOf('__MACOSX/') === 0) return;
+        var normalizedEntry = normalizePath(entryPath);
+        if (!normalizedEntry) return;
+        var lowerEntry = normalizedEntry.toLowerCase();
+        if (options.skipContent && lowerEntry.indexOf('content/') === 0) return;
+        if (options.skipContent && lowerEntry === 'h5p.json' && !options.replaceH5pJson) return;
+        var targetPath = normalizePath((rootPath ? rootPath + '/' : '') + normalizedEntry);
+        var data = entryMap[entryPath];
+        var replaceCurrent = !!(options.replaceH5pJson && lowerEntry === 'h5p.json');
+        if (upsertVirtualFile(targetPath, data, replaceCurrent)) {
+          added += 1;
+        }
+      });
+      return added;
+    }
+
+    function parseMainLibraryFromBlob(blob) {
+      if (!blob || !blob.arrayBuffer) return Promise.resolve('');
+      return blob.arrayBuffer().then(function (buffer) {
+        try {
+          var parsed = JSON.parse(decodeUtf8(new Uint8Array(buffer)) || '{}');
+          return String(parsed && parsed.mainLibrary ? parsed.mainLibrary : '').trim();
+        } catch (e) {
+          return '';
+        }
+      }).catch(function () {
+        return '';
+      });
+    }
 
     var tasks = [];
     baseFiles.forEach(function (file) {
@@ -4517,35 +4624,80 @@
         });
         var hasManifest = paths.some(function (path) { return String(path).toLowerCase() === 'h5p.json'; });
         var hasContent = paths.some(function (path) { return String(path).toLowerCase() === 'content/content.json'; });
+        var hasLibraries = paths.some(function (path) { return /^h5p\.[^/]+\//i.test(String(path || '')); });
         if (!hasManifest || !hasContent) return;
 
+        var h5pMeta = null;
+        var mainLibrary = '';
+        try {
+          h5pMeta = JSON.parse(decodeUtf8(entries['h5p.json']) || '{}');
+          mainLibrary = String(h5pMeta && h5pMeta.mainLibrary ? h5pMeta.mainLibrary : '').trim();
+        } catch (e) {
+          mainLibrary = '';
+        }
+
         var rootPath = buildH5pExtractRoot(sourcePath, usedRoots);
-        result.packages.push({
+        var packageInfo = {
           sourcePath: sourcePath,
           rootPath: rootPath,
-          title: deriveTitleFromPath(sourcePath) || sourcePath
-        });
+          title: deriveTitleFromPath(sourcePath) || sourcePath,
+          missingLibraries: !hasLibraries
+        };
+        result.packages.push(packageInfo);
 
-        Object.keys(entries).forEach(function (entryPath) {
-          if (!entryPath || /\/$/.test(entryPath)) return;
-          if (entryPath.indexOf('__MACOSX/') === 0) return;
-          var normalizedEntry = normalizePath(entryPath);
-          if (!normalizedEntry) return;
-          var targetPath = normalizePath(rootPath + '/' + normalizedEntry);
-          var targetLower = targetPath.toLowerCase();
-          if (existingPaths[targetLower]) return;
-          var data = entries[entryPath];
-          var type = guessMimeType(targetPath);
-          var blob = new Blob([data], { type: type });
-          result.files.push({
-            key: siteId + '::' + targetPath,
-            siteId: siteId,
-            path: targetPath,
-            blob: blob,
-            size: blob.size,
-            type: type
-          });
-          existingPaths[targetLower] = true;
+        appendEntriesToRoot(entries, rootPath);
+
+        if (hasLibraries || !mainLibrary) {
+          return;
+        }
+
+        return fetchH5pLibraryBundle(mainLibrary).then(function (bundleEntries) {
+          if (!bundleEntries) return;
+          var addedLibraries = appendEntriesToRoot(bundleEntries, rootPath, { skipContent: true, replaceH5pJson: true });
+          if (addedLibraries > 0) {
+            packageInfo.missingLibraries = false;
+          }
+        });
+      }).catch(function () {
+        return null;
+      }));
+    });
+
+    // Also support raw/incomplete H5P packages opened directly (without .h5p wrapper path).
+    var embeddedRoots = {};
+    baseFiles.forEach(function (file) {
+      var normalized = normalizePath(file && file.path ? file.path : '');
+      if (!normalized) return;
+      var lower = normalized.toLowerCase();
+      if (!/(^|\/)h5p\.json$/.test(lower)) return;
+      var rootPath = '';
+      if (lower !== 'h5p.json') {
+        rootPath = normalized.slice(0, normalized.length - 9).replace(/\/$/, '');
+      }
+      var contentPath = (rootPath ? rootPath + '/' : '') + 'content/content.json';
+      if (!existingPaths[contentPath.toLowerCase()]) return;
+      var rootPrefix = rootPath ? (rootPath.toLowerCase() + '/') : '';
+      var hasLibraries = Object.keys(existingPaths).some(function (path) {
+        if (rootPrefix) {
+          if (path.indexOf(rootPrefix) !== 0) return false;
+          path = path.slice(rootPrefix.length);
+        }
+        return /^h5p\.[^/]+\//.test(path);
+      });
+      if (hasLibraries) return;
+      embeddedRoots[(rootPath || '__root__').toLowerCase()] = rootPath;
+    });
+
+    Object.keys(embeddedRoots).forEach(function (key) {
+      var rootPath = embeddedRoots[key] || '';
+      var h5pJsonPath = (rootPath ? rootPath + '/' : '') + 'h5p.json';
+      var h5pJsonBlobFile = baseFilesByPath[h5pJsonPath.toLowerCase()];
+      if (!h5pJsonBlobFile || !h5pJsonBlobFile.blob) return;
+      tasks.push(parseMainLibraryFromBlob(h5pJsonBlobFile.blob).then(function (mainLibrary) {
+        if (!mainLibrary) return;
+        return fetchH5pLibraryBundle(mainLibrary).then(function (bundleEntries) {
+          if (!bundleEntries) return;
+          appendEntriesToRoot(bundleEntries, rootPath, { skipContent: true, replaceH5pJson: true });
         });
       }).catch(function () {
         return null;
@@ -4580,6 +4732,15 @@
       }
       var contentPath = (rootPath ? rootPath + '/' : '') + 'content/content.json';
       if (!pathSet[contentPath.toLowerCase()]) return;
+      var rootLower = normalizePath(rootPath || '').toLowerCase();
+      var rootPrefix = rootLower ? (rootLower + '/') : '';
+      var hasLibraries = Object.keys(pathSet).some(function (path) {
+        if (rootPrefix) {
+          if (path.indexOf(rootPrefix) !== 0) return false;
+          path = path.slice(rootPrefix.length);
+        }
+        return /^h5p\.[^/]+\//.test(path);
+      });
       var id = rootPath || '__vwz_h5p_root';
       if (packagesByRoot[id]) return;
       var title = rootPath ? (deriveTitleFromPath(rootPath) || rootPath) : 'H5P';
@@ -4587,7 +4748,8 @@
         id: id,
         sourcePath: '',
         rootPath: rootPath,
-        title: title
+        title: title,
+        missingLibraries: !hasLibraries
       };
     });
     return Object.keys(packagesByRoot).map(function (key) {
@@ -4680,7 +4842,8 @@
         return {
           sourcePath: normalizePath(pkg.sourcePath || path),
           rootPath: normalizePath(pkg.rootPath || ''),
-          title: normalizeResourceTitle(pkg.title || deriveTitleFromPath(path)) || deriveTitleFromPath(path) || path
+          title: normalizeResourceTitle(pkg.title || deriveTitleFromPath(path)) || deriveTitleFromPath(path) || path,
+          missingLibraries: !!pkg.missingLibraries
         };
       }).filter(function (item) {
         return !!(item && item.sourcePath && item.rootPath);
