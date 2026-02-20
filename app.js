@@ -4374,6 +4374,10 @@
       var explicitId = normalizePath(item && item.id ? item.id : '');
       var sourcePath = normalizePath(item && item.sourcePath ? item.sourcePath : '');
       var rootPath = normalizePath(item && item.rootPath ? item.rootPath : '');
+      if (!rootPath && sourcePath && isH5pPath(sourcePath)) {
+        // Defensive fallback: recover the extracted root used by expandH5pPackagesInFiles.
+        rootPath = buildH5pExtractRoot(sourcePath, {});
+      }
       var fallbackTitle = deriveTitleFromPath(sourcePath || rootPath) || 'H5P';
       return {
         id: explicitId || sourcePath || rootPath || ('h5p-' + String(index + 1)),
@@ -4447,7 +4451,7 @@
       + '<div class="layout">' + sidebarHtml
       + '<main class="viewer"><section class="toolbar"><span class="badge">H5P</span><span class="status" data-h5p-status></span><a class="download" data-h5p-download hidden></a></section><section class="stage"><div class="h5p-mount" data-h5p-mount></div></section></main></div>'
       + '<script src="https://cdn.jsdelivr.net/npm/h5p-standalone@3.8.0/dist/main.bundle.js"></script>'
-      + '<script>(function(){var strings=' + stringsJson + ';var items=' + itemsJson + ';var allowDownload=' + allowDownloadJs + ';var body=document.body;var toggle=document.querySelector("[data-sidebar-toggle]");var titleNode=document.querySelector("[data-viewer-title]");var statusNode=document.querySelector("[data-h5p-status]");var mountNode=document.querySelector("[data-h5p-mount]");var downloadNode=document.querySelector("[data-h5p-download]");var links=[].slice.call(document.querySelectorAll("[data-h5p-link]"));var iconOpen="<svg viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\"><rect x=\\"3\\" y=\\"3\\" width=\\"18\\" height=\\"18\\" rx=\\"2\\"></rect><path d=\\"M9 3v18\\"></path><path d=\\"m16 9-3 3 3 3\\"></path></svg>";var iconClosed="<svg viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\"><rect x=\\"3\\" y=\\"3\\" width=\\"18\\" height=\\"18\\" rx=\\"2\\"></rect><path d=\\"M9 3v18\\"></path><path d=\\"m13 9 3 3-3 3\\"></path></svg>";if(toggle){toggle.setAttribute("aria-label",strings.hideList||"Hide list");toggle.title=strings.hideList||"Hide list";}function enc(path){return String(path||"").split("/").map(function(seg){return encodeURIComponent(seg);}).join("/");}function applyTitle(text){var clean=String(text||"").replace(/\\s+/g," ").trim();if(!clean)return;if(titleNode)titleNode.textContent=clean;document.title=clean;}function markActive(id){links.forEach(function(link){link.classList.toggle("is-active",String(link.getAttribute("data-h5p-id")||"")===String(id||""));});}function syncToggle(){if(!toggle)return;var collapsed=body.classList.contains("sidebar-collapsed");toggle.innerHTML=collapsed?iconClosed:iconOpen;toggle.setAttribute("aria-expanded",collapsed?"false":"true");toggle.setAttribute("aria-label",collapsed?(strings.showList||"Show list"):(strings.hideList||"Hide list"));toggle.title=collapsed?(strings.showList||"Show list"):(strings.hideList||"Hide list");}function fitMountHeight(){if(!mountNode)return;var probe=mountNode.querySelector(".h5p-iframe-wrapper,.h5p-container,iframe,.h5p-content");if(!probe)return;var h=Math.ceil(Math.max(probe.scrollHeight||0,probe.offsetHeight||0,probe.getBoundingClientRect?probe.getBoundingClientRect().height:0));if(h&&h>0){mountNode.style.minHeight=Math.max(180,h)+"px";}}function renderH5p(item){if(!item||!mountNode)return;markActive(item.id||"");applyTitle(item.title||strings.title||"H5P");if(statusNode)statusNode.textContent=strings.loading||"Loading H5P...";if(downloadNode){downloadNode.hidden=!(allowDownload&&item.sourcePath);downloadNode.textContent=strings.download||"Download H5P";downloadNode.href=item.sourcePath?enc(item.sourcePath):"";downloadNode.download="";downloadNode.setAttribute("aria-label",strings.download||"Download H5P");}mountNode.innerHTML="";mountNode.style.minHeight="220px";if(item.missingLibraries){if(statusNode)statusNode.textContent=strings.missingLibraries||"This H5P file does not include required libraries.";return;}if(!window.H5PStandalone||!window.H5PStandalone.H5P){if(statusNode)statusNode.textContent=strings.missing||"Could not load the H5P engine.";return;}var options={h5pJsonPath:enc(item.rootPath||"."),frameJs:"https://cdn.jsdelivr.net/npm/h5p-standalone@3.8.0/dist/frame.bundle.js",frameCss:"https://cdn.jsdelivr.net/npm/h5p-standalone@3.8.0/dist/styles/h5p.css",frame:true,fullScreen:true,export:!!allowDownload,downloadUrl:item.sourcePath?enc(item.sourcePath):""};Promise.resolve(new window.H5PStandalone.H5P(mountNode,options)).then(function(){if(statusNode)statusNode.textContent="";fitMountHeight();setTimeout(fitMountHeight,120);setTimeout(fitMountHeight,500);setTimeout(fitMountHeight,1200);if(window.ResizeObserver){try{var ro=new ResizeObserver(function(){fitMountHeight();});ro.observe(mountNode);}catch(e){}}}).catch(function(){if(statusNode)statusNode.textContent=strings.failed||"Could not display this H5P content.";});}if(toggle){toggle.addEventListener("click",function(){body.classList.toggle("sidebar-collapsed");syncToggle();});syncToggle();}links.forEach(function(link){link.addEventListener("click",function(){var id=String(link.getAttribute("data-h5p-id")||"");var found=items.find(function(item){return String(item&&item.id||"")===id;});if(found){renderH5p(found);}});});var initial=items.find(function(item){return links.some(function(link){return link.classList.contains("is-active")&&String(link.getAttribute("data-h5p-id")||"")===String(item&&item.id||"");});})||items[0]||null;if(initial){renderH5p(initial);}else if(statusNode){statusNode.textContent=strings.failed||"Could not display this H5P content.";}})();</script>'
+      + '<script>(function(){var strings=' + stringsJson + ';var items=' + itemsJson + ';var allowDownload=' + allowDownloadJs + ';var body=document.body;var toggle=document.querySelector("[data-sidebar-toggle]");var titleNode=document.querySelector("[data-viewer-title]");var statusNode=document.querySelector("[data-h5p-status]");var mountNode=document.querySelector("[data-h5p-mount]");var downloadNode=document.querySelector("[data-h5p-download]");var links=[].slice.call(document.querySelectorAll("[data-h5p-link]"));var iconOpen="<svg viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\"><rect x=\\"3\\" y=\\"3\\" width=\\"18\\" height=\\"18\\" rx=\\"2\\"></rect><path d=\\"M9 3v18\\"></path><path d=\\"m16 9-3 3 3 3\\"></path></svg>";var iconClosed="<svg viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\"><rect x=\\"3\\" y=\\"3\\" width=\\"18\\" height=\\"18\\" rx=\\"2\\"></rect><path d=\\"M9 3v18\\"></path><path d=\\"m13 9 3 3-3 3\\"></path></svg>";if(toggle){toggle.setAttribute("aria-label",strings.hideList||"Hide list");toggle.title=strings.hideList||"Hide list";}function enc(path){return String(path||"").split("/").map(function(seg){return encodeURIComponent(seg);}).join("/");}function applyTitle(text){var clean=String(text||"").replace(/\\s+/g," ").trim();if(!clean)return;if(titleNode)titleNode.textContent=clean;document.title=clean;}function markActive(id){links.forEach(function(link){link.classList.toggle("is-active",String(link.getAttribute("data-h5p-id")||"")===String(id||""));});}function syncToggle(){if(!toggle)return;var collapsed=body.classList.contains("sidebar-collapsed");toggle.innerHTML=collapsed?iconClosed:iconOpen;toggle.setAttribute("aria-expanded",collapsed?"false":"true");toggle.setAttribute("aria-label",collapsed?(strings.showList||"Show list"):(strings.hideList||"Hide list"));toggle.title=collapsed?(strings.showList||"Show list"):(strings.hideList||"Hide list");}function fitMountHeight(){if(!mountNode)return;var probe=mountNode.querySelector(".h5p-iframe-wrapper,.h5p-container,iframe,.h5p-content");if(!probe)return;var h=Math.ceil(Math.max(probe.scrollHeight||0,probe.offsetHeight||0,probe.getBoundingClientRect?probe.getBoundingClientRect().height:0));if(h&&h>0){mountNode.style.minHeight=Math.max(180,h)+"px";}}function renderH5p(item){if(!item||!mountNode)return;markActive(item.id||"");applyTitle(item.title||strings.title||"H5P");if(statusNode)statusNode.textContent=strings.loading||"Loading H5P...";if(downloadNode){downloadNode.hidden=!(allowDownload&&item.sourcePath);downloadNode.textContent=strings.download||"Download H5P";downloadNode.href=item.sourcePath?enc(item.sourcePath):"";downloadNode.download="";downloadNode.setAttribute("aria-label",strings.download||"Download H5P");}mountNode.innerHTML="";mountNode.style.minHeight="220px";if(item.missingLibraries){if(statusNode)statusNode.textContent=strings.missingLibraries||"This H5P file does not include required libraries.";return;}if(!window.H5PStandalone||!window.H5PStandalone.H5P){if(statusNode)statusNode.textContent=strings.missing||"Could not load the H5P engine.";return;}var rootPath=enc(item.rootPath||".");var options={h5pJsonPath:rootPath,contentJsonPath:rootPath+"/content",librariesPath:rootPath,frameJs:"https://cdn.jsdelivr.net/npm/h5p-standalone@3.8.0/dist/frame.bundle.js",frameCss:"https://cdn.jsdelivr.net/npm/h5p-standalone@3.8.0/dist/styles/h5p.css",frame:true,embedType:"div",fullScreen:true,export:!!allowDownload,downloadUrl:item.sourcePath?enc(item.sourcePath):""};Promise.resolve(new window.H5PStandalone.H5P(mountNode,options)).then(function(){if(statusNode)statusNode.textContent="";fitMountHeight();setTimeout(fitMountHeight,120);setTimeout(fitMountHeight,500);setTimeout(fitMountHeight,1200);if(window.ResizeObserver){try{var ro=new ResizeObserver(function(){fitMountHeight();});ro.observe(mountNode);}catch(e){}}}).catch(function(){if(statusNode)statusNode.textContent=strings.failed||"Could not display this H5P content.";});}if(toggle){toggle.addEventListener("click",function(){body.classList.toggle("sidebar-collapsed");syncToggle();});syncToggle();}links.forEach(function(link){link.addEventListener("click",function(){var id=String(link.getAttribute("data-h5p-id")||"");var found=items.find(function(item){return String(item&&item.id||"")===id;});if(found){renderH5p(found);}});});var initial=items.find(function(item){return links.some(function(link){return link.classList.contains("is-active")&&String(link.getAttribute("data-h5p-id")||"")===String(item&&item.id||"");});})||items[0]||null;if(initial){renderH5p(initial);}else if(statusNode){statusNode.textContent=strings.failed||"Could not display this H5P content.";}})();</script>'
       + '</body></html>';
   }
 
@@ -4594,18 +4598,88 @@
       return added;
     }
 
-    function parseMainLibraryFromBlob(blob) {
-      if (!blob || !blob.arrayBuffer) return Promise.resolve('');
-      return blob.arrayBuffer().then(function (buffer) {
-        try {
-          var parsed = JSON.parse(decodeUtf8(new Uint8Array(buffer)) || '{}');
-          return String(parsed && parsed.mainLibrary ? parsed.mainLibrary : '').trim();
-        } catch (e) {
-          return '';
-        }
-      }).catch(function () {
-        return '';
+    function parseMetaFromBytes(bytes) {
+      try {
+        return JSON.parse(decodeUtf8(bytes) || '{}') || {};
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function collectLibrariesFromPaths(paths) {
+      var byMachine = {};
+      (paths || []).forEach(function (path) {
+        var normalized = normalizePath(path || '');
+        if (!normalized) return;
+        var match = /^([^/]+)-(\d+)\.(\d+)\//i.exec(normalized);
+        if (!match) return;
+        var machineName = String(match[1] || '').trim();
+        var major = String(match[2] || '').trim();
+        var minor = String(match[3] || '').trim();
+        if (!machineName || !major || !minor) return;
+        var machineKey = machineName.toLowerCase();
+        if (!byMachine[machineKey]) byMachine[machineKey] = {};
+        byMachine[machineKey][major + '.' + minor] = true;
       });
+      return byMachine;
+    }
+
+    function hasLibraryVersion(libraryMap, machineName, major, minor) {
+      var machineKey = String(machineName || '').toLowerCase();
+      var versionKey = String(major || '') + '.' + String(minor || '');
+      return !!(libraryMap && libraryMap[machineKey] && libraryMap[machineKey][versionKey]);
+    }
+
+    function getMissingPreloadedDependencies(meta, libraryMap) {
+      var deps = Array.isArray(meta && meta.preloadedDependencies) ? meta.preloadedDependencies : [];
+      var missing = [];
+      deps.forEach(function (dep) {
+        if (!dep || !dep.machineName) return;
+        var machineName = String(dep.machineName || '').trim();
+        var major = String(dep.majorVersion || '').trim();
+        var minor = String(dep.minorVersion || '').trim();
+        if (!machineName || !major || !minor) return;
+        if (!hasLibraryVersion(libraryMap, machineName, major, minor)) {
+          missing.push(machineName + ' ' + major + '.' + minor);
+        }
+      });
+      return missing;
+    }
+
+    function isMainLibraryMissing(meta, libraryMap) {
+      var machineName = String(meta && meta.mainLibrary ? meta.mainLibrary : '').trim();
+      if (!machineName) return false;
+      var deps = Array.isArray(meta && meta.preloadedDependencies) ? meta.preloadedDependencies : [];
+      var mainDep = deps.find(function (dep) {
+        return dep && String(dep.machineName || '').trim() === machineName;
+      });
+      if (mainDep) {
+        var major = String(mainDep.majorVersion || '').trim();
+        var minor = String(mainDep.minorVersion || '').trim();
+        if (major && minor) {
+          return !hasLibraryVersion(libraryMap, machineName, major, minor);
+        }
+      }
+      var machineKey = machineName.toLowerCase();
+      return !(libraryMap && libraryMap[machineKey] && Object.keys(libraryMap[machineKey]).length);
+    }
+
+    function computeMissingLibrariesForRoot(rootPath, meta) {
+      var rootLower = normalizePath(rootPath || '').toLowerCase();
+      var rootPrefix = rootLower ? (rootLower + '/') : '';
+      var rootRelativePaths = Object.keys(existingPaths).filter(function (path) {
+        if (!rootPrefix) return true;
+        return path.indexOf(rootPrefix) === 0;
+      }).map(function (path) {
+        return rootPrefix ? path.slice(rootPrefix.length) : path;
+      });
+      var hasAnyLibraries = rootRelativePaths.some(function (path) {
+        return /^h5p\.[^/]+\//.test(path);
+      });
+      var libraryMap = collectLibrariesFromPaths(rootRelativePaths);
+      var missingDeps = getMissingPreloadedDependencies(meta, libraryMap);
+      var missingMainLibrary = isMainLibraryMissing(meta, libraryMap);
+      return !hasAnyLibraries || missingMainLibrary || missingDeps.length > 0;
     }
 
     var tasks = [];
@@ -4627,36 +4701,39 @@
         var hasLibraries = paths.some(function (path) { return /^h5p\.[^/]+\//i.test(String(path || '')); });
         if (!hasManifest || !hasContent) return;
 
-        var h5pMeta = null;
+        var h5pMeta = {};
         var mainLibrary = '';
         try {
-          h5pMeta = JSON.parse(decodeUtf8(entries['h5p.json']) || '{}');
+          h5pMeta = parseMetaFromBytes(entries['h5p.json']);
           mainLibrary = String(h5pMeta && h5pMeta.mainLibrary ? h5pMeta.mainLibrary : '').trim();
         } catch (e) {
           mainLibrary = '';
         }
+        var libraryMap = collectLibrariesFromPaths(paths);
+        var missingDeps = getMissingPreloadedDependencies(h5pMeta, libraryMap);
+        var missingMainLibrary = isMainLibraryMissing(h5pMeta, libraryMap);
+        var needsHydration = !hasLibraries || missingMainLibrary || missingDeps.length > 0;
 
         var rootPath = buildH5pExtractRoot(sourcePath, usedRoots);
         var packageInfo = {
           sourcePath: sourcePath,
           rootPath: rootPath,
           title: deriveTitleFromPath(sourcePath) || sourcePath,
-          missingLibraries: !hasLibraries
+          missingLibraries: true
         };
         result.packages.push(packageInfo);
 
         appendEntriesToRoot(entries, rootPath);
+        packageInfo.missingLibraries = computeMissingLibrariesForRoot(rootPath, h5pMeta);
 
-        if (hasLibraries || !mainLibrary) {
+        if (!needsHydration || !mainLibrary) {
           return;
         }
 
         return fetchH5pLibraryBundle(mainLibrary).then(function (bundleEntries) {
           if (!bundleEntries) return;
-          var addedLibraries = appendEntriesToRoot(bundleEntries, rootPath, { skipContent: true, replaceH5pJson: true });
-          if (addedLibraries > 0) {
-            packageInfo.missingLibraries = false;
-          }
+          appendEntriesToRoot(bundleEntries, rootPath, { skipContent: true, replaceH5pJson: true });
+          packageInfo.missingLibraries = computeMissingLibrariesForRoot(rootPath, h5pMeta);
         });
       }).catch(function () {
         return null;
@@ -4684,17 +4761,35 @@
         }
         return /^h5p\.[^/]+\//.test(path);
       });
-      if (hasLibraries) return;
-      embeddedRoots[(rootPath || '__root__').toLowerCase()] = rootPath;
+      embeddedRoots[(rootPath || '__root__').toLowerCase()] = {
+        rootPath: rootPath,
+        hasLibraries: hasLibraries
+      };
     });
 
     Object.keys(embeddedRoots).forEach(function (key) {
-      var rootPath = embeddedRoots[key] || '';
+      var rootInfo = embeddedRoots[key] || {};
+      var rootPath = rootInfo.rootPath || '';
       var h5pJsonPath = (rootPath ? rootPath + '/' : '') + 'h5p.json';
       var h5pJsonBlobFile = baseFilesByPath[h5pJsonPath.toLowerCase()];
       if (!h5pJsonBlobFile || !h5pJsonBlobFile.blob) return;
-      tasks.push(parseMainLibraryFromBlob(h5pJsonBlobFile.blob).then(function (mainLibrary) {
+      tasks.push(h5pJsonBlobFile.blob.arrayBuffer().then(function (buffer) {
+        var parsedMeta = parseMetaFromBytes(new Uint8Array(buffer));
+        var mainLibrary = String(parsedMeta && parsedMeta.mainLibrary ? parsedMeta.mainLibrary : '').trim();
         if (!mainLibrary) return;
+        var rootPrefix = rootPath ? (rootPath.toLowerCase() + '/') : '';
+        var rootRelativePaths = Object.keys(existingPaths).filter(function (path) {
+          if (!rootPrefix) return true;
+          if (path.indexOf(rootPrefix) !== 0) return false;
+          return true;
+        }).map(function (path) {
+          return rootPrefix ? path.slice(rootPrefix.length) : path;
+        });
+        var libraryMap = collectLibrariesFromPaths(rootRelativePaths);
+        var missingDeps = getMissingPreloadedDependencies(parsedMeta, libraryMap);
+        var missingMainLibrary = isMainLibraryMissing(parsedMeta, libraryMap);
+        var needsHydration = !rootInfo.hasLibraries || missingMainLibrary || missingDeps.length > 0;
+        if (!needsHydration) return;
         return fetchH5pLibraryBundle(mainLibrary).then(function (bundleEntries) {
           if (!bundleEntries) return;
           appendEntriesToRoot(bundleEntries, rootPath, { skipContent: true, replaceH5pJson: true });
