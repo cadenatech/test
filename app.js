@@ -1002,7 +1002,7 @@
     var lang = normalizeLang(currentLang);
     var map = {
       es: {
-        filesReady: 'Archivos listos: {count}.',
+        filesReady: 'Archivos encontrados: {count}.',
         typesDetected: 'Tipos detectados:',
         actionLabel: 'Acción:',
         actionZipLike: 'ZIP/ELPX/H5P detectado: puedes previsualizarlo y, si quieres, aplicar restricciones de visualización.',
@@ -1019,7 +1019,7 @@
         actionForcedFolder: 'Forzado visor de carpetas: se creará un ZIP con visor de carpetas.'
       },
       ca: {
-        filesReady: 'Fitxers a punt: {count}.',
+        filesReady: 'Fitxers trobats: {count}.',
         typesDetected: 'Tipus detectats:',
         actionLabel: 'Acció:',
         actionZipLike: 'S\'ha detectat ZIP/ELPX/H5P: el pots previsualitzar i, si vols, aplicar restriccions de visualització.',
@@ -1036,7 +1036,7 @@
         actionForcedFolder: 'Visor de carpetes forçat: es crearà un ZIP amb visor de carpetes.'
       },
       gl: {
-        filesReady: 'Ficheiros listos: {count}.',
+        filesReady: 'Ficheiros atopados: {count}.',
         typesDetected: 'Tipos detectados:',
         actionLabel: 'Acción:',
         actionZipLike: 'Detectouse ZIP/ELPX/H5P: podes previsualizalo e, se queres, aplicar restricións de visualización.',
@@ -1053,7 +1053,7 @@
         actionForcedFolder: 'Visor de cartafoles forzado: crearase un ZIP con visor de cartafoles.'
       },
       eu: {
-        filesReady: 'Fitxategiak prest: {count}.',
+        filesReady: 'Aurkitutako fitxategiak: {count}.',
         typesDetected: 'Detektatutako motak:',
         actionLabel: 'Ekintza:',
         actionZipLike: 'ZIP/ELPX/H5P detektatu da: aurrebista ikus dezakezu eta, nahi baduzu, bistaratze-murrizketak aplikatu.',
@@ -1070,7 +1070,7 @@
         actionForcedFolder: 'Karpeta bistaratzailea behartuta: karpeta bistaratzailea duen ZIP bat sortuko da.'
       },
       en: {
-        filesReady: 'Files ready: {count}.',
+        filesReady: 'Files found: {count}.',
         typesDetected: 'Detected types:',
         actionLabel: 'Action:',
         actionZipLike: 'ZIP/ELPX/H5P detected: you can preview it and, if you want, apply visibility restrictions.',
@@ -1087,7 +1087,7 @@
         actionForcedFolder: 'Forced folder viewer: a ZIP with folder viewer will be created.'
       },
       de: {
-        filesReady: 'Dateien bereit: {count}.',
+        filesReady: 'Dateien gefunden: {count}.',
         typesDetected: 'Erkannte Typen:',
         actionLabel: 'Aktion:',
         actionZipLike: 'ZIP/ELPX/H5P erkannt: Du kannst eine Vorschau öffnen und bei Bedarf Sichtbarkeitsbeschränkungen anwenden.',
@@ -1169,6 +1169,8 @@
     var typeCounts = collectSelectedFileTypeCounts(list);
     var typeSummary = Object.keys(typeCounts)
       .sort(function (a, b) {
+        if (a === 'OTROS' && b !== 'OTROS') return 1;
+        if (b === 'OTROS' && a !== 'OTROS') return -1;
         if (typeCounts[b] !== typeCounts[a]) return typeCounts[b] - typeCounts[a];
         return a.localeCompare(b);
       })

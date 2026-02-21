@@ -347,11 +347,11 @@
     if (!(get('restrictionAllowDownload') && get('restrictionAllowDownload').checked)) {
       blockedActions.push(t('settings.allowDownload') || 'Descargar');
     }
-    var blockedText = blockedActions.length
-      ? blockedActions.join(', ')
-      : (t('settings.summaryNoBlockedActions') || 'ninguna');
-    var blockedLineTpl = t('settings.summaryBlockedActions') || 'No se podrá: {actions}';
-    items.push(blockedLineTpl.replace('{actions}', blockedText));
+    if (blockedActions.length) {
+      var blockedText = blockedActions.join(', ');
+      var blockedLineTpl = t('settings.summaryBlockedActions') || 'No se podrá: {actions}';
+      items.push(blockedLineTpl.replace('{actions}', blockedText));
+    }
     if (!items.length) {
       var fallbackLine = document.createElement('span');
       fallbackLine.className = 'zipper-restrict-summary__item';

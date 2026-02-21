@@ -33,9 +33,9 @@
         restrictToggle: 'Limitar el acceso',
         startLabel: 'Inicio',
         endLabel: 'Fin',
-        neverExpires: 'Acceso con fecha de fin',
-        enforceEndDuringView: 'Desactivar la visualización al llegar a la fecha de fin, incluso si está abierto',
-        warningMinutesLabel: 'Avisar antes en minutos (0 para no avisar)',
+        neverExpires: 'Activar fecha de fin de visibilidad del recurso',
+        enforceEndDuringView: 'Desactivar la visualización del recurso al llegar a la fecha de fin mientras está abierto',
+        warningMinutesLabel: 'Aviso previo en minutos (0 para no avisar)',
         warningMessageLabel: 'Mensaje de aviso',
         warningMessagePlaceholder: 'El tiempo de acceso se agota en {minutes} minutos.',
         warningMessageDefault: 'El tiempo de acceso se agota en {minutes} minutos.',
@@ -49,11 +49,11 @@
         summaryWarningOn: 'Aviso: {minutes} min antes',
         summaryWarningOff: 'Sin aviso previo',
         summaryNoRestrictions: 'Recurso sin restricciones de visibilidad.',
-        summaryAllowedActions: 'Acciones del gestor de recursos: {actions}',
+        summaryAllowedActions: 'Acciones permitidas en el gestor de recursos: {actions}',
         summaryNoActions: 'ninguna',
         summaryBlockedActions: 'No se podrá: {actions}',
         summaryNoBlockedActions: 'ninguna',
-        actionsTitle: 'Acciones disponibles mientras el recurso sea accesible',
+        actionsTitle: 'Acciones disponibles mientras el recurso sea visible',
         allowShare: 'Compartir',
         allowEmbed: 'Insertar en web',
         allowDownload: 'Descargar'
@@ -99,7 +99,7 @@
           }
         },
         quick: {
-          intro: 'Para compartir tu recurso necesitas un ZIP, ELPX o H5P subido a la nube con enlace público. Si aún no lo tienes, aquí puedes generar el ZIP. Después súbelo a tu servicio en la nube y pega el enlace público en la sección inferior: Ya tengo un ZIP, ELPX o H5P en la nube.',
+          intro: 'Para compartir tu recurso necesitas un ZIP, ELPX o H5P subido a la nube con enlace público. Si aún no lo tienes, aquí puedes generar el ZIP.',
           files: {
             title: 'Sube tu recurso',
             dropTitle: 'Arrastra aquí la carpeta o los archivos',
@@ -265,7 +265,7 @@
         },
         status: {
           empty: 'No hay archivos seleccionados.',
-          filesReady: 'Archivos listos: {count}.',
+          filesReady: 'Archivos encontrados: {count}.',
           ready: 'Listo para crear el ZIP.',
           readyHint: 'Prepara el ZIP para obtener tu archivo.',
           selectFirst: 'Selecciona archivos o una carpeta primero.',
@@ -513,9 +513,9 @@
         restrictToggle: 'Limitar l’accés',
         startLabel: 'Inici',
         endLabel: 'Fi',
-        neverExpires: 'Accés amb data de fi',
-        enforceEndDuringView: 'Desactiva la visualització en arribar a la data de fi, encara que estiga obert',
-        warningMinutesLabel: 'Avisar abans en minuts (0 per no avisar)',
+        neverExpires: 'Activar data de fi de visibilitat del recurs',
+        enforceEndDuringView: 'Desactiva la visualització del recurs en arribar a la data de fi mentre està obert',
+        warningMinutesLabel: 'Avís previ en minuts (0 per no avisar)',
         warningMessageLabel: "Missatge d'avís",
         warningMessagePlaceholder: "El temps d'accés s'esgota en {minutes} minuts.",
         warningMessageDefault: "El temps d'accés s'esgota en {minutes} minuts.",
@@ -529,11 +529,11 @@
         summaryWarningOn: 'Avís: {minutes} min abans',
         summaryWarningOff: 'Sense avís previ',
         summaryNoRestrictions: 'Recurs sense restriccions de visibilitat.',
-        summaryAllowedActions: 'Accions del gestor de recursos: {actions}',
+        summaryAllowedActions: 'Accions permeses al gestor de recursos: {actions}',
         summaryNoActions: 'cap',
         summaryBlockedActions: 'No es podrà: {actions}',
         summaryNoBlockedActions: 'cap',
-        actionsTitle: 'Accions disponibles mentre el recurs sigui accessible',
+        actionsTitle: 'Accions disponibles mentre el recurs sigui visible',
         allowShare: 'Compartir',
         allowEmbed: 'Inserir en web',
         allowDownload: 'Descarregar'
@@ -579,7 +579,7 @@
           }
         },
         quick: {
-          intro: 'Per compartir el teu recurs necessites un ZIP, ELPX o H5P al núvol amb enllaç públic. Si encara no el tens, aquí pots generar el ZIP a partir de la carpeta, fitxers o HTML. Després puja’l al teu servei al núvol i enganxa l’enllaç públic a la secció inferior: Ja tinc un ZIP, ELPX o H5P al núvol.',
+          intro: 'Per compartir el teu recurs necessites un ZIP, ELPX o H5P al núvol amb enllaç públic. Si encara no el tens, aquí pots generar el ZIP a partir de la carpeta, fitxers o HTML.',
           files: {
             title: 'Puja carpeta o fitxers',
             dropTitle: 'Arrossega aquí la carpeta o els fitxers',
@@ -742,7 +742,7 @@
         },
         status: {
           empty: 'No hi ha fitxers seleccionats.',
-          filesReady: 'Fitxers llestos: {count}.',
+          filesReady: 'Fitxers trobats: {count}.',
           ready: 'A punt per crear el ZIP.',
           readyHint: 'Prepara el ZIP per obtenir el teu fitxer.',
           selectFirst: 'Selecciona fitxers o una carpeta primer.',
@@ -979,9 +979,9 @@
         restrictToggle: 'Limitar o acceso',
         startLabel: 'Inicio',
         endLabel: 'Fin',
-        neverExpires: 'Acceso con data de fin',
-        enforceEndDuringView: 'Desactivar a visualización ao chegar á data de fin, mesmo se está aberto',
-        warningMinutesLabel: 'Avisar antes en minutos (0 para non avisar)',
+        neverExpires: 'Activar data de fin de visibilidade do recurso',
+        enforceEndDuringView: 'Desactivar a visualización do recurso ao chegar á data de fin mentres está aberto',
+        warningMinutesLabel: 'Aviso previo en minutos (0 para non avisar)',
         warningMessageLabel: 'Mensaxe de aviso',
         warningMessagePlaceholder: 'O tempo de acceso esgótase en {minutes} minutos.',
         warningMessageDefault: 'O tempo de acceso esgótase en {minutes} minutos.',
@@ -995,11 +995,11 @@
         summaryWarningOn: 'Aviso: {minutes} min antes',
         summaryWarningOff: 'Sen aviso previo',
         summaryNoRestrictions: 'Recurso sen restricións de visibilidade.',
-        summaryAllowedActions: 'Accións do xestor de recursos: {actions}',
+        summaryAllowedActions: 'Accións permitidas no xestor de recursos: {actions}',
         summaryNoActions: 'ningunha',
         summaryBlockedActions: 'Non se poderá: {actions}',
         summaryNoBlockedActions: 'ningunha',
-        actionsTitle: 'Accións dispoñibles mentres o recurso sexa accesible',
+        actionsTitle: 'Accións dispoñibles mentres o recurso sexa visible',
         allowShare: 'Compartir',
         allowEmbed: 'Inserir nunha web',
         allowDownload: 'Descargar'
@@ -1045,7 +1045,7 @@
           }
         },
         quick: {
-          intro: 'Para compartir o teu recurso necesitas un ZIP, ELPX ou H5P subido á nube con ligazón pública. Se aínda non o tes, aquí podes xerar o ZIP a partir do teu cartafol, ficheiros ou HTML. Despois súbeo ao teu servizo na nube e pega a ligazón pública na sección inferior: Xa teño un ZIP, ELPX ou H5P na nube.',
+          intro: 'Para compartir o teu recurso necesitas un ZIP, ELPX ou H5P subido á nube con ligazón pública. Se aínda non o tes, aquí podes xerar o ZIP a partir do teu cartafol, ficheiros ou HTML.',
           files: {
             title: 'Sube cartafol ou ficheiros',
             dropTitle: 'Arrastra aquí o cartafol ou os ficheiros',
@@ -1208,7 +1208,7 @@
         },
         status: {
           empty: 'Non hai ficheiros seleccionados.',
-          filesReady: 'Ficheiros listos: {count}.',
+          filesReady: 'Ficheiros atopados: {count}.',
           ready: 'Listo para crear o ZIP.',
           readyHint: 'Prepara o ZIP para obter o teu ficheiro.',
           selectFirst: 'Selecciona ficheiros ou un cartafol primeiro.',
@@ -1445,9 +1445,9 @@
         restrictToggle: 'Sarbidea mugatu',
         startLabel: 'Hasiera',
         endLabel: 'Amaiera',
-        neverExpires: 'Amaiera-datarekin sarbidea',
-        enforceEndDuringView: 'Bistaratzea desaktibatu amaiera-datara iristean, irekita badago ere',
-        warningMinutesLabel: 'Abisatu lehenago minutuetan (0 abisurik ez)',
+        neverExpires: 'Aktibatu baliabidearen ikusgarritasunaren amaiera-data',
+        enforceEndDuringView: 'Baliabidearen bistaratzea desaktibatu amaiera-datara iristean irekita dagoen bitartean',
+        warningMinutesLabel: 'Aurreko abisua minututan (0 abisurik ez)',
         warningMessageLabel: 'Abisu mezua',
         warningMessagePlaceholder: 'Sarbide-denbora {minutes} minututan amaituko da.',
         warningMessageDefault: 'Sarbide-denbora {minutes} minututan amaituko da.',
@@ -1461,11 +1461,11 @@
         summaryWarningOn: 'Abisua: {minutes} min lehenago',
         summaryWarningOff: 'Ez dago aurretiazko abisurik',
         summaryNoRestrictions: 'Baliabidea ikusgarritasun-murrizketarik gabe.',
-        summaryAllowedActions: 'Baliabideen kudeatzaileko ekintzak: {actions}',
+        summaryAllowedActions: 'Baimendutako ekintzak baliabideen kudeatzailean: {actions}',
         summaryNoActions: 'bat ere ez',
         summaryBlockedActions: 'Ezin izango da: {actions}',
         summaryNoBlockedActions: 'bat ere ez',
-        actionsTitle: 'Ekintzak baliabidea eskuragarri dagoen bitartean',
+        actionsTitle: 'Ekintzak baliabidea ikusgai dagoen bitartean',
         allowShare: 'Partekatu',
         allowEmbed: 'Web batean txertatu',
         allowDownload: 'Deskargatu'
@@ -1511,7 +1511,7 @@
           }
         },
         quick: {
-          intro: 'Zure baliabidea partekatzeko ZIP, ELPX edo H5P fitxategi bat behar duzu hodeian, esteka publikoarekin. Oraindik ez baduzu, hemen ZIPa sor dezakezu karpetatik, fitxategietatik edo HTMLtik abiatuta. Gero igo ezazu zure hodeiko zerbitzura eta itsatsi esteka publikoa beheko atalean: ZIP, ELPX edo H5P bat hodeian daukat.',
+          intro: 'Zure baliabidea partekatzeko ZIP, ELPX edo H5P fitxategi bat behar duzu hodeian, esteka publikoarekin. Oraindik ez baduzu, hemen ZIPa sor dezakezu karpetatik, fitxategietatik edo HTMLtik abiatuta.',
           files: {
             title: 'Igo karpeta edo fitxategiak',
             dropTitle: 'Arrastatu hona karpeta edo fitxategiak',
@@ -1674,7 +1674,7 @@
         },
         status: {
           empty: 'Ez dago hautatutako fitxategirik.',
-          filesReady: 'Prest dauden fitxategiak: {count}.',
+          filesReady: 'Aurkitutako fitxategiak: {count}.',
           ready: 'ZIPa sortzeko prest.',
           readyHint: 'Prestatu ZIPa zure fitxategia eskuratzeko.',
           selectFirst: 'Aukeratu fitxategiak edo karpeta bat lehenik.',
@@ -1911,9 +1911,9 @@
         restrictToggle: 'Limit access',
         startLabel: 'Start',
         endLabel: 'End',
-        neverExpires: 'Access with end date',
-        enforceEndDuringView: 'Disable viewing when end date is reached, even if it is already open',
-        warningMinutesLabel: 'Warn before in minutes (0 for no warning)',
+        neverExpires: 'Enable resource visibility end date',
+        enforceEndDuringView: 'Disable resource viewing when the end date is reached while it is open',
+        warningMinutesLabel: 'Prior warning in minutes (0 for no warning)',
         warningMessageLabel: 'Warning message',
         warningMessagePlaceholder: 'Access time will end in {minutes} minutes.',
         warningMessageDefault: 'Access time will end in {minutes} minutes.',
@@ -1927,11 +1927,11 @@
         summaryWarningOn: 'Warning: {minutes} min before',
         summaryWarningOff: 'No prior warning',
         summaryNoRestrictions: 'Resource without visibility restrictions.',
-        summaryAllowedActions: 'Resource manager actions: {actions}',
+        summaryAllowedActions: 'Allowed actions in the resource manager: {actions}',
         summaryNoActions: 'none',
         summaryBlockedActions: 'Will not be allowed: {actions}',
         summaryNoBlockedActions: 'none',
-        actionsTitle: 'Actions available while the resource is accessible',
+        actionsTitle: 'Actions available while the resource is visible',
         allowShare: 'Share',
         allowEmbed: 'Embed',
         allowDownload: 'Download'
@@ -1977,7 +1977,7 @@
           }
         },
         quick: {
-          intro: 'To share your resource, you need a ZIP, ELPX, or H5P file uploaded to cloud storage with a public link. If you do not have it yet, you can generate the ZIP here from your folder, files, or HTML. Then upload it to your cloud service and paste the public link in the lower section: I already have a ZIP, ELPX, or H5P in the cloud.',
+          intro: 'To share your resource, you need a ZIP, ELPX, or H5P file uploaded to cloud storage with a public link. If you do not have it yet, you can generate the ZIP here from your folder, files, or HTML.',
           files: {
             title: 'Upload folder or files',
             dropTitle: 'Drag the folder or files here',
@@ -2140,7 +2140,7 @@
         },
         status: {
           empty: 'No files selected.',
-          filesReady: 'Files ready: {count}.',
+          filesReady: 'Files found: {count}.',
           ready: 'Ready to create the ZIP.',
           readyHint: 'Prepare the ZIP to get your file.',
           selectFirst: 'Select files or a folder first.',
@@ -2378,9 +2378,9 @@
         restrictToggle: 'Zugriff begrenzen',
         startLabel: 'Start',
         endLabel: 'Ende',
-        neverExpires: 'Zugriff mit Enddatum',
-        enforceEndDuringView: 'Anzeige beim Erreichen des Enddatums deaktivieren, auch wenn bereits geöffnet',
-        warningMinutesLabel: 'Vorwarnung in Minuten (0 fuer keine Warnung)',
+        neverExpires: 'Enddatum der Sichtbarkeit der Ressource aktivieren',
+        enforceEndDuringView: 'Die Anzeige der Ressource beim Erreichen des Enddatums deaktivieren, waehrend sie geoeffnet ist',
+        warningMinutesLabel: 'Vorabwarnung in Minuten (0 fuer keine Warnung)',
         warningMessageLabel: 'Warnhinweis',
         warningMessagePlaceholder: 'Die Zugriffszeit endet in {minutes} Minuten.',
         warningMessageDefault: 'Die Zugriffszeit endet in {minutes} Minuten.',
@@ -2394,11 +2394,11 @@
         summaryWarningOn: 'Warnung: {minutes} Min vorher',
         summaryWarningOff: 'Keine Vorwarnung',
         summaryNoRestrictions: 'Ressource ohne Sichtbarkeitsbeschraenkungen.',
-        summaryAllowedActions: 'Aktionen des Ressourcenmanagers: {actions}',
+        summaryAllowedActions: 'Erlaubte Aktionen im Ressourcenmanager: {actions}',
         summaryNoActions: 'keine',
         summaryBlockedActions: 'Nicht erlaubt: {actions}',
         summaryNoBlockedActions: 'keine',
-        actionsTitle: 'Aktionen, solange die Ressource zugänglich ist',
+        actionsTitle: 'Aktionen, solange die Ressource sichtbar ist',
         allowShare: 'Teilen',
         allowEmbed: 'Einbetten',
         allowDownload: 'Herunterladen'
@@ -2444,7 +2444,7 @@
           }
         },
         quick: {
-          intro: 'Um deine Ressource zu teilen, brauchst du eine ZIP-, ELPX- oder H5P-Datei in deiner Cloud mit öffentlichem Link. Wenn du sie noch nicht hast, kannst du hier eine ZIP aus Ordner, Dateien oder HTML erzeugen. Lade sie danach in deinen Cloud-Dienst hoch und füge den öffentlichen Link im unteren Bereich ein: Ich habe bereits eine ZIP-, ELPX- oder H5P-Datei in der Cloud.',
+          intro: 'Um deine Ressource zu teilen, brauchst du eine ZIP-, ELPX- oder H5P-Datei in deiner Cloud mit öffentlichem Link. Wenn du sie noch nicht hast, kannst du hier eine ZIP aus Ordner, Dateien oder HTML erzeugen.',
           files: {
             title: 'Ordner oder Dateien hochladen',
             dropTitle: 'Ordner oder Dateien hierher ziehen',
@@ -2607,7 +2607,7 @@
         },
         status: {
           empty: 'Keine Dateien ausgewählt.',
-          filesReady: 'Dateien bereit: {count}.',
+          filesReady: 'Dateien gefunden: {count}.',
           ready: 'Bereit zum Erstellen des ZIP.',
           readyHint: 'Bereite das ZIP vor, um deine Datei zu erhalten.',
           selectFirst: 'Wähle zuerst Dateien oder einen Ordner aus.',
