@@ -1798,7 +1798,10 @@
                   return Storage.saveSite(site).then(function () {
                     return Storage.saveFiles(prepared.files).then(function () {
                       currentPreviewSiteId = siteId;
-                      return buildSiteUrl(siteId, indexPath);
+                      return {
+                        siteUrl: buildSiteUrl(siteId, indexPath),
+                        restrictions: previewRestrictions || null
+                      };
                     });
                   });
                 });
@@ -1895,7 +1898,25 @@
       : (hasHtml
         ? buildPreviewFromHtml()
         : Promise.reject(new Error(t('zipper.status.previewSelectFirst'))));
-    return previewPromise.then(function (siteUrl) {
+    return previewPromise.then(function (previewData) {
+      var siteUrl = (previewData && typeof previewData === 'object' && previewData.siteUrl)
+        ? previewData.siteUrl
+        : previewData;
+      var previewRestrictions = (previewData && typeof previewData === 'object' && previewData.restrictions)
+        ? previewData.restrictions
+        : null;
+      var blockedNow = Restrictions.isRestrictionActive(previewRestrictions)
+        && !Restrictions.isRestrictionAllowedNow(previewRestrictions);
+      if (blockedNow) {
+        if (previewWindow && !previewWindow.closed) {
+          try {
+            previewWindow.close();
+          } catch (e) {}
+        }
+        RestrictionUI.showRestrictionModal(previewRestrictions);
+        setPreviewStatus(t('error.restricted'));
+        return siteUrl;
+      }
       return registerServiceWorker().then(function () {
         return waitForServiceWorkerControl();
       }).catch(function () {

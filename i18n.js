@@ -92,7 +92,7 @@
           },
           main: {
             title: 'Ya tengo un ZIP, ELPX o H5P en la nube',
-            note: 'Pega el enlace público (ZIP/ELPX/H5P) y crea el enlace del visor.',
+            note: 'Pega el enlace público y crea el enlace del visor.',
             secondaryHtml: 'Si usas .elpx de eXeLearning, también puedes abrirlo aquí <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="¿Qué es ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Un archivo .elpx es un proyecto de eXeLearning que internamente utiliza el formato ZIP, lo que permite que el visor acceda a su contenido y lo muestre correctamente.</span></span>',
             elpxTooltip: '¿Qué es ELPX?',
             elpxTooltipHtml: 'Un archivo .elpx es un proyecto de eXeLearning que internamente utiliza el formato ZIP, lo que permite que el visor acceda a su contenido y lo muestre correctamente.'
@@ -572,7 +572,7 @@
           },
           main: {
             title: 'Ja tinc un ZIP, ELPX o H5P al núvol amb enllaç',
-            note: 'Enganxa l’enllaç públic (ZIP/ELPX/H5P) i crea l’enllaç del visor.',
+            note: 'Enganxa l’enllaç públic i crea l’enllaç del visor.',
             secondaryHtml: 'Si uses .elpx d’eXeLearning, també el pots obrir aquí <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="Què és ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Un fitxer .elpx és un projecte d’eXeLearning que internament utilitza el format ZIP, cosa que permet al visor accedir al contingut i mostrar-lo correctament.</span></span>',
             elpxTooltip: 'Què és ELPX?',
             elpxTooltipHtml: 'Un fitxer .elpx és un projecte d’eXeLearning que internament utilitza el format ZIP, cosa que permet al visor accedir al contingut i mostrar-lo correctament.'
@@ -1038,7 +1038,7 @@
           },
           main: {
             title: 'Xa teño un ZIP, ELPX ou H5P na nube con ligazón',
-            note: 'Pega a ligazón pública (ZIP/ELPX/H5P) e crea a ligazón do visor.',
+            note: 'Pega a ligazón pública e crea a ligazón do visor.',
             secondaryHtml: 'Se usas .elpx de eXeLearning, tamén o podes abrir aquí <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="Que é ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Un ficheiro .elpx é un proxecto de eXeLearning que internamente utiliza o formato ZIP, o que permite que o visor acceda ao seu contido e o mostre correctamente.</span></span>',
             elpxTooltip: 'Que é ELPX?',
             elpxTooltipHtml: 'Un ficheiro .elpx é un proxecto de eXeLearning que internamente utiliza o formato ZIP, o que permite que o visor acceda ao seu contido e o mostre correctamente.'
@@ -1504,7 +1504,7 @@
           },
           main: {
             title: 'ZIP bat hodeian daukat estekarekin',
-            note: 'Itsatsi esteka publikoa (ZIP/ELPX/H5P) eta sortu bisorearen esteka.',
+            note: 'Itsatsi esteka publikoa eta sortu bisorearen esteka.',
             secondaryHtml: 'eXeLearning-eko .elpx erabiltzen baduzu, hemen ere ireki dezakezu <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="Zer da ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">.elpx fitxategia eXeLearning-eko proiektu bat da, eta barnean ZIP formatua erabiltzen du; horri esker, bisoreak edukira sartu eta behar bezala bistaratu dezake.</span></span>',
             elpxTooltip: 'Zer da ELPX?',
             elpxTooltipHtml: '.elpx fitxategia eXeLearning-eko proiektu bat da, eta barnean ZIP formatua erabiltzen du; horri esker, bisoreak edukira sartu eta behar bezala bistaratu dezake.'
@@ -1970,7 +1970,7 @@
           },
           main: {
             title: 'I already have a ZIP, ELPX, or H5P in the cloud with link',
-            note: 'Paste the public link (ZIP/ELPX/H5P) and create the viewer link.',
+            note: 'Paste the public link and create the viewer link.',
             secondaryHtml: 'If you use an eXeLearning .elpx, you can open it here too <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="What is ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">An .elpx file is an eXeLearning project that internally uses the ZIP format, which allows the viewer to access its content and display it correctly.</span></span>',
             elpxTooltip: 'What is ELPX?',
             elpxTooltipHtml: 'An .elpx file is an eXeLearning project that internally uses the ZIP format, which allows the viewer to access its content and display it correctly.'
@@ -2437,7 +2437,7 @@
           },
           main: {
             title: 'Ich habe bereits eine ZIP-, ELPX- oder H5P-Datei in der Cloud mit Link',
-            note: 'Füge den öffentlichen Link (ZIP/ELPX/H5P) ein und erstelle den Viewer-Link.',
+            note: 'Füge den öffentlichen Link ein und erstelle den Viewer-Link.',
             secondaryHtml: 'Wenn du eine eXeLearning-.elpx nutzt, kannst du sie hier ebenfalls öffnen <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="Was ist ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Eine .elpx-Datei ist ein eXeLearning-Projekt, das intern das ZIP-Format verwendet. Dadurch kann der Viewer auf den Inhalt zugreifen und ihn korrekt anzeigen.</span></span>',
             elpxTooltip: 'Was ist ELPX?',
             elpxTooltipHtml: 'Eine .elpx-Datei ist ein eXeLearning-Projekt, das intern das ZIP-Format verwendet. Dadurch kann der Viewer auf den Inhalt zugreifen und ihn korrekt anzeigen.'
