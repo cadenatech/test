@@ -1414,6 +1414,27 @@ textarea:focus-visible {
   margin-bottom: 10px;
 }
 
+.publish-choice-card--upload {
+  padding: 18px;
+}
+
+.publish-choice-card--upload .publish-quick-actions {
+  grid-column: 1 / -1;
+}
+
+.publish-choice-card--upload .publish-choice-card__header,
+.publish-choice-card--upload .publish-section-divider,
+.publish-choice-card--upload .publish-download-panel {
+  grid-column: 1 / -1;
+}
+
+.publish-section-divider {
+  border: 0;
+  height: 1px;
+  margin: 8px 0;
+  background: var(--border);
+}
+
 .publish-link-reset {
   grid-column: 1 / -1;
   display: flex;
@@ -1629,18 +1650,19 @@ textarea:focus-visible {
 /* ③ Panel de descarga (aparece al cargar contenido) */
 .publish-download-panel {
   margin-top: 0;
-  border-radius: 16px;
-  background: linear-gradient(180deg, #eef5ff 0%, #f4f9ff 100%);
-  border: 1px solid #d6e6fb;
-  padding: 14px;
+  border-radius: 0;
+  background: transparent;
+  border: 0;
+  padding: 0;
   display: grid;
-  gap: 10px;
+  gap: 12px;
 }
 
 .publish-download-panel > .upload-status {
   margin: 0;
   font-size: 0.92rem;
   color: var(--ink-muted);
+  padding: 0 10px;
 }
 
 .upload-status--summary {
@@ -1745,8 +1767,8 @@ textarea:focus-visible {
 }
 
 :root[data-theme="dark"] .publish-download-panel {
-  background: linear-gradient(180deg, #162742 0%, #1a2e4f 100%);
-  border-color: #2a4070;
+  background: transparent;
+  border-color: transparent;
 }
 
 :root[data-theme="dark"] .publish-download-panel .zip-preview-action,
@@ -1781,6 +1803,22 @@ textarea:focus-visible {
   flex-shrink: 0;
   align-self: center;
   white-space: nowrap;
+}
+
+.publish-quick-reset {
+  background: transparent;
+  border-color: rgba(148, 163, 184, 0.55);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.publish-quick-reset:hover {
+  border-color: rgba(37, 99, 235, 0.4);
+  background: var(--accent-wash);
+}
+
+:root[data-theme="dark"] .publish-quick-reset {
+  border-color: rgba(148, 163, 184, 0.35);
 }
 
 .publish-quick-restrict-info {

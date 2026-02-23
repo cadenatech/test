@@ -136,6 +136,7 @@
   var restrictionCountdown = document.querySelector('[data-restrict-countdown]');
   var appVersionNode = document.querySelector('[data-app-version]');
   var downloadPanel = document.querySelector('[data-download-panel]');
+  var downloadDivider = document.querySelector('[data-download-divider]');
   var UI = window.UI || {};
   var Downloads = window.Downloads || {};
   var Zipper = window.Zipper || {};
@@ -1434,6 +1435,13 @@
         downloadPanel.removeAttribute('hidden');
       } else {
         downloadPanel.setAttribute('hidden', '');
+      }
+    }
+    if (downloadDivider) {
+      if (shouldShow) {
+        downloadDivider.removeAttribute('hidden');
+      } else {
+        downloadDivider.setAttribute('hidden', '');
       }
     }
     if (tabZipperButton) {

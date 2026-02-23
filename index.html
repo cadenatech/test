@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;600;800&family=Spectral:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=37">
+  <link rel="stylesheet" href="styles.css?v=38">
 </head>
 <body>
 
@@ -167,96 +167,101 @@
 
           <!-- Área de carga -->
           <div class="publish-quick-upload-area">
-            <div class="flow-title flow-title--primary">
-              <span class="flow-badge">1</span>
-              <span class="flow-title__text" data-i18n="publish.flow.uploadTitle">Cargar recurso</span>
-            </div>
-            <section class="publish-quick-actions" aria-label="Acciones rápidas">
-            <div class="publish-quick-card">
-              <h3 class="publish-quick-card__title" data-i18n="publish.quick.files.title">Cargar archivos o carpetas</h3>
-              <div class="dropzone dropzone--quick" data-quick-dropzone>
-                <div class="dropzone__title" data-i18n="publish.quick.files.dropTitle">Arrastra aquí la carpeta o los archivos</div>
-                <div class="dropzone__actions">
-                  <button class="ghost-button" type="button" data-quick-folder-button data-i18n="publish.quick.files.folder">Elegir carpeta</button>
-                  <button class="ghost-button" type="button" data-quick-file-button data-i18n="publish.quick.files.files">Elegir archivos</button>
-                  <input type="file" data-quick-folder-input webkitdirectory multiple hidden>
-                  <input type="file" data-quick-file-input multiple hidden>
+            <section class="publish-choice-card publish-choice-card--link publish-choice-card--upload" aria-labelledby="publish-upload-title">
+              <div class="publish-choice-card__header">
+                <div class="flow-title flow-title--primary">
+                  <span class="flow-badge">1</span>
+                  <span id="publish-upload-title" class="flow-title__text" data-i18n="publish.flow.uploadTitle">Cargar recurso</span>
                 </div>
               </div>
-            </div>
-            <div class="publish-quick-card">
-              <h3 class="publish-quick-card__title" data-i18n="publish.quick.html.title">¿Tienes código HTML? Pégalo aquí</h3>
-              <textarea class="html-zip-textarea publish-quick-html" data-quick-html-input data-i18n-placeholder="publish.quick.html.placeholder" placeholder="&lt;!doctype html&gt;..."></textarea>
-            </div>
-          </section>
-          </div>
+              <div class="publish-quick-actions" role="group" aria-label="Acciones rápidas">
+                <div class="publish-quick-card">
+                  <h3 class="publish-quick-card__title" data-i18n="publish.quick.files.title">Cargar archivos o carpetas</h3>
+                  <div class="dropzone dropzone--quick" data-quick-dropzone>
+                    <div class="dropzone__title" data-i18n="publish.quick.files.dropTitle">Arrastra aquí la carpeta o los archivos</div>
+                    <div class="dropzone__actions">
+                      <button class="ghost-button" type="button" data-quick-folder-button data-i18n="publish.quick.files.folder">Elegir carpeta</button>
+                      <button class="ghost-button" type="button" data-quick-file-button data-i18n="publish.quick.files.files">Elegir archivos</button>
+                      <input type="file" data-quick-folder-input webkitdirectory multiple hidden>
+                      <input type="file" data-quick-file-input multiple hidden>
+                    </div>
+                  </div>
+                </div>
+                <div class="publish-quick-card">
+                  <h3 class="publish-quick-card__title" data-i18n="publish.quick.html.title">¿Tienes código HTML? Pégalo aquí</h3>
+                  <textarea class="html-zip-textarea publish-quick-html" data-quick-html-input data-i18n-placeholder="publish.quick.html.placeholder" placeholder="&lt;!doctype html&gt;..."></textarea>
+                </div>
+              </div>
+              <hr class="publish-section-divider" data-download-divider hidden>
 
-          <!-- Panel de descarga (aparece al cargar contenido) -->
-          <div class="publish-download-panel" data-download-panel hidden>
-            <div class="upload-status upload-status--summary" data-upload-status data-i18n="zipper.status.empty" data-i18n-dynamic>No hay archivos seleccionados.</div>
-            <div class="publish-download-layout">
-              <div class="publish-options">
-                <div class="publish-config-panel">
-                  <div class="publish-config-row publish-config-row--title">
-                    <label class="publish-config-label" for="resource-title-input" data-i18n="zipper.resourceTitle.label" data-i18n-title="zipper.resourceTitle.placeholder">Título del recurso</label>
-                    <input id="resource-title-input" class="zip-title-input publish-config-title-input" type="text" data-resource-title data-i18n-placeholder="zipper.resourceTitle.placeholder" data-i18n-title="zipper.resourceTitle.placeholder" placeholder="Mi recurso" autocomplete="off">
-                  </div>
-                  <div class="publish-config-row">
-                    <div class="publish-config-row__main">
-                      <div class="zipper-force-folder-wrap">
-                        <label class="settings-check zipper-force-folder" for="force-folder-viewer-input" data-i18n-title="zipper.step2.forceFolderNote">
-                          <input id="force-folder-viewer-input" type="checkbox" data-force-folder-viewer>
-                          <span data-i18n="zipper.step2.forceFolderLabel">Forzar visor de carpetas</span>
-                        </label>
-                        <p class="zipper-force-folder__inline-note" data-force-folder-note data-i18n="zipper.step2.forceFolderNote" hidden>El recurso se abrirá en modo explorador de archivos con el contenido como archivos organizados en carpetas</p>
+              <!-- Panel de descarga (aparece al cargar contenido) -->
+              <div class="publish-download-panel" data-download-panel hidden>
+                <div class="upload-status upload-status--summary" data-upload-status data-i18n="zipper.status.empty" data-i18n-dynamic>No hay archivos seleccionados.</div>
+                <div class="publish-download-layout">
+                  <div class="publish-options">
+                    <div class="publish-config-panel">
+                      <div class="publish-config-row publish-config-row--title">
+                        <label class="publish-config-label" for="resource-title-input" data-i18n="zipper.resourceTitle.label" data-i18n-title="zipper.resourceTitle.placeholder">Título del recurso</label>
+                        <input id="resource-title-input" class="zip-title-input publish-config-title-input" type="text" data-resource-title data-i18n-placeholder="zipper.resourceTitle.placeholder" data-i18n-title="zipper.resourceTitle.placeholder" placeholder="Mi recurso" autocomplete="off">
+                      </div>
+                      <div class="publish-config-row">
+                        <div class="publish-config-row__main">
+                          <div class="zipper-force-folder-wrap">
+                            <label class="settings-check zipper-force-folder" for="force-folder-viewer-input" data-i18n-title="zipper.step2.forceFolderNote">
+                              <input id="force-folder-viewer-input" type="checkbox" data-force-folder-viewer>
+                              <span data-i18n="zipper.step2.forceFolderLabel">Forzar visor de carpetas</span>
+                            </label>
+                            <p class="zipper-force-folder__inline-note" data-force-folder-note data-i18n="zipper.step2.forceFolderNote" hidden>El recurso se abrirá en modo explorador de archivos con el contenido como archivos organizados en carpetas</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="publish-config-row publish-config-row--availability">
+                        <div class="publish-config-row__main">
+                          <label class="settings-check zipper-option-toggle" for="restrict-toggle-proxy" data-i18n-title="zipper.options.availabilityInfo">
+                            <input id="restrict-toggle-proxy" type="checkbox" data-restrict-toggle-proxy>
+                            <span data-i18n="zipper.options.availabilityLabel">Configurar la disponibilidad del recurso</span>
+                          </label>
+                          <div class="zipper-restrict-summary" data-restrict-summary hidden>
+                            <span class="zipper-restrict-summary__label" data-restrict-summary-label data-i18n="zipper.restrict.summaryTitle">Acceso limitado por fechas</span>
+                            <div class="zipper-restrict-summary__items" data-restrict-summary-items></div>
+                          </div>
+                          <button class="ghost-button ghost-button--small publish-config-edit-btn" type="button" data-main-settings-open data-restrict-edit-button data-i18n="zipper.options.availabilityEdit" hidden>Cambiar configuración</button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div class="publish-config-row publish-config-row--availability">
-                    <div class="publish-config-row__main">
-                      <label class="settings-check zipper-option-toggle" for="restrict-toggle-proxy" data-i18n-title="zipper.options.availabilityInfo">
-                        <input id="restrict-toggle-proxy" type="checkbox" data-restrict-toggle-proxy>
-                        <span data-i18n="zipper.options.availabilityLabel">Configurar la disponibilidad del recurso</span>
+                  <div class="publish-actions">
+                    <div class="zip-preview-action">
+                      <label class="settings-check settings-check--preview" for="preview-apply-restrictions-input" data-i18n-title="zipper.help.previewApplyRestrictionsNote">
+                        <input id="preview-apply-restrictions-input" type="checkbox" data-preview-apply-restrictions>
+                        <span data-i18n="zipper.help.previewApplyRestrictions">Aplicar restricciones en la previsualización</span>
                       </label>
-                      <div class="zipper-restrict-summary" data-restrict-summary hidden>
-                        <span class="zipper-restrict-summary__label" data-restrict-summary-label data-i18n="zipper.restrict.summaryTitle">Acceso limitado por fechas</span>
-                        <div class="zipper-restrict-summary__items" data-restrict-summary-items></div>
+                      <div class="upload-actions">
+                        <button class="ghost-button" type="button" data-preview-resource data-i18n="zipper.help.previewAction" data-i18n-title="zipper.help.previewApplyRestrictionsNote">Previsualizar</button>
                       </div>
-                      <button class="ghost-button ghost-button--small publish-config-edit-btn" type="button" data-main-settings-open data-restrict-edit-button data-i18n="zipper.options.availabilityEdit" hidden>Cambiar configuración</button>
+                      <p class="upload-status" data-preview-status></p>
+                    </div>
+                    <div class="zip-download-action">
+                      <h3 class="publish-download-title" data-zip-download-title data-i18n="zipper.step2.title">Descarga el ZIP</h3>
+                      <div class="upload-actions">
+                        <button type="button" data-build-zip data-i18n="zipper.build" data-i18n-title="zipper.step2.detail">Crear y descargar ZIP</button>
+                      </div>
+                      <p class="upload-status" data-zip-status data-i18n-dynamic></p>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="publish-actions">
-                <div class="zip-preview-action">
-                  <label class="settings-check settings-check--preview" for="preview-apply-restrictions-input" data-i18n-title="zipper.help.previewApplyRestrictionsNote">
-                    <input id="preview-apply-restrictions-input" type="checkbox" data-preview-apply-restrictions>
-                    <span data-i18n="zipper.help.previewApplyRestrictions">Aplicar restricciones en la previsualización</span>
-                  </label>
-                  <div class="upload-actions">
-                    <button class="ghost-button" type="button" data-preview-resource data-i18n="zipper.help.previewAction" data-i18n-title="zipper.help.previewApplyRestrictionsNote">Previsualizar</button>
+                <div class="update-banner" data-update-banner hidden>
+                  <div class="update-banner__content">
+                    <strong data-i18n="updates.title">Nueva versión disponible</strong>
+                    <span data-i18n="updates.body">El recurso ha cambiado en la nube. Puedes actualizarlo ahora.</span>
                   </div>
-                  <p class="upload-status" data-preview-status></p>
-                </div>
-                <div class="zip-download-action">
-                  <h3 class="publish-download-title" data-zip-download-title data-i18n="zipper.step2.title">Descarga el ZIP</h3>
-                  <div class="upload-actions">
-                    <button type="button" data-build-zip data-i18n="zipper.build" data-i18n-title="zipper.step2.detail">Crear y descargar ZIP</button>
+                  <div class="update-banner__actions">
+                    <button type="button" data-update-action data-i18n="updates.action">Actualizar</button>
+                    <button type="button" class="ghost-button" data-update-dismiss data-i18n="updates.dismiss">Ahora no</button>
                   </div>
-                  <p class="upload-status" data-zip-status data-i18n-dynamic></p>
                 </div>
               </div>
-            </div>
-            <div class="update-banner" data-update-banner hidden>
-              <div class="update-banner__content">
-                <strong data-i18n="updates.title">Nueva versión disponible</strong>
-                <span data-i18n="updates.body">El recurso ha cambiado en la nube. Puedes actualizarlo ahora.</span>
-              </div>
-              <div class="update-banner__actions">
-                <button type="button" data-update-action data-i18n="updates.action">Actualizar</button>
-                <button type="button" class="ghost-button" data-update-dismiss data-i18n="updates.dismiss">Ahora no</button>
-              </div>
-            </div>
+            </section>
           </div>
           <div class="publish-choice-main">
             <section class="publish-choice-card publish-choice-card--link" id="ya-tengo-zip-elpx" aria-labelledby="main-link-title">
@@ -626,7 +631,7 @@
     <footer class="site-footer">
       <a class="footer-link" href="https://bilateria.org" target="_blank" rel="noopener">(c) 2026 Juan Jose de Haro</a>
       <span class="footer-sep">·</span>
-    <span class="footer-link" data-app-version>v3.4.2</span>
+    <span class="footer-link" data-app-version>v3.4.3</span>
       <span class="footer-sep">·</span>
       <a class="footer-link" href="https://github.com/visor-webzip/visor-webzip.github.io" target="_blank" rel="noopener">
         <svg class="footer-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
@@ -653,7 +658,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/fflate@0.8.2/umd/index.js"></script>
   <script src="config.js"></script>
-			  <script src="i18n.js?v=38"></script>
+		  <script src="i18n.js?v=39"></script>
 	  <script src="restrictions.js?v=5"></script>
 	  <script src="ui.js?v=2"></script>
 	  <script src="downloads.js?v=2"></script>
@@ -664,6 +669,6 @@
 		  <script src="restriction-ui.js?v=14"></script>
 			  <script src="share.js?v=4"></script>
 	  <script src="nav.js?v=3"></script>
-			  <script src="app.js?v=81"></script>
+			  <script src="app.js?v=82"></script>
  </body>
  </html>
