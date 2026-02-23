@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;600;800&family=Spectral:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=30">
+  <link rel="stylesheet" href="styles.css?v=31">
 </head>
 <body>
 
@@ -28,7 +28,7 @@
         <img class="app-mark" src="favicon.svg" alt="" aria-hidden="true">
         <div class="title-stack">
           <h1 data-i18n="header.title">Visor Web-ZIP</h1>
-          <p class="header-subtitle" data-i18n="header.subtitle">Genera un enlace web para compartir tu recurso (carpeta, archivos, HTML, ZIP o ELPX). Comparte el enlace y tu recurso podrá ser abierto directamente en cualquier navegador.</p>
+          <p class="header-subtitle" data-i18n="header.subtitle">Genera un enlace web para compartir tu recurso digital educativo. Comparte el enlace y tu recurso podrá ser abierto directamente en cualquier navegador.</p>
         </div>
         <div class="title-actions">
           <div class="lang-picker" data-i18n-tooltip="header.languageHint">
@@ -117,8 +117,16 @@
       >
       <div class="publish">
         <div class="manager-card" data-publish-choice>
-          <p class="publish-quick-intro" data-i18n="publish.quick.intro">Para compartir tu recurso necesitas un ZIP o ELPX subido a la nube con enlace público. Si aún no lo tienes, aquí puedes generar el ZIP.</p>
-          <section class="publish-quick-actions" aria-label="Acciones rápidas">
+          <p class="publish-quick-intro" data-i18n="publish.quick.intro">Crea el archivo para compartir: arrastra carpetas, archivos o pega el código HTML.</p>
+          <div class="publish-quick-upload-area">
+            <div class="publish-quick-bottom">
+              <label class="settings-check publish-quick-fast-download">
+                <input type="checkbox" data-quick-download>
+                <span><span data-i18n="publish.quick.fastDownload">Descarga rápida</span><span data-quick-download-extra hidden>: <span data-i18n="publish.quick.fastDownloadDetail">omite las opciones y descarga el recurso con las siguientes restricciones:</span> <span class="publish-quick-restrict-info" data-quick-restrict-info></span></span></span>
+              </label>
+              <button class="ghost-button ghost-button--small publish-quick-settings-btn" type="button" data-main-settings-open data-quick-download-extra hidden data-i18n="publish.quick.changeRestrictions">Cambiar restricciones</button>
+            </div>
+            <section class="publish-quick-actions" aria-label="Acciones rápidas">
             <div class="publish-quick-card">
               <h3 class="publish-quick-card__title" data-i18n="publish.quick.files.title">Sube tu recurso</h3>
               <div class="dropzone dropzone--quick" data-quick-dropzone>
@@ -132,13 +140,11 @@
               </div>
             </div>
             <div class="publish-quick-card">
-              <h3 class="publish-quick-card__title" data-i18n="publish.quick.html.title">¿Tienes código HTML? Pégalo aquí (para código generado por IA)</h3>
+              <h3 class="publish-quick-card__title" data-i18n="publish.quick.html.title">¿Tienes código HTML? Pégalo aquí</h3>
               <textarea class="html-zip-textarea publish-quick-html" data-quick-html-input data-i18n-placeholder="publish.quick.html.placeholder" placeholder="&lt;!doctype html&gt;..."></textarea>
-              <div class="publish-quick-html__actions">
-                <button class="ghost-button" type="button" data-quick-html-apply data-i18n="publish.quick.html.apply">Usar este HTML</button>
-              </div>
             </div>
           </section>
+          </div>
           <div class="publish-choice-main">
             <section class="publish-choice-card publish-choice-card--link" id="ya-tengo-zip-elpx" aria-labelledby="main-link-title">
               <span class="publish-choice-card__icon" aria-hidden="true">
@@ -504,26 +510,28 @@
           <button class="modal__close" type="button" data-main-settings-close data-i18n-aria-label="common.close">×</button>
         </div>
         <div class="modal__content">
-          <p class="setting-help" data-i18n="settings.restrictHint">No limites el acceso a no ser que tengas un buen motivo para hacerlo.</p>
           <label class="settings-check settings-check--primary">
             <input type="checkbox" data-restrict-toggle>
             <span data-i18n="settings.restrictToggle">Limitar el acceso</span>
           </label>
 
-          <div class="settings-grid settings-grid--dates" data-restrict-fields hidden>
-            <div class="settings-field">
-              <span class="stat-label" data-i18n="settings.startLabel">Inicio</span>
+          <div class="settings-dates-panel" data-restrict-fields hidden>
+            <div class="settings-panel__title--sub" data-i18n="settings.datesTitle">Periodo de visibilidad</div>
+            <label class="settings-check">
+              <input type="checkbox" data-restrict-has-start>
+              <span data-i18n="settings.hasStart">Activar fecha de inicio de visibilidad del recurso</span>
+            </label>
+            <div class="settings-date-input-wrap" data-restrict-start-wrap hidden>
               <input type="datetime-local" data-restrict-start>
             </div>
-            <div class="settings-field settings-field--end">
-              <span class="stat-label" data-i18n="settings.endLabel">Fin</span>
+            <label class="settings-check">
+              <input type="checkbox" data-restrict-no-end>
+              <span data-i18n="settings.neverExpires">Activar fecha de fin de visibilidad del recurso</span>
+            </label>
+            <div class="settings-date-input-wrap" data-restrict-end-wrap hidden>
               <input type="datetime-local" data-restrict-end>
             </div>
-            <div class="settings-end-options">
-              <label class="settings-check">
-                <input type="checkbox" data-restrict-no-end>
-                <span data-i18n="settings.neverExpires">Activar fecha de fin de visibilidad del recurso</span>
-              </label>
+            <div class="settings-end-options settings-end-options--inline" data-restrict-end-options hidden>
               <label class="settings-check" data-restrict-live-end-wrap hidden>
                 <input type="checkbox" data-restrict-live-end>
                 <span data-i18n="settings.enforceEndDuringView">Desactivar la visualización del recurso al llegar a la fecha de fin mientras está abierto</span>
@@ -539,12 +547,11 @@
                 </label>
               </div>
             </div>
-            <p class="setting-help setting-help--period" data-i18n="settings.periodHint" data-restrict-period-hint>El recurso solo será visible dentro de este intervalo.</p>
           </div>
 
           <div class="settings-actions-panel" data-restrict-actions-panel hidden>
-            <div class="settings-panel__title settings-panel__title--sub" data-restrict-actions-title data-i18n="settings.actionsTitle" hidden>Acciones permitidas</div>
-            <div class="settings-grid settings-actions" data-restrict-actions hidden>
+            <div class="settings-panel__title--sub" data-restrict-actions-title data-i18n="settings.actionsTitle">Acciones disponibles mientras el recurso sea visible</div>
+            <div class="settings-grid settings-actions" data-restrict-actions>
               <div class="settings-actions__group settings-actions__group--share">
                 <label class="settings-check">
                   <input type="checkbox" data-restrict-allow-share checked>
@@ -592,7 +599,7 @@
     <footer class="site-footer">
       <a class="footer-link" href="https://bilateria.org" target="_blank" rel="noopener">(c) 2026 Juan Jose de Haro</a>
       <span class="footer-sep">·</span>
-    <span class="footer-link" data-app-version>v3.2.3</span>
+    <span class="footer-link" data-app-version>v3.2.4</span>
       <span class="footer-sep">·</span>
       <a class="footer-link" href="https://github.com/visor-webzip/visor-webzip.github.io" target="_blank" rel="noopener">
         <svg class="footer-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
@@ -627,7 +634,7 @@
 	  <script src="html-picker.js?v=1"></script>
 	  <script src="storage.js?v=1"></script>
 		  <script src="manager.js?v=3"></script>
-		  <script src="restriction-ui.js?v=13"></script>
+		  <script src="restriction-ui.js?v=14"></script>
 	  <script src="share.js?v=2"></script>
 	  <script src="nav.js?v=3"></script>
 			  <script src="app.js?v=74"></script>

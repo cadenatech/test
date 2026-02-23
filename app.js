@@ -64,7 +64,7 @@
   var quickFolderButton = document.querySelector('[data-quick-folder-button]');
   var quickFileButton = document.querySelector('[data-quick-file-button]');
   var quickHtmlInput = document.querySelector('[data-quick-html-input]');
-  var quickHtmlApplyButton = document.querySelector('[data-quick-html-apply]');
+  var quickDownloadInput = document.querySelector('[data-quick-download]');
   var uploadStatus = document.querySelector('[data-upload-status]');
   var zipDownloadTitleNode = document.querySelector('[data-zip-download-title]');
   var buildZipButton = document.querySelector('[data-build-zip]');
@@ -111,6 +111,10 @@
   var restrictionStartInput = document.querySelector('[data-restrict-start]');
   var restrictionEndInput = document.querySelector('[data-restrict-end]');
   var restrictionNoEnd = document.querySelector('[data-restrict-no-end]');
+  var restrictionHasStart = document.querySelector('[data-restrict-has-start]');
+  var restrictionStartWrap = document.querySelector('[data-restrict-start-wrap]');
+  var restrictionEndWrap = document.querySelector('[data-restrict-end-wrap]');
+  var restrictionEndOptions = document.querySelector('[data-restrict-end-options]');
   var restrictionLiveEnd = document.querySelector('[data-restrict-live-end]');
   var restrictionLiveEndWrap = document.querySelector('[data-restrict-live-end-wrap]');
   var restrictionWarningWrap = document.querySelector('[data-restrict-warning-wrap]');
@@ -571,6 +575,10 @@
         restrictionStartInput: restrictionStartInput,
         restrictionEndInput: restrictionEndInput,
         restrictionNoEnd: restrictionNoEnd,
+        restrictionHasStart: restrictionHasStart,
+        restrictionStartWrap: restrictionStartWrap,
+        restrictionEndWrap: restrictionEndWrap,
+        restrictionEndOptions: restrictionEndOptions,
         restrictionLiveEnd: restrictionLiveEnd,
         restrictionLiveEndWrap: restrictionLiveEndWrap,
         restrictionWarningWrap: restrictionWarningWrap,
@@ -1494,9 +1502,14 @@
   }
 
   function applyQuickHtmlToZipper() {
-    if (!quickHtmlInput || !htmlZipInput) return;
+    if (!quickHtmlInput) return;
     var htmlText = String(quickHtmlInput.value || '');
     if (!htmlText.trim()) return;
+    if (quickDownloadInput && quickDownloadInput.checked) {
+      triggerQuickDownloadFromHtml(htmlText);
+      return;
+    }
+    if (!htmlZipInput) return;
     focusZipperFlow('html');
     htmlZipInput.value = htmlText;
     dispatchInputEvent(htmlZipInput);
@@ -1506,6 +1519,50 @@
       htmlZipInput.setSelectionRange(htmlZipInput.value.length, htmlZipInput.value.length);
     } catch (err) {
       // Ignore focus/selection errors.
+    }
+  }
+
+  function triggerQuickDownloadFromHtml(htmlText) {
+    htmlText = String(htmlText || '').trim();
+    if (!htmlText) {
+      if (UI.showToast) UI.showToast(t('zipper.html.status.empty'));
+      return;
+    }
+    if (Zipper.looksLikeReactJsx && Zipper.looksLikeReactJsx(htmlText)) {
+      if (UI.showToast) UI.showToast(t('zipper.html.status.reactDetected'));
+      return;
+    }
+    if (!window.fflate || !window.fflate.zipSync) {
+      if (UI.showToast) UI.showToast(t('zipper.status.engineMissing'));
+      return;
+    }
+    if (UI.showToast) UI.showToast(t('zipper.status.creating'));
+    try {
+      var zipName = Zipper.normalizeZipName(zipNameInput ? zipNameInput.value : '');
+      var forceFolderViewer = !!(forceFolderViewerInput && forceFolderViewerInput.checked);
+      var resourceTitle = getActiveResourceTitleValue();
+      var files = { 'index.html': encodeUtf8(htmlText) };
+      var restrictions = RestrictionUI.buildRestrictionsPayload();
+      if (restrictions) {
+        files['restrictions.json'] = encodeUtf8(JSON.stringify(restrictions, null, 2));
+      }
+      if (forceFolderViewer) {
+        injectForcedFolderViewer(files, restrictions, resourceTitle);
+      }
+      var zipped = window.fflate.zipSync(files);
+      var blob = new Blob([zipped], { type: 'application/zip' });
+      var anchor = document.createElement('a');
+      anchor.href = URL.createObjectURL(blob);
+      anchor.download = zipName;
+      document.body.appendChild(anchor);
+      anchor.click();
+      URL.revokeObjectURL(anchor.href);
+      document.body.removeChild(anchor);
+      if (quickHtmlInput) quickHtmlInput.value = '';
+      var createdKey = forceFolderViewer ? 'zipper.status.created.files' : 'zipper.status.created.html';
+      if (UI.showToast) UI.showToast(t(createdKey));
+    } catch (err) {
+      if (UI.showToast) UI.showToast(t('zipper.html.status.failed'));
     }
   }
 
@@ -2163,6 +2220,39 @@
     }).catch(function () {
       UI.setZipStatus(t('zipper.status.failed'));
     });
+  }
+
+  function triggerQuickDownload() {
+    if (!selectedFiles.length) {
+      if (UI.showToast) UI.showToast(t('zipper.status.selectFirst'));
+      return;
+    }
+    if (!window.fflate || !window.fflate.zipSync) {
+      if (UI.showToast) UI.showToast(t('zipper.status.engineMissing'));
+      return;
+    }
+    var singleSelected = selectedFiles.length === 1 ? selectedFiles[0] : null;
+    var singlePath = singleSelected ? String(singleSelected.path || (singleSelected.file && singleSelected.file.name) || '') : '';
+    var singleIsZipLike = !!singlePath && /\.(zip|elpx|h5p)$/i.test(singlePath);
+    if (singleSelected && singleIsZipLike && singleSelected.file) {
+      var restrictions = RestrictionUI.buildRestrictionsPayload();
+      var resourceTitle = getActiveResourceTitleValue();
+      var forceFolderViewer = !!(forceFolderViewerInput && forceFolderViewerInput.checked);
+      if (!restrictions && !resourceTitle && !forceFolderViewer) {
+        var origUrl = URL.createObjectURL(singleSelected.file);
+        var origAnchor = document.createElement('a');
+        origAnchor.href = origUrl;
+        origAnchor.download = singlePath.split('/').pop() || singlePath;
+        document.body.appendChild(origAnchor);
+        origAnchor.click();
+        document.body.removeChild(origAnchor);
+        setTimeout(function () { URL.revokeObjectURL(origUrl); }, 1000);
+        if (UI.showToast) UI.showToast(t('zipper.status.downloaded') || t('zipper.status.created.files'));
+        return;
+      }
+    }
+    if (UI.showToast) UI.showToast(t('zipper.status.creating'));
+    buildZipFromSelection();
   }
 
   function buildZipFromHtml() {
@@ -5641,8 +5731,14 @@
     quickDropzone.addEventListener('drop', function (event) {
       stopQuickDropEvent(event);
       quickDropzone.classList.remove('is-dragover');
-      focusZipperFlow('files');
-      collectFilesFromDrop(event);
+      if (quickDownloadInput && quickDownloadInput.checked) {
+        collectFilesFromDrop(event).then(function () {
+          triggerQuickDownload();
+        });
+      } else {
+        focusZipperFlow('files');
+        collectFilesFromDrop(event);
+      }
     });
   }
 
@@ -5671,9 +5767,15 @@
   }
   if (quickFolderInput) {
     quickFolderInput.addEventListener('change', function (event) {
-      focusZipperFlow('files');
-      collectFilesFromInput(event.target.files || []);
-      event.target.value = '';
+      if (quickDownloadInput && quickDownloadInput.checked) {
+        collectFilesFromInput(event.target.files || []);
+        event.target.value = '';
+        triggerQuickDownload();
+      } else {
+        focusZipperFlow('files');
+        collectFilesFromInput(event.target.files || []);
+        event.target.value = '';
+      }
     });
   }
   if (quickFolderButton && quickFolderInput) {
@@ -5684,9 +5786,15 @@
   }
   if (quickFileInput) {
     quickFileInput.addEventListener('change', function (event) {
-      focusZipperFlow('files');
-      collectFilesFromInput(event.target.files || []);
-      event.target.value = '';
+      if (quickDownloadInput && quickDownloadInput.checked) {
+        collectFilesFromInput(event.target.files || []);
+        event.target.value = '';
+        triggerQuickDownload();
+      } else {
+        focusZipperFlow('files');
+        collectFilesFromInput(event.target.files || []);
+        event.target.value = '';
+      }
     });
   }
   if (quickFileButton && quickFileInput) {
@@ -5695,11 +5803,18 @@
       quickFileInput.click();
     });
   }
-  if (quickHtmlApplyButton) {
-    quickHtmlApplyButton.addEventListener('click', function () {
-      applyQuickHtmlToZipper();
+  function syncQuickDownloadExtras() {
+    var checked = !!(quickDownloadInput && quickDownloadInput.checked);
+    document.querySelectorAll('[data-quick-download-extra]').forEach(function (el) {
+      if (checked) el.removeAttribute('hidden');
+      else el.setAttribute('hidden', '');
     });
   }
+  if (quickDownloadInput) {
+    quickDownloadInput.addEventListener('change', syncQuickDownloadExtras);
+  }
+  syncQuickDownloadExtras();
+
   if (quickHtmlInput) {
     quickHtmlInput.addEventListener('paste', function () {
       setTimeout(function () {
@@ -5838,11 +5953,19 @@
       }
     });
   }
+  if (restrictionHasStart) {
+    restrictionHasStart.addEventListener('change', function () {
+      if (restrictionHasStart.checked && restrictionStartInput) {
+        restrictionStartInput.value = formatLocalDateTime(new Date());
+      }
+      RestrictionUI.applyRestrictionUiState();
+      RestrictionUI.updateRestrictionSummary();
+    });
+  }
   if (restrictionNoEnd) {
     restrictionNoEnd.addEventListener('change', function () {
       if (restrictionNoEnd.checked && restrictionEndInput) {
-        var endPlusFive = new Date(Date.now() + 5 * 60 * 1000);
-        restrictionEndInput.value = formatLocalDateTime(endPlusFive);
+        restrictionEndInput.value = formatLocalDateTime(new Date());
       }
       RestrictionUI.applyRestrictionUiState();
       RestrictionUI.updateRestrictionSummary();

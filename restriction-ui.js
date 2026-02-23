@@ -5,6 +5,7 @@
   var currentLang = 'es';
   var ctx = {};
   var restrictCountdownTimer = null;
+  var STORAGE_KEY = 'visor-webzip-restrictions';
 
   function init(options) {
     options = options || {};
@@ -13,6 +14,95 @@
     if (options.lang) currentLang = options.lang;
     if (options.ui) UI = options.ui;
     if (options.restrictions) Restrictions = options.restrictions;
+    loadFromStorage();
+  }
+
+  function saveToStorage() {
+    try {
+      var data = {
+        enabled: !!(get('restrictionToggle') && get('restrictionToggle').checked),
+        hasStart: !!(get('restrictionHasStart') && get('restrictionHasStart').checked),
+        startInput: get('restrictionStartInput') ? get('restrictionStartInput').value : '',
+        endInput: get('restrictionEndInput') ? get('restrictionEndInput').value : '',
+        noEnd: !!(get('restrictionNoEnd') && get('restrictionNoEnd').checked),
+        liveEnd: !!(get('restrictionLiveEnd') && get('restrictionLiveEnd').checked),
+        warningMinutes: get('restrictionWarningMinutes') ? get('restrictionWarningMinutes').value : '5',
+        warningMessage: get('restrictionWarningMessage') ? get('restrictionWarningMessage').value : '',
+        allowShare: !!(get('restrictionAllowShare') && get('restrictionAllowShare').checked),
+        allowEmbed: !!(get('restrictionAllowEmbed') && get('restrictionAllowEmbed').checked),
+        allowDownload: !!(get('restrictionAllowDownload') && get('restrictionAllowDownload').checked)
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    } catch (e) {}
+  }
+
+  function loadFromStorage() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      var data = JSON.parse(raw);
+      if (!data || typeof data !== 'object') return;
+      if (get('restrictionToggle')) get('restrictionToggle').checked = !!data.enabled;
+      if (get('restrictionHasStart')) get('restrictionHasStart').checked = !!data.hasStart;
+      if (data.startInput && get('restrictionStartInput')) get('restrictionStartInput').value = data.startInput;
+      if (get('restrictionNoEnd')) get('restrictionNoEnd').checked = !!data.noEnd;
+      if (data.noEnd && data.endInput && get('restrictionEndInput')) get('restrictionEndInput').value = data.endInput;
+      if (get('restrictionLiveEnd')) get('restrictionLiveEnd').checked = !!data.liveEnd;
+      if (data.warningMinutes !== undefined && get('restrictionWarningMinutes')) {
+        get('restrictionWarningMinutes').value = String(data.warningMinutes);
+      }
+      if (data.warningMessage && get('restrictionWarningMessage')) {
+        get('restrictionWarningMessage').value = data.warningMessage;
+      }
+      if (get('restrictionAllowShare')) get('restrictionAllowShare').checked = !!data.allowShare;
+      if (get('restrictionAllowEmbed')) get('restrictionAllowEmbed').checked = !!data.allowEmbed;
+      if (get('restrictionAllowDownload')) get('restrictionAllowDownload').checked = !!data.allowDownload;
+      applyRestrictionUiState();
+    } catch (e) {}
+  }
+
+  function updateQuickRestrictInfo() {
+    var infoEl = document.querySelector('[data-quick-restrict-info]');
+    if (!infoEl) return;
+    var enabled = !!(get('restrictionToggle') && get('restrictionToggle').checked);
+    if (!enabled) {
+      infoEl.textContent = t('settings.summaryNoActions') || 'ninguna';
+      infoEl.setAttribute('data-active', '0');
+      return;
+    }
+    var parts = [];
+    var hasStart = !!(get('restrictionHasStart') && get('restrictionHasStart').checked);
+    var startValue = hasStart ? normalizeInputDateTime(get('restrictionStartInput')) : '';
+    if (!hasStart) {
+      parts.push(t('restrictionModal.rangeNoStart') || 'Sin fecha de inicio');
+    } else if (startValue) {
+      var startText = Restrictions.formatRestrictionDate ? Restrictions.formatRestrictionDate(startValue, currentLang) : startValue;
+      if (startText) {
+        var openTpl = t('badges.opening') || 'Inicio: {date}';
+        parts.push(openTpl.replace('{date}', startText));
+      }
+    }
+    if (get('restrictionNoEnd') && !get('restrictionNoEnd').checked) {
+      parts.push(t('restrictionModal.rangeNoEnd') || 'Sin fecha de fin');
+    } else {
+      var endValue = normalizeInputDateTime(get('restrictionEndInput'), { endOfDay: true });
+      if (endValue) {
+        var endText = Restrictions.formatRestrictionDate ? Restrictions.formatRestrictionDate(endValue, currentLang) : endValue;
+        if (endText) {
+          var closeTpl = t('badges.closing') || 'Fin: {date}';
+          parts.push(closeTpl.replace('{date}', endText));
+        }
+      }
+    }
+    var allowed = [];
+    if (get('restrictionAllowShare') && get('restrictionAllowShare').checked) allowed.push(t('settings.allowShare') || 'Compartir');
+    if (get('restrictionAllowEmbed') && get('restrictionAllowEmbed').checked) allowed.push(t('settings.allowEmbed') || 'Insertar en web');
+    if (get('restrictionAllowDownload') && get('restrictionAllowDownload').checked) allowed.push(t('settings.allowDownload') || 'Descargar');
+    var actionsText = allowed.length ? allowed.join(', ') : (t('settings.summaryNoActions') || 'ninguna');
+    var actionsLineTpl = t('settings.summaryAllowedActions') || 'Acciones permitidas en el gestor de recursos: {actions}';
+    parts.push(actionsLineTpl.replace('{actions}', actionsText));
+    infoEl.textContent = parts.join(' · ');
+    infoEl.setAttribute('data-active', '1');
   }
 
   function get(key) {
@@ -110,18 +200,9 @@
       if (enabled) get('restrictionFields').removeAttribute('hidden');
       else get('restrictionFields').setAttribute('hidden', '');
     }
-    if (get('restrictionActions')) {
-      if (enabled) get('restrictionActions').removeAttribute('hidden');
-      else get('restrictionActions').setAttribute('hidden', '');
-    }
     if (get('restrictionActionsPanel')) {
       if (enabled) get('restrictionActionsPanel').removeAttribute('hidden');
       else get('restrictionActionsPanel').setAttribute('hidden', '');
-    }
-    var restrictTitle = document.querySelector('[data-restrict-actions-title]');
-    if (restrictTitle) {
-      if (enabled) restrictTitle.removeAttribute('hidden');
-      else restrictTitle.setAttribute('hidden', '');
     }
     var restrictNote = document.querySelector('[data-restrict-actions-note]');
     if (restrictNote) {
@@ -137,9 +218,24 @@
     if (get('restrictionAccordion')) {
       get('restrictionAccordion').removeAttribute('hidden');
     }
+    if (get('restrictionStartWrap')) {
+      var hasStartDate = !!(get('restrictionHasStart') && get('restrictionHasStart').checked);
+      if (hasStartDate) get('restrictionStartWrap').removeAttribute('hidden');
+      else get('restrictionStartWrap').setAttribute('hidden', '');
+    }
+    if (get('restrictionEndWrap')) {
+      var hasEndDate = !!(get('restrictionNoEnd') && get('restrictionNoEnd').checked);
+      if (hasEndDate) get('restrictionEndWrap').removeAttribute('hidden');
+      else get('restrictionEndWrap').setAttribute('hidden', '');
+    }
+    if (get('restrictionEndOptions')) {
+      var showEndOptions = enabled && !!(get('restrictionNoEnd') && get('restrictionNoEnd').checked);
+      if (showEndOptions) get('restrictionEndOptions').removeAttribute('hidden');
+      else get('restrictionEndOptions').setAttribute('hidden', '');
+    }
     if (get('restrictionNoEnd') && get('restrictionEndInput')) {
-      var hasEndDate = !!get('restrictionNoEnd').checked;
-      get('restrictionEndInput').disabled = !hasEndDate;
+      var hasEndDate2 = !!get('restrictionNoEnd').checked;
+      get('restrictionEndInput').disabled = !hasEndDate2;
     }
     if (get('restrictionLiveEnd')) {
       var hasEndDate = !!(get('restrictionNoEnd') && get('restrictionNoEnd').checked);
@@ -206,7 +302,8 @@
   function updateRestrictionDefaults() {
     if (!get('restrictionStartInput') || !get('restrictionEndInput')) return;
     var now = new Date();
-    if (!get('restrictionStartInput').value) {
+    var hasStart = !!(get('restrictionHasStart') && get('restrictionHasStart').checked);
+    if (hasStart && !get('restrictionStartInput').value) {
       var pad = function (n) { return (n < 10 ? '0' : '') + n; };
       var localValue = now.getFullYear()
         + '-' + pad(now.getMonth() + 1)
@@ -233,9 +330,10 @@
   function buildRestrictionsPayload() {
     if (!get('restrictionToggle') || !get('restrictionToggle').checked) return null;
     updateRestrictionDefaults();
-    var startValue = normalizeInputDateTime(get('restrictionStartInput'));
+    var hasStart = !!(get('restrictionHasStart') && get('restrictionHasStart').checked);
+    var startValue = hasStart ? normalizeInputDateTime(get('restrictionStartInput')) : '';
     var endValue = normalizeInputDateTime(get('restrictionEndInput'), { endOfDay: true });
-    var startAt = startValue ? new Date(startValue).toISOString() : new Date().toISOString();
+    var startAt = (hasStart && startValue) ? new Date(startValue).toISOString() : new Date().toISOString();
     var neverExpires = !(get('restrictionNoEnd') && get('restrictionNoEnd').checked);
     var endAt = null;
     if (!neverExpires && endValue) {
@@ -295,6 +393,8 @@
 
   function updateRestrictionSummary() {
     updateRestrictionPeriodHint();
+    updateQuickRestrictInfo();
+    saveToStorage();
     if (!get('restrictionSummary') || !get('restrictionSummaryItems')) return;
     var enabled = !!(get('restrictionToggle') && get('restrictionToggle').checked);
     get('restrictionSummaryItems').innerHTML = '';
@@ -303,10 +403,13 @@
       return;
     }
     updateRestrictionDefaults();
-    var startValue = normalizeInputDateTime(get('restrictionStartInput'));
+    var hasStart = !!(get('restrictionHasStart') && get('restrictionHasStart').checked);
+    var startValue = hasStart ? normalizeInputDateTime(get('restrictionStartInput')) : '';
     var endValue = normalizeInputDateTime(get('restrictionEndInput'), { endOfDay: true });
     var items = [];
-    if (startValue) {
+    if (!hasStart) {
+      items.push(t('restrictionModal.rangeNoStart') || 'Sin fecha de inicio');
+    } else if (startValue) {
       var startText = Restrictions.formatRestrictionDate(startValue, currentLang) || startValue;
       if (startText) {
         var openText = t('badges.opening', { date: startText }) || ('Inicio: ' + startText);
@@ -474,6 +577,9 @@
     updateRestrictionSummary: updateRestrictionSummary,
     updateShareRestrictionSummary: updateShareRestrictionSummary,
     applyRestrictionsToActions: applyRestrictionsToActions,
-    showRestrictionModal: showRestrictionModal
+    showRestrictionModal: showRestrictionModal,
+    saveToStorage: saveToStorage,
+    loadFromStorage: loadFromStorage,
+    updateQuickRestrictInfo: updateQuickRestrictInfo
   };
 })();

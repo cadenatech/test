@@ -309,9 +309,13 @@ header {
   max-width: 640px;
   grid-template-columns: repeat(2, minmax(220px, 1fr));
   column-gap: 12px;
-  row-gap: 10px;
+  row-gap: 4px;
   align-items: start;
   margin-top: 0;
+}
+
+.settings-grid--dates .settings-check {
+  margin-bottom: 0;
 }
 
 .settings-grid--dates .settings-field input[type="datetime-local"] {
@@ -440,13 +444,43 @@ header {
   gap: 8px;
 }
 
+.settings-dates-panel,
 .settings-actions-panel {
   max-width: 640px;
   border: 1px solid var(--border);
   border-radius: 12px;
   background: var(--surface-muted);
   padding: 10px 12px;
-  margin-top: 2px;
+  margin-top: 8px;
+}
+
+.settings-dates-panel .settings-check {
+  margin-bottom: 4px;
+}
+
+.settings-date-input-wrap {
+  margin-bottom: 8px;
+}
+
+.settings-date-input-wrap input[type="datetime-local"] {
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.9rem;
+  min-height: 42px;
+  width: 100%;
+  max-width: 260px;
+}
+
+.settings-end-options--inline {
+  border: none;
+  background: none;
+  padding: 4px 0 0;
+  margin-top: 0;
+  border-radius: 0;
+  border-left: none;
 }
 
 .settings-actions__group {
@@ -1173,7 +1207,7 @@ textarea:focus-visible {
 }
 
 .publish-choice-main {
-  margin-top: 14px;
+  margin-top: 8px;
 }
 
 .publish-choice-main .publish-choice-card {
@@ -1320,7 +1354,8 @@ textarea:focus-visible {
 }
 
 .publish-quick-actions {
-  margin-top: 8px;
+  margin-top: 0;
+  /* inside .publish-quick-upload-area grid — gap controlled by parent */
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
@@ -1341,9 +1376,9 @@ textarea:focus-visible {
   border: 1px solid var(--border);
   background: var(--surface-muted);
   padding: 14px;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 10px;
-  align-content: start;
 }
 
 .publish-quick-card__title {
@@ -1354,7 +1389,8 @@ textarea:focus-visible {
 }
 
 .dropzone--quick {
-  min-height: 250px;
+  flex: 1;
+  min-height: 140px;
   padding: 22px;
   border-radius: 14px;
   display: flex;
@@ -1371,12 +1407,45 @@ textarea:focus-visible {
 }
 
 .publish-quick-html {
-  min-height: 120px;
+  flex: 1;
+  min-height: 80px;
 }
 
 .publish-quick-html__actions {
   display: flex;
   justify-content: flex-start;
+}
+
+.publish-quick-upload-area {
+  display: grid;
+  gap: 6px;
+}
+
+.publish-quick-bottom {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.publish-quick-fast-download {
+  flex: 1;
+  margin: 0;
+  font-size: 0.9rem;
+  align-items: flex-start;
+}
+
+.publish-quick-settings-btn {
+  flex-shrink: 0;
+  align-self: center;
+  white-space: nowrap;
+}
+
+.publish-quick-restrict-info {
+  color: var(--ink-muted);
+}
+
+.publish-quick-restrict-info[data-active='1'] {
+  color: var(--accent);
 }
 
 .card-lock {
@@ -2241,7 +2310,7 @@ textarea:focus-visible {
   margin-bottom: 0;
 }
 
-[data-main-settings-modal] .settings-grid--dates,
+[data-main-settings-modal] .settings-dates-panel,
 [data-main-settings-modal] .settings-actions,
 [data-main-settings-modal] .settings-actions-panel {
   max-width: none;
@@ -3287,7 +3356,7 @@ body[data-loading="true"][data-loading-mode="overlay"] .loading-screen {
   }
 
   .dropzone--quick {
-    min-height: 210px;
+    min-height: 140px;
   }
 
   .manager-settings {
@@ -3480,10 +3549,20 @@ body[data-loading="true"][data-loading-mode="overlay"] .loading-screen {
   border: 1px solid #4a6590;
 }
 
-:root[data-theme="dark"] .settings-end-options {
+:root[data-theme="dark"] .settings-dates-panel,
+:root[data-theme="dark"] .settings-end-options:not(.settings-end-options--inline) {
   background: rgba(22, 35, 60, 0.75);
   border-color: #334866;
+}
+
+:root[data-theme="dark"] .settings-end-options:not(.settings-end-options--inline) {
   border-left-color: #4a6590;
+}
+
+:root[data-theme="dark"] .settings-date-input-wrap input[type="datetime-local"] {
+  background: var(--surface);
+  border-color: #334866;
+  color: var(--ink);
 }
 
 :root[data-theme="dark"] .settings-check--dependent,

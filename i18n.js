@@ -23,7 +23,7 @@
         themeAuto: 'Automático',
         themeLight: 'Claro',
         themeDark: 'Oscuro',
-        subtitle: 'Genera un enlace web para compartir tu recurso (carpeta, archivos, HTML, ZIP, ELPX, H5P o SCORM 1.2). Comparte el enlace y tu recurso podrá ser abierto directamente en cualquier navegador.'
+        subtitle: 'Genera un enlace web para compartir tu recurso digital educativo. Comparte el enlace y tu recurso podrá ser abierto directamente en cualquier navegador.'
       },
       settings: {
         title: 'Ajustes de visibilidad',
@@ -33,6 +33,7 @@
         restrictToggle: 'Limitar el acceso',
         startLabel: 'Inicio',
         endLabel: 'Fin',
+        hasStart: 'Activar fecha de inicio de visibilidad del recurso',
         neverExpires: 'Activar fecha de fin de visibilidad del recurso',
         enforceEndDuringView: 'Desactivar la visualización del recurso al llegar a la fecha de fin mientras está abierto',
         warningMinutesLabel: 'Aviso previo en minutos (0 para no avisar)',
@@ -53,6 +54,7 @@
         summaryNoActions: 'ninguna',
         summaryBlockedActions: 'No se podrá: {actions}',
         summaryNoBlockedActions: 'ninguna',
+        datesTitle: 'Periodo de visibilidad',
         actionsTitle: 'Acciones disponibles mientras el recurso sea visible',
         allowShare: 'Compartir',
         allowEmbed: 'Insertar en web',
@@ -63,6 +65,7 @@
         body: 'Este recurso no está disponible en este momento.',
         rangeStart: 'Disponible desde: {date}',
         rangeEnd: 'Hasta: {date}',
+        rangeNoStart: 'Sin fecha de inicio',
         rangeNoEnd: 'Sin fecha de fin',
         countdown: 'Disponible en: {time}'
       },
@@ -99,7 +102,7 @@
           }
         },
         quick: {
-          intro: 'Para compartir tu recurso necesitas un ZIP, ELPX o H5P subido a la nube con enlace público. Si aún no lo tienes, aquí puedes generar el ZIP.',
+          intro: 'Crea el archivo para compartir: arrastra carpetas, archivos o pega el código HTML.',
           files: {
             title: 'Sube tu recurso',
             dropTitle: 'Arrastra aquí la carpeta o los archivos',
@@ -108,10 +111,13 @@
             files: 'Elegir archivos'
           },
           html: {
-            title: '¿Tienes código HTML? Pégalo aquí (para código generado por IA)',
+            title: '¿Tienes código HTML? Pégalo aquí',
             placeholder: '<!doctype html>...',
             apply: 'Usar este HTML'
-          }
+          },
+          fastDownload: 'Descarga rápida',
+          fastDownloadDetail: 'omite las opciones y descarga el recurso con las siguientes restricciones:',
+          changeRestrictions: 'Cambiar restricciones'
         }
       },
       tabs: {
@@ -503,7 +509,7 @@
         themeAuto: 'Automàtic',
         themeLight: 'Clar',
         themeDark: 'Fosc',
-        subtitle: 'Crea, previsualitza i comparteix recursos educatius des dels teus fitxers, carpetes, HTML o ZIP/ELPX/H5P/SCORM 1.2.'
+        subtitle: 'Crea, previsualitza i comparteix recursos educatius digitals. Comparteix l\'enllaç i el teu recurs podrà ser obert directament en qualsevol navegador.'
       },
       settings: {
         title: 'Ajustos de visibilitat',
@@ -513,6 +519,7 @@
         restrictToggle: 'Limitar l’accés',
         startLabel: 'Inici',
         endLabel: 'Fi',
+        hasStart: 'Activar data d\'inici de visibilitat del recurs',
         neverExpires: 'Activar data de fi de visibilitat del recurs',
         enforceEndDuringView: 'Desactiva la visualització del recurs en arribar a la data de fi mentre està obert',
         warningMinutesLabel: 'Avís previ en minuts (0 per no avisar)',
@@ -533,6 +540,7 @@
         summaryNoActions: 'cap',
         summaryBlockedActions: 'No es podrà: {actions}',
         summaryNoBlockedActions: 'cap',
+        datesTitle: 'Període de visibilitat',
         actionsTitle: 'Accions disponibles mentre el recurs sigui visible',
         allowShare: 'Compartir',
         allowEmbed: 'Inserir en web',
@@ -543,6 +551,7 @@
         body: 'Aquest recurs no està disponible en aquest moment.',
         rangeStart: 'Disponible des de: {date}',
         rangeEnd: 'Fins a: {date}',
+        rangeNoStart: 'Sense data d\'inici',
         rangeNoEnd: 'Sense data de fi',
         countdown: 'Disponible en: {time}'
       },
@@ -579,19 +588,22 @@
           }
         },
         quick: {
-          intro: 'Per compartir el teu recurs necessites un ZIP, ELPX o H5P al núvol amb enllaç públic. Si encara no el tens, aquí pots generar el ZIP a partir de la carpeta, fitxers o HTML.',
+          intro: 'Crea el fitxer per compartir: arrossega carpetes, fitxers o enganxa el codi HTML.',
           files: {
             title: 'Puja carpeta o fitxers',
             dropTitle: 'Arrossega aquí la carpeta o els fitxers',
-            dropHint: 'S’obrirà directament l’opció per crear el ZIP.',
+            dropHint: "S\u2019obrirà directament l\u2019opció per crear el ZIP.",
             folder: 'Escollir carpeta',
             files: 'Escollir fitxers'
           },
           html: {
-            title: 'Tens codi HTML? Enganxa’l aquí (per a codi generat amb IA)',
+            title: "Tens codi HTML? Enganxa\u2019l aquí",
             placeholder: '<!doctype html>...',
             apply: 'Fer servir aquest HTML'
-          }
+          },
+          fastDownload: 'Descàrrega ràpida',
+          fastDownloadDetail: 'omet les opcions i descarrega el recurs amb les restriccions següents:',
+          changeRestrictions: 'Canviar restriccions'
         }
       },
       tabs: {
@@ -969,7 +981,7 @@
         themeAuto: 'Automático',
         themeLight: 'Claro',
         themeDark: 'Escuro',
-        subtitle: 'Crea, previsualiza e comparte recursos educativos desde os teus ficheiros, cartafoles, HTML ou ZIP/ELPX/H5P/SCORM 1.2.'
+        subtitle: 'Crea, previsualiza e comparte recursos educativos dixitais. Comparte o enlace e o teu recurso poderá ser aberto directamente en calquera navegador.'
       },
       settings: {
         title: 'Axustes de visibilidade',
@@ -979,6 +991,7 @@
         restrictToggle: 'Limitar o acceso',
         startLabel: 'Inicio',
         endLabel: 'Fin',
+        hasStart: 'Activar data de inicio de visibilidade do recurso',
         neverExpires: 'Activar data de fin de visibilidade do recurso',
         enforceEndDuringView: 'Desactivar a visualización do recurso ao chegar á data de fin mentres está aberto',
         warningMinutesLabel: 'Aviso previo en minutos (0 para non avisar)',
@@ -999,6 +1012,7 @@
         summaryNoActions: 'ningunha',
         summaryBlockedActions: 'Non se poderá: {actions}',
         summaryNoBlockedActions: 'ningunha',
+        datesTitle: 'Período de visibilidade',
         actionsTitle: 'Accións dispoñibles mentres o recurso sexa visible',
         allowShare: 'Compartir',
         allowEmbed: 'Inserir nunha web',
@@ -1009,6 +1023,7 @@
         body: 'Este recurso non está dispoñible neste momento.',
         rangeStart: 'Disponible desde: {date}',
         rangeEnd: 'Ata: {date}',
+        rangeNoStart: 'Sen data de inicio',
         rangeNoEnd: 'Sen data de fin',
         countdown: 'Disponible en: {time}'
       },
@@ -1045,7 +1060,7 @@
           }
         },
         quick: {
-          intro: 'Para compartir o teu recurso necesitas un ZIP, ELPX ou H5P subido á nube con ligazón pública. Se aínda non o tes, aquí podes xerar o ZIP a partir do teu cartafol, ficheiros ou HTML.',
+          intro: 'Crea o arquivo para compartir: arrastra cartafoles, ficheiros ou pega o código HTML.',
           files: {
             title: 'Sube cartafol ou ficheiros',
             dropTitle: 'Arrastra aquí o cartafol ou os ficheiros',
@@ -1054,10 +1069,13 @@
             files: 'Escoller ficheiros'
           },
           html: {
-            title: 'Tes código HTML? Pégao aquí (para código xerado por IA)',
+            title: 'Tes código HTML? Pégao aquí',
             placeholder: '<!doctype html>...',
             apply: 'Usar este HTML'
-          }
+          },
+          fastDownload: 'Descarga rápida',
+          fastDownloadDetail: 'omite as opcións e descarga o recurso coas seguintes restricións:',
+          changeRestrictions: 'Cambiar restricións'
         }
       },
       tabs: {
@@ -1435,7 +1453,7 @@
         themeAuto: 'Automatikoa',
         themeLight: 'Argia',
         themeDark: 'Iluna',
-        subtitle: 'Sortu, aurrebistatu eta partekatu hezkuntza-baliabideak zure fitxategi, karpeta, HTML edo ZIP/ELPX/H5P/SCORM 1.2tik.'
+        subtitle: 'Sortu, aurrebistatu eta partekatu hezkuntza-baliabide digitalak. Partekatu esteka eta zure baliabidea edozein nabigatzailetan zuzenean ireki ahalko da.'
       },
       settings: {
         title: 'Ikusgarritasun ezarpenak',
@@ -1445,6 +1463,7 @@
         restrictToggle: 'Sarbidea mugatu',
         startLabel: 'Hasiera',
         endLabel: 'Amaiera',
+        hasStart: 'Aktibatu baliabidearen ikusgarritasunaren hasiera-data',
         neverExpires: 'Aktibatu baliabidearen ikusgarritasunaren amaiera-data',
         enforceEndDuringView: 'Baliabidearen bistaratzea desaktibatu amaiera-datara iristean irekita dagoen bitartean',
         warningMinutesLabel: 'Aurreko abisua minututan (0 abisurik ez)',
@@ -1465,6 +1484,7 @@
         summaryNoActions: 'bat ere ez',
         summaryBlockedActions: 'Ezin izango da: {actions}',
         summaryNoBlockedActions: 'bat ere ez',
+        datesTitle: 'Ikusgarritasun-aldia',
         actionsTitle: 'Ekintzak baliabidea ikusgai dagoen bitartean',
         allowShare: 'Partekatu',
         allowEmbed: 'Web batean txertatu',
@@ -1475,6 +1495,7 @@
         body: 'Baliabidea ez dago eskuragarri une honetan.',
         rangeStart: 'Erabilgarri hemendik: {date}',
         rangeEnd: 'Hona arte: {date}',
+        rangeNoStart: 'Hasiera-datarik gabe',
         rangeNoEnd: 'Amaiera-datarik gabe',
         countdown: 'Eskuragarri: {time}'
       },
@@ -1511,7 +1532,7 @@
           }
         },
         quick: {
-          intro: 'Zure baliabidea partekatzeko ZIP, ELPX edo H5P fitxategi bat behar duzu hodeian, esteka publikoarekin. Oraindik ez baduzu, hemen ZIPa sor dezakezu karpetatik, fitxategietatik edo HTMLtik abiatuta.',
+          intro: 'Sortu partekatzeko fitxategia: arrastatu karpetak, fitxategiak edo itsatsi HTML kodea.',
           files: {
             title: 'Igo karpeta edo fitxategiak',
             dropTitle: 'Arrastatu hona karpeta edo fitxategiak',
@@ -1520,10 +1541,13 @@
             files: 'Aukeratu fitxategiak'
           },
           html: {
-            title: 'HTML kodea duzu? Itsatsi hemen (IAk sortutako koderako)',
+            title: 'HTML kodea duzu? Itsatsi hemen',
             placeholder: '<!doctype html>...',
             apply: 'Erabili HTML hau'
-          }
+          },
+          fastDownload: 'Deskarga azkarra',
+          fastDownloadDetail: 'aukerak alde batera utzi eta baliabidea deskarga ezazu ondoko murrizketekin:',
+          changeRestrictions: 'Murrizketak aldatu'
         }
       },
       tabs: {
@@ -1901,7 +1925,7 @@
         themeAuto: 'Auto',
         themeLight: 'Light',
         themeDark: 'Dark',
-        subtitle: 'Create, preview, and share educational resources from your files, folders, HTML, or ZIP/ELPX/H5P/SCORM 1.2.'
+        subtitle: 'Create, preview, and share digital educational resources. Share the link and your resource can be opened directly in any browser.'
       },
       settings: {
         title: 'Visibility settings',
@@ -1911,6 +1935,7 @@
         restrictToggle: 'Limit access',
         startLabel: 'Start',
         endLabel: 'End',
+        hasStart: 'Enable resource visibility start date',
         neverExpires: 'Enable resource visibility end date',
         enforceEndDuringView: 'Disable resource viewing when the end date is reached while it is open',
         warningMinutesLabel: 'Prior warning in minutes (0 for no warning)',
@@ -1931,6 +1956,7 @@
         summaryNoActions: 'none',
         summaryBlockedActions: 'Will not be allowed: {actions}',
         summaryNoBlockedActions: 'none',
+        datesTitle: 'Visibility period',
         actionsTitle: 'Actions available while the resource is visible',
         allowShare: 'Share',
         allowEmbed: 'Embed',
@@ -1941,6 +1967,7 @@
         body: 'This resource is not available right now.',
         rangeStart: 'Available from: {date}',
         rangeEnd: 'Until: {date}',
+        rangeNoStart: 'No start date',
         rangeNoEnd: 'No end date',
         countdown: 'Available in: {time}'
       },
@@ -1977,7 +2004,7 @@
           }
         },
         quick: {
-          intro: 'To share your resource, you need a ZIP, ELPX, or H5P file uploaded to cloud storage with a public link. If you do not have it yet, you can generate the ZIP here from your folder, files, or HTML.',
+          intro: 'Create the file to share: drag folders, files or paste the HTML code.',
           files: {
             title: 'Upload folder or files',
             dropTitle: 'Drag the folder or files here',
@@ -1986,10 +2013,13 @@
             files: 'Choose files'
           },
           html: {
-            title: 'Have HTML code? Paste it here (for AI-generated code)',
+            title: 'Have HTML code? Paste it here',
             placeholder: '<!doctype html>...',
             apply: 'Use this HTML'
-          }
+          },
+          fastDownload: 'Quick download',
+          fastDownloadDetail: 'skip options and download the resource with the following restrictions:',
+          changeRestrictions: 'Change restrictions'
         }
       },
       tabs: {
@@ -2368,7 +2398,7 @@
         themeAuto: 'Automatisch',
         themeLight: 'Hell',
         themeDark: 'Dunkel',
-        subtitle: 'Erstelle, prüfe in der Vorschau und teile Bildungsressourcen aus deinen Dateien, Ordnern, HTML oder ZIP/ELPX/H5P/SCORM 1.2.'
+        subtitle: 'Erstelle, prüfe in der Vorschau und teile digitale Bildungsressourcen. Teile den Link und deine Ressource kann direkt in jedem Browser geöffnet werden.'
       },
       settings: {
         title: 'Sichtbarkeitseinstellungen',
@@ -2378,6 +2408,7 @@
         restrictToggle: 'Zugriff begrenzen',
         startLabel: 'Start',
         endLabel: 'Ende',
+        hasStart: 'Startdatum der Sichtbarkeit der Ressource aktivieren',
         neverExpires: 'Enddatum der Sichtbarkeit der Ressource aktivieren',
         enforceEndDuringView: 'Die Anzeige der Ressource beim Erreichen des Enddatums deaktivieren, waehrend sie geoeffnet ist',
         warningMinutesLabel: 'Vorabwarnung in Minuten (0 fuer keine Warnung)',
@@ -2398,6 +2429,7 @@
         summaryNoActions: 'keine',
         summaryBlockedActions: 'Nicht erlaubt: {actions}',
         summaryNoBlockedActions: 'keine',
+        datesTitle: 'Sichtbarkeitszeitraum',
         actionsTitle: 'Aktionen, solange die Ressource sichtbar ist',
         allowShare: 'Teilen',
         allowEmbed: 'Einbetten',
@@ -2408,6 +2440,7 @@
         body: 'Diese Ressource ist im Moment nicht verfügbar.',
         rangeStart: 'Verfügbar ab: {date}',
         rangeEnd: 'Bis: {date}',
+        rangeNoStart: 'Kein Startdatum',
         rangeNoEnd: 'Kein Enddatum',
         countdown: 'Verfügbar in: {time}'
       },
@@ -2444,7 +2477,7 @@
           }
         },
         quick: {
-          intro: 'Um deine Ressource zu teilen, brauchst du eine ZIP-, ELPX- oder H5P-Datei in deiner Cloud mit öffentlichem Link. Wenn du sie noch nicht hast, kannst du hier eine ZIP aus Ordner, Dateien oder HTML erzeugen.',
+          intro: 'Erstelle die Datei zum Teilen: Ordner oder Dateien hineinziehen oder HTML-Code einfügen.',
           files: {
             title: 'Ordner oder Dateien hochladen',
             dropTitle: 'Ordner oder Dateien hierher ziehen',
@@ -2453,10 +2486,13 @@
             files: 'Dateien wählen'
           },
           html: {
-            title: 'HTML-Code vorhanden? Hier einfügen (für KI-generierten Code)',
+            title: 'HTML-Code vorhanden? Hier einfügen',
             placeholder: '<!doctype html>...',
             apply: 'Dieses HTML verwenden'
-          }
+          },
+          fastDownload: 'Schnelldownload',
+          fastDownloadDetail: 'Optionen überspringen und Ressource mit den folgenden Einschränkungen herunterladen:',
+          changeRestrictions: 'Einschränkungen ändern'
         }
       },
       tabs: {
