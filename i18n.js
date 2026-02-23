@@ -94,7 +94,15 @@
             restrictHint: 'Se crearán tres tipos de visor según el contenido: 1) visor de páginas web (como recursos generados con IA o proyectos de eXeLearning), 2) visor de documentos (PDF y DOCX) y 3) visor de carpetas (para visualizar cualquier tipo de archivos).'
           },
           main: {
-            title: 'Ya tengo un ZIP, ELPX o H5P en la nube',
+            title: 'Crear enlace',
+            subtitle: 'Ya tengo el {type} en la nube',
+            subtitleAny: 'Ya tengo un ZIP, ELPX o H5P en la nube',
+            types: {
+              any: 'ZIP, ELPX o H5P',
+              zip: 'ZIP',
+              elpx: 'ELPX',
+              h5p: 'H5P'
+            },
             note: 'Pega el enlace público y crea el enlace del visor.',
             secondaryHtml: 'Si usas .elpx de eXeLearning, también puedes abrirlo aquí <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="¿Qué es ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Un archivo .elpx es un proyecto de eXeLearning que internamente utiliza el formato ZIP, lo que permite que el visor acceda a su contenido y lo muestre correctamente.</span></span>',
             elpxTooltip: '¿Qué es ELPX?',
@@ -102,7 +110,7 @@
           }
         },
         quick: {
-          intro: 'Crea el archivo para compartir: arrastra carpetas, archivos o pega el código HTML.',
+          intro: 'Si tu recurso está en carpetas, archivos sueltos o en HTML, crea primero el archivo para compartir: arrastra las carpetas o archivos, o pega el HTML a continuación. Si ya lo tienes en ZIP, ELPX o H5P con enlace público, pega la dirección en "Crear enlace". Si quieres añadir restricciones a un ZIP, ELPX o H5P, súbelo aquí.',
           files: {
             title: 'Sube tu recurso',
             dropTitle: 'Arrastra aquí la carpeta o los archivos',
@@ -282,12 +290,12 @@
           previewFailed: 'No se pudo abrir la previsualización.',
           engineMissing: 'No se pudo cargar el motor ZIP.',
           creating: 'Creando ZIP...',
-          downloaded: 'ZIP descargado.',
+          downloaded: 'ZIP descargado. Sube el ZIP a tu nube, compártelo para que todos lo puedan ver y pega el enlace a continuación.',
           failed: 'No se pudo crear el ZIP. Revisa los archivos.',
           created: {
-            html: 'ZIP creado: visor web HTML listo.',
-            documents: 'ZIP creado: visor de documentos listo.',
-            files: 'ZIP creado: visor de archivos listo.'
+            html: 'ZIP creado: visor web HTML listo. Sube el ZIP a tu nube, compártelo para que todos lo puedan ver y pega el enlace a continuación.',
+            documents: 'ZIP creado: visor de documentos listo. Sube el ZIP a tu nube, compártelo para que todos lo puedan ver y pega el enlace a continuación.',
+            files: 'ZIP creado: visor de archivos listo. Sube el ZIP a tu nube, compártelo para que todos lo puedan ver y pega el enlace a continuación.'
           }
         },
         step2: {
@@ -306,7 +314,7 @@
         },
         resourceTitle: {
           label: 'Título del recurso',
-          placeholder: 'Mi recurso',
+          placeholder: 'Si lo dejas vacío, se usa el título del recurso',
           toggleLabel: 'Poner un título al recurso (título actual: {title})',
           currentEmpty: 'sin título'
         },
@@ -322,7 +330,7 @@
             reactDetected: 'Este contenido parece React/JSX (no HTML). Copia el prompt y pégalo en el chat de tu IA para convertirlo a HTML.',
             empty: '',
             creating: 'Creando ZIP...',
-            downloaded: 'ZIP descargado.',
+            downloaded: 'ZIP descargado. Sube el ZIP a tu nube, compártelo para que todos lo puedan ver y pega el enlace a continuación.',
             failed: 'No se pudo crear el ZIP. Revisa el HTML.'
           }
         },
@@ -337,8 +345,8 @@
           status: {
             ready: '',
             working: 'Aplicando restricciones...',
-            done: '{type} listo con restricciones.',
-            saved: '{type} guardado.',
+            done: '{type} listo con restricciones. Súbelo a tu nube, compártelo para que todos lo puedan ver y pega el enlace a continuación.',
+            saved: '{type} guardado. Súbelo a tu nube, compártelo para que todos lo puedan ver y pega el enlace a continuación.',
             failed: 'No se pudo modificar el ZIP. Revisa el archivo.'
           }
         },
@@ -581,7 +589,15 @@
             restrictHint: 'També pots aplicar una limitació d’accés per dates.'
           },
           main: {
-            title: 'Ja tinc un ZIP, ELPX o H5P al núvol amb enllaç',
+            title: 'Crear enllaç',
+            subtitle: 'Ja tinc el {type} al núvol',
+            subtitleAny: 'Ja tinc un ZIP, ELPX o H5P al núvol amb enllaç',
+            types: {
+              any: 'ZIP, ELPX o H5P',
+              zip: 'ZIP',
+              elpx: 'ELPX',
+              h5p: 'H5P'
+            },
             note: 'Enganxa l’enllaç públic i crea l’enllaç del visor.',
             secondaryHtml: 'Si uses .elpx d’eXeLearning, també el pots obrir aquí <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="Què és ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Un fitxer .elpx és un projecte d’eXeLearning que internament utilitza el format ZIP, cosa que permet al visor accedir al contingut i mostrar-lo correctament.</span></span>',
             elpxTooltip: 'Què és ELPX?',
@@ -589,7 +605,7 @@
           }
         },
         quick: {
-          intro: 'Crea el fitxer per compartir: arrossega carpetes, fitxers o enganxa el codi HTML.',
+          intro: 'Si el teu recurs és en carpetes, fitxers solts o en HTML, crea primer el fitxer per compartir: arrossega les carpetes o fitxers, o enganxa l\'HTML a continuació. Si ja el tens en ZIP, ELPX o H5P amb enllaç públic, enganxa l\'adreça a "Crear enllaç". Si vols afegir restriccions a un ZIP, ELPX o H5P, puja\'l aquí.',
           files: {
             title: 'Puja carpeta o fitxers',
             dropTitle: 'Arrossega aquí la carpeta o els fitxers',
@@ -766,8 +782,13 @@
           previewFailed: 'No s’ha pogut obrir la previsualització.',
           engineMissing: 'No s’ha pogut carregar el motor ZIP.',
           creating: 'Creant ZIP...',
-          downloaded: 'ZIP descarregat.',
-          failed: 'No s’ha pogut crear el ZIP. Revisa els fitxers.'
+          downloaded: 'ZIP descarregat. Puja el ZIP al teu núvol, comparteix-lo perquè tothom el pugui veure i enganxa l’enllaç a continuació.',
+          failed: 'No s’ha pogut crear el ZIP. Revisa els fitxers.',
+          created: {
+            html: 'ZIP creat: visor web HTML llest. Puja el ZIP al teu núvol, comparteix-lo perquè tothom el pugui veure i enganxa l’enllaç a continuació.',
+            documents: 'ZIP creat: visor de documents llest. Puja el ZIP al teu núvol, comparteix-lo perquè tothom el pugui veure i enganxa l’enllaç a continuació.',
+            files: 'ZIP creat: visor de fitxers llest. Puja el ZIP al teu núvol, comparteix-lo perquè tothom el pugui veure i enganxa l’enllaç a continuació.'
+          }
         },
         step2: {
           title: 'Descarrega el ZIP',
@@ -785,7 +806,7 @@
         },
         resourceTitle: {
           label: 'Títol del recurs',
-          placeholder: 'El meu recurs',
+          placeholder: 'Si el deixes buit, s’utilitzarà el títol del recurs',
           toggleLabel: 'Posar un títol al recurs (títol actual: {title})',
           currentEmpty: 'sense títol'
         },
@@ -801,7 +822,7 @@
             reactDetected: 'Aquest contingut sembla React/JSX (no HTML). Copia el prompt i enganxa’l al xat de la teva IA per convertir-lo a HTML.',
             empty: '',
             creating: 'Creant ZIP...',
-            downloaded: 'ZIP descarregat.',
+            downloaded: 'ZIP descarregat. Puja el ZIP al teu núvol, comparteix-lo perquè tothom el pugui veure i enganxa l’enllaç a continuació.',
             failed: 'No s’ha pogut crear el ZIP. Revisa l’HTML.'
           }
         },
@@ -816,8 +837,8 @@
           status: {
             ready: '',
             working: 'Aplicant restriccions...',
-            done: '{type} llest amb restriccions.',
-            saved: '{type} desat.',
+            done: '{type} llest amb restriccions. Puja’l al teu núvol, comparteix-lo perquè tothom el pugui veure i enganxa l’enllaç a continuació.',
+            saved: '{type} desat. Puja’l al teu núvol, comparteix-lo perquè tothom el pugui veure i enganxa l’enllaç a continuació.',
             failed: 'No s’ha pogut modificar el ZIP. Revisa el fitxer.'
           },
           summaryTitle: 'Accés limitat per dates'
@@ -1054,7 +1075,15 @@
             restrictHint: 'Tamén podes aplicar limitación de acceso por datas.'
           },
           main: {
-            title: 'Xa teño un ZIP, ELPX ou H5P na nube con ligazón',
+            title: 'Crear ligazón',
+            subtitle: 'Xa teño o {type} na nube',
+            subtitleAny: 'Xa teño un ZIP, ELPX ou H5P na nube con ligazón',
+            types: {
+              any: 'ZIP, ELPX ou H5P',
+              zip: 'ZIP',
+              elpx: 'ELPX',
+              h5p: 'H5P'
+            },
             note: 'Pega a ligazón pública e crea a ligazón do visor.',
             secondaryHtml: 'Se usas .elpx de eXeLearning, tamén o podes abrir aquí <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="Que é ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Un ficheiro .elpx é un proxecto de eXeLearning que internamente utiliza o formato ZIP, o que permite que o visor acceda ao seu contido e o mostre correctamente.</span></span>',
             elpxTooltip: 'Que é ELPX?',
@@ -1062,7 +1091,7 @@
           }
         },
         quick: {
-          intro: 'Crea o arquivo para compartir: arrastra cartafoles, ficheiros ou pega o código HTML.',
+          intro: 'Se o teu recurso está en cartafoles, ficheiros soltos ou en HTML, crea primeiro o arquivo para compartir: arrastra os cartafoles ou ficheiros, ou pega o HTML a continuación. Se xa o tes en ZIP, ELPX ou H5P con ligazón pública, pega o enderezo en "Crear ligazón". Se queres engadir restricións a un ZIP, ELPX ou H5P, súbeo aquí.',
           files: {
             title: 'Sube cartafol ou ficheiros',
             dropTitle: 'Arrastra aquí o cartafol ou os ficheiros',
@@ -1239,8 +1268,13 @@
           previewFailed: 'Non se puido abrir a previsualización.',
           engineMissing: 'Non se puido cargar o motor ZIP.',
           creating: 'Creando ZIP...',
-          downloaded: 'ZIP descargado.',
-          failed: 'Non se puido crear o ZIP. Revisa os ficheiros.'
+          downloaded: 'ZIP descargado. Sube o ZIP á túa nube, compárteo para que todo o mundo o poida ver e pega a ligazón a continuación.',
+          failed: 'Non se puido crear o ZIP. Revisa os ficheiros.',
+          created: {
+            html: 'ZIP creado: visor web HTML listo. Sube o ZIP á túa nube, compárteo para que todo o mundo o poida ver e pega a ligazón a continuación.',
+            documents: 'ZIP creado: visor de documentos listo. Sube o ZIP á túa nube, compárteo para que todo o mundo o poida ver e pega a ligazón a continuación.',
+            files: 'ZIP creado: visor de ficheiros listo. Sube o ZIP á túa nube, compárteo para que todo o mundo o poida ver e pega a ligazón a continuación.'
+          }
         },
         step2: {
           title: 'Descarga o ZIP',
@@ -1258,7 +1292,7 @@
         },
         resourceTitle: {
           label: 'Título do recurso',
-          placeholder: 'O meu recurso',
+          placeholder: 'Se o deixas baleiro, usarase o título do recurso',
           toggleLabel: 'Poñer un título ao recurso (título actual: {title})',
           currentEmpty: 'sen título'
         },
@@ -1274,7 +1308,7 @@
             reactDetected: 'Este contido parece React/JSX (non HTML). Copia o prompt e pégao no chat da túa IA para convertelo a HTML.',
             empty: '',
             creating: 'Creando ZIP...',
-            downloaded: 'ZIP descargado.',
+            downloaded: 'ZIP descargado. Sube o ZIP á túa nube, compárteo para que todo o mundo o poida ver e pega a ligazón a continuación.',
             failed: 'No se pudo crear el ZIP. Revisa el HTML.'
           }
         },
@@ -1289,8 +1323,8 @@
           status: {
             ready: '',
             working: 'Aplicando restricións...',
-            done: '{type} listo con restricións.',
-            saved: '{type} gardado.',
+            done: '{type} listo con restricións. Súbeo á túa nube, compárteo para que todo o mundo o poida ver e pega a ligazón a continuación.',
+            saved: '{type} gardado. Súbeo á túa nube, compárteo para que todo o mundo o poida ver e pega a ligazón a continuación.',
             failed: 'Non se puido modificar o ZIP. Revisa o ficheiro.'
           },
           summaryTitle: 'Acceso limitado por datas'
@@ -1527,7 +1561,15 @@
             restrictHint: 'Sarbidea datekin mugatzeko aukera ere baduzu.'
           },
           main: {
-            title: 'ZIP bat hodeian daukat estekarekin',
+            title: 'Esteka sortu',
+            subtitle: '{type} hodeian daukat',
+            subtitleAny: 'ZIP bat hodeian daukat estekarekin',
+            types: {
+              any: 'ZIP, ELPX edo H5P',
+              zip: 'ZIP',
+              elpx: 'ELPX',
+              h5p: 'H5P'
+            },
             note: 'Itsatsi esteka publikoa eta sortu bisorearen esteka.',
             secondaryHtml: 'eXeLearning-eko .elpx erabiltzen baduzu, hemen ere ireki dezakezu <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="Zer da ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">.elpx fitxategia eXeLearning-eko proiektu bat da, eta barnean ZIP formatua erabiltzen du; horri esker, bisoreak edukira sartu eta behar bezala bistaratu dezake.</span></span>',
             elpxTooltip: 'Zer da ELPX?',
@@ -1535,7 +1577,7 @@
           }
         },
         quick: {
-          intro: 'Sortu partekatzeko fitxategia: arrastatu karpetak, fitxategiak edo itsatsi HTML kodea.',
+          intro: 'Zure baliabidea karpetetan, fitxategi solteetan edo HTMLn badago, sortu lehenik partekatzeko fitxategia: arrastatu karpetak edo fitxategiak, edo itsatsi HTMLa jarraian. Dagoeneko ZIP, ELPX edo H5P esteka publikoarekin baduzu, itsatsi helbidea "Esteka sortu" atalean. ZIP, ELPX edo H5Pri murrizketak gehitu nahi badizkiozu, igo hemen.',
           files: {
             title: 'Igo karpeta edo fitxategiak',
             dropTitle: 'Arrastatu hona karpeta edo fitxategiak',
@@ -1712,8 +1754,13 @@
           previewFailed: 'Ezin izan da aurrebista ireki.',
           engineMissing: 'Ezin izan da ZIP motorra kargatu.',
           creating: 'ZIPa sortzen...',
-          downloaded: 'ZIPa deskargatuta.',
-          failed: 'Ezin izan da ZIPa sortu. Berrikusi fitxategiak.'
+          downloaded: 'ZIPa deskargatuta. Igo ZIPa zure hodeira, partekatu denek ikus dezaten eta itsatsi esteka jarraian.',
+          failed: 'Ezin izan da ZIPa sortu. Berrikusi fitxategiak.',
+          created: {
+            html: 'ZIPa sortuta: web bistaratzailea prest. Igo ZIPa zure hodeira, partekatu denek ikus dezaten eta itsatsi esteka jarraian.',
+            documents: 'ZIPa sortuta: dokumentuen bistaratzailea prest. Igo ZIPa zure hodeira, partekatu denek ikus dezaten eta itsatsi esteka jarraian.',
+            files: 'ZIPa sortuta: fitxategi-bistaratzailea prest. Igo ZIPa zure hodeira, partekatu denek ikus dezaten eta itsatsi esteka jarraian.'
+          }
         },
         step2: {
           title: 'Deskargatu ZIPa',
@@ -1731,7 +1778,7 @@
         },
         resourceTitle: {
           label: 'Baliabidearen izenburua',
-          placeholder: 'Nire baliabidea',
+          placeholder: 'Hutsik uzten baduzu, baliabidearen izenburua erabiliko da',
           toggleLabel: 'Jarri izenburua baliabideari (egungo izenburua: {title})',
           currentEmpty: 'izenbururik gabe'
         },
@@ -1747,7 +1794,7 @@
             reactDetected: 'Honek React/JSX dirudi (ez HTML). Kopiatu prompta eta itsatsi zure IAren txatean HTMLra bihurtzeko.',
             empty: '',
             creating: 'Creando ZIP...',
-            downloaded: 'ZIP descargado.',
+            downloaded: 'ZIPa deskargatuta. Igo ZIPa zure hodeira, partekatu denek ikus dezaten eta itsatsi esteka jarraian.',
             failed: 'No se pudo crear el ZIP. Revisa el HTML.'
           }
         },
@@ -1762,8 +1809,8 @@
           status: {
             ready: '',
             working: 'Murrizketak aplikatzen...',
-            done: '{type} prest murrizketekin.',
-            saved: '{type} gordeta.',
+            done: '{type} prest murrizketekin. Igo ezazu zure hodeira, partekatu denek ikus dezaten eta itsatsi esteka jarraian.',
+            saved: '{type} gordeta. Igo ezazu zure hodeira, partekatu denek ikus dezaten eta itsatsi esteka jarraian.',
             failed: 'Ezin izan da ZIPa aldatu. Berrikusi fitxategia.'
           },
           summaryTitle: 'Sarbide mugatua daten arabera'
@@ -2000,7 +2047,15 @@
             restrictHint: 'You can also apply date-based access limits.'
           },
           main: {
-            title: 'I already have a ZIP, ELPX, or H5P in the cloud with link',
+            title: 'Create link',
+            subtitle: 'I already have the {type} in the cloud',
+            subtitleAny: 'I already have a ZIP, ELPX, or H5P in the cloud with link',
+            types: {
+              any: 'ZIP, ELPX, or H5P',
+              zip: 'ZIP',
+              elpx: 'ELPX',
+              h5p: 'H5P'
+            },
             note: 'Paste the public link and create the viewer link.',
             secondaryHtml: 'If you use an eXeLearning .elpx, you can open it here too <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="What is ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">An .elpx file is an eXeLearning project that internally uses the ZIP format, which allows the viewer to access its content and display it correctly.</span></span>',
             elpxTooltip: 'What is ELPX?',
@@ -2008,7 +2063,7 @@
           }
         },
         quick: {
-          intro: 'Create the file to share: drag folders, files or paste the HTML code.',
+          intro: 'If your resource is in folders, loose files, or HTML, first create the shareable file: drag the folders or files, or paste the HTML below. If you already have it in ZIP, ELPX, or H5P with a public link, paste the address in "Create link". If you want to add restrictions to a ZIP, ELPX, or H5P, upload it here.',
           files: {
             title: 'Upload folder or files',
             dropTitle: 'Drag the folder or files here',
@@ -2185,8 +2240,13 @@
           previewFailed: 'Could not open preview.',
           engineMissing: 'ZIP engine could not be loaded.',
           creating: 'Creating ZIP...',
-          downloaded: 'ZIP downloaded.',
-          failed: 'Could not create the ZIP. Check the files.'
+          downloaded: 'ZIP downloaded. Upload the ZIP to your cloud, share it so everyone can view it, and paste the link below.',
+          failed: 'Could not create the ZIP. Check the files.',
+          created: {
+            html: 'ZIP created: web HTML viewer ready. Upload the ZIP to your cloud, share it so everyone can view it, and paste the link below.',
+            documents: 'ZIP created: document viewer ready. Upload the ZIP to your cloud, share it so everyone can view it, and paste the link below.',
+            files: 'ZIP created: file viewer ready. Upload the ZIP to your cloud, share it so everyone can view it, and paste the link below.'
+          }
         },
         step2: {
           title: 'Download the ZIP',
@@ -2204,7 +2264,7 @@
         },
         resourceTitle: {
           label: 'Resource title',
-          placeholder: 'My resource',
+          placeholder: 'Leave it empty to use the resource title',
           toggleLabel: 'Set a title for the resource (current title: {title})',
           currentEmpty: 'no title'
         },
@@ -2220,7 +2280,7 @@
             reactDetected: 'This content looks like React/JSX (not HTML). Copy the prompt and paste it into your AI chat to convert it to HTML.',
             empty: '',
             creating: 'Creating ZIP...',
-            downloaded: 'ZIP downloaded.',
+            downloaded: 'ZIP downloaded. Upload the ZIP to your cloud, share it so everyone can view it, and paste the link below.',
             failed: 'Could not create the ZIP. Check the HTML.'
           }
         },
@@ -2235,8 +2295,8 @@
           status: {
             ready: '',
             working: 'Applying restrictions...',
-            done: '{type} ready with restrictions.',
-            saved: '{type} saved.',
+            done: '{type} ready with restrictions. Upload it to your cloud, share it so everyone can view it, and paste the link below.',
+            saved: '{type} saved. Upload it to your cloud, share it so everyone can view it, and paste the link below.',
             failed: 'Could not modify the ZIP. Check the file.'
           },
           
@@ -2474,7 +2534,15 @@
             restrictHint: 'Du kannst den Zugriff auch zeitlich begrenzen.'
           },
           main: {
-            title: 'Ich habe bereits eine ZIP-, ELPX- oder H5P-Datei in der Cloud mit Link',
+            title: 'Link erstellen',
+            subtitle: 'Ich habe {type} bereits in der Cloud',
+            subtitleAny: 'Ich habe bereits eine ZIP-, ELPX- oder H5P-Datei in der Cloud mit Link',
+            types: {
+              any: 'ZIP, ELPX oder H5P',
+              zip: 'ZIP',
+              elpx: 'ELPX',
+              h5p: 'H5P'
+            },
             note: 'Füge den öffentlichen Link ein und erstelle den Viewer-Link.',
             secondaryHtml: 'Wenn du eine eXeLearning-.elpx nutzt, kannst du sie hier ebenfalls öffnen <span class="info-dot" data-i18n-aria-label="publish.choice.main.elpxTooltip" aria-label="Was ist ELPX?">?<span class="info-dot__tooltip" role="tooltip" data-i18n-html="publish.choice.main.elpxTooltipHtml">Eine .elpx-Datei ist ein eXeLearning-Projekt, das intern das ZIP-Format verwendet. Dadurch kann der Viewer auf den Inhalt zugreifen und ihn korrekt anzeigen.</span></span>',
             elpxTooltip: 'Was ist ELPX?',
@@ -2482,7 +2550,7 @@
           }
         },
         quick: {
-          intro: 'Erstelle die Datei zum Teilen: Ordner oder Dateien hineinziehen oder HTML-Code einfügen.',
+          intro: 'Wenn deine Ressource in Ordnern, einzelnen Dateien oder als HTML vorliegt, erstelle zuerst die Datei zum Teilen: Ziehe die Ordner oder Dateien hinein oder füge unten den HTML-Code ein. Wenn du sie bereits als ZIP, ELPX oder H5P mit öffentlichem Link hast, füge die Adresse unter "Link erstellen" ein. Wenn du einem ZIP, ELPX oder H5P Einschränkungen hinzufügen möchtest, lade es hier hoch.',
           files: {
             title: 'Ordner oder Dateien hochladen',
             dropTitle: 'Ordner oder Dateien hierher ziehen',
@@ -2659,8 +2727,13 @@
           previewFailed: 'Vorschau konnte nicht geöffnet werden.',
           engineMissing: 'ZIP-Engine konnte nicht geladen werden.',
           creating: 'ZIP wird erstellt...',
-          downloaded: 'ZIP heruntergeladen.',
-          failed: 'ZIP konnte nicht erstellt werden. Prüfe die Dateien.'
+          downloaded: 'ZIP heruntergeladen. Lade die ZIP in deine Cloud hoch, teile sie, damit alle sie sehen können, und füge den Link unten ein.',
+          failed: 'ZIP konnte nicht erstellt werden. Prüfe die Dateien.',
+          created: {
+            html: 'ZIP erstellt: Web-Viewer bereit. Lade die ZIP in deine Cloud hoch, teile sie, damit alle sie sehen können, und füge den Link unten ein.',
+            documents: 'ZIP erstellt: Dokumenten-Viewer bereit. Lade die ZIP in deine Cloud hoch, teile sie, damit alle sie sehen können, und füge den Link unten ein.',
+            files: 'ZIP erstellt: Datei-Viewer bereit. Lade die ZIP in deine Cloud hoch, teile sie, damit alle sie sehen können, und füge den Link unten ein.'
+          }
         },
         step2: {
           title: 'ZIP herunterladen',
@@ -2678,7 +2751,7 @@
         },
         resourceTitle: {
           label: 'Titel der Ressource',
-          placeholder: 'Meine Ressource',
+          placeholder: 'Wenn leer, wird der Ressourcentitel verwendet',
           toggleLabel: 'Titel fuer die Ressource festlegen (aktueller Titel: {title})',
           currentEmpty: 'kein Titel'
         },
@@ -2694,7 +2767,7 @@
             reactDetected: 'Dieser Inhalt sieht nach React/JSX aus (nicht HTML). Kopiere den Prompt und füge ihn in deinen KI-Chat ein, um ihn in HTML umzuwandeln.',
             empty: '',
             creating: 'ZIP wird erstellt...',
-            downloaded: 'ZIP heruntergeladen.',
+            downloaded: 'ZIP heruntergeladen. Lade die ZIP in deine Cloud hoch, teile sie, damit alle sie sehen können, und füge den Link unten ein.',
             failed: 'ZIP konnte nicht erstellt werden. Prüfe das HTML.'
           }
         },
@@ -2709,8 +2782,8 @@
           status: {
             ready: '',
             working: 'Einschränkungen werden angewendet...',
-            done: '{type} ist mit Einschränkungen bereit.',
-            saved: '{type} gespeichert.',
+            done: '{type} ist mit Einschränkungen bereit. Lade sie in deine Cloud hoch, teile sie, damit alle sie sehen können, und füge den Link unten ein.',
+            saved: '{type} gespeichert. Lade sie in deine Cloud hoch, teile sie, damit alle sie sehen können, und füge den Link unten ein.',
             failed: 'ZIP konnte nicht geändert werden. Prüfe die Datei.'
           },
           

@@ -146,9 +146,14 @@
     }, 2800);
   }
 
-  function setUploadStatus(message) {
+  function setUploadStatus(message, options) {
     if (els.uploadStatus) {
-      els.uploadStatus.textContent = message;
+      var opts = options || {};
+      if (opts.html) {
+        els.uploadStatus.innerHTML = String(message || '');
+      } else {
+        els.uploadStatus.textContent = message;
+      }
     }
   }
 

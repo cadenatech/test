@@ -4,6 +4,8 @@
   var output = document.querySelector('[data-output]');
   var createLinkButton = document.querySelector('[data-create-link]');
   var createLinkFeedback = document.querySelector('[data-create-link-feedback]');
+  var linkSubtitle = document.querySelector('[data-link-subtitle]');
+  var lastLinkType = '';
   var copyButton = document.querySelector('[data-copy]');
   var qrButton = document.querySelector('[data-qr]');
   var embedButton = document.querySelector('[data-embed]');
@@ -64,14 +66,11 @@
   var quickFolderButton = document.querySelector('[data-quick-folder-button]');
   var quickFileButton = document.querySelector('[data-quick-file-button]');
   var quickHtmlInput = document.querySelector('[data-quick-html-input]');
-  var quickDownloadInput = document.querySelector('[data-quick-download]');
   var uploadStatus = document.querySelector('[data-upload-status]');
   var zipDownloadTitleNode = document.querySelector('[data-zip-download-title]');
   var buildZipButton = document.querySelector('[data-build-zip]');
   var forceFolderViewerInput = document.querySelector('[data-force-folder-viewer]');
   var forceFolderNoteNode = document.querySelector('[data-force-folder-note]');
-  var resourceTitleToggleInput = document.querySelector('[data-resource-title-toggle]');
-  var resourceTitleToggleLabel = document.querySelector('[data-resource-title-toggle-label]');
   var previewResourceButton = document.querySelector('[data-preview-resource]');
   var previewApplyRestrictionsInput = document.querySelector('[data-preview-apply-restrictions]');
   var previewStatusNode = document.querySelector('[data-preview-status]');
@@ -134,6 +133,7 @@
   var restrictionZipEnable = document.querySelector('[data-restrict-zip-enable]');
   var restrictionCountdown = document.querySelector('[data-restrict-countdown]');
   var appVersionNode = document.querySelector('[data-app-version]');
+  var downloadPanel = document.querySelector('[data-download-panel]');
   var UI = window.UI || {};
   var Downloads = window.Downloads || {};
   var Zipper = window.Zipper || {};
@@ -799,12 +799,13 @@
 
   function syncResourceTitleDefault() {
     if (!resourceTitleInput || resourceTitleDirty) return;
-    var derived = deriveResourceTitleFromSelection(selectedFiles);
-    if (!derived) {
-      var fallback = Zipper.getZipDefaultName() || '';
-      derived = fallback.replace(/[_-]+/g, ' ').trim();
+    if (!selectedFiles || !selectedFiles.length) {
+      resourceTitleInput.value = '';
+      syncResourceTitleToggleState();
+      return;
     }
-    resourceTitleInput.value = derived;
+    var derived = deriveResourceTitleFromSelection(selectedFiles);
+    resourceTitleInput.value = derived || '';
     syncResourceTitleToggleState();
   }
 
@@ -814,29 +815,11 @@
 
   function getActiveResourceTitleValue() {
     if (!resourceTitleInput) return '';
-    if (!resourceTitleToggleInput || !resourceTitleToggleInput.checked) return '';
     return normalizeResourceTitle(resourceTitleInput.value || '');
   }
 
   function syncResourceTitleToggleState() {
-    if (resourceTitleInput && resourceTitleToggleInput) {
-      if (resourceTitleToggleInput.checked) {
-        resourceTitleInput.removeAttribute('hidden');
-      } else {
-        resourceTitleInput.setAttribute('hidden', '');
-      }
-    }
-    if (!resourceTitleToggleLabel) return;
-    if (resourceTitleToggleInput && resourceTitleToggleInput.checked) {
-      resourceTitleToggleLabel.textContent = t('zipper.resourceTitle.label') || 'Poner un título al recurso';
-      return;
-    }
-    var currentTitle = normalizeResourceTitle(resourceTitleInput ? resourceTitleInput.value : '');
-    if (!currentTitle) {
-      currentTitle = t('zipper.resourceTitle.currentEmpty') || 'sin título';
-    }
-    resourceTitleToggleLabel.textContent = t('zipper.resourceTitle.toggleLabel', { title: currentTitle })
-      || ('Poner un título al recurso (título actual: ' + currentTitle + ')');
+    // El input de título siempre es visible en el nuevo layout; no-op.
   }
 
   function setPreviewStatus(message, options) {
@@ -882,6 +865,7 @@
     }
     document.documentElement.setAttribute('lang', currentLang);
     applyTranslations();
+    updateLinkSubtitle();
     updateBuildZipButtonLabel();
     if (RestrictionUI && RestrictionUI.setLang) {
       RestrictionUI.setLang(currentLang);
@@ -924,6 +908,37 @@
     if (input) {
       input.placeholder = t(info.placeholderKey);
     }
+  }
+
+  function getLinkTypeFromUrl(value) {
+    var raw = String(value || '').toLowerCase();
+    if (!raw) return '';
+    if (raw.indexOf('.elpx') !== -1) return 'elpx';
+    if (raw.indexOf('.h5p') !== -1) return 'h5p';
+    if (raw.indexOf('.zip') !== -1) return 'zip';
+    return '';
+  }
+
+  function setLastLinkType(value) {
+    var typeKey = getLinkTypeFromUrl(value);
+    if (typeKey) {
+      lastLinkType = typeKey;
+    }
+  }
+
+  function updateLinkSubtitle() {
+    if (!linkSubtitle) return;
+    var currentValue = input ? input.value : '';
+    var typeKey = getLinkTypeFromUrl(currentValue) || lastLinkType;
+    if (!typeKey) {
+      linkSubtitle.textContent = t('publish.choice.main.subtitleAny') || linkSubtitle.textContent || '';
+      return;
+    }
+    var typeLabel = t('publish.choice.main.types.' + typeKey);
+    if (!typeLabel) {
+      typeLabel = typeKey.toUpperCase();
+    }
+    linkSubtitle.textContent = t('publish.choice.main.subtitle', { type: typeLabel }) || '';
   }
 
   function updateRestrictZipAccordionState() {
@@ -1246,9 +1261,23 @@
     else if (onlyDocuments) actionText = texts.actionDocuments;
 
     var filesReady = texts.filesReady.replace('{count}', String(list.length));
-    return filesReady
-      + '\n' + texts.typesDetected + ' ' + typeSummary + '.'
-      + '\n' + texts.actionLabel + ' ' + actionText;
+    var cleanFilesReady = String(filesReady || '').trim().replace(/\.$/, '');
+    var filesLabel = cleanFilesReady;
+    var filesValue = '';
+    var filesMatch = cleanFilesReady.match(/^([^:]+):\s*(.+)$/);
+    if (filesMatch) {
+      filesLabel = filesMatch[1];
+      filesValue = filesMatch[2];
+    }
+    var typesLabel = String(texts.typesDetected || '').replace(/:\s*$/, '');
+    var actionLabel = String(texts.actionLabel || '').replace(/:\s*$/, '');
+    var actionValue = String(actionText || '').trim().replace(/\.$/, '');
+    var chips = [
+      '<span class="summary-chip"><span class="summary-chip__label">' + escapeHtml(filesLabel) + ':</span><span class="summary-chip__value">' + escapeHtml(filesValue || String(list.length)) + '</span></span>',
+      '<span class="summary-chip"><span class="summary-chip__label">' + escapeHtml(typesLabel) + ':</span><span class="summary-chip__value">' + escapeHtml(typeSummary) + '</span></span>',
+      '<span class="summary-chip"><span class="summary-chip__label">' + escapeHtml(actionLabel) + ':</span><span class="summary-chip__value">' + escapeHtml(actionValue) + '</span></span>'
+    ];
+    return '<div class="upload-summary">' + chips.join('') + '</div>';
   }
 
   function refreshUploadSelectionSummary() {
@@ -1260,7 +1289,7 @@
       updateBuildZipButtonLabel();
       return;
     }
-    UI.setUploadStatus(buildUploadSelectionSummary(selectedFiles));
+    UI.setUploadStatus(buildUploadSelectionSummary(selectedFiles), { html: true });
     var singleSelected = selectedFiles.length === 1 ? selectedFiles[0] : null;
     var singlePath = singleSelected ? String(singleSelected.path || (singleSelected.file && singleSelected.file.name) || '') : '';
     var singleIsZipLike = !!singlePath && /\.(zip|elpx|h5p)$/i.test(singlePath);
@@ -1273,7 +1302,7 @@
     var texts = getUploadSummaryTexts();
     var archiveTypeLabel = getSingleArchiveTypeLabel(singlePath);
     var analyzingText = String(texts.analyzingZip || '').replace(/ZIP\/ELPX/g, archiveTypeLabel);
-    UI.setUploadStatus(buildUploadSelectionSummary(selectedFiles) + '\n' + analyzingText);
+    UI.setUploadStatus(buildUploadSelectionSummary(selectedFiles) + '<div class="summary-note">' + escapeHtml(analyzingText) + '</div>', { html: true });
     detectZipLikeViewerType(singleSelected.file).then(function (viewerInfo) {
       if (requestId !== uploadSummaryRequestId) return;
       if (!selectedFiles || selectedFiles.length !== 1) return;
@@ -1281,12 +1310,12 @@
       var currentPath = String(currentSingle.path || (currentSingle.file && currentSingle.file.name) || '');
       if (currentPath !== singlePath) return;
       setSingleZipLikeInfo(singlePath, viewerInfo);
-      UI.setUploadStatus(buildUploadSelectionSummary(selectedFiles, viewerInfo));
+      UI.setUploadStatus(buildUploadSelectionSummary(selectedFiles, viewerInfo), { html: true });
       updateBuildZipButtonLabel();
     }).catch(function () {
       if (requestId !== uploadSummaryRequestId) return;
       setSingleZipLikeInfo(singlePath, null);
-      UI.setUploadStatus(buildUploadSelectionSummary(selectedFiles));
+      UI.setUploadStatus(buildUploadSelectionSummary(selectedFiles), { html: true });
       updateBuildZipButtonLabel();
     });
   }
@@ -1312,16 +1341,16 @@
   }
 
   function syncZipperTabVisibility() {
-    if (!tabZipperButton) return;
     var shouldShow = hasLoadedZipperContent();
-    if (shouldShow) {
-      tabZipperButton.removeAttribute('hidden');
-    } else {
-      tabZipperButton.setAttribute('hidden', '');
-      if (document.body.getAttribute('data-active-tab') === 'zipper') {
-        Nav.setActiveTab('home');
-        Nav.setPublishModule('');
+    if (downloadPanel) {
+      if (shouldShow) {
+        downloadPanel.removeAttribute('hidden');
+      } else {
+        downloadPanel.setAttribute('hidden', '');
       }
+    }
+    if (tabZipperButton) {
+      tabZipperButton.setAttribute('hidden', '');
     }
   }
 
@@ -1494,8 +1523,6 @@
 
   function focusZipperFlow(flow) {
     preferredZipBuildFlow = flow === 'html' ? 'html' : 'files';
-    Nav.setActiveTab('zipper');
-    Nav.setPublishModule('zipper');
     if (flow === 'html') {
       if (selectedFiles && selectedFiles.length) {
         updateSelectedFiles([]);
@@ -1513,21 +1540,14 @@
     if (!quickHtmlInput) return;
     var htmlText = String(quickHtmlInput.value || '');
     if (!htmlText.trim()) return;
-    if (quickDownloadInput && quickDownloadInput.checked) {
-      triggerQuickDownloadFromHtml(htmlText);
-      return;
-    }
     if (!htmlZipInput) return;
-    focusZipperFlow('html');
+    preferredZipBuildFlow = 'html';
+    if (selectedFiles && selectedFiles.length) {
+      updateSelectedFiles([]);
+    }
     htmlZipInput.value = htmlText;
     dispatchInputEvent(htmlZipInput);
     quickHtmlInput.value = '';
-    try {
-      htmlZipInput.focus();
-      htmlZipInput.setSelectionRange(htmlZipInput.value.length, htmlZipInput.value.length);
-    } catch (err) {
-      // Ignore focus/selection errors.
-    }
   }
 
   function triggerQuickDownloadFromHtml(htmlText) {
@@ -2223,6 +2243,8 @@
       setTimeout(function () {
         URL.revokeObjectURL(url);
       }, 1000);
+      setLastLinkType(zipName);
+      updateLinkSubtitle();
       var createdMessageKey = 'zipper.status.created.' + viewerType;
       UI.setZipStatus(t(createdMessageKey), { highlight: true });
     }).catch(function () {
@@ -2255,6 +2277,8 @@
         origAnchor.click();
         document.body.removeChild(origAnchor);
         setTimeout(function () { URL.revokeObjectURL(origUrl); }, 1000);
+        setLastLinkType(singlePath || origAnchor.download);
+        updateLinkSubtitle();
         if (UI.showToast) UI.showToast(t('zipper.status.downloaded') || t('zipper.status.created.files'));
         return;
       }
@@ -2304,6 +2328,8 @@
       anchor.click();
       URL.revokeObjectURL(anchor.href);
       document.body.removeChild(anchor);
+      setLastLinkType(zipName);
+      updateLinkSubtitle();
       var createdKey = forceFolderViewer ? 'zipper.status.created.files' : 'zipper.status.created.html';
       UI.setHtmlZipStatus(t(createdKey), { highlight: true });
       UI.setZipStatus(t(createdKey), { highlight: true });
@@ -2386,6 +2412,8 @@
         name += '-restricciones.zip';
       }
       downloadZipBlob(blob, name);
+      setLastLinkType(name);
+      updateLinkSubtitle();
       var doneArchiveType = getSingleArchiveTypeLabel(file && file.name ? file.name : name);
       if (doneArchiveType === 'ZIP/ELPX/H5P') doneArchiveType = 'ZIP';
       var doneStatusKey = (restrictions || opts.forceFolderViewer)
@@ -5201,6 +5229,7 @@
     var effectiveZipUrl = shouldUseNormalized ? normalizedZipUrl : zipUrl;
     if (shouldUseNormalized && input && input.value && input.value.trim() === zipUrl && normalizedZipUrl !== zipUrl) {
       input.value = normalizedZipUrl;
+      updateLinkSubtitle();
     }
     if (autoOpen) {
       setScopedLoading(true);
@@ -5739,14 +5768,8 @@
     quickDropzone.addEventListener('drop', function (event) {
       stopQuickDropEvent(event);
       quickDropzone.classList.remove('is-dragover');
-      if (quickDownloadInput && quickDownloadInput.checked) {
-        collectFilesFromDrop(event).then(function () {
-          triggerQuickDownload();
-        });
-      } else {
-        focusZipperFlow('files');
-        collectFilesFromDrop(event);
-      }
+      focusZipperFlow('files');
+      collectFilesFromDrop(event);
     });
   }
 
@@ -5775,15 +5798,9 @@
   }
   if (quickFolderInput) {
     quickFolderInput.addEventListener('change', function (event) {
-      if (quickDownloadInput && quickDownloadInput.checked) {
-        collectFilesFromInput(event.target.files || []);
-        event.target.value = '';
-        triggerQuickDownload();
-      } else {
-        focusZipperFlow('files');
-        collectFilesFromInput(event.target.files || []);
-        event.target.value = '';
-      }
+      focusZipperFlow('files');
+      collectFilesFromInput(event.target.files || []);
+      event.target.value = '';
     });
   }
   if (quickFolderButton && quickFolderInput) {
@@ -5794,15 +5811,9 @@
   }
   if (quickFileInput) {
     quickFileInput.addEventListener('change', function (event) {
-      if (quickDownloadInput && quickDownloadInput.checked) {
-        collectFilesFromInput(event.target.files || []);
-        event.target.value = '';
-        triggerQuickDownload();
-      } else {
-        focusZipperFlow('files');
-        collectFilesFromInput(event.target.files || []);
-        event.target.value = '';
-      }
+      focusZipperFlow('files');
+      collectFilesFromInput(event.target.files || []);
+      event.target.value = '';
     });
   }
   if (quickFileButton && quickFileInput) {
@@ -5811,17 +5822,6 @@
       quickFileInput.click();
     });
   }
-  function syncQuickDownloadExtras() {
-    var checked = !!(quickDownloadInput && quickDownloadInput.checked);
-    document.querySelectorAll('[data-quick-download-extra]').forEach(function (el) {
-      if (checked) el.removeAttribute('hidden');
-      else el.setAttribute('hidden', '');
-    });
-  }
-  if (quickDownloadInput) {
-    quickDownloadInput.addEventListener('change', syncQuickDownloadExtras);
-  }
-  syncQuickDownloadExtras();
 
   if (quickHtmlInput) {
     quickHtmlInput.addEventListener('paste', function () {
@@ -5870,17 +5870,6 @@
   if (resourceTitleInput) {
     resourceTitleInput.addEventListener('input', function () {
       resourceTitleDirty = true;
-      syncResourceTitleToggleState();
-    });
-  }
-  if (resourceTitleToggleInput) {
-    resourceTitleToggleInput.addEventListener('change', function () {
-      if (!resourceTitleToggleInput.checked) {
-        // Al desactivar el título manual, recuperamos el título automático calculado.
-        resourceTitleDirty = false;
-        syncResourceTitleDefault();
-      }
-      syncResourceTitleToggleState();
     });
   }
 
@@ -6123,6 +6112,11 @@
   }
   if (!form && createLinkButton) {
     createLinkButton.addEventListener('click', handleCreateLink);
+  }
+  if (input) {
+    input.addEventListener('input', function () {
+      updateLinkSubtitle();
+    });
   }
 
   var params = new URLSearchParams(window.location.search);
@@ -6558,6 +6552,7 @@
     if (input) {
       input.value = resolvedUrl;
     }
+    updateLinkSubtitle();
     var entryParam = params.get('entry') || params.get('index') || params.get('path') || '';
     var viewParam = (params.get('view') || '').toLowerCase();
     var embedParam = (params.get('embed') || '').toLowerCase();
