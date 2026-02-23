@@ -112,7 +112,7 @@
         quick: {
           intro: 'Si tu recurso está en carpetas, archivos sueltos o en HTML, crea primero el archivo para compartir: arrastra las carpetas o archivos, o pega el HTML a continuación. Si ya lo tienes en ZIP, ELPX o H5P con enlace público, pega la dirección en "Crear enlace". Si quieres añadir restricciones a un ZIP, ELPX o H5P, súbelo aquí.',
           files: {
-            title: 'Sube tu recurso',
+            title: '¿Tienes archivos o carpetas? Sube aquí tus recursos',
             dropTitle: 'Arrastra aquí la carpeta o los archivos',
             dropHint: 'Se abrirá directamente la opción para crear el ZIP.',
             folder: 'Elegir carpeta',
@@ -607,7 +607,7 @@
         quick: {
           intro: 'Si el teu recurs és en carpetes, fitxers solts o en HTML, crea primer el fitxer per compartir: arrossega les carpetes o fitxers, o enganxa l\'HTML a continuació. Si ja el tens en ZIP, ELPX o H5P amb enllaç públic, enganxa l\'adreça a "Crear enllaç". Si vols afegir restriccions a un ZIP, ELPX o H5P, puja\'l aquí.',
           files: {
-            title: 'Puja carpeta o fitxers',
+            title: 'Tens fitxers o carpetes? Puja aquí els teus recursos',
             dropTitle: 'Arrossega aquí la carpeta o els fitxers',
             dropHint: "S\u2019obrirà directament l\u2019opció per crear el ZIP.",
             folder: 'Escollir carpeta',
@@ -1093,7 +1093,7 @@
         quick: {
           intro: 'Se o teu recurso está en cartafoles, ficheiros soltos ou en HTML, crea primeiro o arquivo para compartir: arrastra os cartafoles ou ficheiros, ou pega o HTML a continuación. Se xa o tes en ZIP, ELPX ou H5P con ligazón pública, pega o enderezo en "Crear ligazón". Se queres engadir restricións a un ZIP, ELPX ou H5P, súbeo aquí.',
           files: {
-            title: 'Sube cartafol ou ficheiros',
+            title: 'Tes ficheiros ou cartafoles? Sobe aquí os teus recursos',
             dropTitle: 'Arrastra aquí o cartafol ou os ficheiros',
             dropHint: 'Abrirase directamente a opción para crear o ZIP.',
             folder: 'Escoller cartafol',
@@ -1579,7 +1579,7 @@
         quick: {
           intro: 'Zure baliabidea karpetetan, fitxategi solteetan edo HTMLn badago, sortu lehenik partekatzeko fitxategia: arrastatu karpetak edo fitxategiak, edo itsatsi HTMLa jarraian. Dagoeneko ZIP, ELPX edo H5P esteka publikoarekin baduzu, itsatsi helbidea "Esteka sortu" atalean. ZIP, ELPX edo H5Pri murrizketak gehitu nahi badizkiozu, igo hemen.',
           files: {
-            title: 'Igo karpeta edo fitxategiak',
+            title: 'Fitxategiak edo karpetak dituzu? Igo hemen zure baliabideak',
             dropTitle: 'Arrastatu hona karpeta edo fitxategiak',
             dropHint: 'ZIP sortzeko aukera zuzenean irekiko da.',
             folder: 'Aukeratu karpeta',
@@ -2065,7 +2065,7 @@
         quick: {
           intro: 'If your resource is in folders, loose files, or HTML, first create the shareable file: drag the folders or files, or paste the HTML below. If you already have it in ZIP, ELPX, or H5P with a public link, paste the address in "Create link". If you want to add restrictions to a ZIP, ELPX, or H5P, upload it here.',
           files: {
-            title: 'Upload folder or files',
+            title: 'Have files or folders? Upload your resources here',
             dropTitle: 'Drag the folder or files here',
             dropHint: 'The ZIP creation option will open directly.',
             folder: 'Choose folder',
@@ -2552,7 +2552,7 @@
         quick: {
           intro: 'Wenn deine Ressource in Ordnern, einzelnen Dateien oder als HTML vorliegt, erstelle zuerst die Datei zum Teilen: Ziehe die Ordner oder Dateien hinein oder füge unten den HTML-Code ein. Wenn du sie bereits als ZIP, ELPX oder H5P mit öffentlichem Link hast, füge die Adresse unter "Link erstellen" ein. Wenn du einem ZIP, ELPX oder H5P Einschränkungen hinzufügen möchtest, lade es hier hoch.',
           files: {
-            title: 'Ordner oder Dateien hochladen',
+            title: 'Hast du Dateien oder Ordner? Lade deine Ressourcen hier hoch',
             dropTitle: 'Ordner oder Dateien hierher ziehen',
             dropHint: 'Die ZIP-Erstellung wird direkt geöffnet.',
             folder: 'Ordner wählen',
