@@ -17,6 +17,7 @@
   var updateDismissButton = document.querySelector('[data-update-dismiss]');
   var stepThree = document.querySelector('[data-step-three]');
   var homeShareResult = document.querySelector('[data-home-share-result]');
+  var newResourceWrap = document.querySelector('[data-new-resource-wrap]');
   var loadingScreen = document.querySelector('[data-loading]');
   var loadingMessage = document.querySelector('[data-loading-message]');
   var loadingBar = document.querySelector('[data-loading-bar]');
@@ -66,6 +67,7 @@
   var quickFolderButton = document.querySelector('[data-quick-folder-button]');
   var quickFileButton = document.querySelector('[data-quick-file-button]');
   var quickHtmlInput = document.querySelector('[data-quick-html-input]');
+  var newResourceButton = document.querySelector('[data-new-resource]');
   var uploadStatus = document.querySelector('[data-upload-status]');
   var zipDownloadTitleNode = document.querySelector('[data-zip-download-title]');
   var buildZipButton = document.querySelector('[data-build-zip]');
@@ -726,6 +728,29 @@
     });
   }
 
+  function applyFlowBadges() {
+    var intro = document.querySelector('.publish-quick-intro');
+    if (intro && !intro.querySelector('.flow-badge')) {
+      var html = intro.innerHTML || '';
+      if (html) {
+        html = html.replace(/<br>\s*<br>/g, '<br>');
+        html = html.replace(/(^|<br>)(\s*)1\./, '$1$2<span class="flow-badge">1</span> ');
+        html = html.replace(/(^|<br>)(\s*)2\./, '$1$2<span class="flow-badge">2</span> ');
+        intro.innerHTML = html;
+      }
+    }
+
+    var swapNodes = document.querySelectorAll('[data-flow-badge-swap]');
+    swapNodes.forEach(function (node) {
+      if (node.querySelector('.flow-badge')) return;
+      var swapHtml = node.innerHTML || '';
+      if (!swapHtml) return;
+      swapHtml = swapHtml.replace(/①/g, '<span class="flow-badge">1</span>');
+      swapHtml = swapHtml.replace(/②/g, '<span class="flow-badge">2</span>');
+      node.innerHTML = swapHtml;
+    });
+  }
+
   function setCreateLinkFeedback(message) {
     if (!createLinkFeedback) return;
     var text = String(message || '').trim();
@@ -736,6 +761,57 @@
     }
     createLinkFeedback.textContent = text;
     createLinkFeedback.removeAttribute('hidden');
+  }
+
+  function resetPublishFlow() {
+    if (input) input.value = '';
+    lastLinkType = '';
+    updateLinkSubtitle();
+    setCreateLinkFeedback('');
+    currentZipUrl = '';
+    currentIndexPath = '';
+    currentRestrictions = null;
+    if (Share && Share.setShareLink) {
+      Share.setShareLink('');
+    } else if (output) {
+      output.textContent = t('main.output.placeholder') || '';
+    }
+    if (RestrictionUI && RestrictionUI.applyRestrictionsToActions) {
+      RestrictionUI.applyRestrictionsToActions(currentRestrictions);
+    }
+    if (RestrictionUI && RestrictionUI.updateShareRestrictionSummary) {
+      RestrictionUI.updateShareRestrictionSummary(currentRestrictions);
+    }
+    if (updateBanner) {
+      updateBanner.setAttribute('hidden', '');
+    }
+    if (updateActionButton) {
+      updateActionButton.removeAttribute('data-zip-url');
+    }
+    if (quickHtmlInput) quickHtmlInput.value = '';
+    if (htmlZipInput) {
+      htmlZipInput.value = '';
+      dispatchInputEvent(htmlZipInput);
+    }
+    preferredZipBuildFlow = 'files';
+    if (zipStatus) UI.setZipStatus('');
+    if (htmlZipStatus) UI.setHtmlZipStatus('');
+    if (previewStatusNode) previewStatusNode.textContent = '';
+    if (forceFolderViewerInput) {
+      forceFolderViewerInput.checked = false;
+      syncForceFolderNoteVisibility();
+    }
+    zipNameDirty = false;
+    resourceTitleDirty = false;
+    updateSelectedFiles([]);
+    if (folderInput) folderInput.value = '';
+    if (fileInput) fileInput.value = '';
+    if (quickFolderInput) quickFolderInput.value = '';
+    if (quickFileInput) quickFileInput.value = '';
+    if (restrictionZipInput) restrictionZipInput.value = '';
+    restrictionZipFile = null;
+    if (restrictionZipStatus) restrictionZipStatus.textContent = '';
+    updateRestrictZipAccordionState();
   }
 
   function refreshFooterVersion() {
@@ -865,6 +941,7 @@
     }
     document.documentElement.setAttribute('lang', currentLang);
     applyTranslations();
+    applyFlowBadges();
     updateLinkSubtitle();
     updateBuildZipButtonLabel();
     if (RestrictionUI && RestrictionUI.setLang) {
@@ -1321,6 +1398,7 @@
   }
 
   function refreshPrimaryUploadSummary() {
+    updateNewResourceVisibility();
     var filesReady = !!(selectedFiles && selectedFiles.length);
     var htmlReady = !!(htmlZipInput && htmlZipInput.value && htmlZipInput.value.trim());
     if (filesReady) {
@@ -1338,6 +1416,15 @@
     var filesReady = !!(selectedFiles && selectedFiles.length);
     var htmlReady = !!(htmlZipInput && htmlZipInput.value && htmlZipInput.value.trim());
     return filesReady || htmlReady;
+  }
+
+  function updateNewResourceVisibility() {
+    if (!newResourceWrap) return;
+    if (hasLoadedZipperContent()) {
+      newResourceWrap.removeAttribute('hidden');
+    } else {
+      newResourceWrap.setAttribute('hidden', '');
+    }
   }
 
   function syncZipperTabVisibility() {
@@ -1422,6 +1509,7 @@
 
   function updateSelectedFiles(files) {
     selectedFiles = files || [];
+    updateNewResourceVisibility();
     resetZipDownload();
     zipNameDirty = false;
     resourceTitleDirty = false;
@@ -5837,6 +5925,12 @@
       if (!isEnter || !withModifier) return;
       event.preventDefault();
       applyQuickHtmlToZipper();
+    });
+  }
+
+  if (newResourceButton) {
+    newResourceButton.addEventListener('click', function () {
+      resetPublishFlow();
     });
   }
 

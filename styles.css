@@ -1233,7 +1233,7 @@ textarea:focus-visible {
 
 .publish-choice-card--link {
   min-height: 0;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: 1fr;
   align-items: start;
   cursor: default;
 }
@@ -1243,13 +1243,8 @@ textarea:focus-visible {
   transform: none;
 }
 
-.publish-choice-card--link .publish-choice-card__icon {
-  grid-row: 1;
-  align-self: start;
-}
-
 .publish-choice-card--link .publish-choice-card__header {
-  grid-column: 2;
+  grid-column: 1 / -1;
   display: grid;
   gap: 2px;
   align-items: start;
@@ -1257,7 +1252,6 @@ textarea:focus-visible {
 
 .publish-choice-card--link .publish-choice-card__title {
   margin-top: 0;
-  grid-column: auto;
   line-height: 1.2;
 }
 
@@ -1368,6 +1362,64 @@ textarea:focus-visible {
   line-height: 1.25;
 }
 
+.flow-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.flow-badge {
+  min-width: 30px;
+  height: 30px;
+  padding: 0 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  font-weight: 800;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.flow-title__icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: var(--surface-muted);
+  color: var(--ink-muted);
+  border: 1px solid var(--border);
+}
+
+.flow-title__icon svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+}
+
+.flow-title__text {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.publish-quick-upload-area .flow-title {
+  margin-bottom: 10px;
+}
+
+.publish-link-reset {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 6px;
+}
 .publish-choice-card__note--secondary {
   font-size: 0.9rem;
   color: #6b7e99;
@@ -1847,6 +1899,13 @@ textarea:focus-visible {
   box-shadow: var(--shadow-sm);
   display: grid;
   gap: 18px;
+}
+
+.manager-card[data-publish-choice] {
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  background: transparent;
 }
 
 .help-panel__header h2 {
