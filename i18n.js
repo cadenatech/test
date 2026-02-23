@@ -81,7 +81,8 @@
       tab: {
         home: 'Inicio',
         downloadZip: 'Opciones y descargas',
-        manager: 'Gestor de recursos'
+        manager: 'Gestor de recursos',
+        help: 'Ayuda'
       },
       publish: {
         title: 'Publicar un recurso',
@@ -576,7 +577,8 @@
       tab: {
         home: 'Inici',
         downloadZip: 'Opcions i descàrregues',
-        manager: 'Gestor de recursos'
+        manager: 'Gestor de recursos',
+        help: 'Ajuda'
       },
       publish: {
         title: 'Publicar un recurs',
@@ -1062,7 +1064,8 @@
       tab: {
         home: 'Inicio',
         downloadZip: 'Opcións e descargas',
-        manager: 'Xestor de recursos'
+        manager: 'Xestor de recursos',
+        help: 'Axuda'
       },
       publish: {
         title: 'Publicar un recurso',
@@ -1548,7 +1551,8 @@
       tab: {
         home: 'Hasiera',
         downloadZip: 'Aukerak eta deskargak',
-        manager: 'Baliabide kudeatzailea'
+        manager: 'Baliabide kudeatzailea',
+        help: 'Laguntza'
       },
       publish: {
         title: 'Baliabide bat argitaratu',
@@ -2034,7 +2038,8 @@
       tab: {
         home: 'Home',
         downloadZip: 'Options and downloads',
-        manager: 'Resource manager'
+        manager: 'Resource manager',
+        help: 'Help'
       },
       publish: {
         title: 'Publish a resource',
@@ -2521,7 +2526,8 @@
       tab: {
         home: 'Start',
         downloadZip: 'Optionen und Downloads',
-        manager: 'Ressourcenverwaltung'
+        manager: 'Ressourcenverwaltung',
+        help: 'Hilfe'
       },
       publish: {
         title: 'Ressource veröffentlichen',

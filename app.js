@@ -1547,7 +1547,7 @@
     }
     htmlZipInput.value = htmlText;
     dispatchInputEvent(htmlZipInput);
-    quickHtmlInput.value = '';
+    // Keep the pasted HTML visible in the quick input.
   }
 
   function triggerQuickDownloadFromHtml(htmlText) {
