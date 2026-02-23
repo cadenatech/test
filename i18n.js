@@ -117,6 +117,7 @@
           },
           fastDownload: 'Descarga rápida',
           fastDownloadDetail: 'omite las opciones y descarga el recurso con las siguientes restricciones:',
+          fastDownloadTooltip: 'Genera el archivo y lo descarga directamente, sin pasar por la pantalla de opciones ni por la previsualización. Las restricciones de visibilidad configuradas en los ajustes se aplican automáticamente al archivo descargado.',
           changeRestrictions: 'Cambiar restricciones'
         }
       },
@@ -603,6 +604,7 @@
           },
           fastDownload: 'Descàrrega ràpida',
           fastDownloadDetail: 'omet les opcions i descarrega el recurs amb les restriccions següents:',
+          fastDownloadTooltip: 'Genera el fitxer i el descarrega directament, sense passar per la pantalla d\'opcions ni per la previsualització. Les restriccions de visibilitat configurades als ajustos s\'apliquen automàticament al fitxer descarregat.',
           changeRestrictions: 'Canviar restriccions'
         }
       },
@@ -1075,6 +1077,7 @@
           },
           fastDownload: 'Descarga rápida',
           fastDownloadDetail: 'omite as opcións e descarga o recurso coas seguintes restricións:',
+          fastDownloadTooltip: 'Xera o arquivo e descárgao directamente, sen pasar pola pantalla de opcións nin pola previsualización. As restricións de visibilidade configuradas nos axustes aplícanse automaticamente ao arquivo descargado.',
           changeRestrictions: 'Cambiar restricións'
         }
       },
@@ -1547,6 +1550,7 @@
           },
           fastDownload: 'Deskarga azkarra',
           fastDownloadDetail: 'aukerak alde batera utzi eta baliabidea deskarga ezazu ondoko murrizketekin:',
+          fastDownloadTooltip: 'Fitxategia sortzen du eta zuzenean deskargatzen du, aukeren pantailatik eta aurreikuspenaren pantailatik igaro gabe. Ezarpenetan konfiguratutako ikusgarritasun-murrizketak automatikoki aplikatzen zaizkio deskargatutako fitxategiari.',
           changeRestrictions: 'Murrizketak aldatu'
         }
       },
@@ -2019,6 +2023,7 @@
           },
           fastDownload: 'Quick download',
           fastDownloadDetail: 'skip options and download the resource with the following restrictions:',
+          fastDownloadTooltip: 'Generates the file and downloads it directly, skipping both the options screen and the preview. Any visibility restrictions configured in settings are automatically applied to the downloaded file.',
           changeRestrictions: 'Change restrictions'
         }
       },
@@ -2492,6 +2497,7 @@
           },
           fastDownload: 'Schnelldownload',
           fastDownloadDetail: 'Optionen überspringen und Ressource mit den folgenden Einschränkungen herunterladen:',
+          fastDownloadTooltip: 'Erstellt die Datei und lädt sie direkt herunter, ohne den Optionsbildschirm oder die Vorschau zu öffnen. Konfigurierte Sichtbarkeitsbeschränkungen aus den Einstellungen werden automatisch auf die heruntergeladene Datei angewendet.',
           changeRestrictions: 'Einschränkungen ändern'
         }
       },

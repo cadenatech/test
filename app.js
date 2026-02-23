@@ -708,6 +708,14 @@
         node.setAttribute('aria-label', value);
       }
     });
+    var titleAttrs = document.querySelectorAll('[data-i18n-title]');
+    titleAttrs.forEach(function (node) {
+      var key = node.getAttribute('data-i18n-title');
+      var value = t(key);
+      if (value) {
+        node.setAttribute('title', value);
+      }
+    });
     var tooltips = document.querySelectorAll('[data-i18n-tooltip]');
     tooltips.forEach(function (node) {
       var key = node.getAttribute('data-i18n-tooltip');
